@@ -74,6 +74,7 @@ export async function getLotteryContract(
   signerOrProvider?: SignerOrProvider
 ): Promise<LotteryContract> {
   const contractDetails = contractMap['lottery'];
+	console.log('getLotteryContract()', signerOrProvider)
   return (await ContractFactory.getInstance({
     contractDetails,
     signerOrProvider,

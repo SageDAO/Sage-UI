@@ -20,13 +20,30 @@ const handler = async (req: NextApiRequest, response: NextApiResponse) => {
   }
 };
 
+export interface GetEarnedPointsResponse extends Omit<EarnedPoints, 'totalPointsEarned'> {
+  totalPointsEarned: string;
+}
+
 async function getEarnedPoints(walletAddress: string, response: NextApiResponse) {
   const dbPoints: EarnedPoints | null = await prisma.earnedPoints.findUnique({
     where: {
       address: walletAddress,
     },
   });
-  response.status(200).json(dbPoints);
+  if (!dbPoints) {
+    response.status(400).end('No data found');
+    return;
+  }
+
+  const res: GetEarnedPointsResponse = {
+    address: dbPoints?.address,
+    totalPointsEarned: dbPoints?.totalPointsEarned.toString(),
+    proof: dbPoints?.proof,
+    signedMessage: dbPoints.signedMessage,
+    updatedAt: dbPoints.updatedAt,
+  };
+  console.log('earnedPoints data: ', res);
+  response.status(200).json(res);
   response.end();
 }
 
