@@ -17,13 +17,13 @@ const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NETWORK_NAME } = para
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
-type URNContractNames = 'Lottery' | 'Auction' | 'Rewards';
+type AppContractNames = 'Lottery' | 'Auction' | 'Rewards';
 
-type URNContractDetailsMap = {
-  [key in URNContractNames]: ContractDetails;
+type AppContractDetailsMap = {
+  [key in AppContractNames]: ContractDetails;
 };
 
-const contractMap: URNContractDetailsMap = {
+const contractMap: AppContractDetailsMap = {
   Lottery: {
     address: LOTTERY_ADDRESS,
     abi: Lottery.abi,
