@@ -3,6 +3,7 @@ import {
   approveERC20Transfer,
   extractErrorMessage,
   getAuctionContract,
+  getContractWrite,
 } from '@/utilities/contracts';
 import { playErrorSound, playPrizeClaimedSound, playTxSuccessSound } from '@/utilities/sounds';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
@@ -36,6 +37,7 @@ export const auctionsApi = createApi({
           auctionId,
           newHighestBidEventCallback
         );
+        setupBidListener(auctionId, newHighestBidEventCallback);
         const highestBidString = utils.formatUnits(highestBid);
         const auctionState: AuctionState = {
           highestBidder,
@@ -82,10 +84,6 @@ export async function getAuctionContractState(auctionId: number, stateUpdateCall
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
   const auctionStruct = await auctionContract.getAuction(auctionId);
-  if (stateUpdateCallback) {
-    setupBidListener(auctionId, stateUpdateCallback);
-  }
-
   const auctionState = {
     highestBid: auctionStruct.highestBid,
     highestBidder: auctionStruct.highestBidder,
@@ -105,18 +103,18 @@ event BidPlaced(
   uint256 newEndTime
 );
 */
-async function setupBidListener(auctionId: number, stateUpdateCallback: () => void) {
+async function setupBidListener(auctionId: number, newBidHandler: () => void) {
   console.log(`setupBidListener(${auctionId})`);
-  const contract = await getAuctionContract();
-  if (!contract.listenerCount()) {
-    contract.on('BidPlaced', (auctionId, bidder, bidAmount, newEndTime) => {
+  const auctionContract = await getAuctionContract();
+  if (auctionContract.listenerCount('BidPlaced') < 1) {
+    auctionContract.on('BidPlaced', (auctionId, bidder, bidAmount, newEndTime) => {
       console.log(
         `Contract Event: BidPlaced(${auctionId}, ${bidder}, ${bidAmount}, ${newEndTime})`
       );
       toast.info(
         `Auction ${auctionId} has a new higher bidder with a bid of ${bidAmount / 10 ** 18}`
       );
-      stateUpdateCallback();
+      newBidHandler();
     });
   }
 }

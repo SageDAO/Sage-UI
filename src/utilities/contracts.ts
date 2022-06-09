@@ -3,7 +3,7 @@ import Rewards from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
 import Lottery from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
 import Auction from '@/constants/abis/Auction/Auction.sol/Auction.json';
 import ERC20Standard from '@/constants/abis/ERC-20/ERC20Standard.json';
-import type {
+import {
   Lottery as LotteryContract,
   Auction as AuctionContract,
   Rewards as RewardsContract,
@@ -17,22 +17,22 @@ const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NETWORK_NAME } = para
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
-type URNContracts = 'lottery' | 'auction' | 'points';
+type URNContractNames = 'Lottery' | 'Auction' | 'Rewards';
 
-type URNContractMap = {
-  [key in URNContracts]: ContractDetails;
+type URNContractDetailsMap = {
+  [key in URNContractNames]: ContractDetails;
 };
 
-const contractMap: URNContractMap = {
-  lottery: {
+const contractMap: URNContractDetailsMap = {
+  Lottery: {
     address: LOTTERY_ADDRESS,
     abi: Lottery.abi,
   },
-  auction: {
+  Auction: {
     address: AUCTION_ADDRESS,
     abi: Auction.abi,
   },
-  points: {
+  Rewards: {
     address: REWARDS_ADDRESS,
     abi: Rewards.abi,
   },
@@ -43,57 +43,57 @@ interface ContractDetails {
   abi: any;
 }
 
-interface ContractInstanceArgs {
-  contractDetails: ContractDetails;
-  signerOrProvider?: SignerOrProvider;
-}
-
 var ContractFactory = (function () {
   var instances = new Map<string, Contract>();
-  async function createInstance({ contractDetails, signerOrProvider }: ContractInstanceArgs) {
-    console.log(`Creating contract instance for address ${contractDetails.address}`);
-    return new ethers.Contract(
-      contractDetails.address,
-      contractDetails.abi,
-      signerOrProvider || ethers.getDefaultProvider(NETWORK_NAME)
-    );
+  async function createInstance({ address, abi }: ContractDetails) {
+    console.log(`Creating contract instance for address ${address}`);
+    const contract = new ethers.Contract(address, abi, ethers.getDefaultProvider(NETWORK_NAME));
+    instances.set(address, contract);
+    return contract;
   }
   return {
-    getInstance: async function ({ contractDetails, signerOrProvider }: ContractInstanceArgs) {
-      let contract = await createInstance({ contractDetails, signerOrProvider });
-      instances.set(contractDetails.address, contract);
-      return contract;
+    getInstance: async function ({ address, abi }: ContractDetails) {
+      const existingContract = instances.get(address);
+      if (!existingContract) {
+        let contract = await createInstance({ address, abi });
+        instances.set(address, contract);
+        return contract;
+      }
+      return existingContract;
     },
   };
 })();
 
-export async function getLotteryContract(
-  signerOrProvider?: SignerOrProvider
-): Promise<LotteryContract> {
-  const contractDetails = contractMap['lottery'];
+export async function getLotteryContract(signer?: Signer): Promise<LotteryContract> {
+  const { address, abi } = contractMap.Lottery;
+  if (signer) {
+    return new ethers.Contract(address, abi, signer) as LotteryContract;
+  }
   return (await ContractFactory.getInstance({
-    contractDetails,
-    signerOrProvider,
+    address,
+    abi,
   })) as LotteryContract;
 }
 
-export async function getAuctionContract(
-  signerOrProvider?: SignerOrProvider
-): Promise<AuctionContract> {
-  const contractDetails = contractMap['auction'];
+export async function getAuctionContract(signer?: Signer): Promise<AuctionContract> {
+  const { address, abi } = contractMap.Auction;
+  if (signer) {
+    return new ethers.Contract(address, abi, signer) as AuctionContract;
+  }
   return (await ContractFactory.getInstance({
-    contractDetails,
-    signerOrProvider,
+    address,
+    abi,
   })) as AuctionContract;
 }
 
-export async function getRewardsContract(
-  signerOrProvider?: SignerOrProvider
-): Promise<RewardsContract> {
-  const contractDetails = contractMap['points'];
+export async function getRewardsContract(signer?: Signer): Promise<RewardsContract> {
+  const { address, abi } = contractMap.Rewards;
+  if (signer) {
+    return new ethers.Contract(address, abi, signer) as RewardsContract;
+  }
   return (await ContractFactory.getInstance({
-    contractDetails,
-    signerOrProvider,
+    address,
+    abi,
   })) as RewardsContract;
 }
 
