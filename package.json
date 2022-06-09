@@ -9,7 +9,7 @@
     "typechain": "node typechain",
     "prisma:generate": "npx prisma generate --schema=./src/prisma/schema.prisma",
     "prisma:studio": "npx prisma studio --schema=./src/prisma/schema.prisma",
-    "prisma:db-pull": "npx db pull --schema=./src/prisma/schema.prisma",
+    "prisma:db-pull": "npx prisma db pull --schema=./src/prisma/schema.prisma",
     "postinstall": "npm run prisma:generate && npm run typechain",
     "cy:open": "cypress open",
     "test:macos": "SECRET_WORDS='test test test test test test test test test test test junk' NETWORK_NAME=fantomtestnet RPC_URL=https://rpc.testnet.fantom.network CHAIN_ID=0xfa2 SYMBOL=FTM ./node_modules/@synthetixio/synpress/synpress.js run --configFile ./tests/e2e/synpress.json",
