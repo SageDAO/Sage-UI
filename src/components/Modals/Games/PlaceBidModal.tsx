@@ -6,10 +6,9 @@ import type { User } from '@prisma/client';
 import GamesModalHeader from './GamesModalHeader';
 import Status from '@/components/Status';
 import { useState } from 'react';
-import useAsync from '@/hooks/useAsync';
 import { useAccount, useBalance, useSigner } from 'wagmi';
 import PlaceBidButton from '@/components/Games/PlaceBidButton';
-import { Signer } from 'ethers';
+import { utils, Signer, BigNumber } from 'ethers';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -22,27 +21,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
   const { data: accountData } = useAccount();
   const { data: balance } = useBalance({ addressOrName: accountData?.address });
   const { data: signer } = useSigner();
-  const { call } = useAsync<BidArgs, void>(bid);
-  // const handlePlaceBidClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   const bidVal = (document.getElementById('bid') as HTMLInputElement).value;
-  //   if (bidVal && !isNaN(+bidVal)) {
-  //     bid(auction.id, +bidVal * 10 ** 18);
-  //   } else {
-  //     toast.error('Invalid bid amount');
-  //   }
-  // };
 
   function handlePlaceBidClick(e: React.MouseEvent<HTMLButtonElement>) {
-    // ? is it better not to handle checks here and let errors be handled by wallet?
-    if (+balance?.formatted! < desiredBidValue) {
-      toast.error('Insufficient funds');
-      return;
-    }
-    if (+auction.minimumPrice! > desiredBidValue) {
-      toast.error('Bid too low');
-      return;
-    }
-    call({ auctionId: auction.id, amount: desiredBidValue, signer: signer as Signer });
+    bid({ auctionId: auction.id, amount: desiredBidValue, signer: signer as Signer });
   }
 
   function handleMaxButtonClick() {
@@ -72,7 +53,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
         <div className='games-modal__rules'>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Current Bid</div>
-            <div className='games-modal__rules-value'>{auctionState?.highestBid}</div>
+            <div className='games-modal__rules-value'>
+              {auctionState && utils.formatUnits(BigNumber.from(String(auctionState?.highestBid)))}
+            </div>
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Bid extension</div>

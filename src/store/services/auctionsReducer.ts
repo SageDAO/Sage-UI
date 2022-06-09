@@ -54,7 +54,7 @@ export const auctionsApi = createApi({
           await tx.wait();
           var claimedAt = await updateDbPrizeClaimedDate(_fetchWithBQ, auctionId);
         } catch (e) {
-          console.log(e);
+          console.error(e);
           const errMsg = extractErrorMessage(e);
           toast.error(`Failure! ${errMsg}`);
           playErrorSound();
@@ -120,9 +120,18 @@ export async function bid({ auctionId, amount, signer }: BidArgs) {
   console.log(`bid(${auctionId}, ${amount})`);
   const weiValue = ethers.utils.parseEther(amount.toString());
   try {
-    const erc20AddressASH = '0x64d91f12ece7362f91a6f8e7940cd55f05060b92';
-    const erc20AddressMOCK = '0x20c99f1F5bdf00e3270572177C6e30FC6213cEfe';
-    await approveERC20Transfer(erc20AddressMOCK);
+    // const erc20AddressASH = '0x64d91f12ece7362f91a6f8e7940cd55f05060b92';
+    const auctionContract = await getAuctionContract(signer);
+    const tokenAddress = await auctionContract.token();
+    await approveERC20Transfer(tokenAddress, signer, amount);
+  } catch (e) {
+    console.error(e);
+    toast.error(`error approving transfer`);
+    playErrorSound();
+    return;
+  }
+
+  try {
     const auctionContract = await getAuctionContract(signer);
     var tx = await auctionContract.bid(auctionId, weiValue);
     toast.promise(tx.wait(), {
@@ -133,10 +142,9 @@ export async function bid({ auctionId, amount, signer }: BidArgs) {
     await tx.wait();
     playTxSuccessSound();
   } catch (e) {
-    console.log(e);
-    const errMsg = extractErrorMessage(e);
-    toast.error(`Failure! ${errMsg}`);
-    playErrorSound();
+    toast.error('error placing bid');
+    console.error(e);
+    return;
   }
 }
 

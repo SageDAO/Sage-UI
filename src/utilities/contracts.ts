@@ -1,4 +1,4 @@
-import { BigNumber, Contract, ethers, Signer } from 'ethers';
+import { BigNumber, Contract, ethers, Signer, utils } from 'ethers';
 import Rewards from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
 import Lottery from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
 import Auction from '@/constants/abis/Auction/Auction.sol/Auction.json';
@@ -13,7 +13,7 @@ import { parameters } from '../constants/config';
 import web3Modal from './web3Modal';
 import { toast } from 'react-toastify';
 
-const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS } = parameters;
+const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NETWORK_NAME } = parameters;
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
@@ -55,16 +55,13 @@ var ContractFactory = (function () {
     return new ethers.Contract(
       contractDetails.address,
       contractDetails.abi,
-      signerOrProvider || ethers.getDefaultProvider()
+      signerOrProvider || ethers.getDefaultProvider(NETWORK_NAME)
     );
   }
   return {
     getInstance: async function ({ contractDetails, signerOrProvider }: ContractInstanceArgs) {
-      var contract = instances.get(contractDetails.address);
-      if (!contract) {
-        contract = await createInstance({ contractDetails, signerOrProvider });
-        instances.set(contractDetails.address, contract);
-      }
+      let contract = await createInstance({ contractDetails, signerOrProvider });
+      instances.set(contractDetails.address, contract);
       return contract;
     },
   };
@@ -74,7 +71,6 @@ export async function getLotteryContract(
   signerOrProvider?: SignerOrProvider
 ): Promise<LotteryContract> {
   const contractDetails = contractMap['lottery'];
-	console.log('getLotteryContract()', signerOrProvider)
   return (await ContractFactory.getInstance({
     contractDetails,
     signerOrProvider,
@@ -135,20 +131,19 @@ export async function getCoinBalance() {
   return balance;
 }
 
-export async function approveERC20Transfer(erc20Address: string) {
-  const connection = await web3Modal.connect();
-  const provider = new ethers.providers.Web3Provider(connection);
-  const erc20Contract = new ethers.Contract(erc20Address, ERC20Standard.abi, provider.getSigner());
-  const wallet = await provider.getSigner().getAddress();
+export async function approveERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
+  const erc20Contract = new ethers.Contract(
+    erc20Address,
+    ERC20Standard.abi,
+    signer
+  ) as ERC20Contract;
+  const wallet = await signer.getAddress();
   const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, AUCTION_ADDRESS);
   console.log(
     `approveERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
   );
-  if (allowance.eq(BigNumber.from(0))) {
-    var tx = await (erc20Contract as ERC20Contract).approve(
-      AUCTION_ADDRESS,
-      ethers.constants.MaxUint256
-    );
+  if (allowance.lt(BigNumber.from(utils.parseEther(String(amount))))) {
+    var tx = await erc20Contract.approve(AUCTION_ADDRESS, ethers.constants.MaxUint256);
     toast.promise(tx.wait(), {
       pending: 'Approval submitted to the blockchain, awaiting confirmation...',
       success: `Approved! Preparing bid...`,
