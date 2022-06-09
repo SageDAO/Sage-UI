@@ -71,7 +71,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
           <h1 className='game-panel__pricing-label'>Current Bid</h1>
           <div className='game-panel__price'>
             {auctionState?.highestBidString || 0}
-            <div className='game-panel__price-unit'>ETH</div>
+            <div className='game-panel__price-unit'>ASH</div>
           </div>
         </div>
         {highestBidder && (

@@ -10,7 +10,7 @@ export default function GetTicketsButton({ pending, onClick }: Props) {
     <button className='btn-get-tickets' disabled={pending} onClick={onClick}>
       {pending ? (
         <>
-          <Loader type='TailSpin' color='white' height='20px' width='20px' /> Bidding...
+          <Loader type='TailSpin' color='white' height='20px' width='20px' /> Getting...
         </>
       ) : (
         'Get Tickets'

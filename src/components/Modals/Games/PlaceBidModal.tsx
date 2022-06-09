@@ -90,7 +90,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
               max={+auction.buyNowPrice! || undefined}
               disabled={pending}
             ></input>
-            <span className='games-modal__bid-unit'>ETH</span>
+            <span className='games-modal__bid-unit'>ASH</span>
             <button
               className='games-modal__bid-min-max-btn'
               disabled={pending}
