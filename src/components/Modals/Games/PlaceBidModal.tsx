@@ -1,46 +1,76 @@
-import { toast } from 'react-toastify';
 import { bid, BidArgs, useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
 import GamesModalHeader from './GamesModalHeader';
 import Status from '@/components/Status';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAccount, useBalance, useSigner } from 'wagmi';
 import PlaceBidButton from '@/components/Games/PlaceBidButton';
-import { utils, Signer, BigNumber } from 'ethers';
+import { Signer } from 'ethers';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
   artist: User;
 }
 
+type DesiredBidValue = number;
+
+interface State {
+  desiredBidValue: DesiredBidValue;
+  minBid: DesiredBidValue;
+  maxBid: DesiredBidValue;
+}
+
 //@scss : '@/styles/components/_games-modal.scss'
 function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
-  const [desiredBidValue, setDesiredBidValue] = useState<number>(+auction.minimumPrice! || 0);
+  const { data: auctionState } = useGetAuctionStateQuery(auction.id);
+  const bidMin: DesiredBidValue = auctionState?.nextMinBid || 0;
+  const initialState: State = {
+    desiredBidValue: +auction.minimumPrice!,
+    minBid: +auction.minimumPrice!,
+    maxBid: +auction.buyNowPrice!,
+  };
+  const [state, setState] = useState<State>(initialState);
   const { data: accountData } = useAccount();
   const { data: balance } = useBalance({ addressOrName: accountData?.address });
   const { data: signer } = useSigner();
 
-  function handlePlaceBidClick(e: React.MouseEvent<HTMLButtonElement>) {
-    bid({ auctionId: auction.id, amount: desiredBidValue, signer: signer as Signer });
+  function handlePlaceBidClick() {
+    bid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
   }
 
   function handleMaxButtonClick() {
-    setDesiredBidValue(+auction.buyNowPrice! || +balance?.formatted! || 1000);
+    setState((prevState) => {
+      return { ...prevState, desiredBidValue: state.maxBid };
+    });
   }
 
   function handleMinButtonClick() {
-    setDesiredBidValue(+auction.minimumPrice!);
+    setState((prevState) => {
+      return { ...prevState, desiredBidValue: state.minBid };
+    });
   }
 
   function handleBidInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setDesiredBidValue(e.currentTarget.valueAsNumber);
+    setState((prevState) => {
+      return { ...prevState, desiredBidValue: +e.target.value };
+    });
   }
 
   let pending = false;
 
-  const { data: auctionState } = useGetAuctionStateQuery(auction.id);
+  useEffect(() => {
+    if (!auctionState) return;
+    setState((prevState) => {
+      return {
+        ...prevState,
+        desiredBidValue: auctionState.nextMinBid,
+        minBid: auctionState.nextMinBid,
+      };
+    });
+  }, [auctionState]);
+
   return (
     <Modal title='Place a Bid' isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
@@ -54,7 +84,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Current Bid</div>
             <div className='games-modal__rules-value'>
-              {auctionState && auctionState.highestBidString}
+              {auctionState && auctionState.highestBidNumber}
             </div>
           </div>
           <div className='games-modal__rules-item'>
@@ -70,13 +100,13 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Minimum Bid</div>
-            <div className='games-modal__rules-value'>value</div>
+            <div className='games-modal__rules-value'>{state.minBid}</div>
           </div>
         </div>
         <div className='games-modal__heading'>
           <h1 className='games-modal__heading-label'>Amount</h1>
           <div className='games-modal__heading-value games-modal__heading-value--blue'>
-            {auction.buyNowPrice || auction.minimumPrice}
+            {auction.buyNowPrice}
           </div>
         </div>
         <div className='games-modal__bid-section'>
@@ -84,10 +114,10 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
             <input
               type='number'
               className='games-modal__bid-input'
-              value={desiredBidValue}
+              value={state.desiredBidValue}
               onChange={handleBidInputChange}
-              min={+auction.minimumPrice! || 0}
-              max={+auction.buyNowPrice! || undefined}
+              min={state.minBid}
+              max={state.maxBid}
               disabled={pending}
             ></input>
             <span className='games-modal__bid-unit'>ASH</span>

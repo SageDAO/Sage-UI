@@ -1,7 +1,6 @@
 import { Auction_include_Nft } from '@/prisma/types';
 import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 import { useGetUserDisplayInfoQuery } from '@/store/services/user';
-useGetUserDisplayInfoQuery;
 import Image from 'next/image';
 import { useBalance, useAccount } from 'wagmi';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
@@ -63,7 +62,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
         <div className='game-panel__balance-label'>
           Balance
           <div className='game-panel__balance'>
-            {userBalance && userBalance.formatted + ' ' + userBalance.symbol || '0'}
+            {(userBalance && userBalance.formatted + ' ' + userBalance.symbol) || '0'}
           </div>
         </div>
       </div>
@@ -71,7 +70,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
         <div className='game-panel__pricing-item'>
           <h1 className='game-panel__pricing-label'>Current Bid</h1>
           <div className='game-panel__price'>
-            {auctionState?.highestBidString || 0}
+            {auctionState?.highestBidNumber || 0}
             <div className='game-panel__price-unit'>ASH</div>
           </div>
         </div>

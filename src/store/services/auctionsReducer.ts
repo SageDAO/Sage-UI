@@ -3,19 +3,19 @@ import {
   approveERC20Transfer,
   extractErrorMessage,
   getAuctionContract,
-  getContractWrite,
 } from '@/utilities/contracts';
 import { playErrorSound, playPrizeClaimedSound, playTxSuccessSound } from '@/utilities/sounds';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
-import { ethers, Signer, BigNumber, utils } from 'ethers';
+import { ethers, Signer, utils } from 'ethers';
 
 export interface AuctionState {
   highestBidder: string; // wallet address
-  highestBidString: string;
+  highestBidNumber: number;
   settled: boolean;
   endTime: number; // timestamp
+  nextMinBid: number;
 }
 
 export const auctionsApi = createApi({
@@ -33,17 +33,15 @@ export const auctionsApi = createApi({
         console.log('getAuctionState()');
         const newHighestBidEventCallback = () =>
           dispatch(auctionsApi.util.invalidateTags(['AuctionState']));
-        const { highestBid, highestBidder, settled, endTime } = await getAuctionContractState(
-          auctionId,
-          newHighestBidEventCallback
-        );
+        const { highestBidNumber, highestBidder, settled, endTime, nextMinBid } =
+          await getAuctionContractState(auctionId);
         setupBidListener(auctionId, newHighestBidEventCallback);
-        const highestBidString = utils.formatUnits(highestBid);
         const auctionState: AuctionState = {
           highestBidder,
           settled,
           endTime,
-          highestBidString,
+          highestBidNumber,
+          nextMinBid,
         };
         return { data: auctionState };
       },
@@ -80,15 +78,19 @@ export const auctionsApi = createApi({
   }),
 });
 
-export async function getAuctionContractState(auctionId: number, stateUpdateCallback?: () => void) {
+export async function getAuctionContractState(auctionId: number) {
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
   const auctionStruct = await auctionContract.getAuction(auctionId);
+  const bidIncrementPercentage = Number(await auctionContract.bidIncrementPercentage());
+  const highestBidNumber = +utils.formatUnits(auctionStruct.highestBid);
+  const nextMinBid = (highestBidNumber * (1 + bidIncrementPercentage)) / 100;
   const auctionState = {
-    highestBid: auctionStruct.highestBid,
+    highestBidNumber,
     highestBidder: auctionStruct.highestBidder,
     settled: auctionStruct.settled,
     endTime: auctionStruct.endTime,
+    nextMinBid,
   };
 
   return auctionState;
