@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import prisma from '@/prisma/client';
 import { Prisma } from '@prisma/client';
 import { useRouter } from 'next/router';
-import {
-  TicketPriceTier,
-  useGetLotteryQuery,
-  useGetTicketCountsQuery,
-} from '@/store/services/lotteriesReducer';
-import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
+import { useGetTicketCountsQuery } from '@/store/services/lotteriesReducer';
 import { useSession } from 'next-auth/react';
 import {
   ClaimPrizeRequest,
@@ -15,7 +10,6 @@ import {
   useGetPrizesByUserAndLotteryQuery,
 } from '@/store/services/prizesReducer';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
-import useModal from '@/hooks/useModal';
 import { getBlockchainTimestamp, getCoinBalance } from '@/utilities/contracts';
 import { Drop, Lottery_include_Nft, Auction_include_Nft, User } from '@/prisma/types';
 import {
@@ -63,7 +57,6 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
   const { data: userPoints } = useGetPointsBalanceQuery(undefined, { skip: !walletAddress });
   const { data: escrowPoints } = useGetEscrowPointsQuery(undefined, { skip: !walletAddress });
   const userBalancePoints = userPoints! - escrowPoints!;
-  const userTier = TicketPriceTier.Member; // TODO calculate user tier based on tbd criteria
   useEffect(() => {
     const fetchTimestamp = async () => {
       setBlockchainTimestamp(await getBlockchainTimestamp());

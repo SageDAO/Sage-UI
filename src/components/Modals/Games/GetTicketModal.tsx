@@ -10,6 +10,7 @@ import GetTicketsButton from '@/components/Games/GetTicketsButton';
 import Status from '@/components/Status';
 import { useGetEarnedPointsQuery } from '@/store/services/pointsReducer';
 import { Signer } from 'ethers';
+import { toast } from 'react-toastify';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -85,6 +86,11 @@ function GetTicketModal({ isOpen, closeModal, lottery, dropName, artist, nft }: 
     } else {
       var totalPointsEarned = BigInt(0),
         proof = '';
+    }
+
+    if (!earnedPoints) {
+      toast.error('Points info unavailable');
+      return;
     }
 
     const request: BuyTicketRequest = {
