@@ -6,9 +6,6 @@ const nextConfig = {
   images: {
     domains: [
       'dev-sage.s3.us-east-2.amazonaws.com',
-      'urn-dev.s3.us-east-2.amazonaws.com',
-      'memex-dev.s3.us-east-2.amazonaws.com',
-      'memex-staging.s3.us-east-2.amazonaws.com',
     ],
   },
   webpack: (config) => {

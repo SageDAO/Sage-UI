@@ -66,23 +66,6 @@ export const dashboardApi = createApi({
         }
       },
     }),
-    approveDrop: builder.mutation<null, number>({
-      query: (id: number) => {
-        return {
-          url: '/api/drop?action=ApproveDrop',
-          method: 'POST',
-          body: { id: id.toString() },
-        };
-      },
-      onQueryStarted: async ({}, { queryFulfilled }) => {
-        toast.promise(queryFulfilled, {
-          pending: 'Approving...',
-          success: `Success! Drop approved`,
-          error: 'Failure! Unable to approve',
-        });
-        await queryFulfilled;
-      },
-    }),
   }),
 });
 
@@ -133,8 +116,4 @@ async function getLotteryStats(
   return lottoStats;
 }
 
-export const {
-  useGetAllUsersAndEarnedPointsQuery,
-  useGetLotteriesStatsQuery,
-  useApproveDropMutation,
-} = dashboardApi;
+export const { useGetAllUsersAndEarnedPointsQuery, useGetLotteriesStatsQuery } = dashboardApi;
