@@ -2,10 +2,11 @@ import Image from 'next/image';
 
 interface BaseImageProps {
   src: string;
+  onClickHandler?: React.MouseEventHandler<HTMLImageElement>;
 }
 
-function BaseImage({ src }) {
-  return <Image src={src} layout='fill' objectFit='cover' />;
+function BaseImage({ src, onClickHandler }: BaseImageProps) {
+  return <Image src={src} layout='fill' objectFit='cover' onClick={onClickHandler} />;
 }
 
 function PfpImage({ src }: Partial<BaseImageProps>) {

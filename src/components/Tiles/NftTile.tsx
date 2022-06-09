@@ -1,6 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { BaseImage } from '../Image';
+import { useRouter } from 'next/router';
 
 interface Props {
   imgSrc: string;
@@ -12,22 +12,16 @@ interface Props {
   buttonAction?: () => any;
   imgLink: string;
 }
-function NftTile({
-  imgSrc,
-  name,
-  subtitle,
-  buttonText,
-  buttonAction,
-  button,
-  imgLink,
-  children,
-}: Props) {
+
+function NftTile({ imgSrc, name, subtitle, button, imgLink, children }: Props) {
+  const router = useRouter();
+  function handleNftImageClick() {
+    router.push(imgLink);
+  }
   return (
     <div className='nft-tile'>
-      <div className='image'>
-        <Link href={imgLink}>
-          <Image src={imgSrc} layout='fill' objectFit='cover' />
-        </Link>
+      <div className='image' onClick={handleNftImageClick}>
+        <BaseImage src={imgSrc} />
       </div>
       <div className='interact'>
         <div className='interact__info'>
