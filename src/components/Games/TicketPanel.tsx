@@ -81,9 +81,11 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         opportunity to be selected to buy this NFT. Losing tickets will be refunded.
       </p>
       <div className='game-panel__actions'>
-        <button className='game-panel__interact-btn' onClick={openTicketModal}>
-          Get Tickets
-        </button>
+        <div className='game-panel__btn-container'>
+          <button className='btn-get-tickets' onClick={openTicketModal}>
+            Get Tickets
+          </button>
+        </div>
         <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={lottery.isLive} />
         <h1 className='game-panel__tickets-available'>
           <span className='game-panel__tickets-available-label'>Available</span>
