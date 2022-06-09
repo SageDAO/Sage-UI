@@ -1,13 +1,13 @@
 import { Lottery_include_Nft } from '@/prisma/types';
 import { useGetUserDisplayInfoQuery } from '@/store/services/user';
 useGetUserDisplayInfoQuery;
-import Image from 'next/image';
 import { useBalance, useAccount } from 'wagmi';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
 import { User } from '@prisma/client';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
 import Status from '@/components/Status';
+import GetTicketsButton from './GetTicketsButton';
 
 interface Props {
   lottery: Lottery_include_Nft;
@@ -82,15 +82,15 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
       </p>
       <div className='game-panel__actions'>
         <div className='game-panel__btn-container'>
-          <button className='btn-get-tickets' onClick={openTicketModal}>
-            Get Tickets
-          </button>
+          <GetTicketsButton pending={false} onClick={openTicketModal} />
         </div>
-        <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={lottery.isLive} />
-        <h1 className='game-panel__tickets-available'>
-          <span className='game-panel__tickets-available-label'>Available</span>
-          x/{lottery.maxTickets}
-        </h1>
+        <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={false} />
+        {/*
+          <h1 className='game-panel__tickets-available'>
+            <span className='game-panel__tickets-available-label'>Available</span>
+            x/{lottery.maxTickets}
+          </h1>
+        */}
       </div>
     </div>
   );
