@@ -1,6 +1,7 @@
 import { useGetPointsBalanceQuery } from '@/store/services/pointsReducer';
 import Modal from '@/components/Modals';
 import Loader from 'react-loader-spinner';
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 interface UserDetailsModalProps {
   isOpen: boolean;
@@ -44,7 +45,7 @@ export function UserDetailsModal({ isOpen, toggle, userData }: UserDetailsModalP
             ) : (
               <div className='text-center'>
                 <div className='mx-auto relative sm:w-20 sm:h-20 w-20 h-20 overflow-hidden rounded-full shadow-md bg-white border-1'>
-                  <img src={userData?.profilePicture || '/sample/pfp.svg'} className='mx-auto' />
+                  <img src={userData?.profilePicture || DEFAULT_PROFILE_PICTURE} className='mx-auto' />
                 </div>
                 <div className='mt-2 font-bold'>{userData?.username}</div>
                 <div>{userData?.email}</div>

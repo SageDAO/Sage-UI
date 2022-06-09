@@ -10,6 +10,7 @@ import { Drop as DropType, Nft as NftType } from '@prisma/client';
 import DrawingTile from '@/components/Tiles/DrawingTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -48,7 +49,7 @@ export default function drop({ drop }: Props) {
         <div className='drop-page__details'>
           <div className='artist'>
             <div className='artist__pfp'>
-              <Image src={drop.Artist.profilePicture || '/sample/pfp.svg'} layout='fill'></Image>
+              <Image src={drop.Artist.profilePicture || DEFAULT_PROFILE_PICTURE} layout='fill'></Image>
             </div>
             <div className='artist__info'>
               {/* TODO: display using new artist name field */}

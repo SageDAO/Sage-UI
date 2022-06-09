@@ -1,3 +1,4 @@
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import Image from 'next/image';
 
 interface BaseImageProps {
@@ -10,7 +11,7 @@ function BaseImage({ src, onClickHandler }: BaseImageProps) {
 }
 
 function PfpImage({ src }: Partial<BaseImageProps>) {
-  return <BaseImage src={src || '/sample/pfp.svg'} />;
+  return <BaseImage src={src || DEFAULT_PROFILE_PICTURE} />;
 }
 
 export { BaseImage, PfpImage };

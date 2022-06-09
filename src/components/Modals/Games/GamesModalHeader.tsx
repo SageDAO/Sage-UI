@@ -2,6 +2,7 @@ import React from 'react';
 import { User } from '@/prisma/types';
 import { PfpImage, BaseImage } from '@/components/Image';
 import Image from 'next/image';
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 interface Props {
   imgSrc: string;
@@ -20,7 +21,7 @@ export default function GamesModalHeader({ imgSrc, artist, nftEditions, nftName 
       <div className='games-modal__header-right'>
         <div className='games-modal__header-artist'>
           <div className='games-modal__header-artist-pfp'>
-            <Image src='/sample/pfp.svg' layout='fill' />
+            <Image src={DEFAULT_PROFILE_PICTURE} layout='fill' />
           </div>
           <div className='games-modal__header-artist-name'>
             {artist.displayName || 'displayname'}

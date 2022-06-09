@@ -8,6 +8,7 @@ import shortenAddress from '@/utilities/shortenAddress';
 import { useGetAllUsersAndEarnedPointsQuery } from '@/store/services/dashboardReducer';
 import Loader from 'react-loader-spinner';
 import { User } from '@prisma/client';
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 export function UsersPanel() {
   const { data: users, isFetching: isFetchingUsers } = useGetAllUsersAndEarnedPointsQuery();
@@ -42,7 +43,7 @@ function UsersTable({ users }: UsersTableProps) {
         Cell: (cell: any) => (
           <div>
             <img
-              src={cell.value || '/sample/pfp.svg'}
+              src={cell.value || DEFAULT_PROFILE_PICTURE}
               onClick={() => {
                 displayUserDetailsModal(cell.row.original);
               }}

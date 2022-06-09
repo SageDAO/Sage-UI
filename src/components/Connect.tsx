@@ -6,6 +6,7 @@ import shortenAddress from '@/utilities/shortenAddress';
 import { useGetUserQuery } from '@/store/services/user';
 import AccountModal from '@/components/Modals/AccountModal';
 import { useState } from 'react';
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 export default function Connect() {
   const {
@@ -19,7 +20,7 @@ export default function Connect() {
   const isSignedIn = status === 'authenticated';
   const userName =
     (userData?.username as string) || shortenAddress(userData?.walletAddress as string);
-  const pfp = userData?.profilePicture || '/sample/pfp.svg';
+  const pfp = userData?.profilePicture || DEFAULT_PROFILE_PICTURE;
   return (
     <>
       {status === 'unauthenticated' && (

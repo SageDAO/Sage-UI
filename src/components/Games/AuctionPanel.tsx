@@ -9,6 +9,7 @@ import useModal from '@/hooks/useModal';
 import { User } from '@prisma/client';
 import Status from '@/components/Status';
 import PlaceBidButton from './PlaceBidButton';
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 interface Props {
   auction: Auction_include_Nft;
@@ -79,7 +80,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
             <h1 className='game-panel__pricing-label'>Highest Bidder</h1>
             <div className='game-panel__highest-bidder'>
               <div className='game-panel__highest-bidder-pfp'>
-                <Image src={highestBidder?.profilePicture || '/sample/pfp.svg'} layout='fill' />
+                <Image src={highestBidder?.profilePicture || DEFAULT_PROFILE_PICTURE} layout='fill' />
               </div>
               <div className='game-panel__highest-bidder-name'>
                 {highestBidder?.displayName}

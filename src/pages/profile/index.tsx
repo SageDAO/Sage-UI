@@ -8,6 +8,8 @@ import shortenAddress from '@/utilities/shortenAddress';
 import EditProfileModal from '@/components/Modals/EditProfileModal';
 import { toast } from 'react-toastify';
 import { GamePrize } from '@/prisma/types';
+import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
+import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 function profile() {
   const { data: sessionData } = useSession();
@@ -19,7 +21,8 @@ function profile() {
   const { data: prizeData } = useGetPrizesByUserQuery(sessionData?.address as string, {
     skip: !sessionData,
   });
-  const [isEditModalOpen, setIsEditOpenModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isProfilePicModalOpen, setIsProfilePicModalOpen] = useState(false);
   if (!sessionData) {
     return <div className='profile-page'>sign in to view profile</div>;
   }
@@ -42,21 +45,28 @@ function profile() {
     <div className='profile-page'>
       <EditProfileModal
         isOpen={isEditModalOpen}
-        closeModal={() => setIsEditOpenModalOpen(false)}
+        closeModal={() => setIsEditModalOpen(false)}
         title='Edit Profile'
+      />
+      <ProfilePictureModal
+        isOpen={isProfilePicModalOpen}
+        closeModal={() => setIsProfilePicModalOpen(false)}
+        title='Profile Picture'
       />
       <div className='account-card'>
         <div className='account-card__content'>
           <div className='account-card__edit-container'>
-            <button className='account-card__edit-btn' onClick={() => setIsEditOpenModalOpen(true)}>
+            <button className='account-card__edit-btn' onClick={() => setIsEditModalOpen(true)}>
               edit profile
             </button>
           </div>
           <div className='account-card__pfp'>
             <Image
-              src={userData?.profilePicture || '/sample/pfp.svg'}
+              src={userData?.profilePicture || DEFAULT_PROFILE_PICTURE}
               layout='fill'
               objectFit='cover'
+              onClick={() => setIsProfilePicModalOpen(true)}
+              style={{ cursor: 'pointer' }}
             />
           </div>
           <div className='account-card__name'>{userData?.displayName || 'name'}</div>
