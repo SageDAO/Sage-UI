@@ -54,7 +54,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Current Bid</div>
             <div className='games-modal__rules-value'>
-              {auctionState && utils.formatUnits(BigNumber.from(String(auctionState?.highestBid)))}
+              {auctionState && auctionState.highestBidString}
             </div>
           </div>
           <div className='games-modal__rules-item'>

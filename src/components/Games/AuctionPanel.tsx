@@ -62,7 +62,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
         <div className='game-panel__balance-label'>
           Balance
           <div className='game-panel__balance'>
-            {userBalance?.formatted} {userBalance?.symbol}
+            {userBalance && userBalance.formatted + ' ' + userBalance.symbol || '0'}
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
         <div className='game-panel__pricing-item'>
           <h1 className='game-panel__pricing-label'>Current Bid</h1>
           <div className='game-panel__price'>
-            {auctionState?.highestBid || 0}
+            {auctionState?.highestBidString || 0}
             <div className='game-panel__price-unit'>ETH</div>
           </div>
         </div>

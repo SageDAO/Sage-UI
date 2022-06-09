@@ -8,11 +8,11 @@ import { playErrorSound, playPrizeClaimedSound, playTxSuccessSound } from '@/uti
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
-import { ethers, Signer } from 'ethers';
+import { ethers, Signer, BigNumber, utils } from 'ethers';
 
 export interface AuctionState {
   highestBidder: string; // wallet address
-  highestBid: number;
+  highestBidString: string;
   settled: boolean;
   endTime: number; // timestamp
 }
@@ -32,8 +32,18 @@ export const auctionsApi = createApi({
         console.log('getAuctionState()');
         const newHighestBidEventCallback = () =>
           dispatch(auctionsApi.util.invalidateTags(['AuctionState']));
-        const state = await getAuctionContractState(auctionId, newHighestBidEventCallback);
-        return { data: state };
+        const { highestBid, highestBidder, settled, endTime } = await getAuctionContractState(
+          auctionId,
+          newHighestBidEventCallback
+        );
+        const highestBidString = utils.formatUnits(highestBid);
+        const auctionState: AuctionState = {
+          highestBidder,
+          settled,
+          endTime,
+          highestBidString,
+        };
+        return { data: auctionState };
       },
       providesTags: ['AuctionState'],
     }),
@@ -68,10 +78,7 @@ export const auctionsApi = createApi({
   }),
 });
 
-export async function getAuctionContractState(
-  auctionId: number,
-  stateUpdateCallback?: () => void
-): Promise<AuctionState> {
+export async function getAuctionContractState(auctionId: number, stateUpdateCallback?: () => void) {
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
   const auctionStruct = await auctionContract.getAuction(auctionId);
@@ -79,8 +86,8 @@ export async function getAuctionContractState(
     setupBidListener(auctionId, stateUpdateCallback);
   }
 
-  const auctionState: AuctionState = {
-    highestBid: +auctionStruct.highestBid,
+  const auctionState = {
+    highestBid: auctionStruct.highestBid,
     highestBidder: auctionStruct.highestBidder,
     settled: auctionStruct.settled,
     endTime: auctionStruct.endTime,
@@ -133,7 +140,7 @@ export async function bid({ auctionId, amount, signer }: BidArgs) {
 
   try {
     const auctionContract = await getAuctionContract(signer);
-    var tx = await auctionContract.bid(auctionId, weiValue);
+    var tx = await auctionContract.bid(auctionId, weiValue, { gasLimit: 1000000 });
     toast.promise(tx.wait(), {
       pending: 'Request submitted to the blockchain, awaiting confirmation...',
       success: `Success! You are now the highest bidder!`,
