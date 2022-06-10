@@ -1,6 +1,8 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/colors' as c;
 .nft-tile {
+	display: flex;
+	flex-direction: column;
   border-radius: 9px;
   overflow: hidden;
   background: #1e1e21;
@@ -13,32 +15,34 @@
   }
 }
 
-.interact {
+.nft-tile__interact {
   display: flex;
+	flex: 1;
   justify-content: space-between;
   padding: 10px;
-  &__info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+}
 
-  &__name {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 15px;
-    line-height: 19px;
-  }
+.nft-tile__interact-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-  &__subtitle {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 15px;
-    /* identical to box height, or 125% */
+.nft-tile__interact-name {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+}
 
-    color: rgba(196, 196, 196, 0.6);
-  }
+.nft-tile__interact-subtitle {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  /* identical to box height, or 125% */
+
+  color: rgba(196, 196, 196, 0.6);
 }
 
 .nft-tile__btn-container {
@@ -59,7 +63,7 @@
   //   background-color: #131314;
   //   color: #c4c4c4;
   // }
-  
+
   &__claimbutton {
     cursor: pointer;
     background: linear-gradient(90deg, #22b573 0%, #22b573 100%);
