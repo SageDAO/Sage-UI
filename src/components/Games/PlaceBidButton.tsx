@@ -20,7 +20,6 @@ export default function PlaceBidButton({ pending, onClick, auction }: Props) {
       settled: auctionState?.settled,
     });
 
-  if (!auction) return null;
   if (status === 'Live') {
     return (
       <button className='btn-place-bid' disabled={pending} onClick={onClick}>
@@ -44,4 +43,5 @@ export default function PlaceBidButton({ pending, onClick, auction }: Props) {
       </button>
     );
   }
+  return null;
 }

@@ -38,7 +38,6 @@ async function getEarnedPoints(walletAddress: string, response: NextApiResponse)
   const res: GetEarnedPointsResponse = {
     address: dbPoints?.address,
     totalPointsEarned: dbPoints?.totalPointsEarned.toString(),
-    proof: dbPoints?.proof,
     signedMessage: dbPoints.signedMessage,
     updatedAt: dbPoints.updatedAt,
   };
