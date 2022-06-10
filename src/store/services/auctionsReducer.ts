@@ -16,6 +16,8 @@ export interface AuctionState {
   settled: boolean;
   endTime: number; // timestamp
   nextMinBid: number;
+  bidIncrementPercentage: number;
+  timeExtension: number;
 }
 
 export const auctionsApi = createApi({
@@ -33,16 +35,8 @@ export const auctionsApi = createApi({
         console.log('getAuctionState()');
         const newHighestBidEventCallback = () =>
           dispatch(auctionsApi.util.invalidateTags(['AuctionState']));
-        const { highestBidNumber, highestBidder, settled, endTime, nextMinBid } =
-          await getAuctionContractState(auctionId);
+        const auctionState = await getAuctionContractState(auctionId);
         setupBidListener(auctionId, newHighestBidEventCallback);
-        const auctionState: AuctionState = {
-          highestBidder,
-          settled,
-          endTime,
-          highestBidNumber,
-          nextMinBid,
-        };
         return { data: auctionState };
       },
       providesTags: ['AuctionState'],
@@ -82,15 +76,19 @@ export async function getAuctionContractState(auctionId: number) {
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
   const auctionStruct = await auctionContract.getAuction(auctionId);
-  const bidIncrementPercentage = Number(await auctionContract.bidIncrementPercentage());
+  const timeExtension = Number(await auctionContract.defaultTimeExtension());
+  const bidIncrementPercentage = Number(await auctionContract.bidIncrementPercentage()) / 100;
   const highestBidNumber = +utils.formatUnits(auctionStruct.highestBid);
-  const nextMinBid = (highestBidNumber * (1 + bidIncrementPercentage)) / 100;
+  const endTime = auctionStruct.endTime * 1000;
+  const nextMinBid = highestBidNumber * (1 + bidIncrementPercentage / 100);
   const auctionState = {
     highestBidNumber,
     highestBidder: auctionStruct.highestBidder,
     settled: auctionStruct.settled,
-    endTime: auctionStruct.endTime,
+    endTime,
     nextMinBid,
+    bidIncrementPercentage,
+    timeExtension,
   };
 
   return auctionState;

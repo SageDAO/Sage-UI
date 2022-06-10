@@ -93,7 +93,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
       </div>
       <div className='game-panel__actions'>
         <div className='game-panel__btn-container'>
-          <PlaceBidButton pending={false} onClick={openPlaceBidModal} />
+          <PlaceBidButton pending={false} auction={auction} onClick={openPlaceBidModal} />
         </div>
         <Status
           endTime={auctionState?.endTime || auction.endTime}

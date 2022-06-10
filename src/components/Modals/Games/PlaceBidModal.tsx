@@ -25,7 +25,6 @@ interface State {
 //@scss : '@/styles/components/_games-modal.scss'
 function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
-  const bidMin: DesiredBidValue = auctionState?.nextMinBid || 0;
   const initialState: State = {
     desiredBidValue: +auction.minimumPrice!,
     minBid: +auction.minimumPrice!,
@@ -33,7 +32,6 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
   };
   const [state, setState] = useState<State>(initialState);
   const { data: accountData } = useAccount();
-  const { data: balance } = useBalance({ addressOrName: accountData?.address });
   const { data: signer } = useSigner();
 
   function handlePlaceBidClick() {
@@ -89,11 +87,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Bid extension</div>
-            <div className='games-modal__rules-value'>time</div>
+            <div className='games-modal__rules-value'>{auctionState?.timeExtension}</div>
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Bid increment</div>
-            <div className='games-modal__rules-value'>value</div>
+            <div className='games-modal__rules-value'>{auctionState?.bidIncrementPercentage}%</div>
           </div>
           <div className='games-modal__rules-divider-container'>
             <div className='games-modal__rules-divider-rectangle'></div>
@@ -106,7 +104,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
         <div className='games-modal__heading'>
           <h1 className='games-modal__heading-label'>Amount</h1>
           <div className='games-modal__heading-value games-modal__heading-value--blue'>
-            {auction.buyNowPrice}
+            {auction.buyNowPrice} COINS
           </div>
         </div>
         <div className='games-modal__bid-section'>
@@ -120,7 +118,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
               max={state.maxBid}
               disabled={pending}
             ></input>
-            <span className='games-modal__bid-unit'>ASH</span>
+            <span className='games-modal__bid-unit'>COINS</span>
             <button
               className='games-modal__bid-min-max-btn'
               disabled={pending}
@@ -137,7 +135,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
             </button>
           </div>
           <div className='games-modal__btn-container'>
-            <PlaceBidButton pending={pending} onClick={handlePlaceBidClick} />
+            <PlaceBidButton pending={pending} onClick={handlePlaceBidClick} auction={auction} />
           </div>
         </div>
         <div className='games-modal__status-container'>

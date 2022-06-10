@@ -20,4 +20,7 @@
   font-size: 13px;
   line-height: 16px;
   color: c.$white;
+  &[data-status='settled'] {
+    background-color: black;
+  }
 }

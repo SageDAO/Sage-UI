@@ -22,7 +22,7 @@ export default function AuctionTile({ auction, artist }: Props) {
       name={auction.Nft.name}
       button={
         <div className='nft-tile__btn-container'>
-          <PlaceBidButton pending={false} onClick={openModal}></PlaceBidButton>
+          <PlaceBidButton pending={false} auction={auction} onClick={openModal}></PlaceBidButton>
         </div>
       }
       subtitle={`Auction - ${auction.Nft.numberOfEditions} editions`}
