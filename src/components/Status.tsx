@@ -1,40 +1,9 @@
-import Countdown from './Countdown';
+import { computeGameStatus } from '@/utilities/status';
+import Countdown from '@/components/Countdown';
+
+type Props = Parameters<typeof computeGameStatus>[0];
 
 // styles/components/_status.scss
-type GameStatus = 'Done' | 'Live' | 'Error' | 'Upcoming' | 'Settled';
-
-interface ComputeGameStatusArgs {
-  endTime: number | Date;
-  startTime: number | Date;
-  settled: boolean;
-}
-
-export function computeGameStatus({
-  startTime,
-  endTime,
-  settled,
-}: ComputeGameStatusArgs): GameStatus {
-  let end = +endTime;
-  let start = +startTime;
-  if (settled) {
-    return 'Settled';
-  }
-  if (end < Date.now()) {
-    return 'Done';
-  }
-  if (start < Date.now()) {
-    return 'Live';
-  }
-  if (start > Date.now()) {
-    return 'Upcoming';
-  }
-
-  return 'Error';
-}
-
-interface Props extends ComputeGameStatusArgs {}
-
-// src/styles/components/_status.scss
 export default function Status({ endTime, startTime, settled }: Props) {
   const gameStatus = computeGameStatus({ endTime, startTime, settled });
   return (

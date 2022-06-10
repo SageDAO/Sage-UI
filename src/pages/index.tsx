@@ -7,7 +7,6 @@ import Slider from 'react-slick';
 
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import Drop from '@/components/Drop';
-import Link from 'next/link';
 import AWS from 'aws-sdk';
 
 interface BannerType {

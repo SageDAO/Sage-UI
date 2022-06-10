@@ -1,6 +1,6 @@
 import Loader from 'react-loader-spinner';
 import type { Auction_include_Nft } from '@/prisma/types';
-import { computeGameStatus } from '@/components/Status';
+import { computeGameStatus } from '@/utilities/status';
 import Countdown from '@/components/Countdown';
 import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 

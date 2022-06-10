@@ -41,7 +41,6 @@ async function getEarnedPoints(walletAddress: string, response: NextApiResponse)
     signedMessage: dbPoints.signedMessage,
     updatedAt: dbPoints.updatedAt,
   };
-  console.log('earnedPoints data: ', res);
   response.status(200).json(res);
   response.end();
 }
