@@ -10,7 +10,7 @@ import {
   useGetPrizesByUserAndLotteryQuery,
 } from '@/store/services/prizesReducer';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
-import { getBlockchainTimestamp, getCoinBalance } from '@/utilities/contracts';
+// import { getBlockchainTimestamp, getCoinBalance } from '@/utilities/contracts';
 import { Drop, Lottery_include_Nft, Auction_include_Nft, User } from '@/prisma/types';
 import {
   GetStaticPropsContext,
@@ -57,13 +57,13 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
   const { data: userPoints } = useGetPointsBalanceQuery(undefined, { skip: !walletAddress });
   const { data: escrowPoints } = useGetEscrowPointsQuery(undefined, { skip: !walletAddress });
   const userBalancePoints = userPoints! - escrowPoints!;
-  useEffect(() => {
-    const fetchTimestamp = async () => {
-      setBlockchainTimestamp(await getBlockchainTimestamp());
-      setUserBalanceCoins((await getCoinBalance()).toString());
-    };
-    fetchTimestamp();
-  }, []);
+  // useEffect(() => {
+  //   const fetchTimestamp = async () => {
+  //     setBlockchainTimestamp(await getBlockchainTimestamp());
+  //     setUserBalanceCoins((await getCoinBalance()).toString());
+  //   };
+  //   fetchTimestamp();
+  // }, []);
   const toTimestamp = (aDate: any) => Date.parse(aDate) / 1000;
   const hasStarted = lottery && blockchainTimestamp > toTimestamp(lottery.startTime);
   const hasEnded = lottery && blockchainTimestamp > toTimestamp(lottery.endTime);

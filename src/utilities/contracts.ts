@@ -10,7 +10,6 @@ import {
   ERC20Standard as ERC20Contract,
 } from '@/types/contracts';
 import { parameters } from '../constants/config';
-import web3Modal from './web3Modal';
 import { toast } from 'react-toastify';
 
 const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NETWORK_NAME } = parameters;
@@ -115,21 +114,20 @@ export function extractErrorMessage(err: any): string {
 }
 
 export async function getBlockchainTimestamp(): Promise<number> {
-  const connection = await web3Modal.connect();
-  const provider = new ethers.providers.Web3Provider(connection);
+  const provider = ethers.providers.getDefaultProvider(NETWORK_NAME);
   const currentBlock = await provider.getBlockNumber();
   const blockTimestamp = (await provider.getBlock(currentBlock)).timestamp;
   console.log(`getBlockchainTimestamp() :: ${new Date(blockTimestamp * 1000).toISOString()}`);
   return blockTimestamp;
 }
 
-export async function getCoinBalance() {
-  const connection = await web3Modal.connect();
-  const provider = new ethers.providers.Web3Provider(connection);
-  const balance = await provider.getBalance(await provider.getSigner().getAddress());
-  console.log(`getCoinBalance() :: ${balance}`);
-  return balance;
-}
+// export async function getCoinBalance() {
+//   const connection = await web3Modal.connect();
+//   const provider = new ethers.providers.Web3Provider(connection);
+//   const balance = await provider.getBalance(await provider.getSigner().getAddress());
+//   console.log(`getCoinBalance() :: ${balance}`);
+//   return balance;
+// }
 
 export async function approveERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
   const erc20Contract = new ethers.Contract(
