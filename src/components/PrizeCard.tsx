@@ -42,7 +42,7 @@ export default function PrizeCard({ prize }: Props) {
           </div>
         </div>
         <button
-          className='interact__claimbutton'
+          className='nft-tile__btn-container__claimbutton'
           onClick={handleClaimPrizeClick}
           style={{ width: '100%' }}
         >
