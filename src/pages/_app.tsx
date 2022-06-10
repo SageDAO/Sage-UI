@@ -36,7 +36,8 @@ const wagmiClient = createClient({
 });
 
 const apolloClient = new ApolloClient({
-  uri: 'https://api.studio.thegraph.com/query/28124/urndrops/v0.0.10',
+  // TODO store uri in config file
+  uri: 'https://api.studio.thegraph.com/query/28124/urndrops/v0.0.12',
   cache: new InMemoryCache(),
 });
 

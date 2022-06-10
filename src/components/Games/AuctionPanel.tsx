@@ -9,6 +9,7 @@ import { User } from '@prisma/client';
 import Status from '@/components/Status';
 import PlaceBidButton from './PlaceBidButton';
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import { BidHistoryModal } from '../Modals/Games/BidHistoryModal';
 
 interface Props {
   auction: Auction_include_Nft;
@@ -37,6 +38,11 @@ export default function AuctionPanel({ auction, artist }: Props) {
     closeModal: closePlaceBidModal,
     openModal: openPlaceBidModal,
   } = useModal();
+  const {
+    isOpen: isBidHistoryModalOpen,
+    closeModal: closeBidHistoryModal,
+    openModal: openBidHistoryModal,
+  } = useModal();
   const { data: accountData } = useAccount();
   const { data: userBalance } = useBalance({ addressOrName: accountData?.address });
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
@@ -56,6 +62,11 @@ export default function AuctionPanel({ auction, artist }: Props) {
         closeModal={closePlaceBidModal}
         auction={auction}
         artist={artist}
+      />
+      <BidHistoryModal
+        isOpen={isBidHistoryModalOpen}
+        closeModal={closeBidHistoryModal}
+        auctionId={auction.id}
       />
       <div className='game-panel__header'>
         <h1 className='game-panel__header-title'>Auction</h1>
@@ -79,7 +90,10 @@ export default function AuctionPanel({ auction, artist }: Props) {
             <h1 className='game-panel__pricing-label'>Highest Bidder</h1>
             <div className='game-panel__highest-bidder'>
               <div className='game-panel__highest-bidder-pfp'>
-                <Image src={highestBidder?.profilePicture || DEFAULT_PROFILE_PICTURE} layout='fill' />
+                <Image
+                  src={highestBidder?.profilePicture || DEFAULT_PROFILE_PICTURE}
+                  layout='fill'
+                />
               </div>
               <div className='game-panel__highest-bidder-name'>
                 {highestBidder?.displayName}
@@ -94,6 +108,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
       <div className='game-panel__actions'>
         <div className='game-panel__btn-container'>
           <PlaceBidButton pending={false} auction={auction} onClick={openPlaceBidModal} />
+          <button onClick={openBidHistoryModal}>Bid History</button>
         </div>
         <Status
           endTime={auctionState?.endTime || auction.endTime}

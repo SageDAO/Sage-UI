@@ -16,13 +16,15 @@ export default function ProfilePictureModal({ isOpen, closeModal, title }: Modal
     image: DEFAULT_PROFILE_PICTURE,
     scale: 1,
   };
+  const [state, setState] = useState<State>(initialState);
   const { data: user } = useGetUserQuery();
   if (user && user.profilePicture) {
     initialState.image = user.profilePicture;
   }
   const [updateUser] = useUpdateUserMutation();
-  const [state, setState] = useState<State>(initialState);
+
   var editor: any;
+  
   const setEditorRef = (_editor: any) => {
     if (_editor) {
       editor = _editor;
