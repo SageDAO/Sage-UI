@@ -1,11 +1,14 @@
 @use '@/styles/layout/layout' as l;
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 
 .game-page {
   padding: 43px l.$indent;
 
   .game__main {
     display: flex;
+    gap: 60px;
+    flex-direction: column;
   }
 
   .game__nft-display {
@@ -21,7 +24,6 @@
     flex-direction: column;
     gap: 25px;
     flex: 1;
-    margin-left: 60px;
   }
 
   .nft__header {
@@ -68,7 +70,7 @@
     color: #6f767e;
   }
 
-  .game__info {
+  .game-info {
     display: flex;
     flex-direction: column;
     padding: 30px;
@@ -77,43 +79,73 @@
     border-radius: 18px;
   }
 
-  .game__info-nav {
+  .game-info__tab-list {
     display: flex;
   }
 
-  .game__info-nav-item {
+  .game-info__tab {
+    @include m.interact;
     font-style: normal;
     font-weight: 500;
     font-size: 13px;
     line-height: 29px;
 
-    width: 99px;
+    padding: 0 10px;
     height: 29px;
-    cursor: pointer;
-  }
-
-  .game__info-nav-item--inactive {
     border-bottom: 2px solid gray;
     color: #6f767e;
+    transition-duration: 200ms;
+    outline: none;
+
+    &--active {
+      color: #ffffff;
+      border-bottom: 2px solid white;
+    }
   }
 
-  .game__info-nav-item--active {
-    color: #ffffff;
-    border-bottom: 2px solid white;
+  .game-info__tab-panels-container {
   }
 
-  .game__info-content {
+  .game-info__tab-panel {
     margin-top: 30px;
+    opacity: 0;
+    transition-duration: 200ms;
+
+    &--active {
+      opacity: 1;
+    }
   }
 
-  .game__info-about {
+  .game-info__bid-history-table {
+		table-layout: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 14px;
+  }
+
+  @mixin game-info__bid-history-row {
+    display: flex;
+		gap: 30px;
+    width: 100%;
+  }
+
+  .game-info__bid-history-header {
+    @include game-info__bid-history-row;
+  }
+
+  .game-info__bid-history-item {
+    @include game-info__bid-history-row;
+  }
+
+  .game-info__about {
     display: flex;
     flex-direction: column;
     height: 100%;
     gap: 14px;
   }
 
-  .game__info-about-drop-title {
+  .game-info__about-drop-title {
     font-style: normal;
     font-weight: 500;
     font-size: 19px;
@@ -123,7 +155,7 @@
     color: #ffffff;
   }
 
-  .game__info-about-drop-description {
+  .game-info__about-drop-description {
     font-style: normal;
     font-weight: 400;
     font-size: 13px;
@@ -132,7 +164,7 @@
     color: #6f767e;
   }
 
-  .game__info-about-drop-link {
+  .game-info__about-drop-link {
     font-style: normal;
     font-weight: 600;
     font-size: 12px;

@@ -85,7 +85,7 @@ function auction({ auction, auctions, lotteries, artist, drawings, drop }: Props
             numberOfEditions={auction.Nft.numberOfEditions}
           />
           <AuctionPanel auction={auction} artist={artist} />
-          <GameInfo drop={drop} />
+          <GameInfo drop={drop} auction={auction} />
         </div>
       </div>
       <MoreInDrop
