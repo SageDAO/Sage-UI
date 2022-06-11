@@ -8,7 +8,7 @@ import { playErrorSound, playPrizeClaimedSound, playTxSuccessSound } from '@/uti
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
-import { ethers, Signer, utils } from 'ethers';
+import { BigNumber, ethers, Signer, utils } from 'ethers';
 
 export interface AuctionState {
   highestBidder: string; // wallet address
@@ -72,26 +72,34 @@ export const auctionsApi = createApi({
   }),
 });
 
-export async function getAuctionContractState(auctionId: number) {
+export async function getAuctionContractState(auctionId: number): Promise<AuctionState> {
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
   const auctionStruct = await auctionContract.getAuction(auctionId);
+
   const timeExtension = Number(await auctionContract.defaultTimeExtension());
-  const bidIncrementPercentage = Number(await auctionContract.bidIncrementPercentage()) / 100;
-  const highestBidNumber = +utils.formatUnits(auctionStruct.highestBid);
   const endTime = auctionStruct.endTime * 1000;
-  const nextMinBid = highestBidNumber * (1 + bidIncrementPercentage / 100);
-  const auctionState = {
-    highestBidNumber,
+
+  const bidIncrementPercentage = await auctionContract.bidIncrementPercentage();
+  const highestBidNumber = utils.formatUnits(auctionStruct.highestBid);
+  const nextMinBid = Number(
+    utils.formatUnits(
+      auctionStruct.highestBid
+        .mul(BigNumber.from(10000).add(bidIncrementPercentage))
+        .div(BigNumber.from(10000))
+    )
+  );
+
+  console.log('new min BN: ');
+  return {
+    highestBidNumber: +highestBidNumber,
     highestBidder: auctionStruct.highestBidder,
     settled: auctionStruct.settled,
     endTime,
     nextMinBid,
-    bidIncrementPercentage,
+    bidIncrementPercentage: +bidIncrementPercentage,
     timeExtension,
   };
-
-  return auctionState;
 }
 
 /*
