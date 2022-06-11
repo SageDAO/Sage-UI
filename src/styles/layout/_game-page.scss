@@ -104,10 +104,10 @@
   }
 
   .game-info__tab-panels-container {
+    margin-top: 30px;
   }
 
   .game-info__tab-panel {
-    margin-top: 30px;
     opacity: 0;
     transition-duration: 200ms;
 
@@ -117,25 +117,53 @@
   }
 
   .game-info__bid-history-table {
-		table-layout: fixed;
+    table-layout: fixed;
     display: flex;
     flex-direction: column;
     width: 100%;
+    text-align: left;
     gap: 14px;
+  }
+
+  .game-info__bid-history-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 
   @mixin game-info__bid-history-row {
     display: flex;
-		gap: 30px;
+    gap: 30px;
     width: 100%;
+    //bid-history-table column widths
+
+    & * {
+      &[data-col='time'] {
+        width: 10%;
+      }
+      &[data-col='bidder'] {
+        flex: 1;
+      }
+      &[data-col='amount'] {
+        width: 20%;
+        text-align: right;
+      }
+    }
   }
 
   .game-info__bid-history-header {
     @include game-info__bid-history-row;
+    border-bottom: 1px solid c.$bg-base;
+    padding-bottom: 12px;
   }
 
   .game-info__bid-history-item {
     @include game-info__bid-history-row;
+    @include m.interact;
+		@include m.hover {
+			background-color: c.$bg-base;
+		}
+		padding: 10px 4px;
   }
 
   .game-info__about {
