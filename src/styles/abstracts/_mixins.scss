@@ -1,4 +1,5 @@
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/animations' as a;
 @mixin img-container {
   position: relative;
   overflow: hidden;
@@ -21,7 +22,7 @@
 @mixin hover {
   &:not([disabled]):hover {
     filter: brightness(0.9);
-		@content;
+    @content;
   }
 }
 
@@ -32,4 +33,16 @@
 
 @mixin pill {
   border-radius: 999px;
+}
+
+@mixin animate-highlight {
+  animation-duration: 900ms;
+  animation-iteration-count: 7;
+  animation-name: highlight;
+}
+
+@keyframes highlight {
+  60% {
+    background-color: c.$bg-base;
+  }
 }

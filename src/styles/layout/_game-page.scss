@@ -160,10 +160,17 @@
   .game-info__bid-history-item {
     @include game-info__bid-history-row;
     @include m.interact;
-		@include m.hover {
-			background-color: c.$bg-base;
-		}
-		padding: 10px 4px;
+    @include m.hover {
+      background-color: c.$bg-base;
+    }
+
+    &[data-animate-first='true'] {
+      &:nth-child(1) {
+				@include m.animate-highlight;
+      }
+    }
+
+    padding: 10px 4px;
   }
 
   .game-info__about {
