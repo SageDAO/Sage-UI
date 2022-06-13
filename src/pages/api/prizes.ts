@@ -30,8 +30,8 @@ export default async function (request: NextApiRequest, response: NextApiRespons
     case 'IsLotteryDrawn':
       await isLotteryDrawn(Number(lotteryId), response);
       break;
-    case 'GetPrizesByUser':
-      await getPrizesByUser(walletAddress as string, response);
+    case 'GetClaimedPrizesByUser':
+      await getClaimedPrizesByUser(walletAddress as string, response);
       break;
     case 'GetUnclaimedPrizesByUser':
       await getUnclaimedPrizesByUser(walletAddress as string, response);
@@ -52,13 +52,16 @@ export default async function (request: NextApiRequest, response: NextApiRespons
   response.end();
 }
 
-async function getPrizesByUser(walletAddress: string, response: NextApiResponse) {
+async function getClaimedPrizesByUser(walletAddress: string, response: NextApiResponse) {
   let prizeNfts: GamePrize[] = [];
   if (walletAddress && walletAddress != '') {
     try {
       const prizes: PrizeWithNftAndArtist[] = await prisma.prizeProof.findMany({
         where: {
           winnerAddress: walletAddress,
+          NOT: {
+            claimedAt: null
+          }
         },
         include: {
           Nft: {
@@ -81,7 +84,7 @@ async function getPrizesByUser(walletAddress: string, response: NextApiResponse)
       console.log(e);
     }
   }
-  console.log(`getPrizesByUser(${walletAddress}) = ${prizeNfts.length}`);
+  console.log(`getClaimedPrizesByUser(${walletAddress}) = ${prizeNfts.length}`);
   response.status(200).json(prizeNfts);
 }
 

@@ -20,6 +20,7 @@ export interface AuctionState {
   timeExtension: number;
 }
 
+// TODO improve tags/cache handling
 export const auctionsApi = createApi({
   reducerPath: 'auctionsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
@@ -40,6 +41,10 @@ export const auctionsApi = createApi({
         return { data: auctionState };
       },
       providesTags: ['AuctionState'],
+    }),
+    getClaimedAuctionNftsPerUser: builder.query<GamePrize[], void>({
+      query: () => `auctions?action=GetClaimedAuctionNftsPerUser`,
+      providesTags: ['Auction'],
     }),
     getUnclaimedAuctionNftsPerUser: builder.query<GamePrize[], void>({
       query: () => `auctions?action=GetUnclaimedAuctionNftsPerUser`,
@@ -170,5 +175,6 @@ export const {
   useGetAuctionQuery,
   useGetAuctionStateQuery,
   useClaimAuctionNftMutation,
+  useGetClaimedAuctionNftsPerUserQuery,
   useGetUnclaimedAuctionNftsPerUserQuery,
 } = auctionsApi;

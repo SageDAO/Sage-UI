@@ -34,6 +34,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'GetAuction':
       await getAuction(Number(request.query.auctionId), response);
       break;
+    case 'GetClaimedAuctionNftsPerUser':
+      await getClaimedAuctionNftsPerUser(walletAddress as string, response);
+      break;
     case 'GetUnclaimedAuctionNftsPerUser':
       await getUnclaimedAuctionNftsPerUser(walletAddress as string, response);
       break;
@@ -77,6 +80,39 @@ async function getAuction(auctionId: number, response: NextApiResponse) {
       response.json(auction);
     } catch (e) {
       console.log({ e });
+      response.status(500);
+    }
+  }
+  response.end();
+}
+
+async function getClaimedAuctionNftsPerUser(walletAddress: string, response: NextApiResponse) {
+  if (!walletAddress) {
+    response.status(401).end('Not Authenticated');
+  } else {
+    try {
+      const claimedAuctions = await prisma.auction.findMany({
+        where: {
+          winnerAddress: walletAddress,
+          settled: true,
+        },
+        include: {
+          Nft: true,
+          Drop: {
+            include: {
+              Artist: true,
+            },
+          },
+        },
+      });
+      const claimedNfts = Array<GamePrize>();
+      claimedAuctions.forEach((a) =>
+        claimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.Artist }))
+      );
+      console.log(`getClaimedAuctionNftsPerUser(${walletAddress}) :: ${claimedNfts.length}`);
+      response.json(claimedNfts);
+    } catch (e) {
+      console.log(e);
       response.status(500);
     }
   }

@@ -40,9 +40,9 @@ export const prizesApi = createApi({
     isLotteryDrawn: builder.query<boolean, number>({
       query: (lotteryId: number) => `prizes?action=IsLotteryDrawn&lotteryId=${lotteryId}`,
     }),
-    getPrizesByUser: builder.query<GamePrize[], string>({
+    getClaimedPrizesByUser: builder.query<GamePrize[], string>({
       query: (walletAddress: string) =>
-        `prizes?action=GetPrizesByUser&walletAddress=${walletAddress}`,
+        `prizes?action=GetClaimedPrizesByUser&walletAddress=${walletAddress}`,
       providesTags: ['Prizes'],
     }),
     getUnclaimedPrizesByUser: builder.query<GamePrize[], string>({
@@ -136,7 +136,7 @@ function toByteArray(proof: string) {
 }
 
 export const {
-  useGetPrizesByUserQuery,
+  useGetClaimedPrizesByUserQuery,
   useGetUnclaimedPrizesByUserQuery,
   useGetPrizesByUserAndLotteryQuery,
   useClaimLotteryPrizeMutation,
