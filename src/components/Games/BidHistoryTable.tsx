@@ -1,3 +1,4 @@
+import shortenAddress from '@/utilities/shortenAddress';
 import { gql, useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
 import { useState } from 'react';
@@ -112,7 +113,7 @@ export default function BidHistoryTable({ auctionId }: Props) {
                 data-animate-first={animateFirst}
               >
                 <th data-col='time'>{dateTime}</th>
-                <th data-col='bidder'>{bidder}</th>
+                <th data-col='bidder'>{shortenAddress(bidder)}</th>
                 <th data-col='amount'>{amountFormattedShortened}</th>
               </tr>
             );

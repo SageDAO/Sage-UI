@@ -163,7 +163,7 @@
       display: flex;
       align-items: center;
       &[data-col='time'] {
-        width: 20%;
+        width: 40%;
       }
       &[data-col='bidder'] {
         flex: 1;
@@ -185,7 +185,6 @@
 
   .game-info__bid-history-item {
     @include game-info__bid-history-row;
-    @include m.interact;
     @include m.hover {
       background-color: c.$bg-base;
     }
@@ -196,6 +195,7 @@
       }
     }
 
+		cursor: default;
     padding: 10px 4px;
   }
 
