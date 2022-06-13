@@ -67,6 +67,9 @@
     @include b.min-width('medium') {
       grid-template-columns: repeat(3, 1fr);
     }
+    @include b.min-width('2xl') {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   #explore-all {
