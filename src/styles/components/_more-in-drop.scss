@@ -1,4 +1,5 @@
-@use "@/styles/layout/layout" as l;
+@use '@/styles/layout/layout' as l;
+@use '@/styles/abstracts/breakpoints' as b;
 
 .more-in-drop {
   margin-top: 100px;
@@ -16,10 +17,19 @@
 }
 
 .more-in-drop__grid {
-	margin-top: 23px;
+  margin-top: 23px;
   width: 100%;
   min-height: 400px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-	gap: 30px;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 30px;
+  @include b.min-width('small') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include b.min-width('medium') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include b.min-width('2xl') {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

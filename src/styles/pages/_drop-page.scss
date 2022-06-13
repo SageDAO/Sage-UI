@@ -1,5 +1,6 @@
-@use "@/styles/layout/layout" as l;
-@use "@/styles/abstracts/colors" as c;
+@use '@/styles/layout/layout' as l;
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/breakpoints' as b;
 
 @mixin section__title {
   font-size: 19px;
@@ -25,11 +26,19 @@
     width: 100%;
     border-radius: 18px;
     display: flex;
+    flex-direction: column;
+    @include b.min-width('small') {
+      flex-direction: row;
+    }
   }
   &__details {
-    width: 50%;
+    width: 100%;
     padding: 30px;
     border-right: 1px solid c.$bg-base;
+
+    @include b.min-width('small') {
+      width: 50%;
+    }
 
     .artist {
       display: flex;
@@ -90,10 +99,16 @@
   }
 
   &__mechanics {
-    width: 50%;
+    width: 100%;
     padding: 30px;
 
+    @include b.min-width('small') {
+      width: 50%;
+    }
+
     .header {
+			// width: 100%;
+			// background-color: red;
       display: flex;
       align-items: center;
       text-align: center;
@@ -153,7 +168,16 @@
     margin-top: 23px;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 30px;
+    @include b.min-width('small') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include b.min-width('medium') {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @include b.min-width('2xl') {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 }

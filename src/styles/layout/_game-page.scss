@@ -1,6 +1,7 @@
 @use '@/styles/layout/layout' as l;
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
 
 .game-page {
   padding: 43px l.$indent;
@@ -9,14 +10,24 @@
     display: flex;
     gap: 60px;
     flex-direction: column;
+    @include b.min-width('large') {
+      flex-direction: row;
+    }
   }
 
   .game__nft-display {
-    aspect-ratio: 650/816;
     position: relative;
-    width: max(300px, 30vw);
+    width: 100%;
+    aspect-ratio: 650/816;
     border-radius: 1em;
     overflow: hidden;
+    @include b.min-width('medium') {
+      aspect-ratio: 650/400;
+    }
+    @include b.min-width('large') {
+      aspect-ratio: 650/816;
+      width: max(300px, 30vw);
+    }
   }
 
   .game__content {
@@ -117,7 +128,7 @@
   }
 
   .game-info__bid-history-table {
-		margin-top: 30px;
+    margin-top: 30px;
     table-layout: fixed;
     display: flex;
     flex-direction: column;
@@ -149,6 +160,8 @@
     //bid-history-table column widths
 
     & * {
+      display: flex;
+      align-items: center;
       &[data-col='time'] {
         width: 20%;
       }
@@ -158,6 +171,8 @@
       &[data-col='amount'] {
         width: 20%;
         text-align: right;
+        display: flex;
+        justify-content: end;
       }
     }
   }

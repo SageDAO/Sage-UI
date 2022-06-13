@@ -1,5 +1,6 @@
-@use "@/styles/abstracts/colors" as c;
-@use "@/styles/layout/layout" as l;
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/layout/layout' as l;
+@use '@/styles/abstracts/breakpoints' as b;
 #home-page {
   flex: 1;
   .banner-slider {
@@ -58,8 +59,14 @@
   #featured-drops {
     margin: 23px l.$indent 55px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 2%;
+    @include b.min-width('small') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @include b.min-width('medium') {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   #explore-all {
