@@ -104,7 +104,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
         <div className='games-modal__heading'>
           <h1 className='games-modal__heading-label'>Amount</h1>
           <div className='games-modal__heading-value games-modal__heading-value--blue'>
-            {auction.buyNowPrice} COINS
+            {auction.buyNowPrice} ASH
           </div>
         </div>
         <div className='games-modal__bid-section'>
@@ -118,7 +118,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
               max={state.maxBid}
               disabled={pending}
             ></input>
-            <span className='games-modal__bid-unit'>COINS</span>
+            <span className='games-modal__bid-unit'>ASH</span>
             <button
               className='games-modal__bid-min-max-btn'
               disabled={pending}

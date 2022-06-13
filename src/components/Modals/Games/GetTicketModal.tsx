@@ -169,8 +169,8 @@ function GetTicketModal({ isOpen, closeModal, lottery, dropName, artist, nft }: 
           </div>
           <div className='games-modal__tickets-total'>
             <span className='games-modal__tickets-total-label'>Total </span>
-            {desiredTicketAmount * lottery.costPerTicketPoints} POINTS{' + '}
-            {desiredTicketAmount * lottery.costPerTicketTokens} COINS
+            {desiredTicketAmount * lottery.costPerTicketPoints} PIXEL{' + '}
+            {desiredTicketAmount * lottery.costPerTicketTokens} ASH
           </div>
           <div className='games-modal__btn-container'>
             <GetTicketsButton onClick={handleBuyTicketClick} pending={isLoading}></GetTicketsButton>
