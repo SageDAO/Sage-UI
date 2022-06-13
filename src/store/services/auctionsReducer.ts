@@ -9,6 +9,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import { BigNumber, ethers, Signer, utils } from 'ethers';
+import { useSigner } from 'wagmi';
 
 export interface AuctionState {
   highestBidder: string; // wallet address
@@ -50,18 +51,19 @@ export const auctionsApi = createApi({
       query: () => `auctions?action=GetUnclaimedAuctionNftsPerUser`,
       providesTags: ['Auction'],
     }),
-    claimAuctionNft: builder.mutation<Date, number>({
-      queryFn: async (auctionId, {}, _extraOptions, _fetchWithBQ) => {
+    claimAuctionNft: builder.mutation<Date, { id: number; signer: Signer }>({
+      queryFn: async ({ id, signer }, {}, _extraOptions, _fetchWithBQ) => {
+        console.log(`claimAuctionNft(${id})`);
         try {
-          const contract = await getAuctionContract();
-          var tx = await contract.settleAuction(auctionId);
+          const contract = await getAuctionContract(signer);
+          var tx = await contract.settleAuction(id);
           toast.promise(tx.wait(), {
             pending: 'Request submitted to the blockchain, awaiting confirmation...',
-            success: 'Success! NFT claimed!',
+            success: 'Success! NFT claimed and moved to your collection!',
             error: 'Failure! Unable to complete request.',
           });
           await tx.wait();
-          var claimedAt = await updateDbPrizeClaimedDate(_fetchWithBQ, auctionId);
+          var claimedAt = await updateDbPrizeClaimedDate(_fetchWithBQ, id);
         } catch (e) {
           console.error(e);
           const errMsg = extractErrorMessage(e);

@@ -41,8 +41,8 @@ export default function rewards() {
           flexWrap: 'wrap'
         }}
       >
-        {false && prizes?.length == 0 && (
-          <div style={{ marginTop: '50px', marginLeft: '50px' }}>
+        {prizes?.length == 0 && (
+          <div style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}>
             No unclaimed prizes to display (yet)!
           </div>
         )}

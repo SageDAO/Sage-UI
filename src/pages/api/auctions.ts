@@ -12,6 +12,7 @@ interface FlattenArgs {
 
 function flatten({ auction, drop, artist }: FlattenArgs): GamePrize {
   return {
+    auctionId: auction.id,
     nftId: auction.Nft.id,
     dropId: drop.id,
     nftName: auction.Nft.name,

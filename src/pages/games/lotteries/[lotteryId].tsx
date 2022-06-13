@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import prisma from '@/prisma/client';
 import { Prisma } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { useGetTicketCountsQuery } from '@/store/services/lotteriesReducer';
 import { useSession } from 'next-auth/react';
 import {
-  ClaimPrizeRequest,
-  useClaimLotteryPrizeMutation,
   useGetPrizesByUserAndLotteryQuery,
 } from '@/store/services/prizesReducer';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
@@ -53,7 +51,6 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
     { lotteryId: +lotteryId!, walletAddress: walletAddress as string },
     { skip: isNaN(+lotteryId!) || !walletAddress }
   );
-  const [claimLotteryPrize] = useClaimLotteryPrizeMutation();
   const { data: userPoints } = useGetPointsBalanceQuery(undefined, { skip: !walletAddress });
   const { data: escrowPoints } = useGetEscrowPointsQuery(undefined, { skip: !walletAddress });
   const userBalancePoints = userPoints! - escrowPoints!;
@@ -68,17 +65,6 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
   const hasStarted = lottery && blockchainTimestamp > toTimestamp(lottery.startTime);
   const hasEnded = lottery && blockchainTimestamp > toTimestamp(lottery.endTime);
   const displayBuyTicketButton = hasStarted && !hasEnded;
-
-  const handleClaimLotteryPrizeClick = async (index: number) => {
-    await claimLotteryPrize({
-      lotteryId: prizes![index].lotteryId,
-      nftId: prizes![index].nftId,
-      ticketNumber: prizes![index].lotteryTicketNumber,
-      proof: prizes![index].lotteryProof,
-      walletAddress,
-    } as ClaimPrizeRequest);
-  };
-
   const currentNft = lottery.Nfts[selectedNftIndex];
 
   return (

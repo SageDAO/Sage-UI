@@ -144,9 +144,7 @@ export async function approveERC20Transfer(erc20Address: string, signer: Signer,
 }
 
 /**
- * This function is called server-side, so web3Modal isn't available
- * if auction is finished and unclaimed, returns the winning wallet address;
- * if auction is already settled and claimed, throws an error
+ * This function is called server-side so winner can't be spoofed
  */
 export async function getUnclaimedAuctionWinner(auctionId: number): Promise<string> {
   console.log(`getUnclaimedAuctionWinner(${auctionId})`);
@@ -156,8 +154,8 @@ export async function getUnclaimedAuctionWinner(auctionId: number): Promise<stri
   const signer = new ethers.Wallet(privateKey, provider);
   const contract = new ethers.Contract(AUCTION_ADDRESS, Auction.abi, signer);
   const auctionState = await contract.getAuction(auctionId);
-  if (auctionState.settled || auctionState.endTime > new Date().getTime() / 1000) {
-    throw Error(`Auction ${auctionId} is already settled or hasn't finished yet.`);
+  if (auctionState.endTime > new Date().getTime() / 1000) {
+    throw Error(`Auction ${auctionId} hasn't finished yet.`);
   }
   return auctionState.highestBidder;
 }

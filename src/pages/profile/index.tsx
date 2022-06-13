@@ -1,46 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import Loader from 'react-loader-spinner';
-import { useGetUserQuery } from '@/store/services/user';
-import {
-  useGetClaimedPrizesByUserQuery,
-  useGetUnclaimedPrizesByUserQuery,
-} from '@/store/services/prizesReducer';
 import { useSession } from 'next-auth/react';
+import Loader from 'react-loader-spinner';
+import { useAccount, useBalance } from 'wagmi';
+import { toast } from 'react-toastify';
+import { useGetUserQuery } from '@/store/services/user';
 import shortenAddress from '@/utilities/shortenAddress';
 import EditProfileModal from '@/components/Modals/EditProfileModal';
-import { toast } from 'react-toastify';
-import { GamePrize } from '@/prisma/types';
 import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
-import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import { DEFAULT_PROFILE_PICTURE, parameters } from '@/constants/config';
 import useModal from '@/hooks/useModal';
-import {
-  useGetClaimedAuctionNftsPerUserQuery,
-  useGetUnclaimedAuctionNftsPerUserQuery,
-} from '@/store/services/auctionsReducer';
-import Link from 'next/link';
+import { MyCollection } from '@/components/MyCollection';
 
 function profile() {
   const { data: sessionData } = useSession();
-  const {
-    data: userData,
-    isFetching: isFetchingUser,
-    isError: isFetchUserError,
-  } = useGetUserQuery();
-  const { data: claimedPrizes } = useGetClaimedPrizesByUserQuery(sessionData?.address as string, {
-    skip: !sessionData,
-  });
-  const { data: unclaimedPrizes } = useGetUnclaimedPrizesByUserQuery(
-    sessionData?.address as string,
-    {
-      skip: !sessionData,
-    }
-  );
-  const { data: claimedAuctionNfts } = useGetClaimedAuctionNftsPerUserQuery(undefined, {
-    skip: !sessionData,
-  });
-  const { data: unclaimedAuctionNfts } = useGetUnclaimedAuctionNftsPerUserQuery(undefined, {
-    skip: !sessionData,
+  const { data: userData, isFetching: isFetchingUser } = useGetUserQuery();
+  const { data: accountData } = useAccount();
+  const { ASHTOKEN_ADDRESS } = parameters;
+  const { data: userBalance } = useBalance({
+    addressOrName: accountData?.address,
+    token: ASHTOKEN_ADDRESS,
   });
   const {
     isOpen: isEditModalOpen,
@@ -63,10 +42,6 @@ function profile() {
       </div>
     );
   }
-  if (isFetchUserError) {
-    return <div className='profile-page'>Error</div>;
-  }
-  const numUnclaimedItems = (unclaimedAuctionNfts?.length || 0) + (unclaimedPrizes?.length || 0);
 
   return (
     <div className='profile-page'>
@@ -106,71 +81,19 @@ function profile() {
               className='account-card__private-info-address'
               onClick={() => {
                 window.navigator.clipboard.writeText(sessionData?.address as string);
-                toast.success('copied address');
+                toast.success('Address copied to clipboard');
               }}
             >
               {shortenAddress(userData?.walletAddress as string)}
             </div>
-            {/*
-            <div className='account-card__private-info-pina'>7021 ASH</div>
-						*/}
+            <div className='account-card__private-info-pina'>
+              {(userBalance && userBalance.formatted + ' ' + userBalance.symbol) || '0'}
+            </div>
           </div>
           <h1 className='account-card__private-email'>{userData?.email}</h1>
         </div>
       </div>
-      <div className='collection'>
-        <div className='collection__header'>
-          My Collection
-          {numUnclaimedItems > 0 && (
-            <div className='collection__claimable'>
-              <Link href='/rewards'>
-                <>
-                  You have {numUnclaimedItems} NFT {numUnclaimedItems > 1 && 's'} to claim. Click
-                  here to view {numUnclaimedItems > 1 ? 'them' : 'it'}!
-                </>
-              </Link>
-            </div>
-          )}
-        </div>
-        <div className='collection__grid'>
-          {claimedPrizes?.map((p: GamePrize) => {
-            return (
-              <div className='collection__tile'>
-                <div className='collection__tile-img'>
-                  <Image src={p.s3Path} layout='fill' objectFit='cover' />
-                </div>
-                <div className='collection__tile-details'>
-                  <div className='collection__tile-artist-pfp'>
-                    <Image src={p.artistProfilePicture} layout='fill' objectFit='cover' />
-                  </div>
-                  <div className='collection__tile-artist-info'>
-                    <div className='collection__tile-nft-name'>{p.nftName}</div>
-                    <div className='collection__tile-artist-name'>by {p.artistDisplayName}</div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-          {claimedAuctionNfts?.map((p: GamePrize) => {
-            return (
-              <div className='collection__tile'>
-                <div className='collection__tile-img'>
-                  <Image src={p.s3Path} layout='fill' objectFit='cover' />
-                </div>
-                <div className='collection__tile-details'>
-                  <div className='collection__tile-artist-pfp'>
-                    <Image src={p.artistProfilePicture} layout='fill' objectFit='cover' />
-                  </div>
-                  <div className='collection__tile-artist-info'>
-                    <div className='collection__tile-nft-name'>{p.nftName}</div>
-                    <div className='collection__tile-artist-name'>by {p.artistDisplayName}</div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <MyCollection />
     </div>
   );
 }

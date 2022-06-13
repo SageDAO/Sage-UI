@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { extractErrorMessage, getLotteryContract } from '../../utilities/contracts';
 import { playErrorSound, playPrizeClaimedSound } from '../../utilities/sounds';
 import { GamePrize } from '@/prisma/types';
+import { Signer } from 'ethers';
 
 export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{
   include: {
@@ -29,6 +30,7 @@ export interface ClaimPrizeRequest {
   ticketNumber: number;
   proof: string;
   walletAddress: string;
+  signer: Signer;
 }
 
 export const prizesApi = createApi({
@@ -60,13 +62,13 @@ export const prizesApi = createApi({
     }),
     claimLotteryPrize: builder.mutation<Date, ClaimPrizeRequest>({
       queryFn: async (
-        { lotteryId, nftId, ticketNumber, proof, walletAddress },
+        { lotteryId, nftId, ticketNumber, proof, walletAddress, signer },
         {},
         _extraOptions,
         _fetchWithBQ
       ) => {
         try {
-          const contract = await getLotteryContract();
+          const contract = await getLotteryContract(signer);
           var tx = await contract.claimPrize(
             lotteryId,
             walletAddress,

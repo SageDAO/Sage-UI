@@ -15,11 +15,7 @@ import {
 } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import {
-  useClaimAuctionNftMutation,
-  useGetAuctionQuery,
-  useGetAuctionStateQuery,
-} from '@/store/services/auctionsReducer';
+import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 import { useGetUserDisplayInfoQuery } from '@/store/services/user';
 import { getBlockchainTimestamp } from '@/utilities/contracts';
 import { useSession } from 'next-auth/react';
@@ -51,7 +47,6 @@ function auction({ auction, auctions, lotteries, artist, drawings, drop }: Props
       auctionState?.highestBidder != '0x0000000000000000000000000000000000000000'
     ),
   });
-  const [claimAuctionNft] = useClaimAuctionNftMutation();
   useEffect(() => {
     const fetchTimestamp = async () => {
       setBlockchainTimestamp(await getBlockchainTimestamp());
@@ -68,9 +63,6 @@ function auction({ auction, auctions, lotteries, artist, drawings, drop }: Props
     hasEnded &&
     auctionState?.highestBidder == walletAddress;
 
-  const handleClaimNftClick = async () => {
-    await claimAuctionNft(auction?.id!);
-  };
   return (
     <div className='game-page'>
       <div className='game__main'>
