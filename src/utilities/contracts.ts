@@ -132,7 +132,8 @@ export async function approveERC20Transfer(erc20Address: string, signer: Signer,
   console.log(
     `approveERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
   );
-  if (allowance.lt(BigNumber.from(utils.parseEther(String(amount))))) {
+  const amountBN = BigNumber.from(utils.parseEther(String(amount)));
+  if (allowance.lt(amountBN)) {
     var tx = await erc20Contract.approve(AUCTION_ADDRESS, ethers.constants.MaxUint256);
     toast.promise(tx.wait(), {
       pending: 'Approval submitted to the blockchain, awaiting confirmation...',
