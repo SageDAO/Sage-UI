@@ -21,7 +21,7 @@ export default function GamesModalHeader({ imgSrc, artist, nftEditions, nftName 
       <div className='games-modal__header-right'>
         <div className='games-modal__header-artist'>
           <div className='games-modal__header-artist-pfp'>
-            <Image src={DEFAULT_PROFILE_PICTURE} layout='fill' />
+            <Image src={artist.profilePicture || DEFAULT_PROFILE_PICTURE} layout='fill' />
           </div>
           <div className='games-modal__header-artist-name'>
             {artist.displayName || 'displayname'}
