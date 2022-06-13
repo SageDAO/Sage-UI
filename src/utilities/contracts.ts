@@ -121,14 +121,6 @@ export async function getBlockchainTimestamp(): Promise<number> {
   return blockTimestamp;
 }
 
-// export async function getCoinBalance() {
-//   const connection = await web3Modal.connect();
-//   const provider = new ethers.providers.Web3Provider(connection);
-//   const balance = await provider.getBalance(await provider.getSigner().getAddress());
-//   console.log(`getCoinBalance() :: ${balance}`);
-//   return balance;
-// }
-
 export async function approveERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
   const erc20Contract = new ethers.Contract(
     erc20Address,

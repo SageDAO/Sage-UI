@@ -1,13 +1,13 @@
-import { bid, BidArgs, useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
+import { useEffect, useState } from 'react';
+import { Signer } from 'ethers';
+import { useSigner } from 'wagmi';
+import { bid, useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
 import GamesModalHeader from './GamesModalHeader';
 import Status from '@/components/Status';
-import { useEffect, useState } from 'react';
-import { useAccount, useBalance, useSigner } from 'wagmi';
 import PlaceBidButton from '@/components/Games/PlaceBidButton';
-import { Signer } from 'ethers';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -31,7 +31,6 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
     maxBid: +auction.buyNowPrice!,
   };
   const [state, setState] = useState<State>(initialState);
-  const { data: accountData } = useAccount();
   const { data: signer } = useSigner();
 
   function handlePlaceBidClick() {

@@ -133,17 +133,15 @@ export async function bid({ auctionId, amount, signer }: BidArgs) {
   console.log(`bid(${auctionId}, ${amount})`);
   const weiValue = ethers.utils.parseEther(amount.toString());
   try {
-    // const erc20AddressASH = '0x64d91f12ece7362f91a6f8e7940cd55f05060b92';
     const auctionContract = await getAuctionContract(signer);
     const tokenAddress = await auctionContract.token();
     await approveERC20Transfer(tokenAddress, signer, amount);
   } catch (e) {
     console.error(e);
-    toast.error(`error approving transfer`);
+    toast.error(`Error approving transfer`);
     playErrorSound();
     return;
   }
-
   try {
     const auctionContract = await getAuctionContract(signer);
     var tx = await auctionContract.bid(auctionId, weiValue, { gasLimit: 1000000 });
@@ -155,7 +153,7 @@ export async function bid({ auctionId, amount, signer }: BidArgs) {
     await tx.wait();
     playTxSuccessSound();
   } catch (e) {
-    toast.error('error placing bid');
+    toast.error('Error placing bid');
     console.error(e);
     return;
   }

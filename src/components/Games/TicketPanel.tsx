@@ -8,6 +8,7 @@ import { User } from '@prisma/client';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
 import Status from '@/components/Status';
 import GetTicketsButton from './GetTicketsButton';
+import { parameters } from '@/constants/config';
 
 interface Props {
   lottery: Lottery_include_Nft;
@@ -39,7 +40,11 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
     openModal: openTicketModal,
   } = useModal();
   const { data: accountData } = useAccount();
-  const { data: userBalance } = useBalance({ addressOrName: accountData?.address });
+  const { ASHTOKEN_ADDRESS } = parameters;
+  const { data: userBalance } = useBalance({
+    addressOrName: accountData?.address,
+    token: ASHTOKEN_ADDRESS,
+  });
   const { data: userPoints } = useGetPointsBalanceQuery(undefined, { skip: !accountData?.address });
   const { data: escrowPoints } = useGetEscrowPointsQuery(undefined, {
     skip: !accountData?.address,
@@ -72,7 +77,7 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
             {lottery.costPerTicketPoints}
             <div className='game-panel__price-unit'>PIXEL +</div>
             {lottery.costPerTicketTokens}
-            <div className='game-panel__price-unit'>Coins</div>
+            <div className='game-panel__price-unit'>ASH</div>
           </div>
         </div>
       </div>

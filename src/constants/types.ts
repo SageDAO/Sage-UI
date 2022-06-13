@@ -8,6 +8,7 @@ export interface Parameters {
   LOTTERY_ADDRESS: string;
   AUCTION_ADDRESS: string;
   REWARDS_ADDRESS: string;
+  ASHTOKEN_ADDRESS: string;
 }
 
 export interface Configuration {

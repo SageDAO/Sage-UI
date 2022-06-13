@@ -1,14 +1,14 @@
+import Image from 'next/image';
+import { useAccount, useBalance } from 'wagmi';
+import { User } from '@prisma/client';
 import { Auction_include_Nft } from '@/prisma/types';
 import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 import { useGetUserDisplayInfoQuery } from '@/store/services/user';
-import Image from 'next/image';
-import { useBalance, useAccount } from 'wagmi';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
-import { User } from '@prisma/client';
 import Status from '@/components/Status';
 import PlaceBidButton from './PlaceBidButton';
-import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import { DEFAULT_PROFILE_PICTURE, parameters } from '@/constants/config';
 
 interface Props {
   auction: Auction_include_Nft;
@@ -38,13 +38,17 @@ export default function AuctionPanel({ auction, artist }: Props) {
     openModal: openPlaceBidModal,
   } = useModal();
   const { data: accountData } = useAccount();
-  const { data: userBalance } = useBalance({ addressOrName: accountData?.address });
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
   const { data: highestBidder } = useGetUserDisplayInfoQuery(auctionState?.highestBidder!, {
     skip: !(
       auctionState?.highestBidder &&
       auctionState?.highestBidder != '0x0000000000000000000000000000000000000000'
     ),
+  });
+  const { ASHTOKEN_ADDRESS } = parameters;
+  const { data: userBalance } = useBalance({ 
+    addressOrName: accountData?.address,
+    token: ASHTOKEN_ADDRESS
   });
   const status: GameStatus = auctionState
     ? computeGameStatus(auction.startTime.getTime(), auctionState!.endTime, auctionState!.settled)
