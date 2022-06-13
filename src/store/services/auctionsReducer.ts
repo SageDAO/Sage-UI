@@ -90,7 +90,6 @@ export async function getAuctionContractState(auctionId: number): Promise<Auctio
     )
   );
 
-  console.log('new min BN: ');
   return {
     highestBidNumber: +highestBidNumber,
     highestBidder: auctionStruct.highestBidder,
