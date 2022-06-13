@@ -12,6 +12,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { parameters } from '../constants/config';
 
 // set up connectors
 const connectors = [
@@ -35,15 +36,13 @@ const wagmiClient = createClient({
   autoConnect: true,
 });
 
-const apolloClient = new ApolloClient({
-  // TODO store uri in config file
-  uri: 'https://api.studio.thegraph.com/query/28124/urndrops/v0.0.12',
-  cache: new InMemoryCache(),
-});
-
 function App({ Component, pageProps, router }: AppProps) {
   if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <MaintenancePage />;
-
+  const { SUBGRAPH_URL } = parameters;
+  const apolloClient = new ApolloClient({
+    uri: SUBGRAPH_URL,
+    cache: new InMemoryCache(),
+  }); 
   return (
     <ReduxProvider store={store}>
       <WagmiProvider client={wagmiClient}>

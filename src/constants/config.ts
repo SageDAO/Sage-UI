@@ -9,6 +9,7 @@ const configuration: Configuration = {
   rinkeby: {
     CHAIN_ID: '4',
     NETWORK_NAME: 'rinkeby',
+    SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.1',
     LOTTERY_ADDRESS: '0x4732D73D8526E4b05E2dEdaC1E65f7eC1F544686',
     AUCTION_ADDRESS: '0xCa9Fb63e13410Be1aD2AF42DFc9D14E1D70fF902',
     REWARDS_ADDRESS: '0xe15E098CBF9f479Dba9cC7450b59E0e7bf1596B1',
@@ -16,6 +17,7 @@ const configuration: Configuration = {
   dev: {
     CHAIN_ID: '4',
     NETWORK_NAME: 'rinkeby',
+    SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.1',
     LOTTERY_ADDRESS: '0x4732D73D8526E4b05E2dEdaC1E65f7eC1F544686',
     AUCTION_ADDRESS: '0xCa9Fb63e13410Be1aD2AF42DFc9D14E1D70fF902',
     REWARDS_ADDRESS: '0xe15E098CBF9f479Dba9cC7450b59E0e7bf1596B1',

@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 interface BidHistoryItem {
   bidder: string;
   amount: number;
+  blockTimestamp: number;
 }
 
 interface BidHistoryTableProps {
@@ -18,6 +19,7 @@ export default function BidHistoryTable({ auctionId }: BidHistoryTableProps) {
         bids {
           bidder
           amount
+          blockTimestamp
         }
       }
     }
@@ -45,8 +47,9 @@ export default function BidHistoryTable({ auctionId }: BidHistoryTableProps) {
         </tr>
       </thead>
       <tbody className='game-info__bid-history-body'>
-        {sortedBids.map(({ bidder, amount }) => {
+        {sortedBids.map(({ bidder, amount, blockTimestamp }) => {
           const { amountFormatted, amountFormattedShortened } = formatAmount(amount);
+          const datetime = new Date(blockTimestamp * 1000).toLocaleString();
           const animateFirst: string = previousData ? 'true' : 'false';
           if (isLoading) return null;
           return (
@@ -55,7 +58,7 @@ export default function BidHistoryTable({ auctionId }: BidHistoryTableProps) {
               key={amountFormatted}
               data-animate-first={animateFirst}
             >
-              <th data-col='time'>time</th>
+              <th data-col='time'>{datetime}</th>
               <th data-col='bidder'>{bidder}</th>
               <th data-col='amount'>{amountFormattedShortened}</th>
             </tr>
