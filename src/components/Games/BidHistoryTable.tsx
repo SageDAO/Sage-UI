@@ -100,8 +100,9 @@ export default function BidHistoryTable({ auctionId }: Props) {
           </tr>
         </thead>
         <tbody className='game-info__bid-history-body'>
-          {sortedBids.map(({ bidder, amount }) => {
+          {sortedBids.map(({ bidder, amount, blockTimestamp }) => {
             const { amountFormatted, amountFormattedShortened } = formatAmount(amount);
+            const dateTime = new Date(blockTimestamp * 1000).toLocaleString();
             const animateFirst: string = previousData ? 'true' : 'false';
             if (isLoading) return null;
             return (
@@ -110,7 +111,7 @@ export default function BidHistoryTable({ auctionId }: Props) {
                 key={amountFormatted}
                 data-animate-first={animateFirst}
               >
-                <th data-col='time'>time</th>
+                <th data-col='time'>{dateTime}</th>
                 <th data-col='bidder'>{bidder}</th>
                 <th data-col='amount'>{amountFormattedShortened}</th>
               </tr>
