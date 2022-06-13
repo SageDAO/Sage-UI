@@ -86,11 +86,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Bid extension</div>
-            <div className='games-modal__rules-value'>{auctionState?.timeExtension}</div>
+            <div className='games-modal__rules-value'>{auctionState?.timeExtension!/60} minutes</div>
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Bid increment</div>
-            <div className='games-modal__rules-value'>{auctionState?.bidIncrementPercentage}%</div>
+            <div className='games-modal__rules-value'>{auctionState?.bidIncrementPercentage!/100}%</div>
           </div>
           <div className='games-modal__rules-divider-container'>
             <div className='games-modal__rules-divider-rectangle'></div>
@@ -101,7 +101,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
           </div>
         </div>
         <div className='games-modal__heading'>
-          <h1 className='games-modal__heading-label'>Amount</h1>
+          <h1 className='games-modal__heading-label'>Buy Now Price</h1>
           <div className='games-modal__heading-value games-modal__heading-value--blue'>
             {auction.buyNowPrice} ASH
           </div>
