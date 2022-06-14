@@ -13,18 +13,6 @@ export const pointsApi = createApi({
   endpoints: (builder) => ({
     getEarnedPoints: builder.query<GetEarnedPointsResponse, string>({
       query: (walletAddress) => `points?walletAddress=${walletAddress}`,
-      //transformResponse: (response) => {
-      //  //convert total points earned back to big int
-      //  const { address, totalPointsEarned, updatedAt, proof, signedMessage } =
-      //    response as GetEarnedPointsResponse;
-      //  return {
-      //    address,
-      //    totalPointsEarned: BigInt(totalPointsEarned),
-      //    updatedAt,
-      //    proof,
-      //    signedMessage,
-      //  };
-      //},
     }),
     getPointsBalance: builder.query<number, void>({
       queryFn: async (_arg, { dispatch }, _extraOptions, fetchWithBQ) => {

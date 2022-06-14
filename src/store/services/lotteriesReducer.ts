@@ -3,14 +3,9 @@ import type { GetEarnedPointsResponse } from '@/api/points';
 import { extractErrorMessage, getLotteryContract } from '@/utilities/contracts';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
+import { ContractTransaction, Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { pointsApi } from './pointsReducer';
-
-// export enum TicketPriceTier {
-//   Member = 0,
-//   NonMember = 1,
-// }
 
 export interface BuyTicketRequest {
   walletAddress: string;
@@ -19,7 +14,6 @@ export interface BuyTicketRequest {
   ticketCostCoins: bigint;
   ticketCostPoints: bigint;
   totalPointsEarned?: bigint;
-  proof?: string;
   signer: Signer;
   earnedPoints: GetEarnedPointsResponse;
 }
@@ -106,31 +100,30 @@ async function buyTicketsWithoutPoints(buyRequest: BuyTicketRequest): Promise<Co
   return tx;
 }
 
-async function buyTicketsUsingPoints(buyRequest: BuyTicketRequest): Promise<ContractTransaction> {
-  console.log(
-    `buyTicketsUsingPoints(${buyRequest.totalPointsEarned}, ${buyRequest.proof?.substring(
-      0,
-      12
-    )}...)`
-  );
-  const proofArray =
-    buyRequest.proof && buyRequest.proof.length > 0 ? buyRequest.proof.split(',') : [];
-  var tx: ContractTransaction;
+async function buyTicketsUsingPoints({
+  walletAddress,
+  signer,
+  lotteryId,
+  numberOfTickets,
+  earnedPoints,
+}: BuyTicketRequest): Promise<ContractTransaction> {
   try {
-    const contract = await getLotteryContract(buyRequest.signer);
-    console.log('buyTicketsWithSignedMessage()');
-    console.log(buyRequest);
-    console.log('buyTicketsWithSignedMessage()');
-    tx = await contract.buyTicketsWithSignedMessage(
-      buyRequest.walletAddress,
-      buyRequest.ticketCostPoints,
-      buyRequest.lotteryId,
-      buyRequest.numberOfTickets,
-      buyRequest.earnedPoints.signedMessage,
+    const contract = await getLotteryContract(signer);
+    const points = Number(earnedPoints.totalPointsEarned);
+    console.log(
+      `buyTicketsWithSignedMessage() ${walletAddress} :: ${points} :: ${lotteryId} :: ${numberOfTickets} :: ${earnedPoints.signedMessage}`
+    );
+    const tx = await contract.buyTicketsWithSignedMessage(
+      walletAddress,
+      Number(earnedPoints.totalPointsEarned),
+      lotteryId,
+      numberOfTickets,
+      earnedPoints.signedMessage,
+      { gasLimit: 100000 }
     );
     return tx;
   } catch (e) {
-    console.log(e);
+    console.log(extractErrorMessage(e));
     throw e;
   }
 }
