@@ -8,8 +8,8 @@ import shortenAddress from '@/utilities/shortenAddress';
 import { useGetAllUsersAndEarnedPointsQuery } from '@/store/services/dashboardReducer';
 import Loader from 'react-loader-spinner';
 import { User } from '@prisma/client';
-import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import useModal from '@/hooks/useModal';
+import { PfpImage } from '@/components/Image';
 
 export function UsersPanel() {
   const { data: users, isFetching: isFetchingUsers } = useGetAllUsersAndEarnedPointsQuery();
@@ -48,14 +48,13 @@ function UsersTable({ users }: UsersTableProps) {
         Header: '',
         accessor: 'profilePicture',
         Cell: (cell: any) => (
-          <div>
-            <img
-              src={cell.value || DEFAULT_PROFILE_PICTURE}
-              onClick={() => {
-                displayUserDetailsModal(cell.row.original);
-              }}
-              className='dashboard-user__profile-img'
-            />
+          <div
+            onClick={() => {
+              displayUserDetailsModal(cell.row.original);
+            }}
+            className='dashboard-user__profile-img'
+          >
+            <PfpImage src={cell.value} />
           </div>
         ),
       },
@@ -231,7 +230,7 @@ function UsersTable({ users }: UsersTableProps) {
           {'>>'}
         </button>
       </div>
-      <div style={{ textAlign: 'center'}}>
+      <div style={{ textAlign: 'center' }}>
         <span style={{ marginRight: '1rem' }}>
           Page <strong>{pageIndex + 1}</strong> of <strong>{pageOptions.length}</strong>
         </span>

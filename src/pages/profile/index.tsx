@@ -1,6 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
-import { useSession } from 'next-auth/react';
 import Loader from 'react-loader-spinner';
 import { useAccount, useBalance } from 'wagmi';
 import { toast } from 'react-toastify';
@@ -8,9 +6,11 @@ import { useGetUserQuery } from '@/store/services/user';
 import shortenAddress from '@/utilities/shortenAddress';
 import EditProfileModal from '@/components/Modals/EditProfileModal';
 import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
-import { DEFAULT_PROFILE_PICTURE, parameters } from '@/constants/config';
+import { parameters } from '@/constants/config';
 import useModal from '@/hooks/useModal';
 import { MyCollection } from '@/components/MyCollection';
+import { PfpImage } from '@/components/Image';
+import { useSession } from 'next-auth/react';
 
 function profile() {
   const { data: sessionData } = useSession();
@@ -58,14 +58,8 @@ function profile() {
               edit profile
             </button>
           </div>
-          <div className='account-card__pfp'>
-            <Image
-              src={userData?.profilePicture || DEFAULT_PROFILE_PICTURE}
-              layout='fill'
-              objectFit='cover'
-              onClick={openProfilePicModal}
-              style={{ cursor: 'pointer' }}
-            />
+          <div className='account-card__pfp' onClick={openProfilePicModal}>
+            <PfpImage src={userData?.profilePicture} />
           </div>
           <div className='account-card__name'>{userData?.displayName || 'name'}</div>
           <div className='account-card__handle'>{userData?.username || '@handle'}</div>

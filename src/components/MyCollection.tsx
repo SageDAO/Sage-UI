@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import {
@@ -10,8 +9,8 @@ import {
   useGetUnclaimedPrizesByUserQuery,
 } from '@/store/services/prizesReducer';
 import { GamePrize } from '@/prisma/types';
-import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import Loader from 'react-loader-spinner';
+import { BaseImage, PfpImage } from '@/components/Image';
 
 export function MyCollection() {
   const { data: sessionData } = useSession();
@@ -25,7 +24,7 @@ export function MyCollection() {
   const { data: unclaimedAuctionNfts } = useGetUnclaimedAuctionNftsPerUserQuery();
   const numUnclaimedItems = (unclaimedAuctionNfts?.length || 0) + (unclaimedPrizes?.length || 0);
   const myNfts = new Array().concat(claimedAuctionNfts, claimedPrizes);
-  
+
   if (isFetchingFromLotteries || isFetchingFromAuctions) {
     return (
       <div className='profile-page'>
@@ -55,15 +54,11 @@ export function MyCollection() {
           return (
             <div className='collection__tile' key={index}>
               <div className='collection__tile-img'>
-                <Image src={item.s3Path} layout='fill' objectFit='cover' />
+                <BaseImage src={item.s3Path} />
               </div>
               <div className='collection__tile-details'>
                 <div className='collection__tile-artist-pfp'>
-                  <Image
-                    src={item.artistProfilePicture || DEFAULT_PROFILE_PICTURE}
-                    layout='fill'
-                    objectFit='cover'
-                  />
+                  <PfpImage src={item.artistProfilePicture} />
                 </div>
                 <div className='collection__tile-artist-info'>
                   <div className='collection__tile-nft-name'>{item.nftName}</div>

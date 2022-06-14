@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useAccount, useBalance } from 'wagmi';
 import { User } from '@prisma/client';
 import { Auction_include_Nft } from '@/prisma/types';
@@ -8,7 +7,8 @@ import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import Status from '@/components/Status';
 import PlaceBidButton from './PlaceBidButton';
-import { DEFAULT_PROFILE_PICTURE, parameters } from '@/constants/config';
+import { PfpImage } from '@/components/Image';
+import { parameters } from '@/constants/config';
 
 interface Props {
   auction: Auction_include_Nft;
@@ -46,9 +46,9 @@ export default function AuctionPanel({ auction, artist }: Props) {
     ),
   });
   const { ASHTOKEN_ADDRESS } = parameters;
-  const { data: userBalance } = useBalance({ 
+  const { data: userBalance } = useBalance({
     addressOrName: accountData?.address,
-    token: ASHTOKEN_ADDRESS
+    token: ASHTOKEN_ADDRESS,
   });
   const status: GameStatus = auctionState
     ? computeGameStatus(auction.startTime.getTime(), auctionState!.endTime, auctionState!.settled)
@@ -83,10 +83,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
             <h1 className='game-panel__pricing-label'>Highest Bidder</h1>
             <div className='game-panel__highest-bidder'>
               <div className='game-panel__highest-bidder-pfp'>
-                <Image
-                  src={highestBidder?.profilePicture || DEFAULT_PROFILE_PICTURE}
-                  layout='fill'
-                />
+                <PfpImage src={highestBidder?.profilePicture}  />
               </div>
               <div className='game-panel__highest-bidder-name'>
                 {highestBidder?.displayName}

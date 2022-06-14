@@ -27,6 +27,8 @@
 
 .dashboard-user {
   &__profile-img {
+    overflow: hidden;
+    position: relative;
     width: 2rem;
     height: 2rem;
     border-radius: 7px;

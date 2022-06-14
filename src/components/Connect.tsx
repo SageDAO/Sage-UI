@@ -1,12 +1,11 @@
 import useModal from '@/hooks/useModal';
 import { useSession } from 'next-auth/react';
-import Image from 'next/image';
 import Loader from 'react-loader-spinner';
 import shortenAddress from '@/utilities/shortenAddress';
 import { useGetUserQuery } from '@/store/services/user';
 import AccountModal from '@/components/Modals/AccountModal';
 import { useState } from 'react';
-import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import { PfpImage } from '@/components/Image';
 
 export default function Connect() {
   const {
@@ -15,12 +14,10 @@ export default function Connect() {
     openModal: openAccountModal,
   } = useModal();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { status, data: sessionData } = useSession();
+  const { status } = useSession();
   const { data: userData } = useGetUserQuery();
   const isSignedIn = status === 'authenticated';
-  const userName =
-    (userData?.username as string) || shortenAddress(userData?.walletAddress as string);
-  const pfp = userData?.profilePicture || DEFAULT_PROFILE_PICTURE;
+  const userDisplay = userData?.username || shortenAddress(userData?.walletAddress as string);
   return (
     <>
       {status === 'unauthenticated' && (
@@ -38,14 +35,14 @@ export default function Connect() {
       )}
       {status === 'authenticated' && (
         <div className='profile' onClick={openAccountModal}>
-          {isSignedIn && (
+          {userData && (
             <div className='pfp'>
-              <Image src={pfp} layout='fill' />
+              <PfpImage src={userData?.profilePicture} />
             </div>
           )}
           <div>
             <h1 className='wallet-status'>{isSignedIn ? 'Signed In' : 'Sign In'}</h1>
-            {isSignedIn && <h1 className='username'>{userName}</h1>}
+            {isSignedIn && <h1 className='username'>{userDisplay}</h1>}
           </div>
         </div>
       )}

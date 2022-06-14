@@ -1,7 +1,7 @@
 import { useGetPointsBalanceQuery } from '@/store/services/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import Loader from 'react-loader-spinner';
-import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import { PfpImage } from '@/components/Image';
 
 interface UserDetailsModalProps extends ModalProps {
   userData: any;
@@ -21,7 +21,7 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
         ) : (
           <div style={{ textAlign: 'center' }}>
             <div>
-              <img src={userData?.profilePicture || DEFAULT_PROFILE_PICTURE} />
+              <PfpImage src={userData?.profilePicture} />
             </div>
             <div style={{ fontWeight: 'bolder' }}>{userData?.username}</div>
             <div>{userData?.displayName}</div>
