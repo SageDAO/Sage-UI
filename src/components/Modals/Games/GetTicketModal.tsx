@@ -67,26 +67,8 @@ function GetTicketModal({ isOpen, closeModal, lottery, dropName, artist, nft }: 
     return BigInt(lottery.costPerTicketPoints);
   };
 
-  const fetchUserPointsAndProof = async (): Promise<{
-    totalPointsEarned: bigint;
-    proof: string;
-  }> => {
-    const response = await fetch('/api/points');
-    const data = await response.json();
-    return {
-      totalPointsEarned: BigInt(data.totalPointsEarned),
-      proof: data.proof,
-    };
-  };
-
   const handleBuyTicketClick = async () => {
     const pricePoints = getPricePoints();
-    if (pricePoints > 0) {
-      var { totalPointsEarned, proof } = await fetchUserPointsAndProof();
-    } else {
-      var totalPointsEarned = BigInt(0),
-        proof = '';
-    }
 
     if (!earnedPoints) {
       toast.error('Points info unavailable');
@@ -99,12 +81,9 @@ function GetTicketModal({ isOpen, closeModal, lottery, dropName, artist, nft }: 
       numberOfTickets: desiredTicketAmount,
       ticketCostPoints: pricePoints,
       ticketCostCoins: getPriceCoins(),
-      totalPointsEarned,
-      proof,
       signer: signer as Signer,
       earnedPoints: earnedPoints,
     };
-    console.log('buyTickets input: ', request);
     await buyTickets(request);
   };
 

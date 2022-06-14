@@ -13,7 +13,6 @@ export interface BuyTicketRequest {
   numberOfTickets: number;
   ticketCostCoins: bigint;
   ticketCostPoints: bigint;
-  totalPointsEarned?: bigint;
   signer: Signer;
   earnedPoints: GetEarnedPointsResponse;
 }
@@ -114,7 +113,7 @@ async function buyTicketsUsingPoints({
     );
     const tx = await contract.buyTicketsWithSignedMessage(
       walletAddress,
-      Number(earnedPoints.totalPointsEarned),
+      points,
       lotteryId,
       numberOfTickets,
       earnedPoints.signedMessage,

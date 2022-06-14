@@ -66,7 +66,9 @@ var ContractFactory = (function () {
 export async function getLotteryContract(signer?: Signer): Promise<LotteryContract> {
   const { address, abi } = contractMap.Lottery;
   if (signer) {
-    return new ethers.Contract(address, abi, signer) as LotteryContract;
+    const contract = new ethers.Contract(address, abi, signer) as LotteryContract;
+    console.log('created signer lotteryContract instance: ', contract);
+    return contract;
   }
   return (await ContractFactory.getInstance({
     address,
