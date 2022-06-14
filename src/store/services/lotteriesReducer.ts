@@ -54,7 +54,6 @@ export const lotteriesApi = createApi({
             const escrowPoints =
               Number(buyRequest.numberOfTickets) * Number(buyRequest.ticketCostPoints);
             dispatch(pointsApi.endpoints.withholdEscrowPoints.initiate(escrowPoints));
-            console.log('buytickets mutation: ', buyRequest);
             var tx = await buyTicketsUsingPoints(buyRequest);
           } else {
             var tx = await buyTicketsWithoutPoints(buyRequest);
