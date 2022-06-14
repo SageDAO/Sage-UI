@@ -1,4 +1,4 @@
-@use "@/styles/abstracts/colors" as c;
+@use '@/styles/abstracts/colors' as c;
 
 .dashboard-page {
   margin: 2rem 5rem 2rem 5rem;
@@ -109,5 +109,36 @@
       background-color: c.$text-black;
       cursor: default;
     }
+  }
+}
+
+.dashboard-game-stats {
+  &__container {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: flex-start;
+    text-align: center;
+    border-bottom: 1px dashed gray;
+    line-height: 20px;
+  }
+
+  &__item {
+    padding: 15px 15px 15px 15px;
+
+    table {
+      margin-left: auto;
+      margin-right: auto;
+      td {
+        border-bottom: 1px dotted gray;
+        padding: 15px 25px 15px 25px;
+      }
+    }
+  }
+
+  &__id {
+    font-weight: bolder;
+    font-size: 18px;
+    color: white;
   }
 }

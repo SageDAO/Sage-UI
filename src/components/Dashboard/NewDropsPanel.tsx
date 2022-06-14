@@ -12,6 +12,13 @@ export function NewDropsPanel() {
       </div>
     );
   }
+  if (drops?.length == 0) {
+    return (
+      <div style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}>
+        No pending approvals.
+      </div>
+    );
+  }
   return (
     <>
       <div

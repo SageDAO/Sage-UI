@@ -10,7 +10,7 @@ export function DashBoardPage() {
       <Tabs>
         <TabList>
           <Tab>New Drops</Tab>
-          <Tab>Games</Tab>
+          <Tab>Games Stats</Tab>
           <Tab>Users</Tab>
         </TabList>
         <TabPanel className='dashboard-panel'>
