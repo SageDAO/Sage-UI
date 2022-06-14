@@ -3,7 +3,9 @@ import { useGetApprovedDropsQuery } from '@/store/services/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
 import { gql, useQuery } from '@apollo/client';
 import { utils } from 'ethers';
+import { stat } from 'fs/promises';
 import Loader from 'react-loader-spinner';
+import Countdown from '../Countdown';
 
 const GAMES_QUERY = gql`
   query GetGames {
@@ -22,6 +24,7 @@ const GAMES_QUERY = gql`
       status
       highestBid
       highestBidder
+      endTime
       bids {
         id
         bidder
@@ -72,14 +75,23 @@ export function GamesStatsPanel() {
                     <td>
                       lottery <span className='dashboard-game-stats__id'>{lottery.id}</span> <br />
                       status: {stats.status} <br />
-                      time left: XXX
+                      {stats.status === 'Created' && new Date(lottery.endTime).getTime() > new Date().getTime() ? (
+                        <Countdown
+                          className='status__countdown'
+                          endTime={new Date(lottery.endTime).getTime()}
+                        />
+                      ) : `ended ${new Date(lottery.endTime).toLocaleString()}`}
                     </td>
                     <td>
-                      tickets sold: {stats.tickets.length} <br />
-                      revenue (points): XXX PIXEL
+                      tickets sold: {stats.tickets?.length || 0} <br />
+                      revenue (points): {(stats.tickets?.length || 0) *
+                        lottery.costPerTicketPoints}{' '}
+                      PIXEL
                       <br />
-                      revenue (tokens): XXX ASH <br />
-                      prizes claimed: {stats.claimedPrizes.length}
+                      revenue (tokens): {(stats.tickets?.length || 0) *
+                        lottery.costPerTicketTokens}{' '}
+                      ASH <br />
+                      prizes claimed: {stats.claimedPrizes?.length || 0}
                     </td>
                   </tr>
                 );
@@ -90,17 +102,28 @@ export function GamesStatsPanel() {
             <table>
               {drop.Auctions.map((auction) => {
                 const stats = getAuctionGameStats(auction.id);
+                if (stats.endTime == null) {
+                  var endTime = Math.floor(new Date(auction.endTime).getTime() / 1000);
+                } else {
+                  var endTime = Number(stats.endTime);
+                }
                 return (
                   <tr>
                     <td>
                       auction <span className='dashboard-game-stats__id'>{auction.id}</span> <br />
                       status: {stats.status}
                       <br />
-                      time left: XXX
+                      {stats.status === 'Created' && endTime > new Date().getTime() ? (
+                        <Countdown
+                          className='status__countdown'
+                          endTime={endTime * 1000}
+                        />
+                      ) : `ended ${new Date(endTime * 1000).toLocaleString()}`}
                     </td>
                     <td>
-                      bids: {stats.bids.length} <br />
-                      highest bid: {utils.formatUnits(stats.highestBid)} ASH<br />
+                      bids: {stats.bids?.length || 0} <br />
+                      highest bid: {utils.formatUnits(stats.highestBid || 0)} ASH
+                      <br />
                       highest bidder: {shortenAddress(stats.highestBidder)}
                     </td>
                   </tr>
