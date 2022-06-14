@@ -101,7 +101,6 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
         lotteries={lotteries}
         drawings={drawings}
         artist={artist}
-        dropName={drop.name}
       />
     </div>
   );

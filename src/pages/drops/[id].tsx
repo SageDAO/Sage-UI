@@ -49,7 +49,10 @@ export default function drop({ drop }: Props) {
         <div className='drop-page__details'>
           <div className='artist'>
             <div className='artist__pfp'>
-              <Image src={drop.Artist.profilePicture || DEFAULT_PROFILE_PICTURE} layout='fill'></Image>
+              <Image
+                src={drop.Artist.profilePicture || DEFAULT_PROFILE_PICTURE}
+                layout='fill'
+              ></Image>
             </div>
             <div className='artist__info'>
               {/* TODO: display using new artist name field */}
@@ -58,7 +61,7 @@ export default function drop({ drop }: Props) {
             </div>
           </div>
           <div className='description'>
-            <h1 className='description__title'>Description Title</h1>
+            <h1 className='description__title'>{drop.name}</h1>
             <p className='description__content'>{drop.description}</p>
           </div>
         </div>
@@ -112,9 +115,7 @@ export default function drop({ drop }: Props) {
           <h1 className='games__title'>Lotteries</h1>
           <div className='games__grid'>
             {Lotteries.map((l: Lottery_include_Nft) => {
-              return (
-                <LotteryTile lottery={l} artist={drop.Artist} key={l.id} dropName={drop.name} />
-              );
+              return <LotteryTile lottery={l} artist={drop.Artist} key={l.id} />;
             })}
           </div>
         </section>
@@ -125,9 +126,7 @@ export default function drop({ drop }: Props) {
           <h1 className='games__title'>Drawings</h1>
           <div className='games__grid'>
             {Drawings.map((d: Lottery_include_Nft) => {
-              return (
-                <DrawingTile drawing={d} artist={drop.Artist} key={d.id} dropName={drop.name} />
-              );
+              return <DrawingTile drawing={d} artist={drop.Artist} key={d.id} />;
             })}
           </div>
         </section>

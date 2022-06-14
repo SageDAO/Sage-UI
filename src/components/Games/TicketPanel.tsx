@@ -58,7 +58,6 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         nft={lottery.Nfts[selectedNftIndex]}
         lottery={lottery}
         artist={artist}
-        dropName={dropName}
       />
       <div className='game-panel__header'>
         <h1 className='game-panel__header-title'>Tickets</h1>

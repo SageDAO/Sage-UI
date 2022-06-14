@@ -9,10 +9,9 @@ import GetTicketsButton from '../Games/GetTicketsButton';
 type Props = {
   lottery: Lottery_include_Nft;
   artist: User;
-  dropName: string;
 };
 
-export default function LotteryTile({ lottery, artist, dropName }: Props) {
+export default function LotteryTile({ lottery, artist }: Props) {
   const { openModal, isOpen: isModalOpen, closeModal } = useModal(false);
   const isActive = false;
   return (
@@ -33,7 +32,6 @@ export default function LotteryTile({ lottery, artist, dropName }: Props) {
         lottery={lottery}
         artist={artist}
         nft={lottery.Nfts[0]}
-        dropName={dropName}
       />
     </NftTile>
   );
