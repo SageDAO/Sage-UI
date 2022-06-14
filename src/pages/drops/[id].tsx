@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
 import prisma from '@/prisma/client';
 import { Drop as DropType, Prisma, User } from '@prisma/client';
@@ -6,7 +5,7 @@ import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import DrawingTile from '@/components/Tiles/DrawingTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
-import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import { BaseImage, PfpImage } from '@/components/Image';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -40,14 +39,14 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   return (
     <div className='drop-page'>
       <div className='drop-page__hero'>
-        <Image src={drop.bannerImageS3Path || '/'} layout='fill' objectFit='cover' />
+        <BaseImage src={drop.bannerImageS3Path} />
       </div>
       {/* --------------------DROP INFO------------------------ */}
       <section className='drop-page__dropinfo'>
         <div className='drop-page__details'>
           <div className='artist'>
             <div className='artist__pfp'>
-              <Image src={artist.profilePicture || DEFAULT_PROFILE_PICTURE} layout='fill'></Image>
+              <PfpImage src={artist.profilePicture as string} />
             </div>
             <div className='artist__info'>
               {/* TODO: display using new artist name field */}

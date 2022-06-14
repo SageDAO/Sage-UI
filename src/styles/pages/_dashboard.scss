@@ -1,4 +1,4 @@
-@use "@/styles/abstracts/colors" as c;
+@use '@/styles/abstracts/colors' as c;
 
 .dashboard-page {
   margin: 2rem 5rem 2rem 5rem;
@@ -27,6 +27,8 @@
 
 .dashboard-user {
   &__profile-img {
+    overflow: hidden;
+    position: relative;
     width: 2rem;
     height: 2rem;
     border-radius: 7px;

@@ -10,7 +10,11 @@ function BaseImage({ src, onClickHandler }: BaseImageProps) {
   return <Image src={src} layout='fill' objectFit='cover' onClick={onClickHandler} />;
 }
 
-function PfpImage({ src }: Partial<BaseImageProps>) {
+interface PfpImageProps {
+  src: string | null | undefined;
+}
+
+function PfpImage({ src }: PfpImageProps) {
   return <BaseImage src={src || DEFAULT_PROFILE_PICTURE} />;
 }
 
