@@ -18,7 +18,7 @@ function createBanner(imagePath: string, link: string): BannerType {
   return { imagePath, link };
 }
 
-const banners: BannerType[] = [];
+const banners: BannerType[] = [createBanner('/pak.svg', '/')];
 
 const sliderSettings = {
   dots: true,
@@ -36,12 +36,12 @@ interface Props {
   useS3: boolean;
 }
 
-function home({ drops, useS3 }: Props) {
+function home({ drops }: Props) {
   return (
     <div id='home-page'>
       <Slider {...sliderSettings} className='banner-slider'>
         {banners.map((b) => {
-          const src = `/banners/${b.imagePath}`;
+          const src = `/sample/banners${b.imagePath}`;
           return (
             <a key={b.imagePath} href={b.link} target='_blank'>
               <img className='banner-image' src={src} />
