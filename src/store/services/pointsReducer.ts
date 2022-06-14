@@ -18,7 +18,8 @@ export const pointsApi = createApi({
       queryFn: async (_arg, { dispatch }, _extraOptions, fetchWithBQ) => {
         const { data } = await fetchWithBQ(`points`);
         const pointsEarned = BigInt((data as any).totalPointsEarned);
-        const pointsUsed = await getTotalPointsUsed((data as any).walletAddress);
+        const userAddress = (data as EarnedPoints).address;
+        const pointsUsed = await getTotalPointsUsed(userAddress);
         let pointsBalance = pointsEarned - pointsUsed;
         // as the balance is fresh from contract and database, release any escrow on hold
         dispatch(pointsApi.endpoints.releaseEscrowPoints.initiate());
