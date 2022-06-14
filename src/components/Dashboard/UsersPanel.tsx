@@ -9,6 +9,7 @@ import { useGetAllUsersAndEarnedPointsQuery } from '@/store/services/dashboardRe
 import Loader from 'react-loader-spinner';
 import { User } from '@prisma/client';
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import useModal from '@/hooks/useModal';
 
 export function UsersPanel() {
   const { data: users, isFetching: isFetchingUsers } = useGetAllUsersAndEarnedPointsQuery();
@@ -28,12 +29,18 @@ interface UsersTableProps {
 }
 
 function UsersTable({ users }: UsersTableProps) {
-  const [isUserDetailsModalOpen, setIsUserDetailsModalOpen] = useState<boolean>(false);
   const [userDetails, setUserDetails] = useState<any>(undefined);
   const data = React.useMemo(() => JSON.parse(JSON.stringify(users)), []);
+
+  const {
+    isOpen: isUserDetailsModalOpen,
+    closeModal: closeUserDetailsModal,
+    openModal: openUserDetailsModal,
+  } = useModal();
+
   const displayUserDetailsModal = (rowData: any) => {
     setUserDetails(rowData);
-    setIsUserDetailsModalOpen((prevState) => !prevState);
+    openUserDetailsModal();
   };
   const columns = React.useMemo(
     () => [
@@ -158,7 +165,7 @@ function UsersTable({ users }: UsersTableProps) {
     <>
       <UserDetailsModal
         isOpen={isUserDetailsModalOpen}
-        toggle={() => setIsUserDetailsModalOpen((prevState) => !prevState)}
+        closeModal={closeUserDetailsModal}
         userData={userDetails}
       />
       <GlobalFilter
