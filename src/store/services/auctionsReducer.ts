@@ -150,7 +150,7 @@ export async function bid({ auctionId, amount, signer }: BidArgs) {
   }
   try {
     const auctionContract = await getAuctionContract(signer);
-    var tx = await auctionContract.bid(auctionId, weiValue, { gasLimit: 1000000 });
+    var tx = await auctionContract.bid(auctionId, weiValue);
     toast.promise(tx.wait(), {
       pending: 'Request submitted to the blockchain, awaiting confirmation...',
       success: `Success! You are now the highest bidder!`,

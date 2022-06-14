@@ -16,11 +16,10 @@ interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
   nft: Nft;
   artist: User;
-  dropName: string;
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
-function GetTicketModal({ isOpen, closeModal, lottery, dropName, artist, nft }: Props) {
+function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const { data: accountData } = useAccount();
   const { data: sessionData } = useSession();

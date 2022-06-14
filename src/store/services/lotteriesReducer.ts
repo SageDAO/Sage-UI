@@ -116,8 +116,7 @@ async function buyTicketsUsingPoints({
       points,
       lotteryId,
       numberOfTickets,
-      earnedPoints.signedMessage,
-      { gasLimit: 100000 }
+      earnedPoints.signedMessage
     );
     return tx;
   } catch (e) {
