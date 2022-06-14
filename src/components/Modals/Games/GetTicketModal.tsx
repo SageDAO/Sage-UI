@@ -75,7 +75,6 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
     }
 
     const request: BuyTicketRequest = {
-      walletAddress: accountData?.address as string,
       lotteryId: lottery.id,
       numberOfTickets: desiredTicketAmount,
       ticketCostPoints: pricePoints,
