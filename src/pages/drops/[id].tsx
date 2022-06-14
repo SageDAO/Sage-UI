@@ -1,12 +1,8 @@
 import Image from 'next/image';
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
 import prisma from '@/prisma/client';
-import type {
-  Drop_include_GamesAndArtist,
-  Lottery_include_Nft,
-  Auction_include_Nft,
-} from '@/prisma/types';
-import { Drop as DropType, Nft as NftType } from '@prisma/client';
+import { Drop as DropType, Prisma, User } from '@prisma/client';
+import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import DrawingTile from '@/components/Tiles/DrawingTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
@@ -14,28 +10,30 @@ import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 
 //determines the type interface received from getStaticProps()
 interface Props {
-  drop: Drop_include_GamesAndArtist;
+  drop: DropType;
+  artist: User;
+  lotteries: Lottery_include_Nft[];
+  drawings: Lottery_include_Nft[];
+  auctions: Auction_include_Nft[];
 }
 
 function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
   return {
-    Drawings: array.filter((l: Lottery_include_Nft) => l.Nfts.length == 1),
-    Lotteries: array.filter((l: Lottery_include_Nft) => l.Nfts.length > 1),
+    drawings: array.filter((l: Lottery_include_Nft) => l.Nfts.length == 1),
+    lotteries: array.filter((l: Lottery_include_Nft) => l.Nfts.length > 1),
   };
 }
 
-export default function drop({ drop }: Props) {
+export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
   //TODO: restrict access to unapproved drops
   if (!drop) {
     return (
       <div className=''>Oops it appears the drop you are trying to reach is not available</div>
     );
   }
-  const { Drawings, Lotteries } = filterDrawingsFromLottery(drop.Lotteries);
-  const { Auctions } = drop;
-  const hasAuctions: boolean = Auctions.length > 0;
-  const hasDrawings: boolean = Drawings.length > 0;
-  const hasLotteries: boolean = Lotteries.length > 0;
+  const hasAuctions: boolean = auctions.length > 0;
+  const hasDrawings: boolean = drawings.length > 0;
+  const hasLotteries: boolean = lotteries.length > 0;
 
   //TODO: add admin only functionalities
   //if (!drop.approvedBy && user?.role !== "ADMIN") return null;
@@ -49,15 +47,12 @@ export default function drop({ drop }: Props) {
         <div className='drop-page__details'>
           <div className='artist'>
             <div className='artist__pfp'>
-              <Image
-                src={drop.Artist.profilePicture || DEFAULT_PROFILE_PICTURE}
-                layout='fill'
-              ></Image>
+              <Image src={artist.profilePicture || DEFAULT_PROFILE_PICTURE} layout='fill'></Image>
             </div>
             <div className='artist__info'>
               {/* TODO: display using new artist name field */}
-              <div className='artist__name'>{drop.Artist.displayName}</div>
-              <div className='artist__handle'>@{drop.Artist.username}</div>
+              <div className='artist__name'>{artist.displayName}</div>
+              <div className='artist__handle'>@{artist.username}</div>
             </div>
           </div>
           <div className='description'>
@@ -78,10 +73,10 @@ export default function drop({ drop }: Props) {
             </div>
           </h1>
           <p className='details'>
-            This drop includes {hasAuctions && `${Auctions.length} NFTs for auction`}{' '}
+            This drop includes {hasAuctions && `${auctions.length} NFTs for auction`}{' '}
             {hasAuctions && hasDrawings && 'and'}{' '}
             {hasDrawings &&
-              `${Lotteries.length} individual drawing${Lotteries.length > 1 ? 's' : ''}`}
+              `${drawings.length} individual drawing${drawings.length > 1 ? 's' : ''}`}
             . <span>The highest bidder on each auction wins each auction piece.</span>
             <span>
               Drawings are a fair drop mechanic: buy a ticket for each NFT you want to win. After
@@ -114,8 +109,8 @@ export default function drop({ drop }: Props) {
         <section className='games' id='lotteries'>
           <h1 className='games__title'>Lotteries</h1>
           <div className='games__grid'>
-            {Lotteries.map((l: Lottery_include_Nft) => {
-              return <LotteryTile lottery={l} artist={drop.Artist} key={l.id} />;
+            {lotteries.map((l: Lottery_include_Nft) => {
+              return <LotteryTile lottery={l} artist={artist} key={l.id} />;
             })}
           </div>
         </section>
@@ -125,8 +120,8 @@ export default function drop({ drop }: Props) {
         <section className='games' id='drawings'>
           <h1 className='games__title'>Drawings</h1>
           <div className='games__grid'>
-            {Drawings.map((d: Lottery_include_Nft) => {
-              return <DrawingTile drawing={d} artist={drop.Artist} key={d.id} />;
+            {drawings.map((d: Lottery_include_Nft) => {
+              return <DrawingTile drawing={d} artist={artist} key={d.id} />;
             })}
           </div>
         </section>
@@ -136,8 +131,8 @@ export default function drop({ drop }: Props) {
         <section className='games' id='auctions'>
           <h1 className='games__title'>Auctions</h1>
           <div className='games__grid'>
-            {Auctions.map((a: Auction_include_Nft) => {
-              return <AuctionTile auction={a} artist={drop.Artist} key={a.id} />;
+            {auctions.map((a: Auction_include_Nft) => {
+              return <AuctionTile auction={a} artist={artist} key={a.id} />;
             })}
           </div>
         </section>
@@ -149,23 +144,20 @@ export default function drop({ drop }: Props) {
 export async function getStaticProps({
   params,
 }: GetStaticPropsContext): Promise<GetStaticPropsResult<Props>> {
-  const drop: Drop_include_GamesAndArtist | null = await prisma.drop.findFirst({
+  const dropPageQuery = Prisma.validator<Prisma.DropArgs>()({
     include: {
-      Lotteries: {
-        include: {
-          Nfts: true,
-        },
-      },
-      Auctions: {
-        include: {
-          Nft: true,
-        },
-      },
       Artist: true,
+      Lotteries: { include: { Nfts: true } },
+      Auctions: { include: { Nft: true } },
     },
+  });
+
+  const drop = await prisma.drop.findFirst({
+    ...dropPageQuery,
     where: { id: Number(params!.id) },
   });
 
+  //redirect to home page of data for this drop is not availablee
   if (!drop) {
     return {
       redirect: {
@@ -174,9 +166,16 @@ export async function getStaticProps({
       },
     };
   }
+
+  const { drawings, lotteries } = filterDrawingsFromLottery(drop.Lotteries);
+
   return {
     props: {
       drop,
+      artist: drop.Artist,
+      auctions: drop.Auctions,
+      lotteries,
+      drawings,
     },
     revalidate: 60,
   };
@@ -196,10 +195,6 @@ export async function getStaticPaths(): Promise<GetStaticPathsResult> {
         },
       },
     });
-  } else {
-    //const dropsPath = path.join(process.cwd(), "data/drops.json");
-    //const someDrops = await fs.readFile(dropsPath, "utf8");
-    //drops = JSON.parse(someDrops);
   }
 
   // Get the paths we want to pre-render based on drops
