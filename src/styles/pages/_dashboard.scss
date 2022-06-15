@@ -6,6 +6,7 @@
   margin-right: 5rem;
   font-weight: 500;
   font-size: 14px;
+  flex: 1;
 
   &__tab {
     display: inline-block;
@@ -18,7 +19,7 @@
     padding: 10px 15px 10px 15px;
     border-color: #aaa;
     border-radius: 15px 15px 0 0;
-    
+
     &--selected {
       background: #fff;
       border-color: #aaa;
@@ -167,4 +168,8 @@
     font-size: 18px;
     color: white;
   }
+}
+
+.dashboard__user-details-pfp-container {
+	position: relative;
 }
