@@ -113,7 +113,7 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
         <div className='games-modal__heading'>
           <h1 className='games-modal__heading-label'>Price per ticket</h1>
           <div className='games-modal__heading-value games-modal__heading-value--green'>
-            {lottery.costPerTicketPoints} POINTS
+            {lottery.costPerTicketPoints} PIXEL
           </div>
         </div>
         <div className='games-modal__tickets-section'>
