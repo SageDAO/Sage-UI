@@ -131,27 +131,30 @@
   gap: 3px;
 }
 
-.nft-tile__user-position-display-tickets {
+.nft-tile__user-position-display-game {
   font-style: normal;
   font-weight: 500;
   font-size: 12px;
   line-height: 17px;
-	width: 100%;
-	justify-content: end;
+  width: 100%;
+  justify-content: end;
   gap: 3px;
   display: flex;
   align-items: center;
   color: #6f767e;
 }
 
-.nft-tile__user-position-display-ticket-count {
+.nft-tile__user-position-display-game-highlight {
   font-style: normal;
   font-weight: 600;
   font-size: 12px;
   line-height: 17px;
   align-items: center;
-  color: #22b573;
+  color: white;
 }
 
 .nft-tile__user-position-display-game-status {
+  display: flex;
+  width: 100%;
+  justify-content: end;
 }
