@@ -12,6 +12,7 @@ type Props = {
 };
 
 export default function MoreInDrop({ auctions, lotteries, drawings, artist }: Props) {
+  if (!auctions?.length && !lotteries?.length && !drawings?.length) return null;
   return (
     <div className='more-in-drop'>
       <h1 className='more-in-drop__header'>More in this drop</h1>
