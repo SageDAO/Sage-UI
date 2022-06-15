@@ -102,7 +102,7 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Refundable</div>
             <div className='games-modal__rules-value'>
-              {lottery.isRefundable ? 'true' : 'false'}
+              {lottery.isRefundable ? 'Yes' : 'No'}
             </div>
           </div>
           <div className='games-modal__rules-item'>
