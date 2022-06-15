@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 interface Props {
   imgSrc: string;
-  children?: JSX.Element;
+  children?: React.ReactNode;
   name: string;
   subtitle: string;
   button?: React.ReactElement;
@@ -24,13 +24,15 @@ function NftTile({ imgSrc, name, subtitle, button, imgLink, children }: Props) {
         <BaseImage src={imgSrc} />
       </div>
       <div className='nft-tile__interact'>
-        <div className='nft-tile__interact-info'>
-          <h1 className='nft-tile__interact-name'>{name}</h1>
-          <h1 className='nft-tile__interact-subtitle'>{subtitle}</h1>
+        <div className='nft-tile__interact-container'>
+          <div className='nft-tile__interact-info'>
+            <h1 className='nft-tile__interact-name'>{name}</h1>
+            <h1 className='nft-tile__interact-subtitle'>{subtitle}</h1>
+          </div>
+          {button}
         </div>
-        {button}
+        {children}
       </div>
-      {children}
     </div>
   );
 }
