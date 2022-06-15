@@ -66,10 +66,6 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               {hasAuctions && hasDrawings && <span className='header__divider'>×</span>}
               {hasDrawings && <span>Drawings</span>}
             </div>
-            <div className='header__ticket-count'>
-              {/* TODO: fetch number of tickets user owns */}
-              You have {'0'} tickets
-            </div>
           </h1>
           <p className='details'>
             This drop includes {hasAuctions && `${auctions.length} NFTs for auction`}{' '}

@@ -221,19 +221,21 @@
   color: #9299a0;
 }
 
-.game-panel__tickets-available {
-  flex: 1;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 17px;
+.game-panel__lottery-info {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  color: c.$white;
-  gap: 7px;
+  flex: 1;
+  justify-content: space-between;
 }
 
-.game-panel__tickets-available-label {
-  color: c.$text-gray-2;
+.game-panel__user-ticket-count {
+  @include m.pill;
+  display: flex;
+  padding: 4px 10px 4px 9px;
+  background-color: c.$box-black;
+
+  font-size: 12px;
+  line-height: 17px;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
 }

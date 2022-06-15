@@ -88,13 +88,10 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         <div className='game-panel__btn-container'>
           <GetTicketsButton pending={false} onClick={openTicketModal} />
         </div>
-        <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={false} />
-        {/*
-          <h1 className='game-panel__tickets-available'>
-            <span className='game-panel__tickets-available-label'>Available</span>
-            x/{lottery.maxTickets}
-          </h1>
-        */}
+        <div className='game-panel__lottery-info'>
+          <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={false} />
+          <div className='game-panel__user-ticket-count'>you have {0} tickets</div>
+        </div>
       </div>
     </div>
   );
