@@ -6,7 +6,7 @@ type Colors = 'purple';
 interface Props {
   endTime: number | Date;
   color?: Colors;
-	className?: string;
+  className?: string;
 }
 
 export default function Countdown({ endTime, color, className }: Props) {
@@ -16,7 +16,7 @@ export default function Countdown({ endTime, color, className }: Props) {
     setDisplayValue(`${days * 24 + hours}h ${minutes}m ${seconds}s`);
   }, [total]);
   return (
-    <div className={className} data-color={color}>
+    <div className={className} data-color={color} style={{ flexWrap: 'nowrap' }}>
       {displayValue}
     </div>
   );

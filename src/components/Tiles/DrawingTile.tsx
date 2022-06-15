@@ -12,13 +12,12 @@ import { useGetUserQuery } from '@/store/services/user';
 type Props = {
   drawing: Lottery_include_Nft;
   artist: User;
+  userTicketCount: number;
 };
 
-export default function DrawingTile({ drawing, artist }: Props) {
+export default function DrawingTile({ drawing, artist, userTicketCount }: Props) {
   const { openModal, isOpen: isModalOpen, closeModal } = useModal(false);
   const { data: userData } = useGetUserQuery();
-  const isActive = false;
-  const hasTickets = true;
 
   return (
     <NftTile
@@ -32,32 +31,31 @@ export default function DrawingTile({ drawing, artist }: Props) {
       imgSrc={drawing.Nfts[0].s3Path}
       imgLink={`${basePathLotteries}/${drawing.id}`}
     >
-      {hasTickets === true && (
-        <div className='nft-tile__user-position-display'>
-          <div className='nft-tile__user-position-display-profile'>
-            <div className='nft-tile__user-position-display-profile-pfp'>
-              <PfpImage src={userData?.profilePicture} />
-            </div>
-            <div className='nft-tile__user-position-display-profile-handles'>
-              <div className='nft-tile__user-position-display-profile-handles-name'>
-                {userData?.displayName}
-              </div>
-              <div className='nft-tile__user-position-display-profile-handles-username'>
-                @{userData?.username}
-              </div>
-            </div>
+      <div className='nft-tile__user-position-display'>
+        <div className='nft-tile__user-position-display-profile'>
+          <div className='nft-tile__user-position-display-profile-pfp'>
+            <PfpImage src={userData?.profilePicture} />
           </div>
-          <div className='nft-tile__user-position-display-info'>
-            <div className='nft-tile__user-position-display-tickets'>
-              You have <span className='nft-tile__user-position-display-ticket-count'>{0}</span>
-              tickets
+          <div className='nft-tile__user-position-display-profile-handles'>
+            <div className='nft-tile__user-position-display-profile-handles-name'>
+              {userData?.displayName}
             </div>
-            <div className='nft-tile__user-position-display-game-status'>
-              <Status endTime={drawing.endTime} startTime={drawing.startTime} settled={false} />
+            <div className='nft-tile__user-position-display-profile-handles-username'>
+              @{userData?.username}
             </div>
           </div>
         </div>
-      )}
+        <div className='nft-tile__user-position-display-info'>
+          <div className='nft-tile__user-position-display-tickets'>
+            You have{' '}
+            <span className='nft-tile__user-position-display-ticket-count'>{userTicketCount}</span>
+            tickets
+          </div>
+          <div className='nft-tile__user-position-display-game-status'>
+            <Status endTime={drawing.endTime} startTime={drawing.startTime} settled={false} />
+          </div>
+        </div>
+      </div>
       <GetTicketModal
         isOpen={isModalOpen}
         closeModal={closeModal}

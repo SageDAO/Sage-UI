@@ -1,11 +1,13 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
 import prisma from '@/prisma/client';
-import { Drop as DropType, Prisma, User } from '@prisma/client';
+import { Drop as DropType, Lottery, Prisma, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import DrawingTile from '@/components/Tiles/DrawingTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
 import { BaseImage, PfpImage } from '@/components/Image';
+import { useSession } from 'next-auth/react';
+import { useTicketCount } from '@/hooks/useTicketCount';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -24,6 +26,12 @@ function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
 }
 
 export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
+  const { data: sessionData } = useSession();
+  const walletAddress = sessionData?.address;
+  const ticketCount = useTicketCount(
+    new Array().concat(drawings, lotteries) as Lottery[],
+    walletAddress as string
+  );
   //TODO: restrict access to unapproved drops
   if (!drop) {
     return (
@@ -105,7 +113,14 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           <h1 className='games__title'>Lotteries</h1>
           <div className='games__grid'>
             {lotteries.map((l: Lottery_include_Nft) => {
-              return <LotteryTile lottery={l} artist={artist} key={l.id} />;
+              return (
+                <LotteryTile
+                  lottery={l}
+                  artist={artist}
+                  key={l.id}
+                  userTicketCount={ticketCount[l.id]}
+                />
+              );
             })}
           </div>
         </section>
@@ -116,7 +131,14 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           <h1 className='games__title'>Drawings</h1>
           <div className='games__grid'>
             {drawings.map((d: Lottery_include_Nft) => {
-              return <DrawingTile drawing={d} artist={artist} key={d.id} />;
+              return (
+                <DrawingTile
+                  drawing={d}
+                  artist={artist}
+                  key={d.id}
+                  userTicketCount={ticketCount[d.id]}
+                />
+              );
             })}
           </div>
         </section>

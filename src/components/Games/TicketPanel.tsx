@@ -4,11 +4,13 @@ useGetUserDisplayInfoQuery;
 import { useBalance, useAccount } from 'wagmi';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
-import { User } from '@prisma/client';
+import { Lottery, User } from '@prisma/client';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
 import Status from '@/components/Status';
 import GetTicketsButton from './GetTicketsButton';
 import { parameters } from '@/constants/config';
+import { useSession } from 'next-auth/react';
+import { useTicketCount } from '@/hooks/useTicketCount';
 
 interface Props {
   lottery: Lottery_include_Nft;
@@ -39,6 +41,9 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
     closeModal: closeTicketModal,
     openModal: openTicketModal,
   } = useModal();
+  const { data: sessionData } = useSession();
+  const walletAddress = sessionData?.address;
+  const ticketCount = useTicketCount([lottery] as Lottery[], walletAddress as string);
   const { data: accountData } = useAccount();
   const { ASHTOKEN_ADDRESS } = parameters;
   const { data: userBalance } = useBalance({
@@ -90,7 +95,7 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         </div>
         <div className='game-panel__lottery-info'>
           <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={false} />
-          <div className='game-panel__user-ticket-count'>you have {0} tickets</div>
+          <div className='game-panel__user-ticket-count'>you have {ticketCount[lottery.id]} tickets</div>
         </div>
       </div>
     </div>
