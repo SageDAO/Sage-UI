@@ -81,6 +81,7 @@ export const auctionsApi = createApi({
         }
         return { data: null };
       },
+      invalidatesTags: ['AuctionState'],
     }),
     claimAuctionNft: builder.mutation<Date, { id: number; signer: Signer }>({
       queryFn: async ({ id, signer }, {}, _extraOptions, _fetchWithBQ) => {

@@ -9,6 +9,7 @@ import PlaceBidButton from '@/components/Games/PlaceBidButton';
 import { PfpImage } from '@/components/Image';
 import { useGetUserQuery } from '@/store/services/user';
 import Status from '@/components/Status';
+import { useSession } from 'next-auth/react';
 
 type Props = {
   auction: Auction_include_Nft;
@@ -20,8 +21,7 @@ export default function AuctionTile({ auction, artist }: Props) {
   const { openModal, isOpen: isModalOpen, closeModal } = useModal();
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
   const { data: userData } = useGetUserQuery();
-  const isActive = auctionState?.settled || false;
-  const hasTickets = true;
+  const { status: sessionStatus } = useSession();
   return (
     <NftTile
       name={auction.Nft.name}
@@ -34,7 +34,7 @@ export default function AuctionTile({ auction, artist }: Props) {
       imgSrc={auction.Nft.s3Path}
       imgLink={`${basePathAuctions}/${auction.id}`}
     >
-      {hasTickets === true && (
+      {sessionStatus === 'authenticated' && (
         <div className='nft-tile__user-position-display'>
           <div className='nft-tile__user-position-display-profile'>
             <div className='nft-tile__user-position-display-profile-pfp'>
@@ -53,7 +53,7 @@ export default function AuctionTile({ auction, artist }: Props) {
             <div className='nft-tile__user-position-display-game'>
               Current Bid{' '}
               <span className='nft-tile__user-position-display-game-highlight'>
-                {auctionState?.highestBidNumber} ETH
+                {auctionState?.highestBidNumber} ASH
               </span>
             </div>
             <div className='nft-tile__user-position-display-game-status'>
