@@ -53,7 +53,7 @@ export default function AuctionTile({ auction, artist }: Props) {
             <div className='nft-tile__user-position-display-game'>
               Current Bid{' '}
               <span className='nft-tile__user-position-display-game-highlight'>
-                {auctionState.highestBidNumber} ETH
+                {auctionState?.highestBidNumber} ETH
               </span>
             </div>
             <div className='nft-tile__user-position-display-game-status'>
