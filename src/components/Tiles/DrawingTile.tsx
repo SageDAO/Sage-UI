@@ -48,8 +48,8 @@ export default function DrawingTile({ drawing, artist }: Props) {
             </div>
           </div>
           <div className='nft-tile__user-position-display-info'>
-            <div className='nft-tile__user-position-display-tickets'>
-              You have <span className='nft-tile__user-position-display-ticket-count'>{0}</span>
+            <div className='nft-tile__user-position-display-game'>
+              You have <span className='nft-tile__user-position-display-game-highlight'>{0}</span>
               tickets
             </div>
             <div className='nft-tile__user-position-display-game-status'>
