@@ -36,10 +36,9 @@ export default function DrawingTile({ drawing, artist, userTicketCount }: Props)
           <div className='nft-tile__user-position-display-profile-pfp'>
             <PfpImage src={userData?.profilePicture} />
           </div>
-          <div className='nft-tile__user-position-display-info'>
-            <div className='nft-tile__user-position-display-game'>
-              You have <span className='nft-tile__user-position-display-game-highlight'>{userTicketCount}</span>
-              tickets
+          <div className='nft-tile__user-position-display-profile-handles'>
+            <div className='nft-tile__user-position-display-profile-handles-name'>
+              {userData?.displayName}
             </div>
             <div className='nft-tile__user-position-display-profile-handles-username'>
               @{userData?.username}
@@ -47,9 +46,11 @@ export default function DrawingTile({ drawing, artist, userTicketCount }: Props)
           </div>
         </div>
         <div className='nft-tile__user-position-display-info'>
-          <div className='nft-tile__user-position-display-tickets'>
+          <div className='nft-tile__user-position-display-game'>
             You have{' '}
-            <span className='nft-tile__user-position-display-ticket-count'>{userTicketCount}</span>
+            <span className='nft-tile__user-position-display-game-highlight'>
+              {userTicketCount}
+            </span>
             tickets
           </div>
           <div className='nft-tile__user-position-display-game-status'>
