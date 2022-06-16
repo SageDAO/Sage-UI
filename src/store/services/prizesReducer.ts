@@ -6,24 +6,6 @@ import { playErrorSound, playPrizeClaimedSound } from '../../utilities/sounds';
 import { GamePrize } from '@/prisma/types';
 import { Signer } from 'ethers';
 
-export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{
-  include: {
-    Nft: {
-      include: {
-        Lottery: {
-          include: {
-            Drop: {
-              include: {
-                Artist: true;
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-}>;
-
 export interface ClaimPrizeRequest {
   lotteryId: number;
   nftId: number;
@@ -42,14 +24,12 @@ export const prizesApi = createApi({
     isLotteryDrawn: builder.query<boolean, number>({
       query: (lotteryId: number) => `prizes?action=IsLotteryDrawn&lotteryId=${lotteryId}`,
     }),
-    getClaimedPrizesByUser: builder.query<GamePrize[], string>({
-      query: (walletAddress: string) =>
-        `prizes?action=GetClaimedPrizesByUser&walletAddress=${walletAddress}`,
+    getClaimedPrizes: builder.query<GamePrize[], void>({
+      query: () => `prizes?action=GetClaimedPrizes`,
       providesTags: ['Prizes'],
     }),
-    getUnclaimedPrizesByUser: builder.query<GamePrize[], string>({
-      query: (walletAddress: string) =>
-        `prizes?action=GetUnclaimedPrizesByUser&walletAddress=${walletAddress}`,
+    getUnclaimedPrizes: builder.query<GamePrize[], void>({
+      query: () => `prizes?action=GetUnclaimedPrizes`,
       providesTags: ['Prizes'],
     }),
     getPrizesByUserAndLottery: builder.query<
@@ -138,8 +118,8 @@ function toByteArray(proof: string) {
 }
 
 export const {
-  useGetClaimedPrizesByUserQuery,
-  useGetUnclaimedPrizesByUserQuery,
+  useGetClaimedPrizesQuery,
+  useGetUnclaimedPrizesQuery,
   useGetPrizesByUserAndLotteryQuery,
   useClaimLotteryPrizeMutation,
   useIsLotteryDrawnQuery,

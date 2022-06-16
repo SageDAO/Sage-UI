@@ -8,7 +8,6 @@ import { playErrorSound, playPrizeClaimedSound, playTxSuccessSound } from '@/uti
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
-import { User } from '@prisma/client';
 import { BigNumber, ethers, Signer, utils } from 'ethers';
 
 export interface AuctionState {
@@ -44,12 +43,12 @@ export const auctionsApi = createApi({
       },
       providesTags: ['AuctionState'],
     }),
-    getClaimedAuctionNftsPerUser: builder.query<GamePrize[], void>({
-      query: () => `auctions?action=GetClaimedAuctionNftsPerUser`,
+    getClaimedAuctionNfts: builder.query<GamePrize[], void>({
+      query: () => `auctions?action=GetClaimedAuctionNfts`,
       providesTags: ['Auction'],
     }),
-    getUnclaimedAuctionNftsPerUser: builder.query<GamePrize[], void>({
-      query: () => `auctions?action=GetUnclaimedAuctionNftsPerUser`,
+    getUnclaimedAuctionNfts: builder.query<GamePrize[], void>({
+      query: () => `auctions?action=GetUnclaimedAuctionNfts`,
       providesTags: ['Auction'],
     }),
     placeBid: builder.mutation<null, BidArgs>({
@@ -179,7 +178,7 @@ export const {
   useGetAuctionQuery,
   useGetAuctionStateQuery,
   useClaimAuctionNftMutation,
-  useGetClaimedAuctionNftsPerUserQuery,
-  useGetUnclaimedAuctionNftsPerUserQuery,
+  useGetClaimedAuctionNftsQuery,
+  useGetUnclaimedAuctionNftsQuery,
   usePlaceBidMutation,
 } = auctionsApi;

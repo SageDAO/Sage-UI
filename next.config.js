@@ -20,7 +20,6 @@ const nextConfig = {
       '/': { page: '/' },
       '/marketplace': { page: '/marketplace' },
       '/profile': { page: '/profile' },
-      '/rewards': { page: '/rewards' },
     };
   },
   staticPageGenerationTimeout: 180,

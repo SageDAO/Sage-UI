@@ -37,7 +37,8 @@ const GAMES_QUERY = gql`
 
 export function GamesStatsPanel() {
   const { data: drops, isFetching: isLoadingFromDB } = useGetApprovedDropsQuery();
-  const { loading: isLoadingFromSubgraph, data: graphData } = useQuery(GAMES_QUERY);
+  const { loading: isLoadingFromSubgraph, data: graphData, startPolling } = useQuery(GAMES_QUERY);
+  startPolling(3000);
   if (isLoadingFromDB || isLoadingFromSubgraph) {
     return (
       <div style={{ margin: '25px auto 25px' }}>
@@ -75,12 +76,15 @@ export function GamesStatsPanel() {
                     <td>
                       lottery <span className='dashboard-game-stats__id'>{lottery.id}</span> <br />
                       status: {stats.status} <br />
-                      {stats.status === 'Created' && new Date(lottery.endTime).getTime() > new Date().getTime() ? (
+                      {stats.status === 'Created' &&
+                      new Date(lottery.endTime).getTime() > new Date().getTime() ? (
                         <Countdown
                           className='status__countdown'
                           endTime={new Date(lottery.endTime).getTime()}
                         />
-                      ) : `ended ${new Date(lottery.endTime).toLocaleString()}`}
+                      ) : (
+                        `ended ${new Date(lottery.endTime).toLocaleString()}`
+                      )}
                     </td>
                     <td>
                       tickets sold: {stats.tickets?.length || 0} <br />
@@ -114,11 +118,10 @@ export function GamesStatsPanel() {
                       status: {stats.status}
                       <br />
                       {stats.status === 'Created' && endTime > new Date().getTime() ? (
-                        <Countdown
-                          className='status__countdown'
-                          endTime={endTime * 1000}
-                        />
-                      ) : `ended ${new Date(endTime * 1000).toLocaleString()}`}
+                        <Countdown className='status__countdown' endTime={endTime * 1000} />
+                      ) : (
+                        `ended ${new Date(endTime * 1000).toLocaleString()}`
+                      )}
                     </td>
                     <td>
                       bids: {stats.bids?.length || 0} <br />

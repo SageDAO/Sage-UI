@@ -1,31 +1,46 @@
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import {
-  useGetClaimedAuctionNftsPerUserQuery,
-  useGetUnclaimedAuctionNftsPerUserQuery,
+  useClaimAuctionNftMutation,
+  useGetClaimedAuctionNftsQuery,
+  useGetUnclaimedAuctionNftsQuery,
 } from '@/store/services/auctionsReducer';
 import {
-  useGetClaimedPrizesByUserQuery,
-  useGetUnclaimedPrizesByUserQuery,
+  ClaimPrizeRequest,
+  useClaimLotteryPrizeMutation,
+  useGetClaimedPrizesQuery,
+  useGetUnclaimedPrizesQuery,
 } from '@/store/services/prizesReducer';
 import { GamePrize } from '@/prisma/types';
 import Loader from 'react-loader-spinner';
 import { BaseImage, PfpImage } from '@/components/Image';
+import { Signer } from 'ethers';
+import { useSigner } from 'wagmi';
 
 export function MyCollection() {
   const { data: sessionData } = useSession();
-  const { data: claimedPrizes, isFetching: isFetchingFromLotteries } =
-    useGetClaimedPrizesByUserQuery(sessionData?.address as string);
-  const { data: unclaimedPrizes } = useGetUnclaimedPrizesByUserQuery(
-    sessionData?.address as string
+  const { data: signer } = useSigner();
+  const [claimLotteryPrize] = useClaimLotteryPrizeMutation();
+  const [claimAuctionNft] = useClaimAuctionNftMutation();
+  const { data: claimedPrizes, isFetching: fetchingClaimedPrizes } = useGetClaimedPrizesQuery();
+  const { data: unclaimedPrizes, isFetching: fetchingUnclaimedPrizes } =
+    useGetUnclaimedPrizesQuery();
+  const { data: claimedAuctionNfts, isFetching: fetchingClaimedAuctionNfts } =
+    useGetClaimedAuctionNftsQuery();
+  const { data: unclaimedAuctionNfts, isFetching: fetchingUnclaimedAuctionNfts } =
+    useGetUnclaimedAuctionNftsQuery();
+  const myNfts = new Array().concat(
+    unclaimedAuctionNfts,
+    unclaimedPrizes,
+    claimedAuctionNfts,
+    claimedPrizes
   );
-  const { data: claimedAuctionNfts, isFetching: isFetchingFromAuctions } =
-    useGetClaimedAuctionNftsPerUserQuery();
-  const { data: unclaimedAuctionNfts } = useGetUnclaimedAuctionNftsPerUserQuery();
-  const numUnclaimedItems = (unclaimedAuctionNfts?.length || 0) + (unclaimedPrizes?.length || 0);
-  const myNfts = new Array().concat(claimedAuctionNfts, claimedPrizes);
 
-  if (isFetchingFromLotteries || isFetchingFromAuctions) {
+  if (
+    fetchingClaimedPrizes ||
+    fetchingUnclaimedPrizes ||
+    fetchingClaimedAuctionNfts ||
+    fetchingUnclaimedAuctionNfts
+  ) {
     return (
       <div className='profile-page'>
         <br />
@@ -34,21 +49,29 @@ export function MyCollection() {
     );
   }
 
+  const handleClaimPrizeClick = async (prize: GamePrize) => {
+    if (prize.auctionId) {
+      await claimAuctionNft({ id: prize.auctionId, signer: signer as Signer });
+    } else {
+      await claimLotteryPrize({
+        lotteryId: prize.lotteryId,
+        nftId: prize.nftId,
+        ticketNumber: prize.lotteryTicketNumber,
+        proof: prize.lotteryProof,
+        walletAddress: sessionData?.address,
+        signer: signer as Signer,
+      } as ClaimPrizeRequest);
+    }
+  };
+
   return (
     <div className='collection'>
-      <div className='collection__header'>
-        My Collection
-        {numUnclaimedItems > 0 && (
-          <div className='collection__claimable'>
-            <Link href='/rewards'>
-              <div>
-                You have {numUnclaimedItems} NFT {numUnclaimedItems > 1 && 's'} to claim. Click here
-                to view {numUnclaimedItems > 1 ? 'them' : 'it'}!
-              </div>
-            </Link>
+      <div className='collection__header'>My Collection</div>
+      {myNfts?.length == 0 && (
+          <div style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}>
+            Nothing to showcase here (yet)!
           </div>
         )}
-      </div>
       <div className='collection__grid'>
         {myNfts?.map((item: GamePrize, index: number) => {
           return (
@@ -65,6 +88,15 @@ export function MyCollection() {
                   <div className='collection__tile-artist-name'>by {item.artistDisplayName}</div>
                 </div>
               </div>
+              {!item.claimedAt && (
+                <button
+                  className='nft-tile__btn-container__claimbutton'
+                  onClick={() => handleClaimPrizeClick(item)}
+                  style={{ width: '100%' }}
+                >
+                  Claim NFT
+                </button>
+              )}
             </div>
           );
         })}
