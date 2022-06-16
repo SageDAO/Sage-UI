@@ -56,7 +56,6 @@ model Lottery {
 }
 
 model Auction {
-  buyNowPrice     String?
   endTime         DateTime
   minimumPrice    String?
   settled         Boolean   @default(false)
