@@ -1,9 +1,8 @@
-import React from 'react';
 import Head from 'next/head';
 import type { Router } from 'next/router';
 import variants from '@/animations/index';
 import { motion } from 'framer-motion';
-import { ToastContainer } from 'react-toastify';
+import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
@@ -14,6 +13,7 @@ type Props = {
 };
 
 export default function Layout({ children, router }: Props) {
+
   return (
     <div className='layout'>
       <Head>
@@ -22,7 +22,7 @@ export default function Layout({ children, router }: Props) {
       </Head>
       <ToastContainer
         position='bottom-center'
-        autoClose={10000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -33,8 +33,8 @@ export default function Layout({ children, router }: Props) {
       />
       <Nav />
       <motion.div
-			key={router.route}
-			initial='pageInitial'
+        key={router.route}
+        initial='pageInitial'
         animate='pageAnimate'
         exit='pageInitial'
         variants={variants}
