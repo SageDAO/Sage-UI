@@ -6,10 +6,12 @@
 
 .modal__backdrop {
   position: fixed;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(6px);
   background-color: c.$bg-dark;
-  opacity: 0.7;
+  opacity: 0.8;
   inset: 0;
+
+  transform: translate3d(0, 0, 0);
 }
 
 .modal__container {
