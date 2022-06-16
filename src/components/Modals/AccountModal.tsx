@@ -127,7 +127,10 @@ export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoadi
           )}
           <button
             className='accountmodal__profile-btn'
-            onClick={() => router.push('/profile')}
+            onClick={async () => {
+              await router.push('/profile');
+              closeModal();
+            }}
             disabled={!sessionData}
           >
             Go to Profile
