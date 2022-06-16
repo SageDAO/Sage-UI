@@ -101,9 +101,7 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Refundable</div>
-            <div className='games-modal__rules-value'>
-              {lottery.isRefundable ? 'Yes' : 'No'}
-            </div>
+            <div className='games-modal__rules-value'>{lottery.isRefundable ? 'Yes' : 'No'}</div>
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Drawing</div>
@@ -146,8 +144,15 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
           </div>
           <div className='games-modal__tickets-total'>
             <span className='games-modal__tickets-total-label'>Total </span>
-            {desiredTicketAmount * lottery.costPerTicketPoints} PIXEL{' + '}
-            {desiredTicketAmount * lottery.costPerTicketTokens} ASH
+            {lottery.costPerTicketPoints > 0 && (
+              <span>{desiredTicketAmount * lottery.costPerTicketPoints} PIXEL</span>
+            )}
+            {lottery.costPerTicketPoints > 0 && lottery.costPerTicketTokens > 0 && (
+              <span>{' + '}</span>
+            )}
+            {lottery.costPerTicketTokens > 0 && (
+              <span>{desiredTicketAmount * lottery.costPerTicketTokens} ASH</span>
+            )}
           </div>
           <div className='games-modal__btn-container'>
             <GetTicketsButton onClick={handleBuyTicketClick} pending={isLoading}></GetTicketsButton>

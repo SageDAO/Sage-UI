@@ -68,20 +68,35 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         <h1 className='game-panel__header-title'>Tickets</h1>
         <div className='game-panel__balance-label'>
           Balance
-          <div className='game-panel__balance'>{userBalancePoints} PIXEL</div>
-          <div className='game-panel__balance'>
-            {userBalance?.formatted} {userBalance?.symbol}
-          </div>
+          {lottery.costPerTicketPoints > 0 && (
+            <div className='game-panel__balance'>{userBalancePoints} PIXEL</div>
+          )}
+          {lottery.costPerTicketTokens > 0 && (
+            <div className='game-panel__balance'>
+              {userBalance?.formatted} {userBalance?.symbol}
+            </div>
+          )}
         </div>
       </div>
       <div className='game-panel__pricing'>
         <div className='game-panel__pricing-item'>
           <h1 className='game-panel__pricing-label'>Pricing</h1>
           <div className='game-panel__price'>
-            {lottery.costPerTicketPoints}
-            <div className='game-panel__price-unit'>PIXEL +</div>
-            {lottery.costPerTicketTokens}
-            <div className='game-panel__price-unit'>ASH</div>
+            {lottery.costPerTicketPoints > 0 && (
+              <span className='game-panel__price-item'>
+                {lottery.costPerTicketPoints}
+                <div className='game-panel__price-unit'>PIXEL</div>
+              </span>
+            )}
+            {Boolean(lottery.costPerTicketTokens > 0 && lottery.costPerTicketPoints > 0) && (
+              <span className='game-panel__price-unit'>{' + '}</span>
+            )}
+            {lottery.costPerTicketTokens > 0 && (
+              <span className='game-panel__price-item'>
+                {lottery.costPerTicketTokens}
+                <div className='game-panel__price-unit'>ASH</div>
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -95,7 +110,9 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         </div>
         <div className='game-panel__lottery-info'>
           <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={false} />
-          <div className='game-panel__user-ticket-count'>you have {ticketCount[lottery.id]} tickets</div>
+          <div className='game-panel__user-ticket-count'>
+            you have {ticketCount[lottery.id]} tickets
+          </div>
         </div>
       </div>
     </div>
