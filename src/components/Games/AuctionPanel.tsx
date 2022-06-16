@@ -66,7 +66,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
         <div className='game-panel__balance-label'>
           Balance
           <div className='game-panel__balance'>
-            {(userBalance && userBalance.formatted + ' ' + userBalance.symbol) || '0'}
+            {(userBalance && userBalance.formatted + ' ' + userBalance.symbol)}
           </div>
         </div>
       </div>

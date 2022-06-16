@@ -90,7 +90,7 @@ export function MyCollection() {
               </div>
               {!item.claimedAt && (
                 <button
-                  className='nft-tile__btn-container__claimbutton'
+                  className='nft-tile__claimbutton'
                   onClick={() => handleClaimPrizeClick(item)}
                   style={{ width: '100%' }}
                 >
