@@ -10,11 +10,14 @@ let fields: Fields[] = ['displayName', 'username', 'email', 'bio'];
 
 export default function EditProfile({ isOpen, closeModal, title }: ModalProps) {
   const [state, setState] = useState<SafeUserUpdate>({});
-  const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
+  const [updateUser, { isLoading: isUpdatingUser, isSuccess }] = useUpdateUserMutation();
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     updateUser(state);
+    if (isSuccess) {
+      closeModal();
+    }
   }
 
   return (
