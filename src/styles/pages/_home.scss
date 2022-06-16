@@ -1,7 +1,7 @@
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/layout/layout' as l;
 @use '@/styles/abstracts/breakpoints' as b;
-#home-page {
+.home-page {
   flex: 1;
   .banner-slider {
     margin: 50px 0;
@@ -50,44 +50,45 @@
       }
     }
   }
+}
 
-  #header {
-    font-weight: 600;
-    margin-left: l.$indent;
-    size: 19px;
-  }
-  #featured-drops {
-    margin: 23px l.$indent 55px;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 2%;
-    @include b.min-width('small') {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @include b.min-width('medium') {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    @include b.min-width('2xl') {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
+.home-page__subheader {
+  font-weight: 600;
+  margin-left: l.$indent;
+  size: 19px;
+}
 
-  #explore-all {
-    width: 100%;
-    display: grid;
-    place-items: center;
-    margin-bottom: 132px;
-    button {
-      border: 1.5px solid #6c437e;
-      box-sizing: border-box;
-      border-radius: 23px;
-      background: transparent;
-      color: white;
-      font-size: 16px;
-      font-weight: 500;
-      padding: 15px 20px;
-      cursor: pointer;
-      line-height: 16px;
-    }
+.home-page__featured-drops {
+  margin: 23px l.$indent 55px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2%;
+  @include b.min-width('small') {
+    grid-template-columns: repeat(2, 1fr);
   }
+  @include b.min-width('medium') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include b.min-width('2xl') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.home-page__explore-all {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 132px;
+}
+
+.home-page__explore-all-button {
+  border: 1.5px solid #6c437e;
+  box-sizing: border-box;
+  border-radius: 23px;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 15px 20px;
+  cursor: pointer;
+  line-height: 16px;
 }

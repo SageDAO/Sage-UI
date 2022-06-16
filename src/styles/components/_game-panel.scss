@@ -73,6 +73,12 @@
   gap: 6px;
 }
 
+.game-panel__price-item {
+  display: flex;
+  gap: 6px;
+	align-items: center;
+}
+
 .game-panel__price-unit {
   font-style: normal;
   font-weight: 500;

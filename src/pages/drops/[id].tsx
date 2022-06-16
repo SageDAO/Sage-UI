@@ -108,53 +108,55 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           </div>
         </div>
       </section>
-      {/* --------------------LOTTERIES------------------------ */}
-      {hasLotteries && (
-        <section className='drop-page__games' id='lotteries'>
-          <h1 className='drop-page__games-title'>Lotteries</h1>
-          <div className='drop-page__games-grid'>
-            {lotteries.map((l: Lottery_include_Nft) => {
-              return (
-                <LotteryTile
-                  lottery={l}
-                  artist={artist}
-                  key={l.id}
-                  userTicketCount={ticketCount[l.id]}
-                />
-              );
-            })}
-          </div>
-        </section>
-      )}
-      {/* --------------------Drawings------------------------ */}
-      {hasDrawings && (
-        <section className='drop-page__games' id='drawings'>
-          <h1 className='drop-page__games-title'>Drawings</h1>
-          <div className='drop-page__games-grid'>
-            {drawings.map((d: Lottery_include_Nft) => {
-              return (
-                <LotteryTile
-                  lottery={d}
-                  artist={artist}
-                  key={d.id}
-                  userTicketCount={ticketCount[d.id]}
-                />
-              );
-            })}
-          </div>
-        </section>
-      )}
-      {/* --------------------AUCTIONS------------------------ */}
-      {hasAuctions && (
-        <section className='drop-page__games' id='auctions'>
-          <h1 className='drop-page__games-title'>Auctions</h1>
-          <div className='drop-page__games-grid'>
-            {auctions.map((a: Auction_include_Nft) => {
-              return <AuctionTile auction={a} artist={artist} key={a.id} />;
-            })}
-          </div>
-        </section>
-      )}
+      <div className='drop-page__games'>
+        {/* --------------------LOTTERIES------------------------ */}
+        {hasLotteries && (
+          <section className='drop-page__games-section' id='lotteries'>
+            <h1 className='drop-page__games-title'>Lotteries</h1>
+            <div className='drop-page__games-grid'>
+              {lotteries.map((l: Lottery_include_Nft) => {
+                return (
+                  <LotteryTile
+                    lottery={l}
+                    artist={artist}
+                    key={l.id}
+                    userTicketCount={ticketCount[l.id]}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
+        {/* --------------------Drawings------------------------ */}
+        {hasDrawings && (
+          <section className='drop-page__games-section' id='drawings'>
+            <h1 className='drop-page__games-title'>Drawings</h1>
+            <div className='drop-page__games-grid'>
+              {drawings.map((d: Lottery_include_Nft) => {
+                return (
+                  <LotteryTile
+                    lottery={d}
+                    artist={artist}
+                    key={d.id}
+                    userTicketCount={ticketCount[d.id]}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
+        {/* --------------------AUCTIONS------------------------ */}
+        {hasAuctions && (
+          <section className='drop-page__games-section' id='auctions'>
+            <h1 className='drop-page__games-title'>Auctions</h1>
+            <div className='drop-page__games-grid'>
+              {auctions.map((a: Auction_include_Nft) => {
+                return <AuctionTile auction={a} artist={artist} key={a.id} />;
+              })}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }
