@@ -51,30 +51,32 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
       {/* --------------------DROP INFO------------------------ */}
       <section className='drop-page__dropinfo'>
         <div className='drop-page__details'>
-          <div className='artist'>
-            <div className='artist__pfp'>
+          <div className='drop-page__details-artist'>
+            <div className='drop-page__details-artist-pfp'>
               <PfpImage src={artist.profilePicture as string} />
             </div>
-            <div className='artist__info'>
+            <div className='drop-page__details-artist-info'>
               {/* TODO: display using new artist name field */}
-              <div className='artist__name'>{artist.displayName}</div>
-              <div className='artist__handle'>@{artist.username}</div>
+              <div className='drop-page__details-artist-name'>{artist.displayName}</div>
+              <div className='drop-page__details-artist-handle'>@{artist.username}</div>
             </div>
           </div>
-          <div className='description'>
-            <h1 className='description__title'>{drop.name}</h1>
-            <p className='description__content'>{drop.description}</p>
+          <div className='drop-page__description'>
+            <h1 className='drop-page__description-title'>{drop.name}</h1>
+            <p className='drop-page__description-content'>{drop.description}</p>
           </div>
         </div>
         <div className='drop-page__mechanics'>
-          <h1 className='header'>
+          <h1 className='drop-page__mechanics-header'>
             <div>
               {hasAuctions && <span>Auctions</span>}
-              {hasAuctions && hasDrawings && <span className='header__divider'>×</span>}
+              {hasAuctions && hasDrawings && (
+                <span className='drop-page__mechanics-divider'>×</span>
+              )}
               {hasDrawings && <span>Drawings</span>}
             </div>
           </h1>
-          <p className='details'>
+          <p className='drop-page__mechanics-details'>
             This drop includes {hasAuctions && `${auctions.length} NFTs for auction`}{' '}
             {hasAuctions && hasDrawings && 'and'}{' '}
             {hasDrawings &&
@@ -86,19 +88,19 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               were drawn.
             </span>
           </p>
-          <div className='extra'>
+          <div className='drop-page__mechanics-extra'>
             {hasAuctions && (
-              <a className='extra__link' href='#auctions'>
+              <a className='drop-page__mechanics-extra-link' href='#auctions'>
                 Auctions Below
               </a>
             )}
             {hasDrawings && (
-              <a className='extra__link' href='#drawings'>
+              <a className='drop-page__mechanics-extra-link' href='#drawings'>
                 Tickets Below
               </a>
             )}
             {hasLotteries && (
-              <a className='extra__link' href='#lotteries'>
+              <a className='drop-page__mechanics-extra-link' href='#lotteries'>
                 Tickets Below
               </a>
             )}
@@ -108,9 +110,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
       </section>
       {/* --------------------LOTTERIES------------------------ */}
       {hasLotteries && (
-        <section className='games' id='lotteries'>
-          <h1 className='games__title'>Lotteries</h1>
-          <div className='games__grid'>
+        <section className='drop-page__games' id='lotteries'>
+          <h1 className='drop-page__games-title'>Lotteries</h1>
+          <div className='drop-page__games-grid'>
             {lotteries.map((l: Lottery_include_Nft) => {
               return (
                 <LotteryTile
@@ -126,9 +128,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
       )}
       {/* --------------------Drawings------------------------ */}
       {hasDrawings && (
-        <section className='games' id='drawings'>
-          <h1 className='games__title'>Drawings</h1>
-          <div className='games__grid'>
+        <section className='drop-page__games' id='drawings'>
+          <h1 className='drop-page__games-title'>Drawings</h1>
+          <div className='drop-page__games-grid'>
             {drawings.map((d: Lottery_include_Nft) => {
               return (
                 <LotteryTile
@@ -144,9 +146,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
       )}
       {/* --------------------AUCTIONS------------------------ */}
       {hasAuctions && (
-        <section className='games' id='auctions'>
-          <h1 className='games__title'>Auctions</h1>
-          <div className='games__grid'>
+        <section className='drop-page__games' id='auctions'>
+          <h1 className='drop-page__games-title'>Auctions</h1>
+          <div className='drop-page__games-grid'>
             {auctions.map((a: Auction_include_Nft) => {
               return <AuctionTile auction={a} artist={artist} key={a.id} />;
             })}
