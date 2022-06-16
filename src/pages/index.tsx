@@ -38,7 +38,7 @@ interface Props {
 
 function home({ drops }: Props) {
   return (
-    <div id='home-page'>
+    <div className='home-page'>
       <Slider {...sliderSettings} className='banner-slider'>
         {banners.map((b) => {
           const src = `/sample/banners${b.imagePath}`;
@@ -49,16 +49,16 @@ function home({ drops }: Props) {
           );
         })}
       </Slider>
-      <h1 id='header'>Available Drops</h1>
-      <div id='featured-drops'>
+      <h1 className='home-page__subheader'>Available Drops</h1>
+      <div className='home-page__featured-drops'>
         {drops.map((d: Drop_include_GamesAndArtist) => {
           return <Drop drop={d} key={d.id} />;
         })}
       </div>
       {
-        // <div id='explore-all'>
+        // <div className='home-page__explore-all'>
         //   <Link href='/drops'>
-        //     <button>Explore all drops</button>
+        //     <button className='home-page__explore-all-button'>Explore all drops</button>
         //   </Link>
         // </div>
       }
