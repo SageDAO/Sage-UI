@@ -1,3 +1,60 @@
-#rewards-page {
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
+.rewards-page {
   flex: 1;
+  padding: 30px;
+}
+
+.rewards-page__grid {
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.prize-card {
+  background-color: #1e1e21;
+  border-radius: 9px;
+  transition-duration: 50ms;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  @include m.hover {
+    transform: scale(1.02);
+  }
+}
+
+.prize-card__image-container {
+  position: relative;
+  overflow: hidden;
+  width: 300px;
+  aspect-ratio: 448/550;
+}
+
+.prize-card__interact {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.prize-card__artist {
+  display: flex;
+	justify-content: space-between;
+}
+
+.prize-card__artist-name {
+}
+
+.prize-card__artist-username {
+}
+
+.prize-card__claim-button {
+  background-color: c.$green;
+  color: white;
+  @include m.btn;
+  @include m.pill;
+  height: 44px;
+  width: 100%;
+  font-weight: bold;
+  padding: 10px;
 }

@@ -28,21 +28,12 @@ export default function rewards() {
   }
   const prizes = new Array().concat(lotteryPrizes, auctionPrizes);
   return (
-    <div id='rewards-page'>
-      <div
-        className='games__grid'
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '20px',
-          textAlign: 'center',
-          margin: '25px',
-          justifyContent: 'center',
-          flexWrap: 'wrap'
-        }}
-      >
+    <div className='rewards-page'>
+      <div className='rewards-page__grid'>
         {prizes?.length == 0 && (
-          <div style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}>
+          <div
+          // style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}
+          >
             No unclaimed prizes to display (yet)!
           </div>
         )}
