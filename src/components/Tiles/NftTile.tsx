@@ -20,7 +20,7 @@ function NftTile({ imgSrc, name, subtitle, button, imgLink, children }: Props) {
   }
   return (
     <div className='nft-tile'>
-      <div className='image' onClick={handleNftImageClick}>
+      <div className='nft-tile__image-container' onClick={handleNftImageClick}>
         <BaseImage src={imgSrc} />
       </div>
       <div className='nft-tile__interact'>

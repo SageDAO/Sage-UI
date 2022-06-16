@@ -22,23 +22,17 @@
   width: 100%;
   border-radius: 18px;
   display: flex;
-  flex-direction: column;
-  @include b.min-width('small') {
-    flex-direction: row;
-  }
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 
 .drop-page__details {
-  width: 100%;
   padding: 30px;
-  border-right: 1px solid c.$bg-base;
-
-  @include b.min-width('small') {
-    width: 50%;
-  }
+	flex-shrink: 1;
 }
 .drop-page__description {
 }
+
 .drop-page__description-title {
   margin-top: 10px;
   font-style: normal;
@@ -58,12 +52,7 @@
 }
 
 .drop-page__mechanics {
-  width: 100%;
   padding: 30px;
-
-  @include b.min-width('small') {
-    width: 50%;
-  }
 }
 .drop-page__mechanics-header {
   // width: 100%;
@@ -103,10 +92,11 @@
 
 .drop-page__mechanics-extra {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 2em;
 }
 .drop-page__mechanics-extra-link {
-  margin-right: 20px;
   padding: 15px 20px;
   font-weight: 600;
   font-size: 13px;
@@ -123,24 +113,21 @@
   padding: 20px l.$indent 183px;
 }
 
+.drop-page__games {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.drop-page__section {
+}
+
 .drop-page__games-title {
   @include section__title();
 }
 .drop-page__games-grid {
   margin-top: 23px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 30px;
-  @include b.min-width('small') {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @include b.min-width('medium') {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @include b.min-width('2xl') {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  display: flex;
 }
 
 .drop-page__details-artist {
