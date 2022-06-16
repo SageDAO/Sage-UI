@@ -2,7 +2,6 @@ import AuctionTile from '@/components/Tiles/AuctionTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import type { Auction_include_Nft, Lottery_include_Nft } from '@/prisma/types';
 import type { Lottery, User } from '@prisma/client';
-import DrawingTile from '@/components/Tiles/DrawingTile';
 import { useSession } from 'next-auth/react';
 import { useTicketCount } from '@/hooks/useTicketCount';
 
@@ -37,8 +36,8 @@ export default function MoreInDrop({ auctions, lotteries, drawings, artist }: Pr
           />
         ))}
         {drawings?.map((drawing) => (
-          <DrawingTile
-            drawing={drawing}
+          <LotteryTile
+            lottery={drawing}
             key={drawing.id}
             artist={artist}
             userTicketCount={ticketCount[drawing.id]}

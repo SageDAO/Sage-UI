@@ -2,7 +2,6 @@ import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } fro
 import prisma from '@/prisma/client';
 import { Drop as DropType, Lottery, Prisma, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
-import DrawingTile from '@/components/Tiles/DrawingTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
 import { BaseImage, PfpImage } from '@/components/Image';
@@ -132,8 +131,8 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           <div className='games__grid'>
             {drawings.map((d: Lottery_include_Nft) => {
               return (
-                <DrawingTile
-                  drawing={d}
+                <LotteryTile
+                  lottery={d}
                   artist={artist}
                   key={d.id}
                   userTicketCount={ticketCount[d.id]}
