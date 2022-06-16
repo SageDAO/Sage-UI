@@ -57,7 +57,13 @@ export default function AuctionTile({ auction, artist }: Props) {
               </span>
             </div>
             <div className='nft-tile__user-position-display-game-status'>
-              <Status endTime={auction.endTime} startTime={auction.startTime} settled={false} />
+              {auctionState && (
+                <Status
+                  endTime={auctionState.endTime}
+                  startTime={auction.startTime}
+                  settled={false}
+                />
+              )}
             </div>
           </div>
         </div>
