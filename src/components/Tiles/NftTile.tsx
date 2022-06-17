@@ -21,7 +21,7 @@ function NftTile({ src, isVideo, name, subtitle, button, tileLink, children }: P
   }
   return (
     <div className='nft-tile'>
-      <div className='nft-tile__image-container' onClick={handleNftTileClick}>
+      <div className='nft-tile__media-container' onClick={handleNftTileClick}>
         <BaseMedia src={src} isVideo={isVideo} />
       </div>
       <div className='nft-tile__interact'>

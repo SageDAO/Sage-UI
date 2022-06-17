@@ -1,7 +1,7 @@
 @use '@/styles/abstracts/colors' as c;
 .modal {
   position: relative;
-  z-index: 50;
+  z-index: 999;
 }
 
 .modal__backdrop {

@@ -3,7 +3,7 @@ import { Dialog } from '@headlessui/react';
 export interface Props {
   isOpen: boolean;
   closeModal: () => void;
-  children?: JSX.Element;
+  children?: React.ReactNode;
   title?: string;
 }
 
