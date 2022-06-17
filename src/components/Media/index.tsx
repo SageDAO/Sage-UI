@@ -24,7 +24,7 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps)
         )}
       >
         {isVideo ? (
-          <video preload='auto' autoPlay muted loop playsInline>
+          <video preload='auto' autoPlay muted loop playsInline style={{ overflow: 'hidden' }}>
             <source src={src} type='video/mp4' />
           </video>
         ) : isZoomable ? (
