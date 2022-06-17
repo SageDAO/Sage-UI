@@ -77,7 +77,7 @@ export function MyCollection() {
           return (
             <div className='collection__tile' key={index}>
               <div className='collection__tile-img'>
-                <BaseMedia src={item.s3Path} isVideo={item.isVideo} />
+                <BaseMedia src={item.s3Path} isVideo={item.isVideo} isZoomable={true} />
               </div>
               <div className='collection__tile-details'>
                 <div className='collection__tile-artist-pfp'>
