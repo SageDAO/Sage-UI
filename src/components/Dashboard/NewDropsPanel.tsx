@@ -20,11 +20,13 @@ export function NewDropsPanel() {
     );
   }
   return (
-    <div className='collection'>
-      <div className='collection__grid'>
-        {drops?.map((drop) => (
-          <NewDropCard key={drop.id} drop={drop} />
-        ))}
+    <div className='profile-page'>
+      <div className='collection'>
+        <div className='collection__grid'>
+          {drops?.map((drop) => (
+            <NewDropCard key={drop.id} drop={drop} />
+          ))}
+        </div>
       </div>
     </div>
   );
