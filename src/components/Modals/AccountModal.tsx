@@ -22,7 +22,7 @@ interface Props extends ModalProps {
 
 export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoading }: Props) {
   const { data: accountData } = useAccount();
-  const { data: sessionData, status: sessionStatus } = useSession();
+  const { data: sessionData } = useSession();
   const { connectors, connectAsync, activeConnector } = useConnect();
   const [signIn, { isLoading: isSigningIn }] = useSignInMutation();
   const [signOut] = useSignOutMutation();
