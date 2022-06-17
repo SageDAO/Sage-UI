@@ -4,7 +4,7 @@ import { Drop as DropType, Lottery, Prisma, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
-import { BaseImage, PfpImage } from '@/components/Image';
+import { BaseMedia, PfpImage } from '@/components/Media';
 import { useSession } from 'next-auth/react';
 import { useTicketCount } from '@/hooks/useTicketCount';
 
@@ -46,7 +46,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   return (
     <div className='drop-page'>
       <div className='drop-page__hero'>
-        <BaseImage src={drop.bannerImageS3Path} />
+        <BaseMedia src={drop.bannerImageS3Path} isVideo={false} />
       </div>
       {/* --------------------DROP INFO------------------------ */}
       <section className='drop-page__dropinfo'>

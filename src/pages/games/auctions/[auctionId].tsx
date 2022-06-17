@@ -1,7 +1,6 @@
 import MoreInDrop from '@/components/Games/MoreInDrop';
 import ArtistTag from '@/components/Games/ArtistTag';
 import GameInfo from '@/components/Games/GameInfo';
-import NftDisplay from '@/components/Games/NftDisplay';
 import NftHeader from '@/components/Games/NftHeader';
 import AuctionPanel from '@/components/Games/AuctionPanel';
 import prisma from '@/prisma/client';
@@ -19,6 +18,7 @@ import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 import { useGetUserDisplayInfoQuery } from '@/store/services/user';
 import { getBlockchainTimestamp } from '@/utilities/contracts';
 import { useSession } from 'next-auth/react';
+import { BaseMedia } from '@/components/Media';
 
 type Props = {
   drop: Drop;
@@ -67,7 +67,7 @@ function auction({ auction, auctions, lotteries, artist, drawings, drop }: Props
     <div className='game-page'>
       <div className='game__main'>
         <div>
-          <NftDisplay imgSrc={auction.Nft.s3Path} />
+          <BaseMedia src={auction.Nft.s3Path} isVideo={auction.Nft.isVideo} />
         </div>
         <div className='game__content'>
           <ArtistTag artist={artist} />

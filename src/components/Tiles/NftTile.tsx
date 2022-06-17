@@ -1,27 +1,28 @@
 import React from 'react';
-import { BaseImage } from '../Image';
+import { BaseMedia } from '../Media';
 import { useRouter } from 'next/router';
 
 interface Props {
-  imgSrc: string;
+  src: string;
+  isVideo: boolean;
   children?: React.ReactNode;
   name: string;
   subtitle: string;
   button?: React.ReactElement;
   buttonText?: string;
   buttonAction?: () => any;
-  imgLink: string;
+  tileLink: string;
 }
 
-function NftTile({ imgSrc, name, subtitle, button, imgLink, children }: Props) {
+function NftTile({ src, isVideo, name, subtitle, button, tileLink, children }: Props) {
   const router = useRouter();
-  function handleNftImageClick() {
-    router.push(imgLink);
+  function handleNftTileClick() {
+    router.push(tileLink);
   }
   return (
     <div className='nft-tile'>
-      <div className='nft-tile__image-container' onClick={handleNftImageClick}>
-        <BaseImage src={imgSrc} />
+      <div className='nft-tile__image-container' onClick={handleNftTileClick}>
+        <BaseMedia src={src} isVideo={isVideo} />
       </div>
       <div className='nft-tile__interact'>
         <div className='nft-tile__interact-container'>

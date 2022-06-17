@@ -1,7 +1,7 @@
 import type { User } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { basePathArtists } from '@/constants/paths';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 
 interface Props {
   artist: User;

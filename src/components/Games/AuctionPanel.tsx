@@ -7,7 +7,7 @@ import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import Status from '@/components/Status';
 import PlaceBidButton from './PlaceBidButton';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 import { parameters } from '@/constants/config';
 
 interface Props {

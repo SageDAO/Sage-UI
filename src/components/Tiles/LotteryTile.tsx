@@ -6,7 +6,7 @@ import useModal from '@/hooks/useModal';
 import type { User } from '@prisma/client';
 import GetTicketsButton from '../Games/GetTicketsButton';
 import { useGetUserQuery } from '@/store/services/user';
-import { PfpImage } from '../Image';
+import { PfpImage } from '../Media';
 import Status from '../Status';
 import { useSession } from 'next-auth/react';
 
@@ -29,8 +29,9 @@ export default function LotteryTile({ lottery, artist, userTicketCount }: Props)
       }
       name={lottery.Nfts[0].name}
       subtitle={`${String(lottery.Nfts.length)} NFTs`}
-      imgSrc={lottery.Nfts[0].s3Path}
-      imgLink={`${basePathLotteries}/${lottery.id}`}
+      src={lottery.Nfts[0].s3Path}
+      isVideo={lottery.Nfts[0].isVideo}
+      tileLink={`${basePathLotteries}/${lottery.id}`}
     >
       {status === 'authenticated' && (
         <div className='nft-tile__user-position-display'>

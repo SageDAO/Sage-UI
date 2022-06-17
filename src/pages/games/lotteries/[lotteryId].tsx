@@ -16,13 +16,13 @@ import {
   GetStaticPathsResult,
   GetStaticPathsContext,
 } from 'next';
-import NftDisplay from '@/components/Games/NftDisplay';
 import ArtistTag from '@/components/Games/ArtistTag';
 import NftHeader from '@/components/Games/NftHeader';
 import GameInfo from '@/components/Games/GameInfo';
 import MoreInDrop from '@/components/Games/MoreInDrop';
 import TicketPanel from '@/components/Games/TicketPanel';
 import LotterySlider from '@/components/Games/LotterySlider';
+import { BaseMedia } from '@/components/Media';
 
 type Props = {
   drop: Drop;
@@ -71,7 +71,7 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
     <div className='game-page'>
       <div className='game__main'>
         <div>
-          <NftDisplay imgSrc={currentNft.s3Path} />
+          <BaseMedia src={currentNft.s3Path} isVideo={currentNft.isVideo} />
         </div>
         <div className='game__content'>
           <ArtistTag artist={artist} />

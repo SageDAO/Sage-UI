@@ -9,7 +9,7 @@ import { useGetAllUsersAndEarnedPointsQuery } from '@/store/services/dashboardRe
 import Loader from 'react-loader-spinner';
 import { User } from '@prisma/client';
 import useModal from '@/hooks/useModal';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 
 export function UsersPanel() {
   const { data: users, isFetching: isFetchingUsers } = useGetAllUsersAndEarnedPointsQuery();

@@ -6,7 +6,7 @@ import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 import PlaceBidButton from '@/components/Games/PlaceBidButton';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 import { useGetUserQuery } from '@/store/services/user';
 import Status from '@/components/Status';
 import { useSession } from 'next-auth/react';
@@ -31,8 +31,9 @@ export default function AuctionTile({ auction, artist }: Props) {
         </div>
       }
       subtitle={`Auction - ${auction.Nft.numberOfEditions} editions`}
-      imgSrc={auction.Nft.s3Path}
-      imgLink={`${basePathAuctions}/${auction.id}`}
+      src={auction.Nft.s3Path}
+      isVideo={auction.Nft.isVideo}
+      tileLink={`${basePathAuctions}/${auction.id}`}
     >
       {sessionStatus === 'authenticated' && (
         <div className='nft-tile__user-position-display'>

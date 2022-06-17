@@ -89,7 +89,8 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
     <Modal title='Get a Ticket' isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
         <GamesModalHeader
-          imgSrc={nft.s3Path}
+          src={nft.s3Path}
+          isVideo={nft.isVideo}
           nftName={nft.name}
           nftEditions={nft.numberOfEditions}
           artist={artist}

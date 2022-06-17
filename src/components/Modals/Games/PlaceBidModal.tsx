@@ -66,7 +66,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
     <Modal title='Place a Bid' isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
         <GamesModalHeader
-          imgSrc={auction.Nft.s3Path}
+          src={auction.Nft.s3Path}
+          isVideo={auction.Nft.isVideo}
           nftName={auction.Nft.name}
           nftEditions={auction.Nft.numberOfEditions}
           artist={artist}

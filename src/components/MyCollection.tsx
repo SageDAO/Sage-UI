@@ -12,7 +12,7 @@ import {
 } from '@/store/services/prizesReducer';
 import { GamePrize } from '@/prisma/types';
 import Loader from 'react-loader-spinner';
-import { BaseImage, PfpImage } from '@/components/Image';
+import { BaseMedia, PfpImage } from '@/components/Media';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
 
@@ -77,7 +77,7 @@ export function MyCollection() {
           return (
             <div className='collection__tile' key={index}>
               <div className='collection__tile-img'>
-                <BaseImage src={item.s3Path} />
+                <BaseMedia src={item.s3Path} isVideo={item.isVideo} />
               </div>
               <div className='collection__tile-details'>
                 <div className='collection__tile-artist-pfp'>

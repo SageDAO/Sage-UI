@@ -20,23 +20,12 @@ export function NewDropsPanel() {
     );
   }
   return (
-    <>
-      <div
-        className='games__grid'
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '20px',
-          textAlign: 'center',
-          margin: '25px',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-        }}
-      >
+    <div className='collection'>
+      <div className='collection__grid'>
         {drops?.map((drop) => (
           <NewDropCard key={drop.id} drop={drop} />
         ))}
       </div>
-    </>
+    </div>
   );
 }

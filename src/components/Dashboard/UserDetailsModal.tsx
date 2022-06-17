@@ -1,7 +1,7 @@
 import { useGetPointsBalanceQuery } from '@/store/services/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import Loader from 'react-loader-spinner';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 
 interface UserDetailsModalProps extends ModalProps {
   userData: any;

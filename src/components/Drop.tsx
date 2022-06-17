@@ -1,7 +1,7 @@
 import shortenAddress from '@/utilities/shortenAddress';
 import Link from 'next/link';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { BaseImage, PfpImage } from './Image';
+import { BaseMedia, PfpImage } from './Media';
 import Countdown from '@/components/Countdown';
 import { computeDropStatus } from '@/utilities/status';
 
@@ -15,7 +15,7 @@ export default function Drop({ drop }: Props) {
     <div className='drop'>
       <Link href={`drops/${drop.id}`}>
         <div className='drop__thumbnail'>
-          <BaseImage src={drop.bannerImageS3Path || '/'} />
+          <BaseMedia src={drop.bannerImageS3Path || '/'} isVideo={false} />
         </div>
       </Link>
       <div className='details'>
