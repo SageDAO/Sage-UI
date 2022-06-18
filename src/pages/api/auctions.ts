@@ -35,11 +35,11 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'GetAuction':
       await getAuction(Number(request.query.auctionId), response);
       break;
-    case 'GetClaimedAuctionNftsPerUser':
-      await getClaimedAuctionNftsPerUser(walletAddress as string, response);
+    case 'GetClaimedAuctionNfts':
+      await getClaimedAuctionNfts(walletAddress as string, response);
       break;
-    case 'GetUnclaimedAuctionNftsPerUser':
-      await getUnclaimedAuctionNftsPerUser(walletAddress as string, response);
+    case 'GetUnclaimedAuctionNfts':
+      await getUnclaimedAuctionNfts(walletAddress as string, response);
       break;
     case 'UpdateNftClaimedDate':
       await updateNftClaimedDate(
@@ -87,7 +87,7 @@ async function getAuction(auctionId: number, response: NextApiResponse) {
   response.end();
 }
 
-async function getClaimedAuctionNftsPerUser(walletAddress: string, response: NextApiResponse) {
+async function getClaimedAuctionNfts(walletAddress: string, response: NextApiResponse) {
   if (!walletAddress) {
     response.status(401).end('Not Authenticated');
   } else {
@@ -110,7 +110,7 @@ async function getClaimedAuctionNftsPerUser(walletAddress: string, response: Nex
       claimedAuctions.forEach((a) =>
         claimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.Artist }))
       );
-      console.log(`getClaimedAuctionNftsPerUser(${walletAddress}) :: ${claimedNfts.length}`);
+      console.log(`getClaimedAuctionNfts() :: ${claimedNfts.length}`);
       response.json(claimedNfts);
     } catch (e) {
       console.log(e);
@@ -120,7 +120,7 @@ async function getClaimedAuctionNftsPerUser(walletAddress: string, response: Nex
   response.end();
 }
 
-async function getUnclaimedAuctionNftsPerUser(walletAddress: string, response: NextApiResponse) {
+async function getUnclaimedAuctionNfts(walletAddress: string, response: NextApiResponse) {
   if (!walletAddress) {
     response.status(401).end('Not Authenticated');
   } else {
@@ -143,7 +143,7 @@ async function getUnclaimedAuctionNftsPerUser(walletAddress: string, response: N
       unclaimedAuctions.forEach((a) =>
         unclaimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.Artist }))
       );
-      console.log(`getUnclaimedAuctionNftsPerUser(${walletAddress}) :: ${unclaimedNfts.length}`);
+      console.log(`getUnclaimedAuctionNfts() :: ${unclaimedNfts.length}`);
       response.json(unclaimedNfts);
     } catch (e) {
       console.log(e);

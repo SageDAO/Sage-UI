@@ -1,6 +1,6 @@
 import { Nft } from '@/prisma/types';
 import { Dispatch, SetStateAction } from 'react';
-import { BaseImage } from '@/components/Image';
+import { BaseMedia } from '@/components/Media';
 
 interface Props {
   nfts: Nft[];
@@ -29,7 +29,7 @@ export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIn
               data-selected={selectedNftIndex === i}
             >
               NFT{nft.id}
-							<BaseImage src={nft.s3Path} />
+              <BaseMedia src={nft.s3Path} isVideo={nft.isVideo} />
             </div>
           );
         })}

@@ -3,15 +3,33 @@ import type { DropWhereInput } from '@prisma/client';
 
 export type { User, Drop, Nft };
 
-export type SafeUserUpdate = Partial<
-  Pick<User, 'displayName' | 'username' | 'email' | 'bio' | 'profilePicture'>
->;
-
-export type DropWithArtist = Prisma.DropGetPayload<{
+export type Auction_include_DropNftArtist = Prisma.AuctionGetPayload<{
   include: {
-    Artist: true;
+    Nft: true;
+    Drop: {
+      include: {
+        Artist: true;
+      };
+    };
   };
 }>;
+
+export type Auction_include_Nft = Prisma.AuctionGetPayload<{
+  include: { Nft: true };
+}>;
+
+export type AuctionNftWithArtist = Prisma.AuctionGetPayload<{
+  include: {
+    Nft: true;
+    Drop: {
+      include: {
+        Artist: true;
+      };
+    };
+  };
+}>;
+
+export type Game = Auction_include_Nft | Lottery_include_Nft;
 
 export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   include: {
@@ -29,46 +47,9 @@ export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   };
 }>;
 
-export type Game = Auction_include_Nft | Lottery_include_Nft;
-
-export type Auction_include_Nft = Prisma.AuctionGetPayload<{
-  include: { Nft: true };
-}>;
-
-export type Auction_include_DropNftArtist = Prisma.AuctionGetPayload<{
+export type DropWithArtist = Prisma.DropGetPayload<{
   include: {
-    Nft: true;
-    Drop: {
-      include: {
-        Artist: true;
-      };
-    };
-  };
-}>;
-
-export type AuctionNftWithArtist = Prisma.AuctionGetPayload<{
-  include: {
-    Nft: true;
-    Drop: {
-      include: {
-        Artist: true;
-      };
-    };
-  };
-}>;
-
-export type Lottery_include_Nft = Prisma.LotteryGetPayload<{
-  include: { Nfts: true };
-}>;
-
-export type LotteryWithNftsAndArtist = Prisma.LotteryGetPayload<{
-  include: {
-    Nfts: true;
-    Drop: {
-      include: {
-        Artist: true;
-      };
-    };
+    Artist: true;
   };
 }>;
 
@@ -87,3 +68,40 @@ export interface GamePrize {
   isVideo: boolean;
   claimedAt?: Date;
 }
+
+export type Lottery_include_Nft = Prisma.LotteryGetPayload<{
+  include: { Nfts: true };
+}>;
+
+export type LotteryWithNftsAndArtist = Prisma.LotteryGetPayload<{
+  include: {
+    Nfts: true;
+    Drop: {
+      include: {
+        Artist: true;
+      };
+    };
+  };
+}>;
+
+export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{
+  include: {
+    Nft: {
+      include: {
+        Lottery: {
+          include: {
+            Drop: {
+              include: {
+                Artist: true;
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+}>;
+
+export type SafeUserUpdate = Partial<
+  Pick<User, 'displayName' | 'username' | 'email' | 'bio' | 'profilePicture'>
+>;

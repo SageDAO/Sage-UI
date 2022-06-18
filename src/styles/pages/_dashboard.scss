@@ -6,6 +6,31 @@
   margin-right: 5rem;
   font-weight: 500;
   font-size: 14px;
+  flex: 1;
+
+  &__tab {
+    display: inline-block;
+    border: 1px solid transparent;
+    border-bottom: none;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 15px 10px 15px;
+    border-color: #aaa;
+    border-radius: 15px 15px 0 0;
+
+    &--selected {
+      background: #fff;
+      border-color: #aaa;
+      color: black;
+      border-radius: 15px 15px 0 0;
+    }
+  }
+
+  &__tab:focus {
+    outline: none;
+  }
 }
 
 .dashboard-panel {
@@ -112,4 +137,39 @@
       cursor: default;
     }
   }
+}
+
+.dashboard-game-stats {
+  &__container {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: flex-start;
+    text-align: center;
+    border-bottom: 1px dashed gray;
+    line-height: 20px;
+  }
+
+  &__item {
+    padding: 15px 15px 15px 15px;
+
+    table {
+      margin-left: auto;
+      margin-right: auto;
+      td {
+        border-bottom: 1px dotted gray;
+        padding: 15px 25px 15px 25px;
+      }
+    }
+  }
+
+  &__id {
+    font-weight: bolder;
+    font-size: 18px;
+    color: white;
+  }
+}
+
+.dashboard__user-details-pfp-container {
+	position: relative;
 }

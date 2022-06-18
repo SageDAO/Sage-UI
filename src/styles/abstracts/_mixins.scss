@@ -13,21 +13,22 @@
   &[disabled] {
     background: c.$text-gray-2;
   }
-  &:not([disabled]):hover {
+  &:not([disabled]) {
     cursor: pointer;
+    @include hover {
+      filter: brightness(0.9);
+    }
   }
 }
 
 @mixin hover {
   &:not([disabled]):hover {
-    filter: brightness(0.9);
     @content;
   }
 }
 
 @mixin btn {
   @include interact;
-  @include hover;
 }
 
 @mixin pill {

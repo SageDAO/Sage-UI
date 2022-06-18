@@ -46,15 +46,15 @@ export default function BidHistoryTable({ auctionId }: Props) {
   `;
   const auctionIdHexStr = '0x' + auctionId.toString(16);
   const {
-    data: { auction: { bids } } = { auction: { bids: [] } },
+    data: graphData,
     previousData,
     loading: isLoading,
     startPolling,
   } = useQuery(BID_HISTORY_QUERY, {
     variables: { auctionId: auctionIdHexStr },
   });
-  // if (bidHistoryQueryLoading || !data || !data.auction || !data.auction.bids) return null;
-  const sortedBids = sortBidHistory(bids, state.itemsToShow);
+  if (isLoading || !graphData || !graphData.auction || !graphData.auction.bids) return null;
+  const sortedBids = sortBidHistory(graphData.auction.bids, state.itemsToShow);
   startPolling(500);
 
   return (
@@ -78,7 +78,7 @@ export default function BidHistoryTable({ auctionId }: Props) {
               }
             }
             return (
-              <div>
+              <div key={inputId}>
                 <input
                   type='radio'
                   id={inputId}

@@ -13,6 +13,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     return;
   }
   switch (action) {
+    case 'GetApprovedDrops':
+      await getApprovedDrops(response);
+      break;
     case 'GetDropsPendingApproval':
       await getDropsPendingApproval(response);
       break;
@@ -23,6 +26,27 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       response.status(500);
   }
   response.end();
+}
+
+async function getApprovedDrops(response: NextApiResponse) {
+  console.log(`getApprovedDrops()`);
+  try {
+    const result = await prisma.drop.findMany({
+      where: { approvedAt: { not: null } },
+      include: {
+        Artist: true,
+        Lotteries: { include: { Nfts: true } },
+        Auctions: { include: { Nft: true } },
+      },
+      orderBy: {
+        id: 'desc'
+      }
+    });
+    response.json(result);
+  } catch (e) {
+    console.log({ e });
+    response.status(500);
+  }
 }
 
 async function getDropsPendingApproval(response: NextApiResponse) {
@@ -61,7 +85,6 @@ async function approveDrop(id: number, walletAddress: string, response: NextApiR
     console.log(e);
     response.status(500);
   }
-  response.end();
 }
 
 export default handler;

@@ -18,10 +18,12 @@ export const pointsApi = createApi({
       queryFn: async (_arg, { dispatch }, _extraOptions, fetchWithBQ) => {
         const { data } = await fetchWithBQ(`points`);
         const pointsEarned = BigInt((data as any).totalPointsEarned);
-        const pointsUsed = await getTotalPointsUsed((data as any).walletAddress);
+        const userAddress = (data as EarnedPoints).address;
+        const pointsUsed = await getTotalPointsUsed(userAddress);
         let pointsBalance = pointsEarned - pointsUsed;
         // as the balance is fresh from contract and database, release any escrow on hold
         dispatch(pointsApi.endpoints.releaseEscrowPoints.initiate());
+        console.log(`getPointsBalance() :: ${pointsEarned} - ${pointsUsed} = ${pointsBalance}`);
         return { data: Number(pointsBalance) };
       },
       providesTags: ['UserPoints'],
@@ -49,10 +51,12 @@ export const pointsApi = createApi({
   }),
 });
 
-const getTotalPointsUsed = async (walletAddress: string) => {
+const getTotalPointsUsed = async (walletAddress: string): Promise<bigint> => {
   try {
     const contract = await getRewardsContract();
-    return (await contract.totalPointsUsed(walletAddress)).toBigInt();
+    const result = await contract.totalPointsUsed(walletAddress);
+    console.log(`contract.totalPointsUsed(${walletAddress}) :: ${result}`);
+    return result.toBigInt();
   } catch (e) {
     console.error(e);
   }

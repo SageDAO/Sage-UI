@@ -75,7 +75,6 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
     }
 
     const request: BuyTicketRequest = {
-      walletAddress: accountData?.address as string,
       lotteryId: lottery.id,
       numberOfTickets: desiredTicketAmount,
       ticketCostPoints: pricePoints,
@@ -90,7 +89,8 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
     <Modal title='Get a Ticket' isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
         <GamesModalHeader
-          imgSrc={nft.s3Path}
+          src={nft.s3Path}
+          isVideo={nft.isVideo}
           nftName={nft.name}
           nftEditions={nft.numberOfEditions}
           artist={artist}
@@ -102,9 +102,7 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Refundable</div>
-            <div className='games-modal__rules-value'>
-              {lottery.isRefundable ? 'true' : 'false'}
-            </div>
+            <div className='games-modal__rules-value'>{lottery.isRefundable ? 'Yes' : 'No'}</div>
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Drawing</div>
@@ -114,7 +112,7 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
         <div className='games-modal__heading'>
           <h1 className='games-modal__heading-label'>Price per ticket</h1>
           <div className='games-modal__heading-value games-modal__heading-value--green'>
-            {lottery.costPerTicketPoints} POINTS
+            {lottery.costPerTicketPoints} PIXEL
           </div>
         </div>
         <div className='games-modal__tickets-section'>
@@ -147,8 +145,15 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
           </div>
           <div className='games-modal__tickets-total'>
             <span className='games-modal__tickets-total-label'>Total </span>
-            {desiredTicketAmount * lottery.costPerTicketPoints} PIXEL{' + '}
-            {desiredTicketAmount * lottery.costPerTicketTokens} ASH
+            {lottery.costPerTicketPoints > 0 && (
+              <span>{desiredTicketAmount * lottery.costPerTicketPoints} PIXEL</span>
+            )}
+            {lottery.costPerTicketPoints > 0 && lottery.costPerTicketTokens > 0 && (
+              <span>{' + '}</span>
+            )}
+            {lottery.costPerTicketTokens > 0 && (
+              <span>{desiredTicketAmount * lottery.costPerTicketTokens} ASH</span>
+            )}
           </div>
           <div className='games-modal__btn-container'>
             <GetTicketsButton onClick={handleBuyTicketClick} pending={isLoading}></GetTicketsButton>

@@ -8,7 +8,6 @@ const basePathAuctions = `${basePathGames}/auctions`;
 const basePathLotteries = `${basePathGames}/lotteries`;
 
 const basePathProfile = '/profile';
-const basePathRewards = 'rewards';
 
 
 export {
@@ -20,5 +19,4 @@ export {
   basePathAuctions,
   basePathLotteries,
   basePathProfile,
-  basePathRewards,
 };

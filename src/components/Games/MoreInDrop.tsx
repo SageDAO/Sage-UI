@@ -1,8 +1,9 @@
 import AuctionTile from '@/components/Tiles/AuctionTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import type { Auction_include_Nft, Lottery_include_Nft } from '@/prisma/types';
-import type { User } from '@prisma/client';
-import DrawingTile from '@/components/Tiles/DrawingTile';
+import type { Lottery, User } from '@prisma/client';
+import { useSession } from 'next-auth/react';
+import { useTicketCount } from '@/hooks/useTicketCount';
 
 type Props = {
   auctions?: Auction_include_Nft[];
@@ -12,6 +13,13 @@ type Props = {
 };
 
 export default function MoreInDrop({ auctions, lotteries, drawings, artist }: Props) {
+  const { data: sessionData } = useSession();
+  const walletAddress = sessionData?.address;
+  const ticketCount = useTicketCount(
+    new Array().concat(drawings, lotteries) as Lottery[],
+    walletAddress as string
+  );
+  if (!auctions?.length && !lotteries?.length && !drawings?.length) return null;
   return (
     <div className='more-in-drop'>
       <h1 className='more-in-drop__header'>More in this drop</h1>
@@ -20,10 +28,20 @@ export default function MoreInDrop({ auctions, lotteries, drawings, artist }: Pr
           <AuctionTile auction={auction} key={auction.id} artist={artist} />
         ))}
         {lotteries?.map((lottery) => (
-          <LotteryTile lottery={lottery} key={lottery.id} artist={artist} />
+          <LotteryTile
+            lottery={lottery}
+            key={lottery.id}
+            artist={artist}
+            userTicketCount={ticketCount[lottery.id]}
+          />
         ))}
         {drawings?.map((drawing) => (
-          <DrawingTile drawing={drawing} key={drawing.id} artist={artist} />
+          <LotteryTile
+            lottery={drawing}
+            key={drawing.id}
+            artist={artist}
+            userTicketCount={ticketCount[drawing.id]}
+          />
         ))}
       </div>
     </div>

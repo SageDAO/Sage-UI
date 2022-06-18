@@ -1,8 +1,8 @@
-import { Prisma, PrizeProof } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Prisma, PrizeProof } from '@prisma/client';
 import prisma from '@/prisma/client';
-import { PrizeWithNftAndArtist } from '@/store/services/prizesReducer';
-import { GamePrize } from '@/prisma/types';
+import { GamePrize, PrizeWithNftAndArtist } from '@/prisma/types';
+import { getSession } from 'next-auth/react';
 
 function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
   return {
@@ -23,18 +23,20 @@ function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
 
 export default async function (request: NextApiRequest, response: NextApiResponse) {
   const {
-    query: { action, walletAddress, lotteryId },
+    query: { action, lotteryId },
     body: { winnerAddress, nftId, ticketNumber },
   } = request;
+  const session = await getSession({ req: request });
+  const { address: walletAddress } = session!;
   switch (action) {
     case 'IsLotteryDrawn':
       await isLotteryDrawn(Number(lotteryId), response);
       break;
-    case 'GetClaimedPrizesByUser':
-      await getClaimedPrizesByUser(walletAddress as string, response);
+    case 'GetClaimedPrizes':
+      await getClaimedPrizes(walletAddress as string, response);
       break;
-    case 'GetUnclaimedPrizesByUser':
-      await getUnclaimedPrizesByUser(walletAddress as string, response);
+    case 'GetUnclaimedPrizes':
+      await getUnclaimedPrizes(walletAddress as string, response);
       break;
     case 'GetPrizesByUserAndLottery':
       await getPrizesByUserAndLottery(Number(lotteryId), walletAddress as string, response);
@@ -52,7 +54,7 @@ export default async function (request: NextApiRequest, response: NextApiRespons
   response.end();
 }
 
-async function getClaimedPrizesByUser(walletAddress: string, response: NextApiResponse) {
+async function getClaimedPrizes(walletAddress: string, response: NextApiResponse) {
   let prizeNfts: GamePrize[] = [];
   if (walletAddress && walletAddress != '') {
     try {
@@ -84,11 +86,11 @@ async function getClaimedPrizesByUser(walletAddress: string, response: NextApiRe
       console.log(e);
     }
   }
-  console.log(`getClaimedPrizesByUser(${walletAddress}) = ${prizeNfts.length}`);
+  console.log(`getClaimedPrizes() :: ${prizeNfts.length}`);
   response.status(200).json(prizeNfts);
 }
 
-async function getUnclaimedPrizesByUser(walletAddress: string, response: NextApiResponse) {
+async function getUnclaimedPrizes(walletAddress: string, response: NextApiResponse) {
   let prizeNfts: GamePrize[] = [];
   if (walletAddress && walletAddress != '') {
     try {
@@ -118,7 +120,7 @@ async function getUnclaimedPrizesByUser(walletAddress: string, response: NextApi
       console.log(e);
     }
   }
-  console.log(`getUnclaimedPrizesByUser(${walletAddress}) :: ${prizeNfts.length}`);
+  console.log(`getUnclaimedPrizes() :: ${prizeNfts.length}`);
   response.status(200).json(prizeNfts);
 }
 

@@ -8,176 +8,161 @@
   margin-top: 35px;
 }
 
+.drop-page__hero {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1405/622;
+  border-radius: 18px;
+}
+
+.drop-page__dropinfo {
+  margin-top: 20px;
+  background-color: c.$bg-dark;
+  width: 100%;
+  border-radius: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.drop-page__details {
+  padding: 30px;
+	flex-shrink: 1;
+}
+.drop-page__description {
+}
+
+.drop-page__description-title {
+  margin-top: 10px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 29px;
+}
+
+.drop-page__description-content {
+  margin-top: 12px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  /* or 154% */
+  color: #6f767e;
+}
+
+.drop-page__mechanics {
+  padding: 30px;
+}
+.drop-page__mechanics-header {
+  // width: 100%;
+  // background-color: red;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 27px;
+}
+.drop-page__mechanics-divider {
+  margin: 0 8px;
+  color: grey;
+}
+
+.drop-page__mechanics-ticket-count {
+  background: #792e9c;
+  border-radius: 14px;
+  padding: 4px 12px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.drop-page__mechanics-details {
+  margin-top: 27px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 21px;
+  /* or 162% */
+  color: #6f767e;
+}
+
+.drop-page__mechanics-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2em;
+}
+.drop-page__mechanics-extra-link {
+  padding: 15px 20px;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  background: #201e21;
+  border-radius: 23px;
+  cursor: pointer;
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+}
+
 .drop-page {
   flex: 1;
   padding: 20px l.$indent 183px;
+}
 
-  &__hero {
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1405/622;
-    border-radius: 18px;
-  }
+.drop-page__games {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
 
-  &__dropinfo {
-    margin-top: 20px;
-    background-color: c.$bg-dark;
-    width: 100%;
-    border-radius: 18px;
-    display: flex;
-    flex-direction: column;
-    @include b.min-width('small') {
-      flex-direction: row;
-    }
-  }
-  &__details {
-    width: 100%;
-    padding: 30px;
-    border-right: 1px solid c.$bg-base;
+.drop-page__section {
+}
 
-    @include b.min-width('small') {
-      width: 50%;
-    }
+.drop-page__games-title {
+  @include section__title();
+}
+.drop-page__games-grid {
+  margin-top: 23px;
+  display: flex;
+}
 
-    .artist {
-      display: flex;
-      height: 60px;
-      align-items: center;
-      &__pfp {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 12px;
-        position: relative;
-        overflow: hidden;
-        aspect-ratio: 1/1;
-      }
+.drop-page__details-artist {
+  display: flex;
+  height: 60px;
+  align-items: center;
+}
+.drop-page__details-artist-pfp {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+}
 
-      &__info {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
+.drop-page__details-artist-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-      &__name {
-        color: white;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 14px;
-        line-height: 17px;
-      }
+.drop-page__details-artist-name {
+  color: white;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+}
 
-      &__handle {
-        font-style: normal;
-        font-weight: 500;
-        font-size: 13px;
-        line-height: 17px;
-        color: rgba(225, 225, 225, 0.6);
-      }
-    }
-
-    .description {
-      &__title {
-        margin-top: 10px;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 21px;
-        line-height: 29px;
-      }
-
-      &__content {
-        margin-top: 12px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 13px;
-        line-height: 20px;
-        /* or 154% */
-        color: #6f767e;
-      }
-    }
-  }
-
-  &__mechanics {
-    width: 100%;
-    padding: 30px;
-
-    @include b.min-width('small') {
-      width: 50%;
-    }
-
-    .header {
-			// width: 100%;
-			// background-color: red;
-      display: flex;
-      align-items: center;
-      text-align: center;
-      justify-content: space-between;
-      font-weight: 500;
-      font-size: 17px;
-      line-height: 27px;
-
-      &__divider {
-        margin: 0 8px;
-        color: grey;
-      }
-
-      &__ticket-count {
-        background: #792e9c;
-        border-radius: 14px;
-        padding: 4px 12px;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
-        line-height: 17px;
-      }
-    }
-
-    .details {
-      margin-top: 27px;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 13px;
-      line-height: 21px;
-      /* or 162% */
-      color: #6f767e;
-    }
-
-    .extra {
-      display: flex;
-      margin-top: 2em;
-      &__link {
-        margin-right: 20px;
-        padding: 15px 20px;
-        font-weight: 600;
-        font-size: 13px;
-        line-height: 16px;
-        background: #201e21;
-        border-radius: 23px;
-        cursor: pointer;
-        color: inherit; /* blue colors for links too */
-        text-decoration: inherit; /* no underline */
-      }
-    }
-  }
-
-  .games__title {
-    @include section__title();
-  }
-  .games__grid {
-    margin-top: 23px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 30px;
-    @include b.min-width('small') {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    @include b.min-width('medium') {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    @include b.min-width('2xl') {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
+.drop-page__details-artist-handle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 17px;
+  color: rgba(225, 225, 225, 0.6);
 }

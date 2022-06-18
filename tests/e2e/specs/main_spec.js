@@ -194,13 +194,6 @@ describe("Navigation", () => {
     });
   });
 
-  it("Rewards link works", () => {
-    cy.get("[data-cy=connect-button]").contains("connect").click();
-    cy.get("[data-cy=Rewards]").click();
-    cy.url().should("include", "/rewards");
-    cy.wait(3000);
-  });
-
   it.skip("Nav can be toggled", () => {
     cy.get("[data-cy=nav-toggle]").click();
     cy.get("[data-cy=nav]").should("have.class", "hidden");

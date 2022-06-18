@@ -5,7 +5,7 @@ import shortenAddress from '@/utilities/shortenAddress';
 import { useGetUserQuery } from '@/store/services/user';
 import AccountModal from '@/components/Modals/AccountModal';
 import { useState } from 'react';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 
 export default function Connect() {
   const {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
-import { bid, useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
+import { useGetAuctionStateQuery, usePlaceBidMutation } from '@/store/services/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
@@ -19,7 +19,6 @@ type DesiredBidValue = number;
 interface State {
   desiredBidValue: DesiredBidValue;
   minBid: DesiredBidValue;
-  maxBid: DesiredBidValue;
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
@@ -28,19 +27,14 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
   const initialState: State = {
     desiredBidValue: +auction.minimumPrice!,
     minBid: +auction.minimumPrice!,
-    maxBid: +auction.buyNowPrice!,
   };
   const [state, setState] = useState<State>(initialState);
+  const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
 
   function handlePlaceBidClick() {
-    bid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
-  }
-
-  function handleMaxButtonClick() {
-    setState((prevState) => {
-      return { ...prevState, desiredBidValue: state.maxBid };
-    });
+    // bid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
+    placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
   }
 
   function handleMinButtonClick() {
@@ -72,7 +66,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
     <Modal title='Place a Bid' isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
         <GamesModalHeader
-          imgSrc={auction.Nft.s3Path}
+          src={auction.Nft.s3Path}
+          isVideo={auction.Nft.isVideo}
           nftName={auction.Nft.name}
           nftEditions={auction.Nft.numberOfEditions}
           artist={artist}
@@ -86,11 +81,15 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Bid extension</div>
-            <div className='games-modal__rules-value'>{auctionState?.timeExtension!/60} minutes</div>
+            <div className='games-modal__rules-value'>
+              {auctionState?.timeExtension! / 60} minutes
+            </div>
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Bid increment</div>
-            <div className='games-modal__rules-value'>{auctionState?.bidIncrementPercentage!/100}%</div>
+            <div className='games-modal__rules-value'>
+              {auctionState?.bidIncrementPercentage! / 100}%
+            </div>
           </div>
           <div className='games-modal__rules-divider-container'>
             <div className='games-modal__rules-divider-rectangle'></div>
@@ -100,12 +99,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
             <div className='games-modal__rules-value'>{state.minBid}</div>
           </div>
         </div>
-        <div className='games-modal__heading'>
-          <h1 className='games-modal__heading-label'>Buy Now Price</h1>
-          <div className='games-modal__heading-value games-modal__heading-value--blue'>
-            {auction.buyNowPrice} ASH
-          </div>
-        </div>
+        <div className='games-modal__heading'></div>
         <div className='games-modal__bid-section'>
           <div className='games-modal__bid-controls'>
             <input
@@ -114,27 +108,23 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
               value={state.desiredBidValue}
               onChange={handleBidInputChange}
               min={state.minBid}
-              max={state.maxBid}
               disabled={pending}
             ></input>
             <span className='games-modal__bid-unit'>ASH</span>
             <button
-              className='games-modal__bid-min-max-btn'
+              className='games-modal__bid-min-btn'
               disabled={pending}
               onClick={handleMinButtonClick}
             >
               min
             </button>
-            <button
-              className='games-modal__bid-min-max-btn'
-              disabled={pending}
-              onClick={handleMaxButtonClick}
-            >
-              max
-            </button>
           </div>
           <div className='games-modal__btn-container'>
-            <PlaceBidButton pending={pending} onClick={handlePlaceBidClick} auction={auction} />
+            <PlaceBidButton
+              pending={isPlaceBidLoading}
+              onClick={handlePlaceBidClick}
+              auction={auction}
+            />
           </div>
         </div>
         <div className='games-modal__status-container'>

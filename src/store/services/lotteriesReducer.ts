@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import { pointsApi } from './pointsReducer';
 
 export interface BuyTicketRequest {
-  walletAddress: string;
   lotteryId: number;
   numberOfTickets: number;
   ticketCostCoins: bigint;
@@ -91,15 +90,12 @@ async function buyTicketsWithoutPoints(buyRequest: BuyTicketRequest): Promise<Co
   // const value = ethers.BigNumber.from(1);
   const contract = await getLotteryContract(buyRequest.signer);
   console.log('numberoftix: ', buyRequest.numberOfTickets);
-  const tx = await contract.buyTickets(buyRequest.lotteryId, buyRequest.numberOfTickets, {
-    gasLimit: 10000000,
-  });
+  const tx = await contract.buyTickets(buyRequest.lotteryId, buyRequest.numberOfTickets);
 
   return tx;
 }
 
 async function buyTicketsUsingPoints({
-  walletAddress,
   signer,
   lotteryId,
   numberOfTickets,
@@ -109,10 +105,9 @@ async function buyTicketsUsingPoints({
     const contract = await getLotteryContract(signer);
     const points = Number(earnedPoints.totalPointsEarned);
     console.log(
-      `buyTicketsWithSignedMessage() ${walletAddress} :: ${points} :: ${lotteryId} :: ${numberOfTickets} :: ${earnedPoints.signedMessage}`
+      `buyTicketsWithSignedMessage()  :: ${points} :: ${lotteryId} :: ${numberOfTickets} :: ${earnedPoints.signedMessage}`
     );
     const tx = await contract.buyTicketsWithSignedMessage(
-      walletAddress,
       points,
       lotteryId,
       numberOfTickets,

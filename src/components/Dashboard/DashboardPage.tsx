@@ -9,9 +9,15 @@ export function DashBoardPage() {
     <div className='dashboard-page'>
       <Tabs>
         <TabList>
-          <Tab>New Drops</Tab>
-          <Tab>Games</Tab>
-          <Tab>Users</Tab>
+          <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
+            New Drops
+          </Tab>
+          <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
+            Games Stats
+          </Tab>
+          <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
+            Users
+          </Tab>
         </TabList>
         <TabPanel className='dashboard-panel'>
           <NewDropsPanel />

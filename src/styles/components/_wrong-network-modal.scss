@@ -1,0 +1,20 @@
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
+
+.wrong-network-modal {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+
+.wrong-network-modal__button {
+  @include m.btn;
+  @include m.pill;
+  color: white;
+  background-color: c.$purple;
+  font-weight: 600;
+  width: 300px;
+  height: 40px;
+}

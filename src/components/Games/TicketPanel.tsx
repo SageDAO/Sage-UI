@@ -4,11 +4,13 @@ useGetUserDisplayInfoQuery;
 import { useBalance, useAccount } from 'wagmi';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
-import { User } from '@prisma/client';
+import { Lottery, User } from '@prisma/client';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
 import Status from '@/components/Status';
 import GetTicketsButton from './GetTicketsButton';
 import { parameters } from '@/constants/config';
+import { useSession } from 'next-auth/react';
+import { useTicketCount } from '@/hooks/useTicketCount';
 
 interface Props {
   lottery: Lottery_include_Nft;
@@ -39,6 +41,9 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
     closeModal: closeTicketModal,
     openModal: openTicketModal,
   } = useModal();
+  const { data: sessionData } = useSession();
+  const walletAddress = sessionData?.address;
+  const ticketCount = useTicketCount([lottery] as Lottery[], walletAddress as string);
   const { data: accountData } = useAccount();
   const { ASHTOKEN_ADDRESS } = parameters;
   const { data: userBalance } = useBalance({
@@ -63,20 +68,35 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         <h1 className='game-panel__header-title'>Tickets</h1>
         <div className='game-panel__balance-label'>
           Balance
-          <div className='game-panel__balance'>{userBalancePoints} PIXEL</div>
-          <div className='game-panel__balance'>
-            {userBalance?.formatted} {userBalance?.symbol}
-          </div>
+          {lottery.costPerTicketPoints > 0 && (
+            <div className='game-panel__balance'>{userBalancePoints} PIXEL</div>
+          )}
+          {lottery.costPerTicketTokens > 0 && (
+            <div className='game-panel__balance'>
+              {userBalance?.formatted} {userBalance?.symbol}
+            </div>
+          )}
         </div>
       </div>
       <div className='game-panel__pricing'>
         <div className='game-panel__pricing-item'>
           <h1 className='game-panel__pricing-label'>Pricing</h1>
           <div className='game-panel__price'>
-            {lottery.costPerTicketPoints}
-            <div className='game-panel__price-unit'>PIXEL +</div>
-            {lottery.costPerTicketTokens}
-            <div className='game-panel__price-unit'>ASH</div>
+            {lottery.costPerTicketPoints > 0 && (
+              <span className='game-panel__price-item'>
+                {lottery.costPerTicketPoints}
+                <div className='game-panel__price-unit'>PIXEL</div>
+              </span>
+            )}
+            {Boolean(lottery.costPerTicketTokens > 0 && lottery.costPerTicketPoints > 0) && (
+              <span className='game-panel__price-unit'>{' + '}</span>
+            )}
+            {lottery.costPerTicketTokens > 0 && (
+              <span className='game-panel__price-item'>
+                {lottery.costPerTicketTokens}
+                <div className='game-panel__price-unit'>ASH</div>
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -88,13 +108,12 @@ export default function LotteryPanel({ lottery, artist, dropName, selectedNftInd
         <div className='game-panel__btn-container'>
           <GetTicketsButton pending={false} onClick={openTicketModal} />
         </div>
-        <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={false} />
-        {/*
-          <h1 className='game-panel__tickets-available'>
-            <span className='game-panel__tickets-available-label'>Available</span>
-            x/{lottery.maxTickets}
-          </h1>
-        */}
+        <div className='game-panel__lottery-info'>
+          <Status endTime={lottery.endTime} startTime={lottery.startTime} settled={false} />
+          <div className='game-panel__user-ticket-count'>
+            you have {ticketCount[lottery.id]} tickets
+          </div>
+        </div>
       </div>
     </div>
   );

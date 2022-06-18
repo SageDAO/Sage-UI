@@ -9,7 +9,7 @@ import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
 import { parameters } from '@/constants/config';
 import useModal from '@/hooks/useModal';
 import { MyCollection } from '@/components/MyCollection';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 import { useSession } from 'next-auth/react';
 
 function profile() {

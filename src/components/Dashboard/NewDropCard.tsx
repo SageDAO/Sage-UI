@@ -1,7 +1,7 @@
 import { DropWithArtist } from '@/prisma/types';
 import { useApproveDropMutation } from '@/store/services/dropsReducer';
-import Image from 'next/image';
 import { toast } from 'react-toastify';
+import { BaseMedia, PfpImage } from '../Media';
 
 interface Props {
   drop: DropWithArtist;
@@ -16,27 +16,22 @@ export default function NewDropCard({ drop }: Props) {
   };
 
   return (
-    <>
-      <div className='nft-tile'>
-        <div className='image'>
-          <Image src={drop.bannerImageS3Path || '/sample/0.png'} layout='fill' objectFit='cover' />
-        </div>
-        <div className='collection__tile-details'>
-          <div className='interact' style={{ width: '200px' }}>
-            <div className='interact__info' style={{ textAlign: 'left' }}>
-              <h1 className='interact__name'>{drop.name}</h1>
-              <h1 className='interact__subtitle'>{drop.Artist.displayName || 'anon'}</h1>
-            </div>
-          </div>
-        </div>
-        <button
-          className='interact__claimbutton'
-          onClick={handleApproveDropClick}
-          style={{ width: '100%', lineHeight: '30px', cursor: 'pointer' }}
-        >
-          Approve Drop
-        </button>
+    <div className='collection__tile'>
+      <div className='collection__tile-img'>
+        <BaseMedia src={drop.bannerImageS3Path} isVideo={false} />
       </div>
-    </>
+      <div className='collection__tile-details'>
+        <div className='collection__tile-artist-pfp'>
+          <PfpImage src={drop.Artist.profilePicture} />
+        </div>
+        <div className='collection__tile-artist-info'>
+          <div className='collection__tile-nft-name'>{drop.name}</div>
+          <div className='collection__tile-artist-name'>by {drop.Artist.displayName || 'anon'}</div>
+        </div>
+      </div>
+      <button className='nft-tile__claimbutton' onClick={handleApproveDropClick} style={{ width: '100%' }}>
+        Approve Drop
+      </button>
+    </div>
   );
 }

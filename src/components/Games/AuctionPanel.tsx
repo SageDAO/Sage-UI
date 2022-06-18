@@ -7,7 +7,7 @@ import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import Status from '@/components/Status';
 import PlaceBidButton from './PlaceBidButton';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 import { parameters } from '@/constants/config';
 
 interface Props {
@@ -66,7 +66,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
         <div className='game-panel__balance-label'>
           Balance
           <div className='game-panel__balance'>
-            {(userBalance && userBalance.formatted + ' ' + userBalance.symbol) || '0'}
+            {(userBalance && userBalance.formatted + ' ' + userBalance.symbol)}
           </div>
         </div>
       </div>

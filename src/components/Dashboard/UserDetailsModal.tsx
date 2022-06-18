@@ -1,7 +1,7 @@
 import { useGetPointsBalanceQuery } from '@/store/services/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import Loader from 'react-loader-spinner';
-import { PfpImage } from '@/components/Image';
+import { PfpImage } from '@/components/Media';
 
 interface UserDetailsModalProps extends ModalProps {
   userData: any;
@@ -20,7 +20,7 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
           <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
         ) : (
           <div style={{ textAlign: 'center' }}>
-            <div>
+            <div className='dashboard__user-details-pfp-container'>
               <PfpImage src={userData?.profilePicture} />
             </div>
             <div style={{ fontWeight: 'bolder' }}>{userData?.username}</div>

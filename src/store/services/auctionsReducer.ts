@@ -9,7 +9,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import { BigNumber, ethers, Signer, utils } from 'ethers';
-import { useSigner } from 'wagmi';
 
 export interface AuctionState {
   highestBidder: string; // wallet address
@@ -38,18 +37,50 @@ export const auctionsApi = createApi({
         const newHighestBidEventCallback = () =>
           dispatch(auctionsApi.util.invalidateTags(['AuctionState']));
         const auctionState = await getAuctionContractState(auctionId);
+        // const highestBidderUser = await fetch('/user', { method: 'GET' });
         setupBidListener(auctionId, newHighestBidEventCallback);
         return { data: auctionState };
       },
       providesTags: ['AuctionState'],
     }),
-    getClaimedAuctionNftsPerUser: builder.query<GamePrize[], void>({
-      query: () => `auctions?action=GetClaimedAuctionNftsPerUser`,
+    getClaimedAuctionNfts: builder.query<GamePrize[], void>({
+      query: () => `auctions?action=GetClaimedAuctionNfts`,
       providesTags: ['Auction'],
     }),
-    getUnclaimedAuctionNftsPerUser: builder.query<GamePrize[], void>({
-      query: () => `auctions?action=GetUnclaimedAuctionNftsPerUser`,
+    getUnclaimedAuctionNfts: builder.query<GamePrize[], void>({
+      query: () => `auctions?action=GetUnclaimedAuctionNfts`,
       providesTags: ['Auction'],
+    }),
+    placeBid: builder.mutation<null, BidArgs>({
+      queryFn: async ({ auctionId, amount, signer }) => {
+        console.log(`bid(${auctionId}, ${amount})`);
+        const weiValue = ethers.utils.parseEther(amount.toString());
+        try {
+          const auctionContract = await getAuctionContract(signer);
+          const tokenAddress = await auctionContract.token();
+          await approveERC20Transfer(tokenAddress, signer, amount);
+        } catch (e) {
+          console.error(e);
+          toast.error(`Error approving transfer`);
+          playErrorSound();
+        }
+        try {
+          const auctionContract = await getAuctionContract(signer);
+          var tx = await auctionContract.bid(auctionId, weiValue);
+          toast.promise(tx.wait(), {
+            pending: 'Request submitted to the blockchain, awaiting confirmation...',
+            success: `Success! You are now the highest bidder!`,
+            error: 'Failure! Unable to complete request.',
+          });
+          await tx.wait();
+          playTxSuccessSound();
+        } catch (e) {
+          toast.error('Error placing bid');
+          console.error(e);
+        }
+        return { data: null };
+      },
+      invalidatesTags: ['AuctionState'],
     }),
     claimAuctionNft: builder.mutation<Date, { id: number; signer: Signer }>({
       queryFn: async ({ id, signer }, {}, _extraOptions, _fetchWithBQ) => {
@@ -79,7 +110,7 @@ export const auctionsApi = createApi({
   }),
 });
 
-export async function getAuctionContractState(auctionId: number): Promise<AuctionState> {
+export async function getAuctionContractState(auctionId: number) {
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
   const auctionStruct = await auctionContract.getAuction(auctionId);
@@ -135,36 +166,6 @@ async function setupBidListener(auctionId: number, newBidHandler: () => void) {
 
 export type BidArgs = { auctionId: number; amount: number; signer: Signer };
 
-export async function bid({ auctionId, amount, signer }: BidArgs) {
-  console.log(`bid(${auctionId}, ${amount})`);
-  const weiValue = ethers.utils.parseEther(amount.toString());
-  try {
-    const auctionContract = await getAuctionContract(signer);
-    const tokenAddress = await auctionContract.token();
-    await approveERC20Transfer(tokenAddress, signer, amount);
-  } catch (e) {
-    console.error(e);
-    toast.error(`Error approving transfer`);
-    playErrorSound();
-    return;
-  }
-  try {
-    const auctionContract = await getAuctionContract(signer);
-    var tx = await auctionContract.bid(auctionId, weiValue);
-    toast.promise(tx.wait(), {
-      pending: 'Request submitted to the blockchain, awaiting confirmation...',
-      success: `Success! You are now the highest bidder!`,
-      error: 'Failure! Unable to complete request.',
-    });
-    await tx.wait();
-    playTxSuccessSound();
-  } catch (e) {
-    toast.error('Error placing bid');
-    console.error(e);
-    return;
-  }
-}
-
 async function updateDbPrizeClaimedDate(fetchWithBQ: any, auctionId: number): Promise<Date> {
   const { data } = await fetchWithBQ({
     url: `auctions?action=UpdateNftClaimedDate&auctionId=${auctionId}`,
@@ -177,6 +178,7 @@ export const {
   useGetAuctionQuery,
   useGetAuctionStateQuery,
   useClaimAuctionNftMutation,
-  useGetClaimedAuctionNftsPerUserQuery,
-  useGetUnclaimedAuctionNftsPerUserQuery,
+  useGetClaimedAuctionNftsQuery,
+  useGetUnclaimedAuctionNftsQuery,
+  usePlaceBidMutation,
 } = auctionsApi;

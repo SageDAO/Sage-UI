@@ -169,7 +169,6 @@ async function insertAuction(data: any, response: NextApiResponse) {
           },
         },
         minimumPrice: data.minPrice,
-        buyNowPrice: data.buyNowPrice ? data.buyNowPrice : null,
         startTime: new Date(Number(data.startDate) * 1000),
         endTime: new Date(Number(data.endDate) * 1000),
         Nft: {

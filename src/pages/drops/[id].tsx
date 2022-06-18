@@ -1,11 +1,12 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
 import prisma from '@/prisma/client';
-import { Drop as DropType, Prisma, User } from '@prisma/client';
+import { Drop as DropType, Lottery, Prisma, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
-import DrawingTile from '@/components/Tiles/DrawingTile';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
-import { BaseImage, PfpImage } from '@/components/Image';
+import { BaseMedia, PfpImage } from '@/components/Media';
+import { useSession } from 'next-auth/react';
+import { useTicketCount } from '@/hooks/useTicketCount';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -24,6 +25,12 @@ function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
 }
 
 export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
+  const { data: sessionData } = useSession();
+  const walletAddress = sessionData?.address;
+  const ticketCount = useTicketCount(
+    new Array().concat(drawings, lotteries) as Lottery[],
+    walletAddress as string
+  );
   //TODO: restrict access to unapproved drops
   if (!drop) {
     return (
@@ -39,39 +46,37 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   return (
     <div className='drop-page'>
       <div className='drop-page__hero'>
-        <BaseImage src={drop.bannerImageS3Path} />
+        <BaseMedia src={drop.bannerImageS3Path} isVideo={false} />
       </div>
       {/* --------------------DROP INFO------------------------ */}
       <section className='drop-page__dropinfo'>
         <div className='drop-page__details'>
-          <div className='artist'>
-            <div className='artist__pfp'>
+          <div className='drop-page__details-artist'>
+            <div className='drop-page__details-artist-pfp'>
               <PfpImage src={artist.profilePicture as string} />
             </div>
-            <div className='artist__info'>
+            <div className='drop-page__details-artist-info'>
               {/* TODO: display using new artist name field */}
-              <div className='artist__name'>{artist.displayName}</div>
-              <div className='artist__handle'>@{artist.username}</div>
+              <div className='drop-page__details-artist-name'>{artist.displayName}</div>
+              <div className='drop-page__details-artist-handle'>@{artist.username}</div>
             </div>
           </div>
-          <div className='description'>
-            <h1 className='description__title'>{drop.name}</h1>
-            <p className='description__content'>{drop.description}</p>
+          <div className='drop-page__description'>
+            <h1 className='drop-page__description-title'>{drop.name}</h1>
+            <p className='drop-page__description-content'>{drop.description}</p>
           </div>
         </div>
         <div className='drop-page__mechanics'>
-          <h1 className='header'>
+          <h1 className='drop-page__mechanics-header'>
             <div>
               {hasAuctions && <span>Auctions</span>}
-              {hasAuctions && hasDrawings && <span className='header__divider'>×</span>}
+              {hasAuctions && hasDrawings && (
+                <span className='drop-page__mechanics-divider'>×</span>
+              )}
               {hasDrawings && <span>Drawings</span>}
             </div>
-            <div className='header__ticket-count'>
-              {/* TODO: fetch number of tickets user owns */}
-              You have {'0'} tickets
-            </div>
           </h1>
-          <p className='details'>
+          <p className='drop-page__mechanics-details'>
             This drop includes {hasAuctions && `${auctions.length} NFTs for auction`}{' '}
             {hasAuctions && hasDrawings && 'and'}{' '}
             {hasDrawings &&
@@ -83,19 +88,19 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               were drawn.
             </span>
           </p>
-          <div className='extra'>
+          <div className='drop-page__mechanics-extra'>
             {hasAuctions && (
-              <a className='extra__link' href='#auctions'>
+              <a className='drop-page__mechanics-extra-link' href='#auctions'>
                 Auctions Below
               </a>
             )}
             {hasDrawings && (
-              <a className='extra__link' href='#drawings'>
+              <a className='drop-page__mechanics-extra-link' href='#drawings'>
                 Tickets Below
               </a>
             )}
             {hasLotteries && (
-              <a className='extra__link' href='#lotteries'>
+              <a className='drop-page__mechanics-extra-link' href='#lotteries'>
                 Tickets Below
               </a>
             )}
@@ -103,39 +108,55 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           </div>
         </div>
       </section>
-      {/* --------------------LOTTERIES------------------------ */}
-      {hasLotteries && (
-        <section className='games' id='lotteries'>
-          <h1 className='games__title'>Lotteries</h1>
-          <div className='games__grid'>
-            {lotteries.map((l: Lottery_include_Nft) => {
-              return <LotteryTile lottery={l} artist={artist} key={l.id} />;
-            })}
-          </div>
-        </section>
-      )}
-      {/* --------------------Drawings------------------------ */}
-      {hasDrawings && (
-        <section className='games' id='drawings'>
-          <h1 className='games__title'>Drawings</h1>
-          <div className='games__grid'>
-            {drawings.map((d: Lottery_include_Nft) => {
-              return <DrawingTile drawing={d} artist={artist} key={d.id} />;
-            })}
-          </div>
-        </section>
-      )}
-      {/* --------------------AUCTIONS------------------------ */}
-      {hasAuctions && (
-        <section className='games' id='auctions'>
-          <h1 className='games__title'>Auctions</h1>
-          <div className='games__grid'>
-            {auctions.map((a: Auction_include_Nft) => {
-              return <AuctionTile auction={a} artist={artist} key={a.id} />;
-            })}
-          </div>
-        </section>
-      )}
+      <div className='drop-page__games'>
+        {/* --------------------LOTTERIES------------------------ */}
+        {hasLotteries && (
+          <section className='drop-page__games-section' id='lotteries'>
+            <h1 className='drop-page__games-title'>Lotteries</h1>
+            <div className='drop-page__games-grid'>
+              {lotteries.map((l: Lottery_include_Nft) => {
+                return (
+                  <LotteryTile
+                    lottery={l}
+                    artist={artist}
+                    key={l.id}
+                    userTicketCount={ticketCount[l.id]}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
+        {/* --------------------Drawings------------------------ */}
+        {hasDrawings && (
+          <section className='drop-page__games-section' id='drawings'>
+            <h1 className='drop-page__games-title'>Drawings</h1>
+            <div className='drop-page__games-grid'>
+              {drawings.map((d: Lottery_include_Nft) => {
+                return (
+                  <LotteryTile
+                    lottery={d}
+                    artist={artist}
+                    key={d.id}
+                    userTicketCount={ticketCount[d.id]}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
+        {/* --------------------AUCTIONS------------------------ */}
+        {hasAuctions && (
+          <section className='drop-page__games-section' id='auctions'>
+            <h1 className='drop-page__games-title'>Auctions</h1>
+            <div className='drop-page__games-grid'>
+              {auctions.map((a: Auction_include_Nft) => {
+                return <AuctionTile auction={a} artist={artist} key={a.id} />;
+              })}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }

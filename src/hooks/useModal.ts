@@ -7,9 +7,6 @@ export default function useModal(initialState?: boolean) {
   function closeModal() {
     setIsOpen(false);
   }
-  function toggle() {
-    setIsOpen((prevState) => !prevState);
-  }
 
-  return { isOpen, openModal, closeModal, toggle };
+  return { isOpen, openModal, closeModal };
 }
