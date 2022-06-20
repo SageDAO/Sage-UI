@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/prisma/client';
 import aws from 'aws-sdk';
 import NextCors from 'nextjs-cors';
+import prisma from '@/prisma/client';
 import { Role } from '@prisma/client';
+import { bundleAndSignData, createData, DataItem } from 'arbundles';
 import { createUcanRequestToken } from '@/utilities/nftStorage';
+import { ArweaveSigner } from 'arbundles/src/signing';
 
 const toNumber = (val: string): number => (val ? Number(val) : 0);
 
@@ -26,6 +28,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
         request.query.filename as string,
         response
       );
+      break;
+    case 'CopyFromS3toArweave':
+      await copyFromS3toArweave(request.query.s3Path as string, response);
       break;
     case 'CreateNftStorageRequestToken':
       await createNftStorageRequestToken(response);
@@ -55,20 +60,6 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
 }
 
 /**
- * https://github.com/nftstorage/ucan.storage#creating-a-request-token-to-upload-content
- */
-async function createNftStorageRequestToken(response: NextApiResponse) {
-  try {
-    const token = await createUcanRequestToken();
-    response.json({ token });
-  } catch (e: any) {
-    console.log(e);
-    response.json({ error: e.message });
-  }
-  response.end();
-}
-
-/**
  * https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrl-property
  */
 async function createS3SignedUrl(dropBucket: string, filename: string, response: NextApiResponse) {
@@ -91,6 +82,35 @@ async function createS3SignedUrl(dropBucket: string, filename: string, response:
   const uploadUrl = s3.getSignedUrl('putObject', params);
   const getUrl = `https://${process.env.S3_BUCKET}.s3.${region}.amazonaws.com/${dropBucket}/${filename}`;
   response.json({ uploadUrl, getUrl });
+  response.end();
+}
+
+async function copyFromS3toArweave(s3Path: string, response: NextApiResponse) {
+  console.log('copyFromS3toArWeave()');
+  const fetchFileContent = async (url: string): Promise<Uint8Array> => {
+    const response = await fetch(url);
+    return new Uint8Array(await response.arrayBuffer());
+  };
+  const jwk = JSON.parse(process.env.KEY || '');
+  const signer = new ArweaveSigner(jwk);
+  const fileContent = await fetchFileContent(s3Path);
+  const item = createData(fileContent, signer);
+  const bundle = await bundleAndSignData([item], signer);
+  response.json({ arweavePath: `https://arweave.net/${bundle.getIdBy(0)}` });
+  response.end();
+}
+
+/**
+ * https://github.com/nftstorage/ucan.storage#creating-a-request-token-to-upload-content
+ */
+async function createNftStorageRequestToken(response: NextApiResponse) {
+  try {
+    const token = await createUcanRequestToken();
+    response.json({ token });
+  } catch (e: any) {
+    console.log(e);
+    response.json({ error: e.message });
+  }
   response.end();
 }
 
