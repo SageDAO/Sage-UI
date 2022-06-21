@@ -156,7 +156,12 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
             )}
           </div>
           <div className='games-modal__btn-container'>
-            <GetTicketsButton onClick={handleBuyTicketClick} pending={isLoading}></GetTicketsButton>
+            <GetTicketsButton
+              onClick={handleBuyTicketClick}
+              pending={isLoading}
+              startTime={lottery.startTime}
+              endTime={lottery.endTime}
+            />
           </div>
         </div>
         <div className='games-modal__status-container'>

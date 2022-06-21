@@ -23,4 +23,8 @@
   &[data-status='settled'] {
     background-color: black;
   }
+
+  &[data-status='upcoming'] {
+    background: c.$purple-button;
+  }
 }

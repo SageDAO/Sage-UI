@@ -24,7 +24,12 @@ export default function LotteryTile({ lottery, artist, userTicketCount }: Props)
     <NftTile
       button={
         <div className='nft-tile__btn-container'>
-          <GetTicketsButton onClick={openModal} pending={false} />
+          <GetTicketsButton
+            onClick={openModal}
+            pending={false}
+            endTime={lottery.endTime}
+            startTime={lottery.startTime}
+          />
         </div>
       }
       name={lottery.Nfts[0].name}
