@@ -34,12 +34,15 @@ export const auctionsApi = createApi({
     getAuctionState: builder.query<AuctionState, number>({
       queryFn: async (auctionId: number, { dispatch }) => {
         console.log('getAuctionState()');
-        const newHighestBidEventCallback = () =>
-          dispatch(auctionsApi.util.invalidateTags(['AuctionState']));
-        const auctionState = await getAuctionContractState(auctionId);
-        // const highestBidderUser = await fetch('/user', { method: 'GET' });
-        setupBidListener(auctionId, newHighestBidEventCallback);
-        return { data: auctionState };
+        try {
+          const auctionState = await getAuctionContractState(auctionId);
+          const newHighestBidEventCallback = () =>
+            dispatch(auctionsApi.util.invalidateTags(['AuctionState']));
+          setupBidListener(auctionId, newHighestBidEventCallback);
+          return { data: auctionState };
+        } catch (e) {
+          return { error: { status: 400, data: {} } };
+        }
       },
       providesTags: ['AuctionState'],
     }),
@@ -113,30 +116,33 @@ export const auctionsApi = createApi({
 export async function getAuctionContractState(auctionId: number) {
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
-  const auctionStruct = await auctionContract.getAuction(auctionId);
-
-  const timeExtension = Number(await auctionContract.defaultTimeExtension());
-  const endTime = auctionStruct.endTime * 1000;
-
-  const bidIncrementPercentage = await auctionContract.bidIncrementPercentage();
-  const highestBidNumber = utils.formatUnits(auctionStruct.highestBid);
-  const nextMinBid = Number(
-    utils.formatUnits(
-      auctionStruct.highestBid
-        .mul(BigNumber.from(10000).add(bidIncrementPercentage))
-        .div(BigNumber.from(10000))
-    )
-  );
-
-  return {
-    highestBidNumber: +highestBidNumber,
-    highestBidder: auctionStruct.highestBidder,
-    settled: auctionStruct.settled,
-    endTime,
-    nextMinBid,
-    bidIncrementPercentage: +bidIncrementPercentage,
-    timeExtension,
-  };
+  try {
+    const auctionStruct = await auctionContract.getAuction(auctionId);
+    const timeExtension = Number(await auctionContract.defaultTimeExtension());
+    const endTime = auctionStruct.endTime * 1000;
+    const bidIncrementPercentage = await auctionContract.bidIncrementPercentage();
+    const highestBidNumber = utils.formatUnits(auctionStruct.highestBid);
+    const nextMinBid = Number(
+      utils.formatUnits(
+        auctionStruct.highestBid
+          .mul(BigNumber.from(10000).add(bidIncrementPercentage))
+          .div(BigNumber.from(10000))
+      )
+    );
+    return {
+      highestBidNumber: +highestBidNumber,
+      highestBidder: auctionStruct.highestBidder,
+      settled: auctionStruct.settled,
+      endTime,
+      nextMinBid,
+      bidIncrementPercentage: +bidIncrementPercentage,
+      timeExtension,
+    };
+  } catch (e) {
+    console.error('error getting auction contract state');
+    console.error(e);
+    throw new Error('error get auction state');
+  }
 }
 
 /*

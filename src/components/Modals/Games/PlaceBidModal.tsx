@@ -23,7 +23,9 @@ interface State {
 
 //@scss : '@/styles/components/_games-modal.scss'
 function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
-  const { data: auctionState } = useGetAuctionStateQuery(auction.id);
+  const { data: auctionState, isError: isGetAuctionStateError } = useGetAuctionStateQuery(
+    auction.id
+  );
   const initialState: State = {
     desiredBidValue: +auction.minimumPrice!,
     minBid: +auction.minimumPrice!,
@@ -129,8 +131,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
         </div>
         <div className='games-modal__status-container'>
           <Status
-            endTime={auction.endTime}
-            settled={auction.settled}
+            endTime={auctionState?.endTime as number}
+            settled={auctionState?.settled as boolean}
             startTime={auction.startTime}
           />
         </div>

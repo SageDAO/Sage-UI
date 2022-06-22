@@ -14,7 +14,6 @@ interface BaseMediaProps {
 }
 
 function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps) {
-  console.log(`${isZoomable?.toString()} :: ${src}`);
   return (
     <Fragment>
       <ConditionalWrapper

@@ -31,26 +31,58 @@ export function computeDropStatus({ Lotteries, Auctions }: Drop_include_GamesAnd
   return { startTime, endTime, status };
 }
 
-interface ComputeGameStatusArgs {
+export interface ComputeAuctionStatusArgs {
   endTime: number | Date;
   startTime: number | Date;
   settled: boolean;
 }
-export function computeGameStatus({ startTime, endTime, settled }: ComputeGameStatusArgs): Status {
+export function computeAuctionStatus({
+  startTime,
+  endTime,
+  settled,
+}: ComputeAuctionStatusArgs): Status {
   let end = +endTime;
   let start = +startTime;
+  if (start > Date.now()) {
+    return 'Upcoming';
+  }
   if (settled) {
     return 'Settled';
   }
   if (end < Date.now()) {
     return 'Done';
   }
+
   if (start < Date.now()) {
     return 'Live';
   }
-  if (start > Date.now()) {
-    return 'Upcoming';
+  return 'Unknown';
+}
+
+export interface ComputeLotteryStatusArgs {
+  endTime: number | Date;
+  startTime: number | Date;
+}
+
+type LotteryStatus = 'upcoming' | 'live' | 'drawn' | 'unknown';
+
+export function computeLotteryStatus({
+  startTime,
+  endTime,
+}: ComputeLotteryStatusArgs): LotteryStatus {
+  let lotteryStatus: LotteryStatus = 'unknown';
+
+  if (startTime > Date.now()) {
+    lotteryStatus = 'upcoming';
   }
 
-  return 'Unknown';
+  if (startTime < Date.now() && endTime > Date.now()) {
+    lotteryStatus = 'live';
+  }
+
+  if (endTime < Date.now()) {
+    lotteryStatus = 'drawn';
+  }
+
+  return lotteryStatus;
 }

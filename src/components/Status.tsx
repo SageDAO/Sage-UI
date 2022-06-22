@@ -1,11 +1,11 @@
-import { computeGameStatus } from '@/utilities/status';
+import { computeAuctionStatus } from '@/utilities/status';
 import Countdown from '@/components/Countdown';
 
-type Props = Parameters<typeof computeGameStatus>[0];
+type Props = Parameters<typeof computeAuctionStatus>[0];
 
 // styles/components/_status.scss
 export default function Status({ endTime, startTime, settled }: Props) {
-  const gameStatus = computeGameStatus({ endTime, startTime, settled });
+  const gameStatus = computeAuctionStatus({ endTime, startTime, settled });
   return (
     <div className='status'>
       <div className='status__is-live'>

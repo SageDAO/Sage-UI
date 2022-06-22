@@ -1,6 +1,6 @@
 import Loader from 'react-loader-spinner';
 import type { Auction_include_Nft } from '@/prisma/types';
-import { computeGameStatus } from '@/utilities/status';
+import { computeAuctionStatus } from '@/utilities/status';
 import Countdown from '@/components/Countdown';
 import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
 
@@ -12,13 +12,14 @@ interface Props {
 
 export default function PlaceBidButton({ pending, onClick, auction }: Props) {
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
-  const status =
-    auctionState &&
-    computeGameStatus({
-      startTime: auction.startTime,
-      endTime: auctionState?.endTime,
-      settled: auctionState?.settled,
-    });
+  if (!auctionState) {
+    return null;
+  }
+  const status = computeAuctionStatus({
+    startTime: auction.startTime,
+    endTime: auctionState.endTime,
+    settled: auctionState.settled,
+  });
 
   if (status === 'Live') {
     return (
@@ -36,12 +37,21 @@ export default function PlaceBidButton({ pending, onClick, auction }: Props) {
   if (status === 'Upcoming') {
     return <Countdown endTime={auctionState?.endTime! * 1000} />;
   }
-  if (status === 'Settled' || status === 'Done') {
+  if (status === 'Settled') {
     return (
       <button className='btn-place-bid' disabled data-status={status}>
         {status}
       </button>
     );
   }
+
+  if (status === 'Done') {
+    return (
+      <button className='btn-place-bid' disabled data-status={status}>
+        done
+      </button>
+    );
+  }
+
   return null;
 }
