@@ -68,10 +68,10 @@ export function MyCollection() {
     <div className='collection'>
       <div className='collection__header'>My Collection</div>
       {myNfts?.length == 0 && (
-          <div style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}>
-            Nothing to showcase here (yet)!
-          </div>
-        )}
+        <div style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}>
+          Nothing to showcase here (yet)!
+        </div>
+      )}
       <div className='collection__grid'>
         {myNfts?.map((item: GamePrize, index: number) => {
           return (
@@ -80,6 +80,7 @@ export function MyCollection() {
                 <BaseMedia src={item.s3Path} isVideo={item.isVideo} isZoomable={true} />
               </div>
               <div className='collection__tile-details'>
+							<div className="collection__tile-artist">
                 <div className='collection__tile-artist-pfp'>
                   <PfpImage src={item.artistProfilePicture} />
                 </div>
@@ -87,16 +88,17 @@ export function MyCollection() {
                   <div className='collection__tile-nft-name'>{item.nftName}</div>
                   <div className='collection__tile-artist-name'>by {item.artistDisplayName}</div>
                 </div>
+
+							</div>
+                {!item.claimedAt && (
+                  <button
+                    className='collection__tile-claim-button'
+                    onClick={() => handleClaimPrizeClick(item)}
+                  >
+                    Claim NFT
+                  </button>
+                )}
               </div>
-              {!item.claimedAt && (
-                <button
-                  className='nft-tile__claimbutton'
-                  onClick={() => handleClaimPrizeClick(item)}
-                  style={{ width: '100%' }}
-                >
-                  Claim NFT
-                </button>
-              )}
             </div>
           );
         })}
