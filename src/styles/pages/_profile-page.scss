@@ -26,6 +26,7 @@
   .account-card__content {
     padding: 14px 14px 33px;
     display: flex;
+		gap: 20px;
     flex-direction: column;
     align-items: center;
     background-color: c.$bg-dark;
