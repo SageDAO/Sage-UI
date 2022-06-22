@@ -6,12 +6,9 @@
 
 .modal__backdrop {
   position: fixed;
-  backdrop-filter: blur(6px);
   background-color: c.$bg-dark;
-  opacity: 0.8;
+  opacity: 0.9;
   inset: 0;
-
-  transform: translate3d(0, 0, 0);
 }
 
 .modal__container {
@@ -23,12 +20,10 @@
 }
 
 .modal__panel {
-  /* Auto layout */
   overflow: hidden;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  /* Modal Dark Bg */
   background: c.$modal-dark;
   // box-shadow: 0px 4px 50px -10px rgba(83, 45, 234, 0.3), 0px 4px 50px #000000;
   border-radius: 18px;
