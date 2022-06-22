@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Connect from '@/components/Connect';
+import { BaseMedia } from './Media';
 interface NavLink {
   name: string;
   url: string;
@@ -27,11 +28,9 @@ export default function Nav() {
   return (
     <div className='nav'>
       <ul>
-        {
-          // <div className='logo'>
-          //   <Image src='/' layout='fill' />
-          // </div>
-        }
+        <div className='logo'>
+          <BaseMedia src='/branding/sage.png'  isVideo={false} />
+        </div>
         {navLinks.map((n: NavLink) => {
           return (
             <Link key={n.name} href={n.url}>
