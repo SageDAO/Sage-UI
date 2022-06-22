@@ -19,23 +19,8 @@ interface Props {
   selectedNftIndex: number;
 }
 
-type GameStatus = 'Done' | 'Live' | 'Error';
-
-function computeGameStatus(start: number, end: number, settled: boolean): GameStatus {
-  if (settled) {
-    return 'Done';
-  }
-  if (end < Date.now()) {
-    return 'Done';
-  }
-  if (start < Date.now()) {
-    return 'Live';
-  }
-  return 'Error';
-}
-
 // styles/components/_game-panel.scss
-export default function LotteryPanel({ lottery, artist, dropName, selectedNftIndex }: Props) {
+export default function LotteryPanel({ lottery, artist, selectedNftIndex }: Props) {
   const {
     isOpen: isTicketModalOpen,
     closeModal: closeTicketModal,

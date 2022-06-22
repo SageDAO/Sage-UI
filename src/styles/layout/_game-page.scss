@@ -10,7 +10,7 @@
     display: flex;
     gap: 60px;
     flex-direction: column;
-    @include b.min-width('large') {
+    @include b.min-width('xl') {
       flex-direction: row;
     }
   }
@@ -24,9 +24,11 @@
     @include b.min-width('medium') {
       aspect-ratio: 650/400;
     }
-    @include b.min-width('large') {
+    @include b.min-width('xl') {
+      // width: max(300px, 30vw);
+			width: 550px;
+			height: 640px;
       aspect-ratio: 650/816;
-      width: max(300px, 30vw);
     }
   }
 
@@ -195,7 +197,7 @@
       }
     }
 
-		cursor: default;
+    cursor: default;
     padding: 10px 4px;
   }
 

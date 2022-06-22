@@ -31,42 +31,33 @@ type Props = {
 
 // src/styles/layout/_game-page.scss
 function auction({ auction, auctions, lotteries, artist, drawings, drop }: Props) {
-  const [blockchainTimestamp, setBlockchainTimestamp] = useState<number>(0);
-  const { data: sessionData } = useSession();
-  const walletAddress = sessionData?.address;
-  const { auctionId } = useRouter().query;
-  // const { data: auction, isFetching } = useGetAuctionQuery(+auctionId!, {
+  // const [blockchainTimestamp, setBlockchainTimestamp] = useState<number>(0);
+  // const { data: sessionData } = useSession();
+  // const walletAddress = sessionData?.address;
+  // const { auctionId } = useRouter().query;
+  // // const { data: auction, isFetching } = useGetAuctionQuery(+auctionId!, {
+  // //   skip: isNaN(+auctionId!),
+  // // });
+  // const { data: auctionState } = useGetAuctionStateQuery(+auctionId!, {
   //   skip: isNaN(+auctionId!),
   // });
-  const { data: auctionState } = useGetAuctionStateQuery(+auctionId!, {
-    skip: isNaN(+auctionId!),
-  });
-  const { data: highestBidder } = useGetUserDisplayInfoQuery(auctionState?.highestBidder!, {
-    skip: !(
-      auctionState?.highestBidder &&
-      auctionState?.highestBidder != '0x0000000000000000000000000000000000000000'
-    ),
-  });
-  useEffect(() => {
-    const fetchTimestamp = async () => {
-      setBlockchainTimestamp(await getBlockchainTimestamp());
-    };
-    fetchTimestamp();
-  }, []);
-  const toTimestamp = (aDate: any) => Date.parse(aDate) / 1000;
-  const hasStarted = auction && blockchainTimestamp > toTimestamp(auction.startTime);
-  const hasEnded = auction && blockchainTimestamp > auctionState?.endTime!;
-  const displayPlaceBidButton = hasStarted && !hasEnded && !auctionState?.settled;
-  const displayClaimButton =
-    !auction?.winnerAddress &&
-    !auction?.claimedAt &&
-    hasEnded &&
-    auctionState?.highestBidder == walletAddress;
+  // const { data: highestBidder } = useGetUserDisplayInfoQuery(auctionState?.highestBidder!, {
+  //   skip: !(
+  //     auctionState?.highestBidder &&
+  //     auctionState?.highestBidder != '0x0000000000000000000000000000000000000000'
+  //   ),
+  // });
+  // useEffect(() => {
+  //   const fetchTimestamp = async () => {
+  //     setBlockchainTimestamp(await getBlockchainTimestamp());
+  //   };
+  //   fetchTimestamp();
+  // }, []);
 
   return (
     <div className='game-page'>
       <div className='game__main'>
-        <div>
+        <div className='game__nft-display'>
           <BaseMedia src={auction.Nft.s3Path} isVideo={auction.Nft.isVideo} />
         </div>
         <div className='game__content'>
@@ -80,12 +71,7 @@ function auction({ auction, auctions, lotteries, artist, drawings, drop }: Props
           <GameInfo drop={drop} auction={auction} />
         </div>
       </div>
-      <MoreInDrop
-        auctions={auctions}
-        lotteries={lotteries}
-        drawings={drawings}
-        artist={artist}
-      />
+      <MoreInDrop auctions={auctions} lotteries={lotteries} drawings={drawings} artist={artist} />
     </div>
   );
 }

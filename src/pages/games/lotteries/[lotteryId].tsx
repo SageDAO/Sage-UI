@@ -4,9 +4,7 @@ import { Prisma } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { useGetTicketCountsQuery } from '@/store/services/lotteriesReducer';
 import { useSession } from 'next-auth/react';
-import {
-  useGetPrizesByUserAndLotteryQuery,
-} from '@/store/services/prizesReducer';
+import { useGetPrizesByUserAndLotteryQuery } from '@/store/services/prizesReducer';
 import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
 // import { getBlockchainTimestamp, getCoinBalance } from '@/utilities/contracts';
 import { Drop, Lottery_include_Nft, Auction_include_Nft, User } from '@/prisma/types';
@@ -70,7 +68,7 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
   return (
     <div className='game-page'>
       <div className='game__main'>
-        <div>
+        <div className='game__nft-display'>
           <BaseMedia src={currentNft.s3Path} isVideo={currentNft.isVideo} />
         </div>
         <div className='game__content'>
@@ -96,12 +94,7 @@ function lottery({ drop, lottery, auctions, lotteries, drawings, artist }: Props
           )}
         </div>
       </div>
-      <MoreInDrop
-        auctions={auctions}
-        lotteries={lotteries}
-        drawings={drawings}
-        artist={artist}
-      />
+      <MoreInDrop auctions={auctions} lotteries={lotteries} drawings={drawings} artist={artist} />
     </div>
   );
 }
