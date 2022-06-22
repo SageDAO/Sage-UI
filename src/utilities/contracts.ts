@@ -12,7 +12,7 @@ import {
 import { parameters } from '../constants/config';
 import { toast } from 'react-toastify';
 
-const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NETWORK_NAME } = parameters;
+const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NETWORK_NAME, CHAIN_ID } = parameters;
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
@@ -46,7 +46,14 @@ var ContractFactory = (function () {
   var instances = new Map<string, Contract>();
   async function createInstance({ address, abi }: ContractDetails) {
     console.log(`Creating contract instance for address ${address}`);
-    const contract = new ethers.Contract(address, abi, ethers.getDefaultProvider(NETWORK_NAME));
+    const contract = new ethers.Contract(
+      address,
+      abi,
+      new ethers.providers.InfuraProvider(
+        { name: NETWORK_NAME, chainId: +CHAIN_ID },
+        process.env.INFURA_ID
+      )
+    );
     instances.set(address, contract);
     return contract;
   }

@@ -48,7 +48,7 @@ export default function PlaceBidButton({ pending, onClick, auction }: Props) {
   if (status === 'Done') {
     return (
       <button className='btn-place-bid' disabled data-status={status}>
-        done
+        Done
       </button>
     );
   }
