@@ -203,19 +203,13 @@ export async function getStaticProps({
 
 // This function gets called at build time
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
-  const useHeroku = process.env.getDropsFromHeroku;
-
-  let drops: DropType[] = [];
-  // Fleek environment variables come in as strings, so gotta check the value this way.
-  if (useHeroku === 'true') {
-    drops = await prisma.drop.findMany({
-      where: {
-        approvedAt: {
-          not: null,
-        },
+  let drops: DropType[] = await prisma.drop.findMany({
+    where: {
+      approvedAt: {
+        not: null,
       },
-    });
-  }
+    },
+  });
 
   // Get the paths we want to pre-render based on drops
   const paths = drops.map((drop) => ({
