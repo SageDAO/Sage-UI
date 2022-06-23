@@ -7,8 +7,9 @@ import { createUcanRequestToken } from '@/utilities/nftStorage';
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import Transaction from 'arweave/node/lib/transaction';
+import { computePrimes } from 'jwk-rsa-compute-primes';
 
-const arweaveJwk = JSON.parse(process.env.ARWEAVE_JSON_JWK || '');
+const arweaveJwk = computePrimes(JSON.parse(process.env.ARWEAVE_JSON_JWK || ''));
 
 const arweave = Arweave.init({
   host: 'arweave.net',
