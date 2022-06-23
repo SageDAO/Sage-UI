@@ -3,11 +3,18 @@ import aws from 'aws-sdk';
 import NextCors from 'nextjs-cors';
 import prisma from '@/prisma/client';
 import { Role } from '@prisma/client';
-import { bundleAndSignData, createData, DataItem } from 'arbundles';
 import { createUcanRequestToken } from '@/utilities/nftStorage';
-import { ArweaveSigner } from 'arbundles/src/signing';
+import Arweave from 'arweave';
+import { JWKInterface } from 'arweave/node/lib/wallet';
+import Transaction from 'arweave/node/lib/transaction';
 
-const toNumber = (val: string): number => (val ? Number(val) : 0);
+const arweaveJwk = JSON.parse(process.env.ARWEAVE_JSON_JWK || '');
+
+const arweave = Arweave.init({
+  host: 'arweave.net',
+  port: 443,
+  protocol: 'https',
+});
 
 /*
  * TODO authenticate requests coming from the (external) upload app
@@ -31,6 +38,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'CopyFromS3toArweave':
       await copyFromS3toArweave(request.query.s3Path as string, response);
+      break;
+    case 'UploadNftMetadataToArweave':
+      await uploadNftMetadataToArweave(request.body, response);
       break;
     case 'CreateNftStorageRequestToken':
       await createNftStorageRequestToken(response);
@@ -66,8 +76,8 @@ async function createS3SignedUrl(dropBucket: string, filename: string, response:
   const region = 'us-east-2';
   aws.config.update({
     credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID_MEMEX || '',
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_MEMEX || '',
+      accessKeyId: process.env.AWS_ACCESS_KEY_SAGE || '',
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_SAGE || '',
     },
     signatureVersion: 'v4',
     region,
@@ -82,22 +92,69 @@ async function createS3SignedUrl(dropBucket: string, filename: string, response:
   const uploadUrl = s3.getSignedUrl('putObject', params);
   const getUrl = `https://${process.env.S3_BUCKET}.s3.${region}.amazonaws.com/${dropBucket}/${filename}`;
   response.json({ uploadUrl, getUrl });
-  response.end();
 }
 
 async function copyFromS3toArweave(s3Path: string, response: NextApiResponse) {
-  console.log('copyFromS3toArWeave()');
-  const fetchFileContent = async (url: string): Promise<Uint8Array> => {
-    const response = await fetch(url);
-    return new Uint8Array(await response.arrayBuffer());
-  };
-  const jwk = JSON.parse(process.env.KEY || '');
-  const signer = new ArweaveSigner(jwk);
+  const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
   const fileContent = await fetchFileContent(s3Path);
-  const item = createData(fileContent, signer);
-  const bundle = await bundleAndSignData([item], signer);
-  response.json({ arweavePath: `https://arweave.net/${bundle.getIdBy(0)}` });
-  response.end();
+  const filename = s3Path.split('/').pop() as string;
+  const tx = await sendArweaveTransaction(filename, fileContent, inferMimeType(s3Path), arweaveJwk);
+  const balance = await arweave.wallets.getBalance(walletAddress);
+  response.json({ id: tx.id, balance });
+}
+
+async function sendArweaveTransaction(
+  filename: string,
+  data: any,
+  contentType: string,
+  jwk: JWKInterface
+): Promise<Transaction> {
+  const transaction = await arweave.createTransaction({ data }, jwk);
+  transaction.addTag('Content-Type', contentType);
+  await arweave.transactions.sign(transaction, jwk);
+  let uploader = await arweave.transactions.getUploader(transaction);
+  while (!uploader.isComplete) {
+    await uploader.uploadChunk();
+    console.log(
+      `${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`
+    );
+  }
+  console.log(`sendArweaveTransaction() :: file ${filename} -> ${transaction.id}`);
+  return transaction;
+}
+
+async function uploadNftMetadataToArweave(nftMetadataFiles: any, response: NextApiResponse) {
+  var metadataType = 'application/json';
+  for (const item of nftMetadataFiles) {
+    const tx = await sendArweaveTransaction(item.filename, item.data, metadataType, arweaveJwk);
+    item.txId = tx.id;
+  }
+  const manifest = createArweaveManifest(nftMetadataFiles);
+  console.log(manifest);
+  const manifestType = 'application/x.arweave-manifest+json';
+  const tx = await sendArweaveTransaction('manifest', manifest, manifestType, arweaveJwk);
+  const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
+  const balance = await arweave.wallets.getBalance(walletAddress);
+  response.json({ id: tx.id, balance });
+}
+
+/**
+ * Based upon https://github.com/ArweaveTeam/arweave/wiki/Path-Manifests#schema
+ */
+function createArweaveManifest(nftMetadataFiles: any[]): string {
+  var paths = '';
+  for (var i = 0; i < nftMetadataFiles.length; i++) {
+    paths += `\n      "${nftMetadataFiles[i].filename}": { "id": "${nftMetadataFiles[i].txId}" }`;
+    paths += i < nftMetadataFiles.length - 1 ? ',' : '\n     ';
+  }
+  var manifest = `
+  {
+    "manifest": "arweave/paths",
+    "version": "0.1.0",
+    "paths": { ${paths} }
+  }
+  `;
+  return manifest;
 }
 
 /**
@@ -111,7 +168,6 @@ async function createNftStorageRequestToken(response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-  response.end();
 }
 
 async function insertDrop(data: any, response: NextApiResponse) {
@@ -175,7 +231,6 @@ async function insertDrop(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-  response.end();
 }
 
 async function insertAuction(data: any, response: NextApiResponse) {
@@ -210,7 +265,6 @@ async function insertAuction(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-  response.end();
 }
 
 async function insertNft(data: any, response: NextApiResponse) {
@@ -250,7 +304,6 @@ async function insertNft(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-  response.end();
 }
 
 async function insertDrawing(data: any, response: NextApiResponse) {
@@ -273,7 +326,6 @@ async function insertDrawing(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-  response.end();
 }
 
 async function updateDefaultPrize(data: any, response: NextApiResponse) {
@@ -292,7 +344,6 @@ async function updateDefaultPrize(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-  response.end();
 }
 
 async function updateMetadataCid(data: any, response: NextApiResponse) {
@@ -311,7 +362,26 @@ async function updateMetadataCid(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-  response.end();
+}
+
+const toNumber = (val: string): number => (val ? Number(val) : 0);
+
+async function fetchFileContent(url: string): Promise<Uint8Array> {
+  const response = await fetch(url);
+  return new Uint8Array(await response.arrayBuffer());
+}
+
+function inferMimeType(filename: string): string {
+  const extension = filename.toLowerCase().split('.').pop();
+  switch (extension) {
+    case 'mp4':
+      return 'video/mpeg';
+    case 'gif':
+      return 'image/gif';
+    case 'png':
+      return 'image/png';
+  }
+  return 'image/jpeg';
 }
 
 export default handler;
