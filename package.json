@@ -10,11 +10,7 @@
     "prisma:generate": "npx prisma generate --schema=./src/prisma/schema.prisma",
     "prisma:studio": "npx prisma studio --schema=./src/prisma/schema.prisma",
     "prisma:db-pull": "npx prisma db pull --schema=./src/prisma/schema.prisma",
-    "postinstall": "npm run prisma:generate && npm run typechain",
-    "cy:open": "cypress open",
-    "test:macos": "SECRET_WORDS='test test test test test test test test test test test junk' NETWORK_NAME=fantomtestnet RPC_URL=https://rpc.testnet.fantom.network CHAIN_ID=0xfa2 SYMBOL=FTM ./node_modules/@synthetixio/synpress/synpress.js run --configFile ./tests/e2e/synpress.json",
-    "test:win32": "set SECRET_WORDS='test test test test test test test test test test test junk' && set NETWORK_NAME=fantomtestnet && set RPC_URL=https://rpc.testnet.fantom.network && set CHAIN_ID=0xfa2 && set SYMBOL=FTM && node ./node_modules/@synthetixio/synpress/synpress.js run --configFile ./tests/e2e/synpress.json",
-    "test": "cross-env-shell process.env.NODE_ENV=test npm run test:macos || npm run test:win32"
+    "postinstall": "npm run prisma:generate && npm run typechain"
   },
   "dependencies": {
     "@apollo/client": "^3.6.6",
@@ -23,7 +19,6 @@
     "@prisma/client": "^3.9.2",
     "@reduxjs/toolkit": "^1.6.1",
     "@svgr/webpack": "^6.2.1",
-    "@synthetixio/synpress": "^1.1.0",
     "@tailwindcss/aspect-ratio": "^0.2.1",
     "@typechain/ethers-v5": "^7.1.0",
     "@types/multer": "^1.4.7",
@@ -43,7 +38,7 @@
     "chai": "^4.3.4",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "cypress": "^8.7.0",
+    "cypress": "^10.2.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "eslint-config-next": "^11.1.0",
@@ -92,5 +87,8 @@
   "resolutions": {
     "@ethersproject/abi": "5.2.0",
     "@ethersproject/contracts": "5.2.0"
+  },
+  "devDependencies": {
+    "cypress-dark": "^1.8.3"
   }
 }

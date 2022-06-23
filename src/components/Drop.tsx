@@ -12,7 +12,7 @@ interface Props {
 export default function Drop({ drop }: Props) {
   const { status, startTime, endTime } = computeDropStatus(drop);
   return (
-    <div className='drop'>
+    <div className='drop' data-cy={`drop-tile`}>
       <Link href={`drops/${drop.id}`}>
         <div className='drop__thumbnail'>
           <BaseMedia src={drop.bannerImageS3Path || '/'} isVideo={false} />

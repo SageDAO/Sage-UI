@@ -38,7 +38,7 @@ interface Props {
 
 function home({ drops }: Props) {
   return (
-    <div className='home-page'>
+    <div className='home-page' data-cy='home-page'>
       <Slider {...sliderSettings} className='banner-slider'>
         {banners.map((b) => {
           const src = `/sample/banners${b.imagePath}`;
@@ -50,7 +50,7 @@ function home({ drops }: Props) {
         })}
       </Slider>
       <h1 className='home-page__subheader'>Available Drops</h1>
-      <div className='home-page__featured-drops'>
+      <div className='home-page__featured-drops' data-cy='home-page__featured-drops'>
         {drops.map((d: Drop_include_GamesAndArtist) => {
           return <Drop drop={d} key={d.id} />;
         })}
