@@ -6,7 +6,7 @@ const tokens = ['cmc', 'uniswap'];
 
 export default function Footer() {
   return (
-    <div className='footer'>
+    <div className='footer' data-cy='footer'>
       <div className='inner'>
         <div className='logo-and-social'>
           <div className='social-icons'>

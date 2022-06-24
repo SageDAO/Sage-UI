@@ -19,7 +19,7 @@
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "noEmit": false,
     "removeComments": true,
     "esModuleInterop": true,
     "declaration": true,
@@ -35,5 +35,5 @@
     "typeRoots": ["./additional.d.ts"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "cypress"]
 }

@@ -23,7 +23,7 @@ export default function Layout({ children, router }: Props) {
   } = useWatchNetwork();
 
   return (
-    <div className='layout'>
+    <div className='layout' data-cy='layout'>
       <Head>
         <title>Sage Marketplace</title>
         <link rel='icon' href='/' />
@@ -44,6 +44,7 @@ export default function Layout({ children, router }: Props) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        data-cy='toast-container'
       />
       <Nav />
       <motion.div

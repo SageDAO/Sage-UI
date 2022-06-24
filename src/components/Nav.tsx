@@ -26,10 +26,10 @@ const navLinks: NavLink[] = [
 export default function Nav() {
   const router = useRouter();
   return (
-    <div className='nav'>
+    <div className='nav' data-cy='nav'>
       <ul>
         <div className='logo'>
-          <BaseMedia src='/branding/sage.png'  isVideo={false} />
+          <BaseMedia src='/branding/sage.png' isVideo={false} />
         </div>
         {navLinks.map((n: NavLink) => {
           return (
