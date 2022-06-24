@@ -61,77 +61,81 @@ export function GamesStatsPanel() {
   };
   return (
     <>
-      {drops?.map((drop: Drop_include_GamesAndArtist) => (
-        <div className='dashboard-game-stats__container'>
+      {drops?.map((drop: Drop_include_GamesAndArtist, i) => (
+        <div key={i} className='dashboard-game-stats__container'>
           <div className='dashboard-game-stats__item nft-tile' style={{ textAlign: 'center' }}>
             <img src={drop.bannerImageS3Path} width={180} height={180} />
             drop <span className='dashboard-game-stats__id'>{drop.id}</span>
           </div>
           <div className='dashboard-game-stats__item' style={{ minWidth: '400px' }}>
             <table>
-              {drop.Lotteries.map((lottery) => {
-                const stats = getLotteryGameStats(lottery.id);
-                return (
-                  <tr>
-                    <td>
-                      lottery <span className='dashboard-game-stats__id'>{lottery.id}</span> <br />
-                      status: {stats.status} <br />
-                      {stats.status === 'Created' &&
-                      new Date(lottery.endTime).getTime() > new Date().getTime() ? (
-                        <Countdown
-                          className='status__countdown'
-                          endTime={new Date(lottery.endTime).getTime()}
-                        />
-                      ) : (
-                        `ended ${new Date(lottery.endTime).toLocaleString()}`
-                      )}
-                    </td>
-                    <td>
-                      tickets sold: {stats.tickets?.length || 0} <br />
-                      revenue (points): {(stats.tickets?.length || 0) *
-                        lottery.costPerTicketPoints}{' '}
-                      PIXEL
-                      <br />
-                      revenue (tokens): {(stats.tickets?.length || 0) *
-                        lottery.costPerTicketTokens}{' '}
-                      ASH <br />
-                      prizes claimed: {stats.claimedPrizes?.length || 0}
-                    </td>
-                  </tr>
-                );
-              })}
+              <tbody>
+                {drop.Lotteries.map((lottery, i) => {
+                  const stats = getLotteryGameStats(lottery.id);
+                  return (
+                    <tr key={i}>
+                      <td>
+                        lottery <span className='dashboard-game-stats__id'>{lottery.id}</span>{' '}
+                        <br />
+                        status: {stats.status} <br />
+                        {stats.status === 'Created' &&
+                        new Date(lottery.endTime).getTime() > new Date().getTime() ? (
+                          <Countdown
+                            className='status__countdown'
+                            endTime={new Date(lottery.endTime).getTime()}
+                          />
+                        ) : (
+                          `ended ${new Date(lottery.endTime).toLocaleString()}`
+                        )}
+                      </td>
+                      <td>
+                        tickets sold: {stats.tickets?.length || 0} <br />
+                        revenue (points):{' '}
+                        {(stats.tickets?.length || 0) * lottery.costPerTicketPoints} PIXEL
+                        <br />
+                        revenue (tokens):{' '}
+                        {(stats.tickets?.length || 0) * lottery.costPerTicketTokens} ASH <br />
+                        prizes claimed: {stats.claimedPrizes?.length || 0}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           </div>
           <div className='dashboard-game-stats__item' style={{ minWidth: '400px' }}>
             <table>
-              {drop.Auctions.map((auction) => {
-                const stats = getAuctionGameStats(auction.id);
-                if (stats.endTime == null) {
-                  var endTime = Math.floor(new Date(auction.endTime).getTime() / 1000);
-                } else {
-                  var endTime = Number(stats.endTime);
-                }
-                return (
-                  <tr>
-                    <td>
-                      auction <span className='dashboard-game-stats__id'>{auction.id}</span> <br />
-                      status: {stats.status}
-                      <br />
-                      {stats.status === 'Created' && endTime > new Date().getTime() ? (
-                        <Countdown className='status__countdown' endTime={endTime * 1000} />
-                      ) : (
-                        `ended ${new Date(endTime * 1000).toLocaleString()}`
-                      )}
-                    </td>
-                    <td>
-                      bids: {stats.bids?.length || 0} <br />
-                      highest bid: {utils.formatUnits(stats.highestBid || 0)} ASH
-                      <br />
-                      highest bidder: {shortenAddress(stats.highestBidder)}
-                    </td>
-                  </tr>
-                );
-              })}
+              <tbody>
+                {drop.Auctions.map((auction, i) => {
+                  const stats = getAuctionGameStats(auction.id);
+                  if (stats.endTime == null) {
+                    var endTime = Math.floor(new Date(auction.endTime).getTime() / 1000);
+                  } else {
+                    var endTime = Number(stats.endTime);
+                  }
+                  return (
+                    <tr key={i}>
+                      <td>
+                        auction <span className='dashboard-game-stats__id'>{auction.id}</span>{' '}
+                        <br />
+                        status: {stats.status}
+                        <br />
+                        {stats.status === 'Created' && endTime > new Date().getTime() ? (
+                          <Countdown className='status__countdown' endTime={endTime * 1000} />
+                        ) : (
+                          `ended ${new Date(endTime * 1000).toLocaleString()}`
+                        )}
+                      </td>
+                      <td>
+                        bids: {stats.bids?.length || 0} <br />
+                        highest bid: {utils.formatUnits(stats.highestBid || 0)} ASH
+                        <br />
+                        highest bidder: {shortenAddress(stats.highestBidder)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           </div>
         </div>
