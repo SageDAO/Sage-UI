@@ -15,12 +15,12 @@ type Props = {
 };
 
 export default function Layout({ children, router }: Props) {
-  const {
-    isNetworkModalOpen,
-    closeNetworkModal,
-    switchToCorrectNetwork,
-    isLoading: isChangingNetwork,
-  } = useWatchNetwork();
+  // const {
+  //   isNetworkModalOpen,
+  //   closeNetworkModal,
+  //   switchToCorrectNetwork,
+  //   isLoading: isChangingNetwork,
+  // } = useWatchNetwork();
 
   return (
     <div className='layout' data-cy='layout'>
@@ -28,12 +28,6 @@ export default function Layout({ children, router }: Props) {
         <title>Sage Marketplace</title>
         <link rel='icon' href='/' />
       </Head>
-      <WrongNetworkModal
-        isOpen={isNetworkModalOpen}
-        closeModal={closeNetworkModal}
-        switchToCorrectNetwork={switchToCorrectNetwork}
-        isLoading={isChangingNetwork}
-      />
       <ToastContainer
         position='bottom-center'
         autoClose={5000}
@@ -46,7 +40,6 @@ export default function Layout({ children, router }: Props) {
         pauseOnHover
         data-cy='toast-container'
       />
-      <Nav />
       <motion.div
         key={router.route}
         initial='pageInitial'
@@ -56,7 +49,6 @@ export default function Layout({ children, router }: Props) {
         id='main'
       >
         {children}
-        <Footer />
       </motion.div>
     </div>
   );
