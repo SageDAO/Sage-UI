@@ -24,7 +24,8 @@ export default function useWatchNetwork() {
   }
 
   function handleIncorrectNetwork() {
-    if (activeChain?.id !== +parameters.CHAIN_ID) {
+    if (!activeChain) return;
+    if (activeChain.id !== +parameters.CHAIN_ID) {
       toast.warn('incorrect network!', {
         toastId: 'networkChange',
         autoClose: false,
