@@ -21,21 +21,19 @@ interface State {
   minBid: DesiredBidValue;
 }
 
+const initialState: State = {
+  desiredBidValue: 0,
+  minBid: 0,
+};
+
 //@scss : '@/styles/components/_games-modal.scss'
 function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
-  const { data: auctionState, isError: isGetAuctionStateError } = useGetAuctionStateQuery(
-    auction.id
-  );
-  const initialState: State = {
-    desiredBidValue: +auction.minimumPrice!,
-    minBid: +auction.minimumPrice!,
-  };
+  const { data: auctionState } = useGetAuctionStateQuery(auction.id);
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
 
   function handlePlaceBidClick() {
-    // bid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
     placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
   }
 
@@ -51,9 +49,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
     });
   }
 
-  let pending = false;
-
-  useEffect(() => {
+  function handleNewAuctionState() {
     if (!auctionState) return;
     setState((prevState) => {
       return {
@@ -62,6 +58,26 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
         minBid: auctionState.nextMinBid,
       };
     });
+  }
+
+  function handleStartingBid() {
+    if (!auction.minimumPrice) return;
+    if (auctionState?.nextMinBid) return;
+    setState((prevState) => {
+      return {
+        ...prevState,
+        desiredBidValue: Number(auction.minimumPrice),
+        minBid: Number(auction.minimumPrice),
+      };
+    });
+  }
+
+  useEffect(() => {
+    handleStartingBid();
+  }, []);
+
+  useEffect(() => {
+    handleNewAuctionState();
   }, [auctionState]);
 
   return (
@@ -110,12 +126,12 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
               value={state.desiredBidValue}
               onChange={handleBidInputChange}
               min={state.minBid}
-              disabled={pending}
+              disabled={isPlaceBidLoading}
             ></input>
             <span className='games-modal__bid-unit'>ASH</span>
             <button
               className='games-modal__bid-min-btn'
-              disabled={pending}
+              disabled={isPlaceBidLoading}
               onClick={handleMinButtonClick}
             >
               min

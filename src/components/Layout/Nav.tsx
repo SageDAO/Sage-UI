@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Connect from '@/components/Connect';
-import { BaseMedia } from './Media';
+import { BaseMedia } from '@/components/Media';
 interface NavLink {
   name: string;
   url: string;
@@ -11,15 +11,6 @@ const navLinks: NavLink[] = [
   {
     name: 'Home',
     url: '/',
-  },
-  // {
-  //   name: 'Drops',
-  //   url: '/drops',
-  // },
-  // { name: 'Artists', url: '/artists' },
-  {
-    name: 'About',
-    url: '/about',
   },
 ];
 

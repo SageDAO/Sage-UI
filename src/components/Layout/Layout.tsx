@@ -4,10 +4,10 @@ import variants from '@/animations/index';
 import { motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
+import Nav from '@/components/Layout/Nav';
+// import Footer from '@/Layout/Footer';
 import useWatchNetwork from '@/hooks/useWatchNetwork';
-import WrongNetworkModal from './Modals/WrongNetworkModal';
+import WrongNetworkModal from '@/components/Modals/WrongNetworkModal';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -53,10 +53,12 @@ export default function Layout({ children, router }: Props) {
         animate='pageAnimate'
         exit='pageInitial'
         variants={variants}
-        id='main'
+        className='layout__main'
       >
         {children}
+        {/*
         <Footer />
+				 * */}
       </motion.div>
     </div>
   );

@@ -1,23 +1,23 @@
-import '../styles/index.scss';
+import '@/styles/index.scss';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import 'react-medium-image-zoom/dist/styles.css';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SessionProvider } from 'next-auth/react';
-import store from '../store/store';
+import store from '@/store/store';
 import type { AppProps } from 'next/app';
 import MaintenancePage from '@/components/MaintenancePage';
 import { AnimatePresence } from 'framer-motion';
-import Layout from '@/components/Layout';
+import Layout from '@/components/Layout/Layout';
 import { createClient, Provider as WagmiProvider, chain } from 'wagmi';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { parameters } from '../constants/config';
+import { parameters } from '@/constants/config';
 
 // set up connectors
 const connectors = [
-  new MetaMaskConnector({
+  new InjectedConnector({
     chains: [chain.mainnet, chain.rinkeby],
   }),
   new WalletConnectConnector({
@@ -27,7 +27,7 @@ const connectors = [
   }),
   new CoinbaseWalletConnector({
     options: {
-      appName: 'wagmi.sh',
+      appName: 'sage',
     },
   }),
 ];
@@ -43,7 +43,7 @@ function App({ Component, pageProps, router }: AppProps) {
   const apolloClient = new ApolloClient({
     uri: SUBGRAPH_URL,
     cache: new InMemoryCache(),
-  }); 
+  });
   return (
     <ReduxProvider store={store}>
       <WagmiProvider client={wagmiClient}>
