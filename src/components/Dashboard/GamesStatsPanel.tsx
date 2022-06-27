@@ -3,8 +3,8 @@ import { useGetApprovedDropsQuery } from '@/store/services/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
 import { gql, useQuery } from '@apollo/client';
 import { utils } from 'ethers';
-import { stat } from 'fs/promises';
 import Loader from 'react-loader-spinner';
+import { toast } from 'react-toastify';
 import Countdown from '../Countdown';
 
 const GAMES_QUERY = gql`
@@ -15,6 +15,8 @@ const GAMES_QUERY = gql`
       tickets {
         id
         txnHash
+        address
+        ticketNumber
       }
       claimedPrizes {
         id
@@ -46,6 +48,69 @@ export function GamesStatsPanel() {
   const { data: drops, isFetching: isLoadingFromDB } = useGetApprovedDropsQuery();
   const { loading: isLoadingFromSubgraph, data: graphData, startPolling } = useQuery(GAMES_QUERY);
   startPolling(3000);
+
+  function download(filename: string, filecontents: string) {
+    var element = document.createElement('a');
+    element.setAttribute(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(filecontents)
+    );
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  function downloadTickets(lotteryId: number) {
+    const lotteryIdHexStr = '0x' + lotteryId.toString(16);
+    var filecontents = 'txnHash,wallet,ticketNumber';
+    graphData.lotteries.forEach((lotto: any) => {
+      if (lotteryIdHexStr == lotto.id) {
+        lotto.tickets.forEach((item: any) => {
+          filecontents += `\n${item.txnHash},${item.address},${item.ticketNumber}`;
+        });
+      }
+    });
+    download(`lottery_${lotteryId}_tickets_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
+  }
+
+  function downloadBids(auctionId: number) {
+    const auctionIdHexStr = '0x' + auctionId.toString(16);
+    var filecontents = 'txnHash,blockTimestamp,wallet,amount';
+    graphData.auctions.forEach((auction: any) => {
+      if (auctionIdHexStr == auction.id) {
+        auction.bids.forEach((item: any) => {
+          filecontents += `\n${item.txnHash},${item.blockTimestamp},${item.bidder},${item.amount}`;
+        });
+      }
+    });
+    download(`auction_${auctionId}_bids_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
+  }
+
+  async function downloadPrizes(lotteryId: number) {
+    var filecontents = 'nftId,winnerAddress,createdAt,claimedAt';
+    var request = fetch(`/api/prizes?action=GetLotteryPrizes&lotteryId=${lotteryId}`);
+    toast.promise(request, {
+      pending: 'Retrieving prize data...',
+      success: 'Success! File ready for download.',
+      error: 'Failure! Unable to complete request.',
+    });
+    let prizeProofEntries: any = await (await request).json();
+    prizeProofEntries.forEach((item: any) => {
+      filecontents +=
+        '\r\n' +
+        item.nftId +
+        ',' +
+        item.winnerAddress +
+        ',' +
+        item.createdAt +
+        ',' +
+        item.claimedAt;
+    });
+    download(`lottery_${lotteryId}_prizes_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
+  }
+
   if (isLoadingFromDB || isLoadingFromSubgraph) {
     return (
       <div style={{ margin: '25px auto 25px' }}>
@@ -92,16 +157,23 @@ export function GamesStatsPanel() {
                             endTime={new Date(lottery.endTime).getTime()}
                           />
                         ) : (
-                          `ended ${new Date(lottery.endTime).toLocaleString()}`
+                          `end: ${new Date(lottery.endTime).toLocaleString()}`
                         )}
-                        <br />
-                        <a style={{ cursor: 'pointer', marginTop: '20px' }}>
-                          <img
-                            src='/icons/download.svg'
-                            width={20}
-                            className='dashboard-white-icon'
-                          />
-                        </a>
+                        {stats.tickets?.length > 0 && (
+                          <>
+                            <br />
+                            <a
+                              onClick={() => downloadTickets(lottery.id)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <img
+                                src='/icons/download.svg'
+                                width={20}
+                                className='dashboard-white-icon'
+                              />
+                            </a>
+                          </>
+                        )}
                       </td>
                       <td>
                         tickets sold: {stats.tickets?.length || 0} <br />
@@ -138,7 +210,22 @@ export function GamesStatsPanel() {
                         {stats.status === 'Created' && endTime > new Date().getTime() ? (
                           <Countdown className='status__countdown' endTime={endTime * 1000} />
                         ) : (
-                          `ended ${new Date(endTime * 1000).toLocaleString()}`
+                          `end: ${new Date(endTime * 1000).toLocaleString()}`
+                        )}
+                        {stats.bids?.length > 0 && (
+                          <>
+                            <br />
+                            <a
+                              onClick={() => downloadBids(auction.id)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <img
+                                src='/icons/download.svg'
+                                width={20}
+                                className='dashboard-white-icon'
+                              />
+                            </a>
+                          </>
                         )}
                       </td>
                       <td>
@@ -156,5 +243,17 @@ export function GamesStatsPanel() {
         </div>
       ))}
     </>
+  );
+}
+
+function getDateYYYYMMDDhhmmss(): string {
+  var d = new Date();
+  return (
+    d.getFullYear() +
+    ('0' + (d.getMonth() + 1)).slice(-2) +
+    ('0' + d.getDate()).slice(-2) +
+    ('0' + d.getHours()).slice(-2) +
+    ('0' + d.getMinutes()).slice(-2) +
+    ('0' + d.getSeconds()).slice(-2)
   );
 }
