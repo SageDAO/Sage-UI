@@ -14,9 +14,15 @@ const GAMES_QUERY = gql`
       status
       tickets {
         id
+        txnHash
       }
       claimedPrizes {
         id
+        txnHash
+      }
+      refunds {
+        id
+        txnHash
       }
     }
     auctions {
@@ -27,6 +33,7 @@ const GAMES_QUERY = gql`
       endTime
       bids {
         id
+        txnHash
         bidder
         amount
         blockTimestamp
@@ -87,6 +94,14 @@ export function GamesStatsPanel() {
                         ) : (
                           `ended ${new Date(lottery.endTime).toLocaleString()}`
                         )}
+                        <br />
+                        <a style={{ cursor: 'pointer', marginTop: '20px' }}>
+                          <img
+                            src='/icons/download.svg'
+                            width={20}
+                            className='dashboard-white-icon'
+                          />
+                        </a>
                       </td>
                       <td>
                         tickets sold: {stats.tickets?.length || 0} <br />

@@ -8,7 +8,7 @@ export default function artists() {
         <h1 id='header'>Artists</h1>
         <div id='filter'>
           <span>{currentOption}</span>
-          <img src='/arrow-down.svg' alt='' />
+          <img src='/icons/arrow-down.svg' alt='' />
         </div>
       </section>
       <section id='grid'></section>

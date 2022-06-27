@@ -21,7 +21,7 @@ export function GlobalFilter({
   return (
     <div className='dashboard-search-container'>
       <label htmlFor='dashboardSearch'>
-        <img src='/search.svg' className='dashboard-search-icon' />
+        <img src='/icons/search.svg' className='dashboard-white-icon' />
       </label>
       <input
         id='dashboardSearch'

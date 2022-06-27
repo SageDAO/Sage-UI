@@ -73,7 +73,7 @@ function UsersTable({ users }: UsersTableProps) {
             >
               <img
                 className='dashboard-user__wallet-clipboard'
-                src='/copy.svg'
+                src='/icons/copy.svg'
                 style={{ stroke: 'white' }}
                 alt=''
                 width='15'
