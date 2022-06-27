@@ -131,7 +131,6 @@ async function uploadNftMetadataToArweave(nftMetadataFiles: any, response: NextA
     item.txId = tx.id;
   }
   const manifest = createArweaveManifest(nftMetadataFiles);
-  console.log(manifest);
   const manifestType = 'application/x.arweave-manifest+json';
   const tx = await sendArweaveTransaction('manifest', manifest, manifestType, arweaveJwk);
   const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
@@ -261,7 +260,7 @@ async function insertAuction(data: any, response: NextApiResponse) {
         },
       },
     });
-    response.json({ auctionId: record.id, nftId: record.id });
+    response.json({ auctionId: record.id, nftId: record.nftId });
   } catch (e: any) {
     console.log(e);
     response.json({ error: e.message });
