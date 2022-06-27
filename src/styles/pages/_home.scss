@@ -2,16 +2,15 @@
 @use '@/styles/layout/layout' as l;
 @use '@/styles/abstracts/breakpoints' as b;
 .home-page {
-  flex: 1;
   display: flex;
+	gap: 20px;
   flex-direction: column;
   padding: 30px l.$indent;
-	gap: 30px;
+	height: min-content;
 }
 
 .home-page__subheader {
   font-weight: 600;
-  // margin-left: l.$indent;
   size: 19px;
 }
 
@@ -19,7 +18,7 @@
   // margin: 23px l.$indent 55px;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 2%;
+	gap: 20px;
   @include b.min-width('small') {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -29,23 +28,4 @@
   @include b.min-width('2xl') {
     grid-template-columns: repeat(4, 1fr);
   }
-}
-.home-page__explore-all {
-  width: 100%;
-  display: grid;
-  place-items: center;
-  margin-bottom: 132px;
-}
-
-.home-page__explore-all-button {
-  border: 1.5px solid #6c437e;
-  box-sizing: border-box;
-  border-radius: 23px;
-  background: transparent;
-  color: white;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 15px 20px;
-  cursor: pointer;
-  line-height: 16px;
 }

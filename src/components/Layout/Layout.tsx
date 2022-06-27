@@ -53,7 +53,7 @@ export default function Layout({ children, router }: Props) {
         animate='pageAnimate'
         exit='pageInitial'
         variants={variants}
-        id='main'
+        className='layout__main'
       >
         {children}
         {/*
