@@ -8,6 +8,8 @@ import Nav from '@/components/Layout/Nav';
 // import Footer from '@/Layout/Footer';
 import useWatchNetwork from '@/hooks/useWatchNetwork';
 import WrongNetworkModal from '@/components/Modals/WrongNetworkModal';
+import Cursor from '@/components/Cursor';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -22,12 +24,24 @@ export default function Layout({ children, router }: Props) {
     isLoading: isChangingNetwork,
   } = useWatchNetwork();
 
+  const cursorEl = useRef<HTMLDivElement>(null);
+  const layoutEl = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    layoutEl.current?.addEventListener('mousemove', (e) => {
+      const dataX = String(e.pageX);
+      const dataY = String(e.pageY);
+      cursorEl.current?.setAttribute('style', `transform: translate3d(${dataX}px, ${dataY}px, 0px);`);
+    });
+  }, []);
+
   return (
-    <div className='layout' data-cy='layout'>
+    <div ref={layoutEl} className='layout' data-cy='layout'>
       <Head>
         <title>Sage Marketplace</title>
         <link rel='icon' href='/' />
       </Head>
+      <div ref={cursorEl} className='cursor'></div>
       <WrongNetworkModal
         isOpen={isNetworkModalOpen}
         closeModal={closeNetworkModal}

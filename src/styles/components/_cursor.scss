@@ -1,0 +1,16 @@
+.cursor {
+  pointer-events: none;
+  will-change: transform;
+  width: 16px;
+	aspect-ratio: 1/1;
+  position: absolute;
+  backdrop-filter: invert(100%);
+  border-radius: 100%;
+  z-index: 999;
+  border: 1px solid grey;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  &[data='link'] {
+		width: 40px;
+  }
+}
