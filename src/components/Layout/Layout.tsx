@@ -43,7 +43,7 @@ export default function Layout({ children, router }: Props) {
     <div ref={layoutEl} className='layout' data-cy='layout'>
       <Head>
         <title>Sage Marketplace</title>
-        <link rel='icon' href='/' />
+        <link rel='icon' href='/icons/sage.svg' />
       </Head>
       <div ref={cursorEl} className='cursor'></div>
       <WrongNetworkModal
