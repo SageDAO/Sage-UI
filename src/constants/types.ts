@@ -1,6 +1,7 @@
-import { chain } from "wagmi";
+import { chain } from 'wagmi';
 
-type networks = keyof typeof chain
+type networks = keyof typeof chain;
+
 export interface Parameters {
   CHAIN_ID: string;
   NETWORK_NAME: networks;
@@ -9,6 +10,7 @@ export interface Parameters {
   AUCTION_ADDRESS: string;
   REWARDS_ADDRESS: string;
   ASHTOKEN_ADDRESS: string;
+  NFT_ADDRESS: string;
 }
 
 export interface Configuration {
