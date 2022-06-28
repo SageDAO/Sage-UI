@@ -5,12 +5,12 @@ import { motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Nav from '@/components/Layout/Nav';
-// import Footer from '@/Layout/Footer';
+import Footer from '@/components/Layout/Footer';
 import useWatchNetwork from '@/hooks/useWatchNetwork';
 import WrongNetworkModal from '@/components/Modals/WrongNetworkModal';
-import Cursor from '@/components/Cursor';
 import { useEffect, useRef } from 'react';
 import HiddenMenu from './HiddenMenu';
+import Image from 'next/image';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -74,10 +74,16 @@ export default function Layout({ children, router }: Props) {
         variants={variants}
         className='layout__main'
       >
+        <div className='layout__destroying-fakes'>
+          <Image
+            draggable={false}
+            src='/branding/destroying-fakes.svg'
+            width={19}
+            height={384}
+          ></Image>
+        </div>
         {children}
-        {/*
         <Footer />
-				 * */}
       </motion.div>
     </div>
   );

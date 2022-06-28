@@ -26,6 +26,7 @@
   &:not([disabled]) {
     cursor: pointer;
     @include hover {
+      @content;
       filter: brightness(0.9);
     }
   }

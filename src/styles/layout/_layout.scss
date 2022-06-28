@@ -8,12 +8,22 @@ $indent: max(1em, 10vw);
   color: c.$white;
   background-color: c.$dark;
   min-height: 100vh;
-
   overflow-x: visible;
 }
 
 .layout__main {
   position: relative;
   display: flex;
+  flex: 1;
   flex-direction: column;
+  .page {
+    flex: 1;
+  }
+}
+
+.layout__destroying-fakes {
+  position: fixed;
+	left: 3%;
+	transform: translateY(30%);
+	z-index: 998;
 }

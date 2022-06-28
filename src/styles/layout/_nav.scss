@@ -2,7 +2,7 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/layout/layout' as l;
 .nav {
-  height: 44px;
+  min-height: 44px;
   width: 100vw;
   background-color: c.$black;
   display: flex;
@@ -12,6 +12,10 @@
 
 .nav__menu {
   display: flex;
+	flex-wrap: wrap;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
   gap: 19px;
 }
 

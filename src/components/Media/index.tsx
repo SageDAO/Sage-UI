@@ -27,13 +27,13 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps)
             <source src={src} type='video/mp4' />
           </video>
         ) : isZoomable ? (
-          <Image src={src} layout='fill' objectFit='cover' />
+          <Image draggable={false} src={src} layout='fill' objectFit='cover' />
         ) : (
           <Image
             src={src}
-						layout='fill'
+            layout='fill'
             objectFit='cover'
-						draggable={false}
+            draggable={false}
             onClick={onClickHandler}
             style={onClickHandler ? { cursor: 'pointer' } : {}}
           />
