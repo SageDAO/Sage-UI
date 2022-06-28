@@ -3,6 +3,34 @@
    License: none (public domain)
 */
 
+@use '@/styles/abstracts/colors' as c;
+
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* width */
+  ::-webkit-scrollbar {
+		width: 10px;
+		padding: 1px;
+		background: transparent;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+		// background: transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: c.$accent;
+		border-radius: 1000px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+  }
+}
+
 html,
 body,
 div,
@@ -144,8 +172,7 @@ input {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-

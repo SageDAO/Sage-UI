@@ -1,31 +1,139 @@
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 @use '@/styles/layout/layout' as l;
 @use '@/styles/abstracts/breakpoints' as b;
 .home-page {
   display: flex;
-	gap: 20px;
   flex-direction: column;
-  padding: 30px l.$indent;
-	height: min-content;
+  padding: 0 max(16vw, 12px) 50px;
+  height: min-content;
 }
 
-.home-page__subheader {
-  font-weight: 600;
-  size: 19px;
+.home-page__hero {
+  aspect-ratio: 1/1;
 }
 
-.home-page__featured-drops {
-  // margin: 23px l.$indent 55px;
+.home-page__logotype {
+  @include m.noselect;
+  position: relative;
+  aspect-ratio: 1200/384;
+  width: 100%;
+  z-index: 1;
+  transform: translateY(30%);
+}
+
+.home-page__hero-banner {
+  @include m.noselect;
+  @include m.interact;
+  transition-duration: 300ms;
+  position: relative;
+  aspect-ratio: 1196/872;
+}
+
+.home-page__featured-drop-tag {
+  @include m.interact;
+  margin-top: 42px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.home-page__featured-drop-tag-sage-logo {
+  position: relative;
+  height: max(40px, 4vw);
+  aspect-ratio: 44.48/48;
+}
+
+.home-page__featured-drop-tag-label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: max(16px, 1vw);
+  line-height: 25px;
+  color: c.$white;
+  text-transform: uppercase;
+}
+
+.home-page__statement {
+  margin: 80px 0;
+  display: flex;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 60px;
+  text-align: center;
+}
+
+.home-page__upcoming-drops-header {
+  margin: 80px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.home-page__upcoming-drops-header-left {
+  font-family: 'Marine';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 49px;
+  color: c.$white;
+}
+
+.home-page__upcoming-drops-header-right {
+  display: flex;
+  gap: 20px;
+  width: min(100%, 300px);
+}
+
+.home-page__upcoming-drops-header-right-dot {
+  border-radius: 100%;
+  width: 12px;
+  height: 12px;
+
+  background-color: c.$accent;
+}
+
+.home-page__upcoming-drops-header-right-text {
+  font-style: normal;
+  font-weight: 400;
+
+  font-size: 16px;
+  line-height: 130%;
+  flex: 1;
+}
+
+.home-page__upcoming-drops-grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-	gap: 20px;
-  @include b.min-width('small') {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @include b.min-width('medium') {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @include b.min-width('2xl') {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  grid-template-columns: repeat(2, 1fr);
+  aspect-ratio: 1/1;
+  gap: 16px;
+}
+
+.home-page__upcoming-drops-tile {
+  @include m.interact;
+  background-color: red;
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+  position: relative;
+}
+
+.home-page__upcoming-drops-tile-img-container {
+  position: relative;
+  aspect-ratio: 1/1;
+  z-index: 0;
+}
+
+.home-page__upcoming-drops-tile-tag {
+  text-transform: uppercase;
+  padding: 5%;
+  position: absolute;
+  font-style: normal;
+  font-weight: 400;
+  font-size: max(16px, 1vw);
+  line-height: max(19px, 1.2vw);
+  z-index: 1;
+  color: c.$white;
+  position: absolute;
+  bottom: 0;
 }

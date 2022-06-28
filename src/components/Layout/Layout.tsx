@@ -10,6 +10,7 @@ import useWatchNetwork from '@/hooks/useWatchNetwork';
 import WrongNetworkModal from '@/components/Modals/WrongNetworkModal';
 import Cursor from '@/components/Cursor';
 import { useEffect, useRef } from 'react';
+import HiddenMenu from './HiddenMenu';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -31,7 +32,10 @@ export default function Layout({ children, router }: Props) {
     layoutEl.current?.addEventListener('mousemove', (e) => {
       const dataX = String(e.pageX);
       const dataY = String(e.pageY);
-      cursorEl.current?.setAttribute('style', `transform: translate3d(${dataX}px, ${dataY}px, 0px);`);
+      cursorEl.current?.setAttribute(
+        'style',
+        `transform: translate3d(${dataX}px, ${dataY}px, 0px);`
+      );
     });
   }, []);
 
@@ -60,6 +64,7 @@ export default function Layout({ children, router }: Props) {
         pauseOnHover
         data-cy='toast-container'
       />
+      <HiddenMenu />
       <Nav />
       <motion.div
         key={router.route}

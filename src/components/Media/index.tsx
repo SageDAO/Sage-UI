@@ -31,8 +31,9 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps)
         ) : (
           <Image
             src={src}
-            layout='fill'
+						layout='fill'
             objectFit='cover'
+						draggable={false}
             onClick={onClickHandler}
             style={onClickHandler ? { cursor: 'pointer' } : {}}
           />

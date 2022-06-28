@@ -1,0 +1,18 @@
+.hidden-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+	padding: 0 121px;
+}
+
+.hidden-menu__socials {
+  display: flex;
+	gap: 16px;
+}
+
+.hidden-menu__socials-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
