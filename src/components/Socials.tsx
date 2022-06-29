@@ -21,7 +21,7 @@ export default function Socials() {
       {SOCIAL_LINKS.map(({ icon, link }: SocialLink) => {
         const src = '/socials' + icon;
         return (
-          <div className='socials__icon'>
+          <div key={icon} className='socials__icon'>
             <BaseMedia src={src} isVideo={false}></BaseMedia>
           </div>
         );

@@ -45,13 +45,13 @@ function home({ featuredDrop, upcomingDrops }: Props) {
         </div>
         <div className='home-page__upcoming-drops-header'>
           <h1 className='home-page__upcoming-drops-header-left'>Upcoming Drops</h1>
-          <p className='home-page__upcoming-drops-header-right'>
+          <div className='home-page__upcoming-drops-header-right'>
             <div className='home-page__upcoming-drops-header-right-dot'></div>
             <h1 className='home-page__upcoming-drops-header-right-text'>
               SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL STANDARDS AND NEW
               STRUCTURES IN NFT ASSETS. A VISION IN THE CRYPTO SPACE.
             </h1>
-          </p>
+          </div>
         </div>
         <div className='home-page__upcoming-drops-grid'>
           {upcomingDrops.map((d, i: number) => {
