@@ -5,13 +5,13 @@
 .home-page {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .home-page__main {
   display: flex;
   flex-direction: column;
-  gap: min(80px, 3vw);
-  padding: 80px max(10px, 10vw);
+  gap: min(80px, 1vw);
   height: min-content;
 }
 
@@ -52,15 +52,15 @@
 
 .home-page__featured-drop-tag-sage-logo {
   position: relative;
-  height: max(40px, 4vw);
+  height: max(40px, 3vw);
   aspect-ratio: 44.48/48;
 }
 
 .home-page__featured-drop-tag-label {
   font-style: normal;
   font-weight: 400;
-  font-size: max(16px, 1vw);
-  line-height: 25px;
+  font-size: max(16px, 0.7vw);
+  line-height: max(25px, 1.5em);
   color: c.$white;
   text-transform: uppercase;
 }
@@ -154,6 +154,7 @@
 
 .home-page__events {
   @include m.interact;
+  max-width: 1440px;
   transition-duration: 200ms;
   aspect-ratio: 1440/1000;
 }
@@ -170,7 +171,7 @@
 }
 
 .home-page__event-slide-focus {
-  width: 80vw;
+  width: min(1152px, 80vw);
   aspect-ratio: 1196/600;
   box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.8);
   transform: translate(0%, 0%);
@@ -181,7 +182,7 @@
   align-items: center;
   z-index: 1;
   height: 18.3%;
-  width: 80vw;
+	width: 80%;
   text-transform: uppercase;
   font-weight: 400;
   font-size: min(40px, 3vw);
@@ -192,7 +193,7 @@
 .home-page__event-slide-content {
   z-index: 1;
   flex: 1;
-  width: 80vw;
+  width: min(1440px, 80vw);
   justify-content: space-between;
 }
 

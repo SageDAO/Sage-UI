@@ -2,13 +2,14 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/layout/layout' as l;
 .footer {
+  position: relative;
   display: flex;
   flex-direction: column;
-  padding: 0 10vw;
-  position: relative;
+	width: 100%; 
 }
 
 @mixin footer-section {
+	margin: 0 10vw;
   display: flex;
   align-items: center;
 }
@@ -54,7 +55,7 @@
 .footer__destroying-fakes {
   position: absolute;
   left: 3%;
-  top: 50%;
+	top: 50%;
   transform: translateY(-50%);
 }
 

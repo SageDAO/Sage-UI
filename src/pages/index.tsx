@@ -13,7 +13,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
   const router = useRouter();
 
   return (
-    <div className='home-page' data-cy='home-page'>
+    <div className='home-page page' data-cy='home-page'>
       <div className='home-page__main'>
         <div className='home-page__hero'>
           <div className='home-page__logotype'>
