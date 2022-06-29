@@ -124,7 +124,6 @@
 
 .home-page__upcoming-drops-tile {
   @include m.interact;
-  background-color: red;
   transition-duration: 300ms;
   transition-timing-function: ease-out;
   position: relative;
