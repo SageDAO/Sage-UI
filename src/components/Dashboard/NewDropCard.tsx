@@ -30,7 +30,7 @@ export default function NewDropCard({ drop }: Props) {
         </div>
       </div>
       <button className='nft-tile__claimbutton' onClick={handleApproveDropClick} style={{ width: '100%' }}>
-        Approve Drop
+        Approve &amp; Deploy Drop
       </button>
     </div>
   );
