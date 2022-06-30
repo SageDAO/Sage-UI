@@ -3,6 +3,7 @@ import React from 'react';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
 import { useRouter } from 'next/router';
+import Logotype from '@/components/Logotype';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;

@@ -1,3 +1,11 @@
-#artists-page {
-  flex: 1;
+.artists-page {
+	display: flex; 
+	flex-direction: column;
+	gap: 30px;
 }
+
+.artists-page__row {
+
+}
+
+

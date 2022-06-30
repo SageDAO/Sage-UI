@@ -8,12 +8,16 @@ const ConditionalWrapper = ({ condition, wrapper, children }) =>
 
 interface BaseMediaProps {
   src: string;
-  isVideo: boolean;
+  isVideo?: boolean;
   onClickHandler?: React.MouseEventHandler<HTMLImageElement>;
   isZoomable?: boolean;
 }
 
 function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps) {
+  if (!isVideo) {
+    isVideo = false;
+  }
+
   return (
     <Fragment>
       <ConditionalWrapper
