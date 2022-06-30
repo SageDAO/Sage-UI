@@ -53,6 +53,17 @@ export type DropWithArtist = Prisma.DropGetPayload<{
   };
 }>;
 
+export type DropFull = Prisma.DropGetPayload<{
+  include: {
+    Artist: true;
+    Auctions: { include: { Nft: true } };
+    Lotteries: { include: { Nfts: true } };
+    PrimarySplitter: { include: { SplitterEntries: true } };
+    SecondarySplitter: { include: { SplitterEntries: true } };
+    Whitelist: { include: { WhitelistEntries: true } };
+  };
+}>;
+
 export interface GamePrize {
   nftId: number;
   dropId: number;
