@@ -1,94 +1,116 @@
-@use "@/styles/abstracts/colors" as c;
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 
-@mixin items-margin {
-  margin-top: 16px;
+.accountmodal {
+  display: flex;
+  flex-direction: column;
+
+  width: 710px;
+  height: 527px;
 }
 
-@mixin btn {
-  @include items-margin;
-  cursor: pointer;
-  padding: 20px;
-  line-height: inherit;
-  font-size: 14px;
-  border-radius: 600px;
-  border: none;
-  font-weight: 600;
-  color: white;
-  background-color: c.$bg-base;
-	&:active {
+.accountmodal__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-		filter: brightness(0.9);
-	}
-	&:hover {
-		filter: brightness(1.1);
-	}
+.accountmodal__header-sage-logo {
+  position: relative;
+  width: 183px;
+  height: 50px;
+  aspect-ratio: 183/50;
+}
+
+.accountmodal__header-info {
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  width: 345px;
+  color: c.$white;
+}
+
+.accountmodal__header-close-button {
+  @include m.interact;
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.accountmodal__wallets {
+  display: flex;
+  flex: 1;
+}
+
+.accountmodal__wallet-item {
+  @include m.hover {
+    transform: scale(1.04);
+  }
+  background-color: transparent;
+  cursor: pointer;
+  transition-duration: 30ms;
+  width: 50%;
+  height: 100%;
+  gap: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   &:disabled {
-    background-color: c.$text-gray;
+    pointer-events: none;
     filter: brightness(0.3);
-		cursor: default;
   }
 }
 
-
-.accountmodal {
-  width: max(100%);
-  display: flex;
-  min-height: 400px;
-  flex-direction: column;
-  @include items-margin;
+.accountmodal__wallet-icon {
+  // width: 120px;
+  // height: 120px;
+  // position: relative;
 }
 
-.accountmodal__loader-container {
+.accountmodal__wallet-name {
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  text-align: center;
+  color: c.$white;
+}
+
+.accountmodal__auth {
+  flex: 1;
   display: flex;
   justify-content: center;
-  @include items-margin;
+  align-items: center;
 }
 
-.session {
+.accountmodal__auth-ethereum-icon {
+  width: 20px;
+  height: 30px;
+}
+
+@mixin auth-button {
+  @include m.hover {
+    transform: scale(1.04);
+  }
+  align-items: center;
+  gap: 10px;
   display: flex;
-  flex-direction: column;
+  cursor: pointer;
+  transition-duration: 200ms;
+  border: 1px solid c.$light;
+  color: c.$light;
+  padding: 10px 20px;
+  background-color: transparent;
 }
 
-.session__status {
-  @include items-margin;
+.accountmodal__auth-sign-in-button {
+  @include auth-button;
 }
 
-.accountmodal__profile-btn {
-  @include btn;
-}
-
-.accountmodal__sign-in-btn {
-  @include btn;
-  background-color: c.$green;
-}
-
-.accountmodal__sign-out-btn {
-  @include btn;
-	background-color: red;
-}
-
-.connectors {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.connectors__title {
-  @include items-margin;
-}
-
-.connectors__current-address {
-  @include items-margin;
-}
-
-.connectors__current-chain {
-  @include items-margin;
-}
-
-.connectors__option {
-  @include btn;
-}
-
-.connectors__disconnect {
-  @include btn;
+.accountmodal__auth-sign-out-button {
+  @include auth-button;
 }

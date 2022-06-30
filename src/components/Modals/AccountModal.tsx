@@ -14,6 +14,8 @@ import shortenAddress from '@/utilities/shortenAddress';
 import { getCsrfToken, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useSignInMutation, useSignOutMutation } from '@/store/services/user';
+import { BaseMedia } from '../Media';
+import Image from 'next/image';
 
 interface Props extends ModalProps {
   isLoading: boolean;
@@ -22,16 +24,21 @@ interface Props extends ModalProps {
 
 export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoading }: Props) {
   const { data: accountData } = useAccount();
-  const { data: sessionData } = useSession();
-  const { connectors, connectAsync, activeConnector } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { data: sessionData, status: sessionStatus } = useSession();
+  const { connectors, connectAsync, activeConnector, isConnecting } = useConnect();
   const [signIn, { isLoading: isSigningIn }] = useSignInMutation();
   const [signOut] = useSignOutMutation();
   const { signMessageAsync } = useSignMessage();
   const { activeChain } = useNetwork();
-  const { disconnect } = useDisconnect();
   const router = useRouter();
 
-  const handleSignInClick = async () => {
+  const showWalletSelection: boolean = Boolean(!accountData);
+  const showAuthSection: boolean = Boolean(accountData);
+  const showSignOutButton: boolean = Boolean(sessionStatus === 'authenticated');
+  const showSignInButton: boolean = Boolean(sessionStatus !== 'authenticated');
+
+  async function handleSignInClick() {
     try {
       setIsLoading(true);
       const nonce = await getCsrfToken();
@@ -53,7 +60,12 @@ export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoadi
       console.error(error);
       setIsLoading(false);
     }
-  };
+  }
+
+  async function handleSignOutClick() {
+    signOut(null);
+    disconnect();
+  }
 
   async function handleConnectClick(c: Connector<any, any>) {
     try {
@@ -66,80 +78,107 @@ export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoadi
   }
 
   return (
-    <Modal title='Account' isOpen={isOpen} closeModal={closeModal}>
+    <Modal title='' isOpen={isOpen} closeModal={closeModal}>
       <div className='accountmodal'>
-        <div className='connectors'>
-          <h1 className='connectors__title'>
-            {accountData ? `Connected to ${activeConnector?.name}` : 'Connect Options:'}
+        <section className='accountmodal__header'>
+          <div className='accountmodal__header-sage-logo'>
+            <BaseMedia src='/branding/sage-full-logo.svg'></BaseMedia>
+          </div>
+          <h1 className='accountmodal__header-info'>
+            SELECT YOUR WALLET YOU WANT TO CONNECT. REMEMBER SAGE WILL NEVER ASK FOR YOUR SECRET
+            KEYS OR ANY CONFIDENTIAL INFO.
           </h1>
-          {accountData && (
-            <h1 className='connectors__current-address'>
-              WalletAddress: {shortenAddress(accountData?.address as string)}
-            </h1>
-          )}
+          <div className='accountmodal__header-close-button' onClick={closeModal}>
+            <BaseMedia src='/interactive/close.svg'></BaseMedia>
+          </div>
+        </section>
 
-          {accountData && (
-            <h1 className='connectors__current-chain'>Network: {activeChain?.name}</h1>
-          )}
-          {!accountData &&
-            connectors.map((c) => {
-              return (
-                <button className='connectors__option' key={c.name}>
-                  <h1
-                    onClick={() => {
-                      handleConnectClick(c);
-                    }}
-                  >
-                    {c.name}
-                  </h1>
-                </button>
-              );
-            })}
-          {accountData && (
+        {showWalletSelection && (
+          <section className='accountmodal__wallets'>
             <button
-              className='connectors__disconnect'
+              className='accountmodal__wallet-item'
+              disabled={isConnecting}
               onClick={() => {
-                disconnect();
+                const c = connectors[0];
+                handleConnectClick(c);
               }}
             >
-              Disconnect
+              <div className='accountmodal__wallet-icon'>
+                <Image src='/icons/metamask.svg' width={120} height={120}></Image>
+              </div>
+              <h1 className='accountmodal__wallet-name'>metamask</h1>
             </button>
-          )}
-        </div>
-        <div className='session'>
-          <h1 className='session__status'>
-            {sessionData
-              ? `Signed In As: ${shortenAddress(sessionData?.address as string)}`
-              : `Sign In With Ethereum`}
-          </h1>
-          {sessionData ? (
-            <button className='accountmodal__sign-out-btn' onClick={() => signOut(null)}>
-              Sign Out
-            </button>
-          ) : (
             <button
-              className='accountmodal__sign-in-btn'
-              onClick={handleSignInClick}
-              disabled={isLoading || !accountData || isSigningIn}
+              className='accountmodal__wallet-item'
+              disabled={isConnecting}
+              onClick={async () => {
+                const c = connectors[1];
+                handleConnectClick(c);
+              }}
             >
-              Sign In
+              <div className='accountmodal__wallet-icon'>
+                <Image src='/icons/walletconnect.svg' height={103.5} width={120}></Image>
+              </div>
+              <h1 className='accountmodal__wallet-name'>walletconnect</h1>
             </button>
-          )}
-          <button
-            className='accountmodal__profile-btn'
-            onClick={async () => {
-              await router.push('/profile');
-              closeModal();
-            }}
-            disabled={!sessionData}
-          >
-            Go to Profile
-          </button>
-        </div>
-        {isLoading && (
-          <div className='accountmodal__loader-container'>
-            <Loader type='ThreeDots' color='white' secondaryColor='yellow' />
-          </div>
+          </section>
+        )}
+        {showAuthSection && (
+          <section className='accountmodal__auth'>
+            {showSignInButton && (
+              <button
+                className='accountmodal__auth-sign-in-button'
+                onClick={handleSignInClick}
+                disabled={isLoading}
+              >
+                <svg
+                  className='accountmodal__auth-ethereum-icon'
+                  width='35'
+                  height='58'
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 35 58'
+                  fill='none'
+                >
+                  <path
+                    d='M17.4954 0L17.1132 1.29889V38.9897L17.4954 39.3711L34.991 29.0295L17.4954 0Z'
+                    fill='white'
+                    data-darkreader-inline-fill=''
+                  ></path>
+                  <path
+                    d='M17.4956 0L0 29.0295L17.4956 39.3713V21.0773V0Z'
+                    fill='white'
+                    data-darkreader-inline-fill=''
+                  ></path>
+                  <path
+                    d='M17.494 42.6838L17.2786 42.9463V56.3726L17.494 57.0017L35 32.3474L17.494 42.6838Z'
+                    fill='white'
+                    data-darkreader-inline-fill=''
+                  ></path>
+                  <path
+                    d='M17.4956 57.0014V42.6835L0 32.3471L17.4956 57.0014Z'
+                    fill='white'
+                    data-darkreader-inline-fill=''
+                  ></path>
+                  <path
+                    d='M17.4965 39.3711L34.9919 29.0296L17.4965 21.0774V39.3711Z'
+                    fill='white'
+                    data-darkreader-inline-fill=''
+                  ></path>
+                  <path
+                    d='M0 29.0296L17.4954 39.3711V21.0774L0 29.0296Z'
+                    fill='white'
+                    data-darkreader-inline-fill=''
+                  ></path>
+                </svg>
+                Sign In With Ethereum
+              </button>
+            )}
+            {showSignOutButton && (
+              <button className='accountmodal__auth-sign-out-button' onClick={handleSignOutClick}>
+                Sign Out
+              </button>
+            )}
+          </section>
         )}
       </div>
     </Modal>
