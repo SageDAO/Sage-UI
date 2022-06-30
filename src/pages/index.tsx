@@ -54,8 +54,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
           </div>
         </div>
         <div className='home-page__upcoming-drops-grid'>
-          {upcomingDrops.map((d, i: number) => {
-            if (i > 3) return;
+          {upcomingDrops.map((d) => {
             const src = d.bannerImageS3Path;
             const onClick = () => {
               router.push(`/drops/${d.id}`);
@@ -94,14 +93,18 @@ function home({ featuredDrop, upcomingDrops }: Props) {
 export async function getStaticProps() {
   let drops: Drop_include_GamesAndArtist[] = await prisma.drop.findMany({
     where: { approvedAt: { not: null } },
+    orderBy: {
+      approvedAt: 'desc',
+    },
     include: {
       Artist: true,
-      Lotteries: { include: { Nfts: true } },
-      Auctions: { include: { Nft: true } },
+      Lotteries: { include: { Nfts: true }, where: { contractAddress: { not: null } } },
+      Auctions: { include: { Nft: true }, where: { contractAddress: { not: null } } },
     },
   });
 
-  const upcomingDrops = drops.sort((a, b) => +b.createdAt - +a.createdAt);
+  const upcomingDrops = drops.splice(0, 4);
+  //TODO: discuss and implement choosing and querying featured drop
   const featuredDrop = upcomingDrops[0];
 
   return {

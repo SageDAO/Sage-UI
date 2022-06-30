@@ -153,6 +153,7 @@
 }
 
 .home-page__events {
+  margin-top: 19px;
   @include m.interact;
   max-width: 1440px;
   transition-duration: 200ms;
@@ -182,7 +183,7 @@
   align-items: center;
   z-index: 1;
   height: 18.3%;
-	width: 80%;
+  width: 80%;
   text-transform: uppercase;
   font-weight: 400;
   font-size: min(40px, 3vw);
