@@ -1,6 +1,8 @@
 import { DropWithArtist } from '@/prisma/types';
-import { useApproveDropMutation } from '@/store/services/dropsReducer';
+import { useApproveAndDeployDropMutation } from '@/store/services/dropsReducer';
+import { Signer } from 'ethers';
 import { toast } from 'react-toastify';
+import { useSigner } from 'wagmi';
 import { BaseMedia, PfpImage } from '../Media';
 
 interface Props {
@@ -8,10 +10,11 @@ interface Props {
 }
 
 export default function NewDropCard({ drop }: Props) {
-  const [approveDrop] = useApproveDropMutation();
+  const [approveAndDeployDrop] = useApproveAndDeployDropMutation();
+  const { data: signer } = useSigner();
 
-  const handleApproveDropClick = async () => {
-    await approveDrop(drop.id);
+  const handleBtnClick = async () => {
+    await approveAndDeployDrop({ dropId: drop.id, signer: signer as Signer });
     toast.success('Drop Approved!');
   };
 
@@ -29,7 +32,7 @@ export default function NewDropCard({ drop }: Props) {
           <div className='collection__tile-artist-name'>by {drop.Artist.displayName || 'anon'}</div>
         </div>
       </div>
-      <button className='nft-tile__claimbutton' onClick={handleApproveDropClick} style={{ width: '100%' }}>
+      <button className='nft-tile__claimbutton' onClick={handleBtnClick} style={{ width: '100%' }}>
         Approve &amp; Deploy Drop
       </button>
     </div>

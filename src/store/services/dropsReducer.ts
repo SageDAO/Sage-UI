@@ -1,7 +1,7 @@
 import { DropWithArtist, Drop_include_GamesAndArtist } from '@/prisma/types';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ethers } from 'ethers';
+import { ethers, Signer } from 'ethers';
 
 export const dropsApi = createApi({
   reducerPath: 'dropsApi',
@@ -17,28 +17,24 @@ export const dropsApi = createApi({
       query: () => `drops?action=GetDropsPendingApproval`,
       providesTags: ['PendingDrops'],
     }),
-    approveDrop: builder.mutation<Date, number>({
-      queryFn: async (dropId, {}, extraOptions, fetchWithBQ) => {
-        
-        const { data } = await fetchWithBQ({
-          url: `drops?action=ApproveDrop`,
-          method: 'POST',
-          body: { id: dropId },
-        });
-        return { data: (data as any).approvedAt as Date };
+    approveAndDeployDrop: builder.mutation<null, { dropId: number; signer: Signer }>({
+      queryFn: async ({ dropId, signer }, {}, _, fetchWithBQ) => {
+        await deployDrop(dropId, signer, fetchWithBQ);
+        return { data: null };
       },
       invalidatesTags: ['PendingDrops'],
     }),
   }),
 });
 
-async function deployDrop(dropId: number, fetchWithBQ: any) {
-  const drop = {} as any; // fetch from db
+async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
+  const drop = {} as any; // TODO: fetch from db
   inspectDropEndTimes(drop);
-  deploySplitters(drop);
-  deployNftCollection(drop);
-  deployAuctions(drop);
-  deployLotteries(drop);
+  deploySplitters(drop, signer);
+  deployNftCollection(drop, signer);
+  deployAuctions(drop, signer);
+  deployLotteries(drop, signer);
+  updateDbApprovedDate(drop, fetchWithBQ);
 }
 
 async function inspectDropEndTimes(drop: any) {
@@ -51,22 +47,28 @@ async function inspectDropEndTimes(drop: any) {
   }
 }
 
-async function deploySplitters(drop: any) {
-  let primarySplitterAddress = drop.PrimarySplitter?.splitterAddress;
-  if (drop.primarySplitterId != null && primarySplitterAddress == null) {
-    drop.PrimarySplitter.splitterAddress = await deploySplitter(drop.id, drop.primarySplitterId);
+async function deploySplitters(drop: any, signer: Signer) {
+  // TODO: reuse existing splitters
+  if (drop.primarySplitterId && !drop.PrimarySplitter?.splitterAddress) {
+    drop.PrimarySplitter.splitterAddress = await deploySplitter(
+      drop.id,
+      drop.primarySplitterId,
+      signer
+    );
+    // TODO: save new address to db
   }
 
-  let secondarySplitterAddress = drop.SecondarySplitter?.splitterAddress;
-  if (drop.secondarySplitterId != null && secondarySplitterAddress == null) {
+  if (drop.secondarySplitterId && !drop.SecondarySplitter?.splitterAddress) {
     drop.SecondarySplitter.splitterAddress = await deploySplitter(
       drop.id,
-      drop.secondarySplitterId
+      drop.secondarySplitterId,
+      signer
     );
+    // TODO: save new address to db
   }
 }
 
-async function deploySplitter(dropId: number, splitterId: number) {
+async function deploySplitter(dropId: number, splitterId: number, signer: Signer) {
   // let owner = await ethers.getSigner();
   // let splitEntries = await prisma.splitEntry.findMany({
   //   where: {
@@ -101,7 +103,7 @@ async function deploySplitter(dropId: number, splitterId: number) {
   // return splitAddress;
 }
 
-async function deployNftCollection(drop: any) {
+async function deployNftCollection(drop: any, signer: Signer) {
   const nftContract = await getNFTContract(); // TODO: use SIGNER
   const collectionExists = await nftContract.collectionExists(drop.id);
 
@@ -134,7 +136,7 @@ async function deployNftCollection(drop: any) {
   console.log('Collection created');
 }
 
-async function deployAuctions(drop: any) {
+async function deployAuctions(drop: any, signer: Signer) {
   const nftContractAddress = (await getNFTContract()).address; // TODO: use SIGNER
   const auctionContract = await getAuctionContract(); // TODO: use SIGNER
 
@@ -174,7 +176,7 @@ async function deployAuctions(drop: any) {
   }
 }
 
-async function deployLotteries(drop: any) {
+async function deployLotteries(drop: any, signer: Signer) {
   const nftContractAddress = (await getNFTContract()).address; // TODO: use SIGNER
   const lotteryContract = await getLotteryContract(); // TODO: use SIGNER
 
@@ -214,7 +216,9 @@ async function deployLotteries(drop: any) {
       await lotteryContract.setMaxTickets(lottery.id, lottery.maxTickets);
     }
     if (lottery.maxTicketsPerUser > 0) {
-      console.log(`LotteryContract.setMaxTicketsPerUser(${lottery.id}, ${lottery.maxTicketsPerUser})`);
+      console.log(
+        `LotteryContract.setMaxTicketsPerUser(${lottery.id}, ${lottery.maxTicketsPerUser})`
+      );
       await lotteryContract.setMaxTicketsPerUser(lottery.id, lottery.maxTicketsPerUser);
     }
 
@@ -231,7 +235,7 @@ async function deployLotteries(drop: any) {
   }
 }
 
-async function addPrizes(lotteryId: number) {
+async function addPrizes(lotteryId: number, signer: Signer) {
   const lotteryContract = await getLotteryContract(); // TODO: use SIGNER
   const prizes = new Array<any>();
   // let prizes = await prisma.nft.findMany({
@@ -256,5 +260,17 @@ async function addPrizes(lotteryId: number) {
   }
 }
 
-export const { useGetApprovedDropsQuery, useGetDropsPendingApprovalQuery, useApproveDropMutation } =
-  dropsApi;
+async function updateDbApprovedDate(drop: any, fetchWithBQ: any): Promise<Date> {
+  const { data } = await fetchWithBQ({
+    url: `drops?action=ApproveDrop`,
+    method: 'POST',
+    body: { id: drop.id },
+  });
+  return data.approvedAt;
+}
+
+export const {
+  useGetApprovedDropsQuery,
+  useGetDropsPendingApprovalQuery,
+  useApproveAndDeployDropMutation,
+} = dropsApi;
