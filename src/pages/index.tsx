@@ -17,7 +17,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
       <div className='home-page__main'>
         <div className='home-page__hero'>
           <div className='home-page__logotype'>
-            <BaseMedia src='/branding/landing-logo.svg' isVideo={false} />
+            <BaseMedia src='/branding/sage-logotype.svg' isVideo={false} />
           </div>
           <div className='home-page__hero-banner'>
             <BaseMedia

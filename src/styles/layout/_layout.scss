@@ -7,13 +7,13 @@ $indent: max(1em, 10vw);
   flex-direction: column;
   color: c.$white;
   background-color: c.$dark;
-  min-height: 100vh;
   overflow-x: visible;
 }
 
 .layout__main {
   position: relative;
   display: flex;
+  min-height: 100vh;
   align-items: center;
   flex: 1;
   flex-direction: column;

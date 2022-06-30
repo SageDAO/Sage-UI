@@ -83,8 +83,8 @@ export default function Layout({ children, router }: Props) {
           ></Image>
         </div>
         {children}
-        <Footer />
       </motion.div>
+      <Footer />
     </div>
   );
 }
