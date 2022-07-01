@@ -1,4 +1,10 @@
-import { DropFull, DropWithArtist, Drop_include_GamesAndArtist, Nft } from '@/prisma/types';
+import {
+  DropFull,
+  DropWithArtist,
+  Drop_include_GamesAndArtist,
+  Nft,
+  Splitter_include_Entries,
+} from '@/prisma/types';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ethers, Signer } from 'ethers';
@@ -31,9 +37,9 @@ async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
   inspectDropGamesEndTimes(drop);
   deploySplitters(drop, signer, fetchWithBQ);
-  deployNftCollection(drop, signer);
-  deployAuctions(drop, signer, fetchWithBQ);
-  deployLotteries(drop, signer, fetchWithBQ);
+  createNftCollection(drop, signer);
+  createAuctions(drop, signer, fetchWithBQ);
+  createLotteries(drop, signer, fetchWithBQ);
   updateDbApprovedDate(drop, fetchWithBQ);
 }
 
@@ -42,7 +48,7 @@ async function inspectDropGamesEndTimes(drop: DropFull) {
   const games = new Array().concat(drop.Auctions, drop.Lotteries);
   for (var game of games) {
     if (game.endTime < now && !game.contractAddress) {
-      throw new Error('One or more games have already ended; please fix before deploying drop.');
+      throw new Error('One or more games have already ended; please fix dates before deploying drop.');
     }
   }
 }
@@ -50,67 +56,44 @@ async function inspectDropGamesEndTimes(drop: DropFull) {
 async function deploySplitters(drop: DropFull, signer: Signer, fetchWithBQ: any) {
   // TODO: reuse existing splitters
   if (drop.primarySplitterId && drop.PrimarySplitter && !drop.PrimarySplitter.splitterAddress) {
-    drop.PrimarySplitter.splitterAddress = await deploySplitter(
-      drop.id,
-      drop.primarySplitterId,
-      signer
-    );
+    drop.PrimarySplitter.splitterAddress = await deploySplitter(drop.PrimarySplitter, signer);
     const params = `id=${drop.primarySplitterId}&address=${drop.PrimarySplitter.splitterAddress}`;
     await fetchWithBQ(`drops?action=UpdateSplitterAddress&${params}`);
   }
-
   if (
     drop.secondarySplitterId &&
     drop.SecondarySplitter &&
     !drop.SecondarySplitter?.splitterAddress
   ) {
-    drop.SecondarySplitter.splitterAddress = await deploySplitter(
-      drop.id,
-      drop.secondarySplitterId,
-      signer
-    );
+    drop.SecondarySplitter.splitterAddress = await deploySplitter(drop.SecondarySplitter, signer);
     const params = `id=${drop.secondarySplitterId}&address=${drop.SecondarySplitter.splitterAddress}`;
     await fetchWithBQ(`drops?action=UpdateSplitterAddress&${params}`);
   }
 }
 
-async function deploySplitter(dropId: number, splitterId: number, signer: Signer): Promise<string> {
-  let owner = await ethers.getSigner();
-  let splitEntries = await prisma.splitEntry.findMany({
-    where: {
-      splitterId: splitId,
-    },
-  });
-  if (splitEntries.length == 0) {
-    logger.error(`No split addresses found for Drop #${dropId}`);
-    return null;
-  }
-  let splitAddress;
-  if (splitEntries.length == 1) {
-    logger.info(`Only one split address found for Drop #${dropId}. No splitter needed.`);
-    splitAddress = splitEntries[0].destinationAddress;
+async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer): Promise<string> {
+  let splitterAddress: string;
+  if (splitter.SplitterEntries.length == 1) {
+    console.log(`deploySplitter() :: Only one split address found, no splitter needed.`);
+    splitterAddress = splitter.SplitterEntries[0].destinationAddress;
   } else {
-    logger.info(`Deploying splitter for splitId #${splitId}`);
+    console.log(`deploySplitter() :: Deploying splitter...`);
     let destinations = new Array();
     let weights = new Array();
-    for (i = 0; i < splitEntries.length; i++) {
-      destinations.push(splitEntries[i].destinationAddress);
-      weights.push(parseInt(splitEntries[i].percent * 100)); // royalty percentage using basis points. 1% = 100
+    for (var i = 0; i < splitter.SplitterEntries.length; i++) {
+      destinations.push(splitter.SplitterEntries[i].destinationAddress);
+      weights.push(Math.floor(splitter.SplitterEntries[i].percent * 100)); // royalty percentage using basis points. 1% = 100
     }
-    const Splitter = await ethers.getContractFactory('Splitter');
-    const splitter = await Splitter.deploy(owner.address, destinations, weights);
-    splitAddress = splitter.address;
-    logger.info(`Splitter deployed to ${splitAddress}`);
+    const splitterJson = require('@/constants/abis/Utils/Splitter.sol/Splitter');
+    const contractFactory = new ethers.ContractFactory(splitterJson.abi, splitterJson.data.bytecode.object, signer);
+    const contractInstance = await contractFactory.deploy(signer.getAddress(), destinations, weights);
+    splitterAddress = contractInstance.address;
+    console.log(`deploySplitter() :: Splitter deployed to ${splitterAddress}`);
   }
-  await prisma.splitter.update({
-    where: { id: splitId },
-    data: { splitterAddress: splitAddress },
-  });
-  return splitAddress;
-  return '';
+  return splitterAddress;
 }
 
-async function deployNftCollection(drop: DropFull, signer: Signer) {
+async function createNftCollection(drop: DropFull, signer: Signer) {
   const nftContract = await getNFTContract(signer);
   const collectionExists = await nftContract.collectionExists(drop.id);
 
@@ -143,7 +126,7 @@ async function deployNftCollection(drop: DropFull, signer: Signer) {
   console.log('Collection created');
 }
 
-async function deployAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) {
+async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) {
   const nftContractAddress = (await getNFTContract(signer)).address;
   const auctionContract = await getAuctionContract(signer);
 
@@ -176,7 +159,7 @@ async function deployAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
   }
 }
 
-async function deployLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any) {
+async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any) {
   const nftContractAddress = (await getNFTContract(signer)).address;
   const lotteryContract = await getLotteryContract(signer);
 

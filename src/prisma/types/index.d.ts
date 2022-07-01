@@ -116,3 +116,9 @@ export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{
 export type SafeUserUpdate = Partial<
   Pick<User, 'displayName' | 'username' | 'email' | 'bio' | 'profilePicture'>
 >;
+
+export type Splitter_include_Entries = Prisma.SplitterGetPayload<{
+  include: {
+    SplitterEntries: true;
+  };
+}>;
