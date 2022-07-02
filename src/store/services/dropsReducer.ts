@@ -48,7 +48,9 @@ async function inspectDropGamesEndTimes(drop: DropFull) {
   const games = new Array().concat(drop.Auctions, drop.Lotteries);
   for (var game of games) {
     if (game.endTime < now && !game.contractAddress) {
-      throw new Error('One or more games have already ended; please fix dates before deploying drop.');
+      throw new Error(
+        'One or more games have already ended; please fix dates before deploying drop.'
+      );
     }
   }
 }
@@ -85,8 +87,16 @@ async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer
       weights.push(Math.floor(splitter.SplitterEntries[i].percent * 100)); // royalty percentage using basis points. 1% = 100
     }
     const splitterJson = require('@/constants/abis/Utils/Splitter.sol/Splitter');
-    const contractFactory = new ethers.ContractFactory(splitterJson.abi, splitterJson.data.bytecode.object, signer);
-    const contractInstance = await contractFactory.deploy(signer.getAddress(), destinations, weights);
+    const contractFactory = new ethers.ContractFactory(
+      splitterJson.abi,
+      splitterJson.data.bytecode.object,
+      signer
+    );
+    const contractInstance = await contractFactory.deploy(
+      signer.getAddress(),
+      destinations,
+      weights
+    );
     splitterAddress = contractInstance.address;
     console.log(`deploySplitter() :: Splitter deployed to ${splitterAddress}`);
   }
@@ -176,9 +186,9 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
     console.log(
       `LotteryContract.createNewLottery(${l.id}, ${l.dropId}, ${
         l.costPerTicketPoints
-      }), ${costPerTicketTokens}, ${startTime}, ${endTime}, ${nftContractAddress}, ${
+      }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${nftContractAddress}, ${
         l.isRefundable
-      }, ${l.defaultPrizeId || 0}, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0}`
+      }, ${l.defaultPrizeId || 0}, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0})`
     );
     const tx = await lotteryContract.createLottery(
       l.id,
