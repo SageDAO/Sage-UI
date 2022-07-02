@@ -1,3 +1,5 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ethers, Signer } from 'ethers';
 import {
   DropFull,
   DropWithArtist,
@@ -6,8 +8,7 @@ import {
   Splitter_include_Entries,
 } from '@/prisma/types';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ethers, Signer } from 'ethers';
+import splitterJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
 
 export const dropsApi = createApi({
   reducerPath: 'dropsApi',
@@ -36,21 +37,19 @@ export const dropsApi = createApi({
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
   inspectDropGamesEndTimes(drop);
-  deploySplitters(drop, signer, fetchWithBQ);
-  createNftCollection(drop, signer);
-  createAuctions(drop, signer, fetchWithBQ);
-  createLotteries(drop, signer, fetchWithBQ);
-  updateDbApprovedDate(drop, fetchWithBQ);
+  await deploySplitters(drop, signer, fetchWithBQ);
+  await createNftCollection(drop, signer);
+  await createAuctions(drop, signer, fetchWithBQ);
+  await createLotteries(drop, signer, fetchWithBQ);
+  await updateDbApprovedDate(drop, fetchWithBQ);
 }
 
-async function inspectDropGamesEndTimes(drop: DropFull) {
+function inspectDropGamesEndTimes(drop: DropFull) {
   const now = Math.floor(Date.now() / 1000);
   const games = new Array().concat(drop.Auctions, drop.Lotteries);
   for (var game of games) {
     if (game.endTime < now && !game.contractAddress) {
-      throw new Error(
-        'One or more games have already ended; please fix dates before deploying drop.'
-      );
+      throw new Error('One or more games have already ended; please fix dates and try again.');
     }
   }
 }
@@ -86,10 +85,9 @@ async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer
       destinations.push(splitter.SplitterEntries[i].destinationAddress);
       weights.push(Math.floor(splitter.SplitterEntries[i].percent * 100)); // royalty percentage using basis points. 1% = 100
     }
-    const splitterJson = require('@/constants/abis/Utils/Splitter.sol/Splitter');
     const contractFactory = new ethers.ContractFactory(
       splitterJson.abi,
-      splitterJson.data.bytecode.object,
+      splitterJson.bytecode,
       signer
     );
     const contractInstance = await contractFactory.deploy(

@@ -10,12 +10,17 @@ interface Props {
 }
 
 export default function NewDropCard({ drop }: Props) {
-  const [approveAndDeployDrop] = useApproveAndDeployDropMutation();
   const { data: signer } = useSigner();
+  const [approveAndDeployDrop] = useApproveAndDeployDropMutation();
 
   const handleBtnClick = async () => {
-    await approveAndDeployDrop({ dropId: drop.id, signer: signer as Signer });
-    toast.success('Drop Approved!');
+    try {
+      console.log(signer)
+      await approveAndDeployDrop({ dropId: drop.id, signer: signer as Signer });
+      toast.success('Drop Approved and Deployed!');
+    } catch (e) {
+      toast.error('Error deploying drop, check browser console for details.')
+    }
   };
 
   return (
