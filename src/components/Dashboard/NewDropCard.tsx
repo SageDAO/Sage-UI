@@ -1,6 +1,7 @@
 import { DropWithArtist } from '@/prisma/types';
 import { useApproveAndDeployDropMutation } from '@/store/services/dropsReducer';
 import { Signer } from 'ethers';
+import Loader from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
 import { BaseMedia, PfpImage } from '../Media';
@@ -11,15 +12,18 @@ interface Props {
 
 export default function NewDropCard({ drop }: Props) {
   const { data: signer } = useSigner();
-  const [approveAndDeployDrop] = useApproveAndDeployDropMutation();
+  const [approveAndDeployDrop, { isLoading: isDeploying }] = useApproveAndDeployDropMutation();
 
   const handleBtnClick = async () => {
-    try {
-      console.log(signer)
-      await approveAndDeployDrop({ dropId: drop.id, signer: signer as Signer });
+    if (!signer) {
+      toast.info('Sign In With Ethereum before continuing');
+      return;
+    }
+    const result = await approveAndDeployDrop({ dropId: drop.id, signer: signer as Signer });
+    if ((result as any).data) {
       toast.success('Drop Approved and Deployed!');
-    } catch (e) {
-      toast.error('Error deploying drop, check browser console for details.')
+    } else {
+      toast.error('Error deploying drop, check browser console for details.');
     }
   };
 
@@ -38,7 +42,14 @@ export default function NewDropCard({ drop }: Props) {
         </div>
       </div>
       <button className='nft-tile__claimbutton' onClick={handleBtnClick} style={{ width: '100%' }}>
-        Approve &amp; Deploy Drop
+        {isDeploying ? (
+          <>
+            <Loader type='TailSpin' color='white' height='15px' width='15px' /> 
+            <span style={{ marginLeft: '15px' }}>Deploying, please wait...</span>
+          </>
+        ) : (
+          <>Approve &amp; Deploy Drop</>
+        )}
       </button>
     </div>
   );

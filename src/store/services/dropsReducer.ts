@@ -4,7 +4,6 @@ import {
   DropFull,
   DropWithArtist,
   Drop_include_GamesAndArtist,
-  Nft,
   Splitter_include_Entries,
 } from '@/prisma/types';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
@@ -24,10 +23,15 @@ export const dropsApi = createApi({
       query: () => `drops?action=GetDropsPendingApproval`,
       providesTags: ['PendingDrops'],
     }),
-    approveAndDeployDrop: builder.mutation<null, { dropId: number; signer: Signer }>({
+    approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
       queryFn: async ({ dropId, signer }, {}, _, fetchWithBQ) => {
-        await deployDrop(dropId, signer, fetchWithBQ);
-        return { data: null };
+        try {
+          await deployDrop(dropId, signer, fetchWithBQ);
+          return { data: true };
+        } catch (e) {
+          console.log(e);
+          return { data: false };
+        }
       },
       invalidatesTags: ['PendingDrops'],
     }),
@@ -41,7 +45,7 @@ async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   await createNftCollection(drop, signer);
   await createAuctions(drop, signer, fetchWithBQ);
   await createLotteries(drop, signer, fetchWithBQ);
-  await updateDbApprovedDate(drop, fetchWithBQ);
+  await updateDbApprovedDateAndIsLiveFlags(drop, fetchWithBQ);
 }
 
 function inspectDropGamesEndTimes(drop: DropFull) {
@@ -75,7 +79,7 @@ async function deploySplitters(drop: DropFull, signer: Signer, fetchWithBQ: any)
 async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer): Promise<string> {
   let splitterAddress: string;
   if (splitter.SplitterEntries.length == 1) {
-    console.log(`deploySplitter() :: Only one split address found, no splitter needed.`);
+    console.log(`deploySplitter() :: Only one destination address found, no splitter needed.`);
     splitterAddress = splitter.SplitterEntries[0].destinationAddress;
   } else {
     console.log(`deploySplitter() :: Deploying splitter...`);
@@ -180,13 +184,22 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
     const startTime = Math.floor(new Date(l.startTime).getTime() / 1000);
     const endTime = Math.floor(new Date(l.endTime).getTime() / 1000);
     const costPerTicketTokens = ethers.utils.parseEther(l.costPerTicketTokens.toString());
-
+    const prizeIds = Array();
+    const prizeAmounts = Array();
+    for (const nft of l.Nfts) {
+      if (nft.numberOfEditions > 0) {
+        prizeIds.push(nft.id);
+        prizeAmounts.push(nft.numberOfEditions);
+      }
+    }
     console.log(
       `LotteryContract.createNewLottery(${l.id}, ${l.dropId}, ${
         l.costPerTicketPoints
       }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${nftContractAddress}, ${
         l.isRefundable
-      }, ${l.defaultPrizeId || 0}, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0})`
+      }, ${l.defaultPrizeId || 0}, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0}, [${
+        prizeIds.length
+      }], [${prizeAmounts.length}])`
     );
     const tx = await lotteryContract.createLottery(
       l.id,
@@ -199,37 +212,19 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
       l.isRefundable,
       l.defaultPrizeId || 0,
       l.maxTickets || 0,
-      l.maxTicketsPerUser || 0
+      l.maxTicketsPerUser || 0,
+      prizeIds,
+      prizeAmounts
     );
     await tx.wait();
 
     const params = `id=${l.id}&address=${lotteryContract.address}`;
     await fetchWithBQ(`drops?action=UpdateLotteryContractAddress&${params}`);
-
-    await addPrizes(l.id, l.Nfts, signer);
   }
 }
 
-async function addPrizes(lotteryId: number, nfts: Nft[], signer: Signer) {
-  const lotteryContract = await getLotteryContract(signer);
-  const prizeIds = Array();
-  const prizeAmounts = Array();
-  for (const nft of nfts) {
-    if (nft.numberOfEditions > 0) {
-      prizeIds.push(nft.id);
-      prizeAmounts.push(nft.numberOfEditions);
-    }
-  }
-  if (prizeIds.length > 0) {
-    console.log(`lotteryContract.addPrizes(${lotteryId}, ${prizeIds}, ${prizeAmounts})`);
-    const tx = await lotteryContract.addPrizes(lotteryId, prizeIds, prizeAmounts);
-    await tx.wait();
-  }
-}
-
-async function updateDbApprovedDate(drop: DropFull, fetchWithBQ: any): Promise<Date> {
-  const { data } = await fetchWithBQ(`drops?action=UpdateApprovedDate&id=${drop.id}`);
-  // TODO: set isLive flags for all games
+async function updateDbApprovedDateAndIsLiveFlags(drop: DropFull, fetchWithBQ: any): Promise<Date> {
+  const { data } = await fetchWithBQ(`drops?action=UpdateApprovedDateAndIsLiveFlags&id=${drop.id}`);
   return data.approvedAt;
 }
 
