@@ -172,16 +172,25 @@ export async function getStaticProps({
     },
   });
 
+  if (!params) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
   const drop = await prisma.drop.findFirst({
     ...dropPageQuery,
-    where: { id: Number(params!.id) },
+    where: { id: Number(params.id) },
   });
 
   //redirect to home page of data for this drop is not availablee
   if (!drop) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/404',
         permanent: false,
       },
     };

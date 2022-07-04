@@ -3,7 +3,8 @@ import React from 'react';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
 import { useRouter } from 'next/router';
-import Logotype from '@/components/Logotype';
+import Hero from '@/components/Hero';
+Hero;
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -16,18 +17,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
   return (
     <div className='home-page page' data-cy='home-page'>
       <div className='home-page__main'>
-        <div className='home-page__hero'>
-          <div className='home-page__logotype'>
-            <BaseMedia src='/branding/sage-logotype.svg' isVideo={false} />
-          </div>
-          <div className='home-page__hero-banner'>
-            <BaseMedia
-              onClickHandler={() => router.push(`/drops/${featuredDrop.id}`)}
-              src={featuredDrop.bannerImageS3Path}
-              isVideo={false}
-            ></BaseMedia>
-          </div>
-        </div>
+        <Hero imgSrc={featuredDrop.bannerImageS3Path} />
         <div
           className='home-page__featured-drop-tag'
           onClick={() => router.push(`/drops/${featuredDrop.id}`)}

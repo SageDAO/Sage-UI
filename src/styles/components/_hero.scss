@@ -1,0 +1,27 @@
+@use '@/styles/abstracts/mixins' as m;
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  aspect-ratio: 1/1;
+}
+
+.hero__logotype {
+  @include m.noselect;
+  position: absolute;
+  aspect-ratio: 1200/384;
+  width: 100%;
+  z-index: 1;
+}
+
+.hero__banner {
+  @include m.noselect;
+  @include m.interact;
+  transform: translateY(31%);
+  overflow: hidden;
+  position: relative;
+  transition-duration: 300ms;
+  width: 100%;
+  aspect-ratio: 1196/872;
+}

@@ -16,33 +16,6 @@
   height: min-content;
 }
 
-.home-page__hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  aspect-ratio: 1/1;
-}
-
-.home-page__logotype {
-  @include m.noselect;
-  position: absolute;
-  aspect-ratio: 1200/384;
-  width: 100%;
-  z-index: 1;
-}
-
-.home-page__hero-banner {
-  @include m.noselect;
-  @include m.interact;
-  transform: translateY(31%);
-  overflow: hidden;
-  position: relative;
-  transition-duration: 300ms;
-  width: 100%;
-  aspect-ratio: 1196/872;
-}
-
 .home-page__featured-drop-tag {
   @include m.interact;
   transition-duration: 300ms;
