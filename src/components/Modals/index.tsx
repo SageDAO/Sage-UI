@@ -1,4 +1,5 @@
 import { Dialog } from '@headlessui/react';
+import { BaseMedia } from '@/components/Media';
 
 export interface Props {
   isOpen: boolean;
@@ -17,11 +18,6 @@ function index({ closeModal, children, isOpen, title }: Props) {
         <Dialog.Panel className='modal__panel' as='div'>
           <div className='modal__header'>
             <Dialog.Title as='h1'>{title}</Dialog.Title>
-            <img
-              className='modal__close__button'
-              src='/interactive/close.svg'
-              onClick={closeModal}
-            />
           </div>
           {children}
         </Dialog.Panel>

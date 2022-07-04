@@ -6,28 +6,19 @@
 @use '@/styles/abstracts/colors' as c;
 
 html {
-  overflow-x: hidden;
-  overflow-y: auto;
-  /* width */
-  ::-webkit-scrollbar {
-		width: 10px;
-		padding: 1px;
-		background: transparent;
+}
+
+body {
+  overflow: overlay;
+	overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 10px;
   }
 
-  /* Track */
-  ::-webkit-scrollbar-track {
-		// background: transparent;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: c.$accent;
-		border-radius: 1000px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+  &::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background-color: c.$accent;
   }
 }
 

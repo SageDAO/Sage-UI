@@ -5,34 +5,47 @@
 .home-page {
   display: flex;
   flex-direction: column;
-  padding: 0 max(16vw, 12px) 50px;
+  align-items: center;
+  width: min(1440px, 80vw);
+}
+
+.home-page__main {
+  display: flex;
+  flex-direction: column;
+  gap: min(80px, 1vw);
   height: min-content;
 }
 
 .home-page__hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   aspect-ratio: 1/1;
 }
 
 .home-page__logotype {
   @include m.noselect;
-  position: relative;
+  position: absolute;
   aspect-ratio: 1200/384;
   width: 100%;
   z-index: 1;
-  transform: translateY(30%);
 }
 
 .home-page__hero-banner {
   @include m.noselect;
   @include m.interact;
-  transition-duration: 300ms;
+  transform: translateY(31%);
+  overflow: hidden;
   position: relative;
+  transition-duration: 300ms;
+  width: 100%;
   aspect-ratio: 1196/872;
 }
 
 .home-page__featured-drop-tag {
   @include m.interact;
-  margin-top: 42px;
+  transition-duration: 300ms;
   display: flex;
   gap: 20px;
   align-items: center;
@@ -40,34 +53,34 @@
 
 .home-page__featured-drop-tag-sage-logo {
   position: relative;
-  height: max(40px, 4vw);
+  height: max(40px, 3vw);
   aspect-ratio: 44.48/48;
 }
 
 .home-page__featured-drop-tag-label {
   font-style: normal;
   font-weight: 400;
-  font-size: max(16px, 1vw);
-  line-height: 25px;
+  font-size: max(16px, 0.7vw);
+  line-height: max(25px, 1.5em);
   color: c.$white;
   text-transform: uppercase;
 }
 
 .home-page__statement {
-  margin: 80px 0;
   display: flex;
   font-style: normal;
+  justify-content: center;
   font-weight: 400;
-  font-size: 50px;
-  line-height: 60px;
+  font-size: min(50px, 3.8vw);
+  line-height: min(64px, 2em);
   text-align: center;
+  padding: max(40px, 8.5vw) 0;
 }
 
 .home-page__upcoming-drops-header {
-  margin: 80px 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
   justify-content: space-between;
 }
 
@@ -83,7 +96,7 @@
 .home-page__upcoming-drops-header-right {
   display: flex;
   gap: 20px;
-  width: min(100%, 300px);
+  width: min(100%, 466px);
 }
 
 .home-page__upcoming-drops-header-right-dot {
@@ -97,7 +110,6 @@
 .home-page__upcoming-drops-header-right-text {
   font-style: normal;
   font-weight: 400;
-
   font-size: 16px;
   line-height: 130%;
   flex: 1;
@@ -107,15 +119,17 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   aspect-ratio: 1/1;
-  gap: 16px;
+  gap: 20px;
 }
 
 .home-page__upcoming-drops-tile {
   @include m.interact;
-  background-color: red;
   transition-duration: 300ms;
   transition-timing-function: ease-out;
   position: relative;
+  &:hover {
+    background-color: grey;
+  }
 }
 
 .home-page__upcoming-drops-tile-img-container {
@@ -136,4 +150,56 @@
   color: c.$white;
   position: absolute;
   bottom: 0;
+}
+
+.home-page__events {
+  margin-top: 19px;
+  @include m.interact;
+  max-width: 1440px;
+  transition-duration: 200ms;
+  aspect-ratio: 1440/1000;
+}
+
+.home-page__event-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  aspect-ratio: 1440/1000;
+  filter: brightness(1);
+}
+
+.home-page__event-slide-focus {
+  width: min(1152px, 80vw);
+  aspect-ratio: 1196/600;
+  box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.8);
+  transform: translate(0%, 0%);
+}
+
+.home-page__event-slide-header {
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  height: 18.3%;
+  width: 80%;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: min(40px, 3vw);
+  line-height: 1.3em;
+  color: c.$light;
+}
+
+.home-page__event-slide-content {
+  z-index: 1;
+  flex: 1;
+  width: min(1440px, 80vw);
+  justify-content: space-between;
+}
+
+.home-page__event-slide-content-left {
+}
+
+.home-page__event-slide-content-right {
 }

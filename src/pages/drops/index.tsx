@@ -3,18 +3,7 @@ import useDropDown from '@/hooks/useDropDown';
 
 function drops() {
   const { currentOption, setCurrentOption } = useDropDown(['Most Recent']);
-  return (
-    <div className='grid-page'>
-      <section id='one'>
-        <h1 id='header'>Drops</h1>
-        <div id='filter'>
-          <span>{currentOption}</span>
-          <img src='/icons/arrow-down.svg' alt='' />
-        </div>
-      </section>
-      <section id='grid'></section>
-    </div>
-  );
+  return <div className='drops-page page'></div>;
 }
 
 export default drops;

@@ -1,4 +1,6 @@
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
+
 .modal {
   position: relative;
   z-index: 999;
@@ -6,8 +8,9 @@
 
 .modal__backdrop {
   position: fixed;
-  background-color: c.$bg-dark;
+  background-color: c.$dark;
   opacity: 0.9;
+  backdrop-filter: blur(4px);
   inset: 0;
 }
 
@@ -20,17 +23,16 @@
 }
 
 .modal__panel {
+	position: relative;
   overflow: hidden;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  background: c.$modal-dark;
+  background: c.$dark;
   // box-shadow: 0px 4px 50px -10px rgba(83, 45, 234, 0.3), 0px 4px 50px #000000;
-  border-radius: 18px;
   min-width: 300px;
   color: white;
   padding: 20px;
-  box-shadow: 0px 4px 30px -10px rgba(black, 0.6);
 }
 
 .modal__header {
@@ -42,12 +44,15 @@
   line-height: 21px;
   width: 100%;
   justify-content: space-between;
-  height: 31px;
   align-items: center;
 }
 
-.modal__close__button {
-  width: 15px;
-  cursor: pointer;
-}
+// .modal__close-button {
+// 	@include m.interact;
+//   position: absolute;
+//   width: 30px;
+// 	top: 5%;
+// 	right: 5%;
+//   height: 30px;
+// }
 // fixed inset-0 flex items-center justify-center p-4
