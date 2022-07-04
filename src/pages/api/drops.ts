@@ -7,11 +7,11 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     query: { action, id, address },
   } = request;
   const session = await getSession({ req: request });
-  const { address: walletAddress } = session!;
   if (!session) {
     response.status(401).end('Please Sign In');
     return;
   }
+  const { address: walletAddress } = session!;
   switch (action) {
     case 'GetApprovedDrops':
       await getApprovedDrops(response);
@@ -22,9 +22,6 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'GetFullDrop':
       await getFullDrop(Number(id), response);
       break;
-    case 'UpdateApprovedDate':
-      await updateApprovedDate(Number(id), walletAddress as string, response);
-      break;
     case 'UpdateSplitterAddress':
       await updateSplitterAddress(Number(id), address as string, response);
       break;
@@ -33,6 +30,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'UpdateLotteryContractAddress':
       await updateLotteryContractAddress(Number(id), address as string, response);
+      break;
+    case 'UpdateApprovedDateAndIsLiveFlags':
+      await updateApprovedDateAndIsLiveFlags(Number(id), walletAddress as string, response);
       break;
     default:
       response.status(500);
@@ -78,6 +78,7 @@ async function getDropsPendingApproval(response: NextApiResponse) {
     response.status(500);
   }
 }
+
 async function getFullDrop(id: number, response: NextApiResponse) {
   console.log(`getFullDrop(${id})`);
   try {
@@ -95,26 +96,6 @@ async function getFullDrop(id: number, response: NextApiResponse) {
     response.json(result);
   } catch (e) {
     console.log({ e });
-    response.status(500);
-  }
-}
-
-async function updateApprovedDate(id: number, walletAddress: string, response: NextApiResponse) {
-  console.log(`updateApprovedDate(${id}, ${walletAddress})`);
-  let now = new Date();
-  try {
-    const { approvedAt } = await prisma.drop.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        approvedAt: now,
-        approvedBy: walletAddress,
-      },
-    });
-    response.json(approvedAt);
-  } catch (e) {
-    console.log(e);
     response.status(500);
   }
 }
@@ -175,6 +156,46 @@ async function updateLotteryContractAddress(
       },
     });
     response.json(result);
+  } catch (e) {
+    console.log(e);
+    response.status(500);
+  }
+}
+
+async function updateApprovedDateAndIsLiveFlags(
+  id: number,
+  walletAddress: string,
+  response: NextApiResponse
+) {
+  console.log(`updateApprovedDateAndIsLiveFlags(${id}, ${walletAddress})`);
+  let now = new Date();
+  try {
+    const { approvedAt } = await prisma.drop.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        approvedAt: now,
+        approvedBy: walletAddress,
+      },
+    });
+    await prisma.auction.updateMany({
+      where: {
+        dropId: Number(id),
+      },
+      data: {
+        isLive: true,
+      },
+    });
+    await prisma.lottery.updateMany({
+      where: {
+        dropId: Number(id),
+      },
+      data: {
+        isLive: true,
+      },
+    });
+    response.json(approvedAt);
   } catch (e) {
     console.log(e);
     response.status(500);
