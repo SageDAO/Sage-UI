@@ -45,7 +45,7 @@
 }
 
 .accountmodal__wallet-item {
-  @include m.hover {
+  @include m.interact {
     transform: scale(1.04);
   }
   background-color: transparent;
@@ -93,8 +93,7 @@
 }
 
 @mixin auth-button {
-  @include m.hover {
-    transform: scale(1.04);
+  @include m.interact {
   }
   align-items: center;
   gap: 10px;

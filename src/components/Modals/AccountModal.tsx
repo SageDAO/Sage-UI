@@ -12,9 +12,8 @@ import type { Dispatch, SetStateAction } from 'react';
 import Loader from 'react-loader-spinner';
 import shortenAddress from '@/utilities/shortenAddress';
 import { getCsrfToken, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import { useSignInMutation, useSignOutMutation } from '@/store/services/user';
-import { BaseMedia } from '../Media';
+import { BaseMedia } from '@/components/Media';
 import Image from 'next/image';
 
 interface Props extends ModalProps {
@@ -27,11 +26,10 @@ export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoadi
   const { disconnect } = useDisconnect();
   const { data: sessionData, status: sessionStatus } = useSession();
   const { connectors, connectAsync, activeConnector, isConnecting } = useConnect();
-  const [signIn, { isLoading: isSigningIn }] = useSignInMutation();
+  const [signIn] = useSignInMutation();
   const [signOut] = useSignOutMutation();
-  const { signMessageAsync } = useSignMessage();
+  const { signMessageAsync, isLoading: isSigningMessage } = useSignMessage();
   const { activeChain } = useNetwork();
-  const router = useRouter();
 
   const showWalletSelection: boolean = Boolean(!accountData);
   const showAuthSection: boolean = Boolean(accountData);
@@ -111,6 +109,7 @@ export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoadi
             <button
               className='accountmodal__wallet-item'
               disabled={isConnecting}
+							data-loading={isConnecting && 'true'}
               onClick={async () => {
                 const c = connectors[1];
                 handleConnectClick(c);
@@ -129,7 +128,8 @@ export default function AccountModal({ isOpen, closeModal, isLoading, setIsLoadi
               <button
                 className='accountmodal__auth-sign-in-button'
                 onClick={handleSignInClick}
-                disabled={isLoading}
+                disabled={isSigningMessage}
+                data-loading={isSigningMessage && 'true'}
               >
                 <svg
                   className='accountmodal__auth-ethereum-icon'

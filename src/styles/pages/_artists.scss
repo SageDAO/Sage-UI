@@ -1,11 +1,129 @@
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 .artists-page {
-	display: flex; 
-	flex-direction: column;
-	gap: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  align-items: center;
+}
+
+.artists-page__header {
+  width: min(1440px, 80vw);
 }
 
 .artists-page__row {
+  width: 100%;
+  gap: 1vw;
+  display: flex;
+	padding-top: 10px;
+  overflow: auto;
 
+  &::-webkit-scrollbar {
+    height: 0px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 }
 
+@keyframes bannermove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-50%, 0);
+  }
+}
 
+.artists-page__item {
+  cursor: pointer;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  display: flex;
+  flex-direction: column;
+  @include m.hover {
+    background-color: c.$accent;
+    transform: translate3d(-10px, -10px, 0px);
+    color: black;
+
+    // &:after,
+    // &:before {
+    //   content: '';
+    //   background: c.$accent;
+    //   position: absolute;
+    //   transition-duration: 200ms;
+    //   transition-timing-function: ease-out;
+    // }
+    // &:after {
+    //   width: 100%;
+    //   height: 20px;
+    //   left: 10px;
+    //   bottom: 0;
+    //   transform: translatey(100%) skewx(45deg);
+    // }
+    // &:before {
+    //   width: 20px;
+    //   height: 100%;
+    //   right: 0;
+    //   transform: translatex(100%) skewy(45deg);
+    //   top: 10px;
+    // }
+  }
+}
+
+.artists-page__item-img {
+  position: relative;
+  aspect-ratio: 1/1;
+}
+
+.artists-page__item-img-text {
+  margin: 20px;
+  position: absolute;
+  bottom: 0;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  z-index: 999;
+  color: c.$white;
+}
+
+.artists-page__item-content {
+  margin: 20px;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  width: 22vw;
+  aspect-ratio: 446/336.28;
+}
+
+.artists-page__item-content-header {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 51px;
+  color: inherit;
+}
+
+.artists-page__item-content-description {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  color: inherit;
+}

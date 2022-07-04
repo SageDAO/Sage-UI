@@ -21,7 +21,11 @@
 
 @mixin interact {
   &[disabled] {
-    background: c.$text-gray-2;
+    filter: brightness(0.3);
+
+    &[data-loading='true'] {
+      cursor: progress;
+    }
   }
   &:not([disabled]) {
     cursor: pointer;

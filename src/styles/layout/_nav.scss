@@ -2,12 +2,14 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/layout/layout' as l;
 .nav {
+	position: sticky;
   min-height: 44px;
   width: 100vw;
   background-color: c.$black;
   display: flex;
   align-items: center;
   justify-content: center;
+	z-index: 998;
 }
 
 .nav__menu {
