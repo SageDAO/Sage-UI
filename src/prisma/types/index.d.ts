@@ -33,16 +33,8 @@ export type Game = Auction_include_Nft | Lottery_include_Nft;
 
 export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   include: {
-    Lotteries: {
-      include: {
-        Nfts: true;
-      };
-    };
-    Auctions: {
-      include: {
-        Nft: true;
-      };
-    };
+    Lotteries: true;
+    Auctions: true;
     Artist: true;
   };
 }>;

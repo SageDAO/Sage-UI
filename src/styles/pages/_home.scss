@@ -95,6 +95,9 @@
   gap: 20px;
 }
 
+$tile-img-z: 0;
+$tile-info-z: calc(#{$tile-img-z} + 1);
+
 .home-page__upcoming-drops-tile {
   @include m.interact;
   transition-duration: 300ms;
@@ -108,7 +111,7 @@
 .home-page__upcoming-drops-tile-img-container {
   position: relative;
   aspect-ratio: 1/1;
-  z-index: 0;
+  z-index: $tile-img-z;
 }
 
 .home-page__upcoming-drops-tile-tag {
@@ -119,10 +122,31 @@
   font-weight: 400;
   font-size: max(16px, 1vw);
   line-height: max(19px, 1.2vw);
-  z-index: 1;
+  z-index: $tile-info-z;
   color: c.$white;
   position: absolute;
   bottom: 0;
+}
+
+.home-page__upcoming-drops-countdown {
+  position: absolute;
+  background-color: c.$white;
+  color: c.$black;
+  z-index: $tile-info-z;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 1px;
+  top: 20px;
+  left: 20px;
+  width: 121px;
+  height: 46.37px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  &[data-status='Live'] {
+    background-color: c.$accent;
+  }
 }
 
 .home-page__events {

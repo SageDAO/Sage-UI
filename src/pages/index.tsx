@@ -4,7 +4,8 @@ import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
 import { useRouter } from 'next/router';
 import Hero from '@/components/Hero';
-Hero;
+import Countdown from '@/components/Countdown';
+import { computeDropStatus } from '@/utilities/status';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -47,12 +48,18 @@ function home({ featuredDrop, upcomingDrops }: Props) {
         <div className='home-page__upcoming-drops-grid'>
           {upcomingDrops.map((d) => {
             const src = d.bannerImageS3Path;
-            const onClick = () => {
-              router.push(`/drops/${d.id}`);
-            };
+            async function onClick() {
+              await router.push(`/drops/${d.id}`);
+            }
             const text = `${d.name} by ${d.Artist.displayName}`;
+            const { startTime, status } = computeDropStatus(d);
+            const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
             return (
               <div className='home-page__upcoming-drops-tile' key={d.id} onClick={onClick}>
+                <div className='home-page__upcoming-drops-countdown' data-status={status}>
+                  {display}
+                </div>
+
                 <BaseMedia src={src} isVideo={false} />
                 <h1 className='home-page__upcoming-drops-tile-tag'>
                   {text}
@@ -89,8 +96,8 @@ export async function getStaticProps() {
     },
     include: {
       Artist: true,
-      Lotteries: { include: { Nfts: true }, where: { contractAddress: { not: null } } },
-      Auctions: { include: { Nft: true }, where: { contractAddress: { not: null } } },
+      Lotteries: { where: { contractAddress: { not: null } } },
+      Auctions: { where: { contractAddress: { not: null } } },
     },
   });
 
