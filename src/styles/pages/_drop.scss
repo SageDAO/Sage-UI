@@ -1,0 +1,16 @@
+@use '@/styles/layout/layout' as l;
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/breakpoints' as b;
+
+.drop-page {
+}
+
+.drop-page__hero {
+	left: 0;
+	top: 0px;
+	z-index: 0;
+  position: absolute;
+  height: 1000px;
+  width: 100vw;
+
+}
