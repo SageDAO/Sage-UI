@@ -1,4 +1,6 @@
 import prisma from '@/prisma/client';
+import { Prisma } from '@prisma/client';
+import { split } from 'cypress/types/lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
@@ -21,6 +23,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'GetFullDrop':
       await getFullDrop(Number(id), response);
+      break;
+    case 'FindSplitterAddress':
+      await findSplitterAddress(Number(id), response);
       break;
     case 'UpdateSplitterAddress':
       await updateSplitterAddress(Number(id), address as string, response);
@@ -96,6 +101,39 @@ async function getFullDrop(id: number, response: NextApiResponse) {
     response.json(result);
   } catch (e) {
     console.log({ e });
+    response.status(500);
+  }
+}
+
+/**
+ * Finds deployed Splitter contract address(es) that matches split entries of a given id.
+ */
+async function findSplitterAddress(id: number, response: NextApiResponse) {
+  console.log(`findSplitterAddress(${id})`);
+  try {
+    var splitEntries = await prisma.splitEntry.findMany({
+      where: {
+        splitterId: id,
+      },
+    });
+    if (splitEntries.length! <= 1) {
+      response.json([]);
+      return;
+    }
+    var queryParams = '';
+    for (var i = 0; i < splitEntries.length; i++) {
+      queryParams += `SELECT "splitterId" FROM "SplitEntry" WHERE
+        ("percent", "destinationAddress") = (${splitEntries[i].percent}, '${splitEntries[i].destinationAddress}')`;
+      if (i != splitEntries.length - 1) {
+        queryParams += ` INTERSECT `;
+      }
+    }
+    const query = `SELECT "p".* FROM "Splitter" AS "p" JOIN (${queryParams}) AS "c"
+      ON ("p"."id" = "c"."splitterId") WHERE ("p"."splitterAddress" IS NOT NULL)`;
+    const result = await prisma.$queryRaw(Prisma.raw(query));
+    response.json(result);
+  } catch (e) {
+    console.log(e);
     response.status(500);
   }
 }

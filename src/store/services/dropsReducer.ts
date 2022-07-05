@@ -41,7 +41,8 @@ export const dropsApi = createApi({
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
   inspectDropGamesEndTimes(drop);
-  await deploySplitters(drop, signer, fetchWithBQ);
+  await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);
+  await processSplitter(drop.SecondarySplitter, signer, fetchWithBQ);
   await createNftCollection(drop, signer);
   await createAuctions(drop, signer, fetchWithBQ);
   await createLotteries(drop, signer, fetchWithBQ);
@@ -58,20 +59,20 @@ function inspectDropGamesEndTimes(drop: DropFull) {
   }
 }
 
-async function deploySplitters(drop: DropFull, signer: Signer, fetchWithBQ: any) {
-  // TODO: reuse existing splitters
-  if (drop.primarySplitterId && drop.PrimarySplitter && !drop.PrimarySplitter.splitterAddress) {
-    drop.PrimarySplitter.splitterAddress = await deploySplitter(drop.PrimarySplitter, signer);
-    const params = `id=${drop.primarySplitterId}&address=${drop.PrimarySplitter.splitterAddress}`;
-    await fetchWithBQ(`drops?action=UpdateSplitterAddress&${params}`);
+async function processSplitter(splitter: Splitter_include_Entries, signer: Signer, fetchWithBQ: any) {
+  if (!splitter) {
+    return;
   }
-  if (
-    drop.secondarySplitterId &&
-    drop.SecondarySplitter &&
-    !drop.SecondarySplitter?.splitterAddress
-  ) {
-    drop.SecondarySplitter.splitterAddress = await deploySplitter(drop.SecondarySplitter, signer);
-    const params = `id=${drop.secondarySplitterId}&address=${drop.SecondarySplitter.splitterAddress}`;
+  if (!splitter.splitterAddress) {
+    // reuse existing deployed splitters with matching entries (percents & destinations)
+    const queryUrl = `drops?action=FindSplitterAddress&id=${splitter.id}`;
+    const matchingSplitters = await fetchWithBQ(queryUrl);
+    if (matchingSplitters.length > 0) {
+      splitter.splitterAddress = matchingSplitters[0].splitterAddress;
+    } else { 
+      splitter.splitterAddress = await deploySplitter(splitter, signer);
+    }
+    const params = `id=${splitter.id}&address=${splitter.splitterAddress}`;
     await fetchWithBQ(`drops?action=UpdateSplitterAddress&${params}`);
   }
 }
@@ -193,7 +194,7 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
       }
     }
     console.log(
-      `LotteryContract.createNewLottery(${l.id}, ${l.dropId}, ${
+      `LotteryContract.createLottery(${l.id}, ${l.dropId}, ${
         l.costPerTicketPoints
       }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${nftContractAddress}, ${
         l.isRefundable
