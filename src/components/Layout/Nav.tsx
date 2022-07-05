@@ -20,7 +20,7 @@ const navLinks: NavLink[] = [
   },
   {
     name: 'Press',
-    url: '/',
+    url: '/press',
   },
 ];
 
