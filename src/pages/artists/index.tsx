@@ -13,9 +13,9 @@ export default function artists({ artists }: Props) {
   const router = useRouter();
   return (
     <div className='artists-page page'>
-      <section className='artists-page__header'>
+      <div className='artists-page__logotype'>
         <Logotype />
-      </section>
+      </div>
       <section className='artists-page__row'>
         {artists.map((a, i: number) => {
           return (

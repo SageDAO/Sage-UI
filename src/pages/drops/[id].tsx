@@ -5,8 +5,11 @@ import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import LotteryTile from '@/components/Tiles/LotteryTile';
 import AuctionTile from '@/components/Tiles/AuctionTile';
 import { BaseMedia, PfpImage } from '@/components/Media';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { useTicketCount } from '@/hooks/useTicketCount';
+import React from 'react';
+import Logotype from '@/components/Logotype';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -41,13 +44,30 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   const hasDrawings: boolean = drawings.length > 0;
   const hasLotteries: boolean = lotteries.length > 0;
 
-  //TODO: add admin only functionalities
-  //if (!drop.approvedBy && user?.role !== "ADMIN") return null;
   return (
-    <div className='drop-page'>
-      <div className='drop-page__hero'>
+    <>
+      <header className='drop-page__parallax-base'>
+        <img src={drop.bannerImageS3Path} className='drop-page__parallax-img' />
+      </header>
+      <div className='page drop-page'>
+        <section className='drop-page__header'>
+          <div className='drop-page__header-logotype'>
+            <Logotype />
+          </div>
+          <div className='drop-page__header-drop-info'></div>
+        </section>
+        <section className='drop-page__content'>
+          <div className='drop-page__grid'>
+            <div className='drop-page__grid-item'>
+              <div className='drop-page__grid-item-img'>
+                <BaseMedia src={drop.bannerImageS3Path}></BaseMedia>
+              </div>
+              <div className='drop-page__grid-item-info'></div>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -76,7 +96,6 @@ export async function getStaticProps({
     where: { id: Number(params.id) },
   });
 
-  //redirect to home page of data for this drop is not availablee
   if (!drop) {
     return {
       redirect: {
@@ -100,7 +119,6 @@ export async function getStaticProps({
   };
 }
 
-// This function gets called at build time
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
   let drops: DropType[] = await prisma.drop.findMany({
     where: {
@@ -110,11 +128,8 @@ export async function getStaticPaths(): Promise<GetStaticPathsResult> {
     },
   });
 
-  // Get the paths we want to pre-render based on drops
   const paths = drops.map((drop) => ({
     params: { id: String(drop.id) },
   }));
-  // We'll pre-render only these paths at build time.
-  // { fallback: blocking } allows for ISR, if a new page is needed for a new drop then the server will serve the page for the first request and cache static html for all future reqeusts
   return { paths, fallback: 'blocking' };
 }

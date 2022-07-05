@@ -1,16 +1,82 @@
 @use '@/styles/layout/layout' as l;
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/breakpoints' as b;
 
 .drop-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.drop-page__hero {
-	left: 0;
-	top: 0px;
-	z-index: 0;
-  position: absolute;
-  height: 1000px;
+.drop-page__parallax-base {
+  display: flex;
   width: 100vw;
+  height: 100vh;
+  position: relative;
+  transform-style: preserve-3d;
+  align-items: center;
+  justify-content: center;
+  z-index: -1;
+}
+
+.drop-page__parallax-img {
+  height: 2000px;
+  position: absolute;
+  transform: translateZ(-10px) scale(2);
+}
+
+.drop-page__header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 896px;
+  width: min(1440px, 80vw);
+}
+
+.drop-page__header-logotype {
+  width: 100%;
+}
+
+.drop-page__header-drop-info {
+  width: 100%;
+}
+
+.drop-page__content {
+  display: flex;
+  justify-content: center;
+  background-color: c.$dark;
+  width: 100vw;
+  padding: 110px 0;
+}
+
+.drop-page__grid {
+  display: grid;
+  width: 80vw;
+  gap: min(60px, 3vw);
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.drop-page__grid-item {
+  transition-duration: 200ms;
+  @include m.interact {
+    background-color: c.$white;
+    border: 2px solid c.$white;
+  }
+  border: 2px solid transparent;
+  color: white;
+  height: 487px;
+  grid-column: span 2 / span 2;
+  // aspect-ratio: 345/487;
+}
+
+.drop-page__grid-item-img {
+  position: relative;
+  width: 100%;
+	height: 345px;
+	aspect-ratio: 1/1;
+}
+
+.drop0page__grid-item-info {
 
 }

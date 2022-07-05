@@ -8,7 +8,7 @@ import Nav from '@/components/Layout/Nav';
 import Footer from '@/components/Layout/Footer';
 import useWatchNetwork from '@/hooks/useWatchNetwork';
 import WrongNetworkModal from '@/components/Modals/WrongNetworkModal';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import HiddenMenu from './HiddenMenu';
 import Image from 'next/image';
 
@@ -29,23 +29,22 @@ export default function Layout({ children, router }: Props) {
   const layoutEl = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    layoutEl.current?.addEventListener('mousemove', (e) => {
-      const dataX = String(e.pageX);
-      const dataY = String(e.pageY);
-      cursorEl.current?.setAttribute(
-        'style',
-        `transform: translate3d(${dataX}px, ${dataY}px, 0px);`
-      );
-    });
+    // layoutEl.current?.addEventListener('mousemove', (e) => {
+    //   const dataX = String(e.pageX);
+    //   const dataY = String(e.pageY);
+    //   cursorEl.current?.setAttribute(
+    //     'style',
+    //     `transform: translate3d(${dataX}px, ${dataY}px, 0px);`
+    //   );
+    // });
   }, []);
 
   return (
-    <div ref={layoutEl} className='layout' data-cy='layout'>
+    <React.Fragment>
       <Head>
         <title>Sage Marketplace</title>
         <link rel='icon' href='/icons/sage.svg' />
       </Head>
-      <div ref={cursorEl} className='cursor'></div>
       <WrongNetworkModal
         isOpen={isNetworkModalOpen}
         closeModal={closeNetworkModal}
@@ -63,17 +62,11 @@ export default function Layout({ children, router }: Props) {
         draggable
         pauseOnHover
         data-cy='toast-container'
-      />
-      <HiddenMenu />
-      <Nav />
-      <motion.div
-        key={router.route}
-        initial='pageInitial'
-        animate='pageAnimate'
-        exit='pageInitial'
-        variants={variants}
-        className='layout__main'
-      >
+      />{' '}
+      <motion.div ref={layoutEl} key={router.route} className='layout'>
+        <HiddenMenu />
+        <Nav />
+        {children}
         <div className='layout__destroying-fakes'>
           <Image
             draggable={false}
@@ -82,9 +75,8 @@ export default function Layout({ children, router }: Props) {
             height={384}
           ></Image>
         </div>
-        {children}
+        <Footer></Footer>
       </motion.div>
-      <Footer />
-    </div>
+    </React.Fragment>
   );
 }

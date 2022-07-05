@@ -2,10 +2,11 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/layout/layout' as l;
 .footer {
+	background-color: c.$dark;
   position: relative;
   display: flex;
   flex-direction: column;
-	width: 100%; 
+	width: 100vw; 
 }
 
 @mixin footer-section {
