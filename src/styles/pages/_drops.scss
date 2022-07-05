@@ -14,16 +14,14 @@
 }
 
 .drops-page__subheader-top {
-  margin-top: 70px;
+  margin-top: min(70px, 5vw);
   display: flex;
-  gap: 40px;
+  gap: min(40px, 3vw);
 }
 
 .drops-page__subheader-sage-icon {
-  margin-left: 30px;
-  height: 100%;
   position: relative;
-  height: 60px;
+  height: min(60px, 7vw);
   aspect-ratio: 43/46;
   align-items: center;
 }
@@ -31,15 +29,15 @@
 .drops-page__subheader-content {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 .drops-page__subheader-label {
   text-transform: uppercase;
   font-style: normal;
   font-weight: 400;
-  font-size: 50px;
-  line-height: 60px;
+  font-size: min(50px, 3.5vw);
+  line-height: min(60px, 1.5em);
 
   color: c.$white;
 }
@@ -47,7 +45,7 @@
 .drops-page__subheader-info {
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: min(16px, 1.5vw);
   line-height: 130%;
 }
 
@@ -79,6 +77,7 @@
 
 .drops-page__drop-header-title {
   font-style: normal;
+  white-space: nowrap;
   font-weight: 400;
   font-size: min(52px, 3vw);
   line-height: 81px;
@@ -95,11 +94,11 @@
   text-transform: uppercase;
   border: 1px solid c.$accent;
   aspect-ratio: 466/85;
-  width: 400px;
+  width: min(400px, 10em);
 
   font-style: normal;
   font-weight: 400;
-  font-size: 40px;
+  font-size: min(40px, 2.5vw);
   line-height: 130%;
   text-align: center;
   letter-spacing: 0.1em;
@@ -108,6 +107,7 @@
 .drops-page__drop-content {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
   flex: 1;
   z-index: 1;
@@ -122,7 +122,7 @@
   justify-content: center;
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: min(14px, 2vw);
   line-height: 136.6%;
   text-align: center;
   letter-spacing: 0.35em;
@@ -130,8 +130,8 @@
   color: c.$black;
   border: 1px solid black;
   text-transform: uppercase;
-  width: 345px;
-  height: 50px;
+  width: min(345px, 20em);
+  aspect-ratio: 345/50;
 
   &[data-status='Live'] {
     background-color: c.$accent;
@@ -141,15 +141,15 @@
 .drops-page__drop-content-description {
   font-weight: 400;
   font-size: 16px;
-	width: min(466px, 30vw);
+  width: min(466px, 30vw);
   line-height: 130%;
   text-transform: uppercase;
   color: c.$white;
 }
 
 .drops-page__drop-backdrop {
-	width: 1000px;
-	height: 1000px;
+  width: 1000px;
+  height: 1000px;
   filter: brightness(0.3);
 }
 
@@ -158,4 +158,4 @@
   width: 80vw;
   aspect-ratio: 1196/640;
   z-index: 2;
-}
+ }

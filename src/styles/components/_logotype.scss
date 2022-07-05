@@ -1,4 +1,6 @@
+@use '@/styles/abstracts/mixins' as m;
 .sage-logotype {
+	@include m.noselect;
   position: relative;
   width: 100%;
   aspect-ratio: 1196/384;

@@ -29,7 +29,7 @@ function drops({ drops }: Props) {
             </div>
             <div className='drops-page__subheader-content'>
               <div className='drops-page__subheader-label'>
-                sage curated live and upcoming drops
+                sage curated live and upcoming drops.
               </div>
               <p className='drops-page__subheader-info'>
                 SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL <br />{' '}
