@@ -62,7 +62,7 @@ function drops({ drops }: Props) {
               </div>
               <Image
                 src={d.bannerImageS3Path}
-                objectFit={'none'}
+                objectFit={'cover'}
                 className='drops-page__drop-backdrop'
                 layout='fill'
                 draggable={false}

@@ -55,7 +55,6 @@
   display: flex;
   flex-direction: column;
   margin-top: 90px;
-  background-color: blue;
   width: 100vw;
 }
 
@@ -64,7 +63,6 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1440/1000;
-  background-color: grey;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -150,13 +148,13 @@
 }
 
 .drops-page__drop-backdrop {
-  transform: scale(2.5);
+	width: 1000px;
+	height: 1000px;
   filter: brightness(0.3);
 }
 
 .drops-page__drop-focus {
   position: relative;
-  background-color: blue;
   width: 80vw;
   aspect-ratio: 1196/640;
   z-index: 2;
