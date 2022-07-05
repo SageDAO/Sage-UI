@@ -1,2 +1,163 @@
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 .drops-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drops-page__header {
+  width: min(1440px, 80vw);
+}
+
+.drops-page__subheader {
+}
+
+.drops-page__subheader-top {
+  margin-top: 70px;
+  display: flex;
+  gap: 40px;
+}
+
+.drops-page__subheader-sage-icon {
+  margin-left: 30px;
+  height: 100%;
+  position: relative;
+  height: 60px;
+  aspect-ratio: 43/46;
+  align-items: center;
+}
+
+.drops-page__subheader-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.drops-page__subheader-label {
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 60px;
+
+  color: c.$white;
+}
+
+.drops-page__subheader-info {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+}
+
+.drops-page__drops-section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 90px;
+  background-color: blue;
+  width: 100vw;
+}
+
+.drops-page__drop {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1440/1000;
+  background-color: grey;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drops-page__drop-header {
+  display: flex;
+  flex: 1;
+  z-index: 1;
+  width: 80vw;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drops-page__drop-header-title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: min(52px, 3vw);
+  line-height: 81px;
+  text-transform: uppercase;
+
+  color: c.$light;
+}
+
+.drops-page__drop-header-countdown {
+  color: c.$accent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  border: 1px solid c.$accent;
+  aspect-ratio: 466/85;
+  width: 400px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 130%;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+.drops-page__drop-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  z-index: 1;
+  width: 80vw;
+}
+
+.drops-page__drop-content-btn {
+  @include m.interact;
+  transition-duration: 200ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 136.6%;
+  text-align: center;
+  letter-spacing: 0.35em;
+  background-color: c.$white;
+  color: c.$black;
+  border: 1px solid black;
+  text-transform: uppercase;
+  width: 345px;
+  height: 50px;
+
+  &[data-status='Live'] {
+    background-color: c.$accent;
+  }
+}
+
+.drops-page__drop-content-description {
+  font-weight: 400;
+  font-size: 16px;
+	width: min(466px, 30vw);
+  line-height: 130%;
+  text-transform: uppercase;
+  color: c.$white;
+}
+
+.drops-page__drop-backdrop {
+  transform: scale(2.5);
+  filter: brightness(0.3);
+}
+
+.drops-page__drop-focus {
+  position: relative;
+  background-color: blue;
+  width: 80vw;
+  aspect-ratio: 1196/640;
+  z-index: 2;
 }
