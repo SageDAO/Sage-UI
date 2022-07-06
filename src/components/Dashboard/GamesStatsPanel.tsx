@@ -3,9 +3,9 @@ import { useGetApprovedDropsQuery } from '@/store/services/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
 import { gql, useQuery } from '@apollo/client';
 import { utils } from 'ethers';
-import Loader from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import Countdown from '../Countdown';
+import LoaderDots from '../LoaderDots';
 
 const GAMES_QUERY = gql`
   query GetGames {
@@ -112,12 +112,7 @@ export function GamesStatsPanel() {
   }
 
   if (isLoadingFromDB || isLoadingFromSubgraph) {
-    return (
-      <div style={{ margin: '25px auto 25px' }}>
-        <br />
-        <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
-      </div>
-    );
+    return <LoaderDots />;
   }
   const getLotteryGameStats = (id: number) => {
     for (let lottery of graphData.lotteries) {

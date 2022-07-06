@@ -1,6 +1,6 @@
 import { computeLotteryStatus, ComputeLotteryStatusArgs } from '@/utilities/status';
-import Loader from 'react-loader-spinner';
 import Countdown from '../Countdown';
+import LoaderSpinner from '../LoaderSpinner';
 
 interface Props extends ComputeLotteryStatusArgs {
   pending: boolean;
@@ -14,7 +14,7 @@ export default function GetTicketsButton({ pending, onClick, startTime, endTime 
       <button className='btn-get-tickets' disabled={pending} onClick={onClick}>
         {pending ? (
           <>
-            <Loader type='TailSpin' color='white' height='20px' width='20px' /> Getting...
+            <LoaderSpinner /> Getting...
           </>
         ) : (
           'Get Tickets'

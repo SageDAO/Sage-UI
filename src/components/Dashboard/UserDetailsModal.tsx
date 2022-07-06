@@ -1,7 +1,7 @@
 import { useGetPointsBalanceQuery } from '@/store/services/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
-import Loader from 'react-loader-spinner';
 import { PfpImage } from '@/components/Media';
+import LoaderDots from '../LoaderDots';
 
 interface UserDetailsModalProps extends ModalProps {
   userData: any;
@@ -17,7 +17,7 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
     <Modal title='User Details' isOpen={isOpen} closeModal={closeModal}>
       <div>
         {isFetchingPoints ? (
-          <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
+          <LoaderDots />
         ) : (
           <div style={{ textAlign: 'center' }}>
             <div className='dashboard__user-details-pfp-container'>

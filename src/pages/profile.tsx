@@ -1,5 +1,4 @@
 import React from 'react';
-import Loader from 'react-loader-spinner';
 import { useAccount, useBalance } from 'wagmi';
 import { toast } from 'react-toastify';
 import { useGetUserQuery } from '@/store/services/user';
@@ -11,6 +10,7 @@ import useModal from '@/hooks/useModal';
 import { MyCollection } from '@/components/MyCollection';
 import { PfpImage } from '@/components/Media';
 import { useSession } from 'next-auth/react';
+import LoaderDots from '@/components/LoaderDots';
 
 function profile() {
   const { data: sessionData } = useSession();
@@ -35,14 +35,8 @@ function profile() {
     return <div className='profile-page'>sign in to view profile</div>;
   }
   if (!userData && isFetchingUser) {
-    return (
-      <div className='profile-page'>
-        <br />
-        <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
-      </div>
-    );
+    return <LoaderDots />;
   }
-
   return (
     <div className='profile-page'>
       <EditProfileModal isOpen={isEditModalOpen} closeModal={closeEditModal} title='Edit Profile' />

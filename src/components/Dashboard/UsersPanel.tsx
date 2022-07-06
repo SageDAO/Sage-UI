@@ -6,20 +6,15 @@ import { UserDetailsModal } from './UserDetailsModal';
 import { GlobalFilter } from './GlobalFilter';
 import shortenAddress from '@/utilities/shortenAddress';
 import { useGetAllUsersAndEarnedPointsQuery } from '@/store/services/dashboardReducer';
-import Loader from 'react-loader-spinner';
 import { User } from '@prisma/client';
 import useModal from '@/hooks/useModal';
 import { PfpImage } from '@/components/Media';
+import LoaderDots from '../LoaderDots';
 
 export function UsersPanel() {
   const { data: users, isFetching: isFetchingUsers } = useGetAllUsersAndEarnedPointsQuery();
   if (isFetchingUsers) {
-    return (
-      <div style={{ margin: '25px' }}>
-        <br />
-        <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
-      </div>
-    );
+    return <LoaderDots />;
   }
   return <UsersTable users={users!} />;
 }

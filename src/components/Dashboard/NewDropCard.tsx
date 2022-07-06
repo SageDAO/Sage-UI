@@ -1,9 +1,9 @@
 import { DropWithArtist } from '@/prisma/types';
 import { useApproveAndDeployDropMutation } from '@/store/services/dropsReducer';
 import { Signer } from 'ethers';
-import Loader from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
+import LoaderSpinner from '../LoaderSpinner';
 import { BaseMedia, PfpImage } from '../Media';
 
 interface Props {
@@ -44,7 +44,7 @@ export default function NewDropCard({ drop }: Props) {
       <button className='nft-tile__claimbutton' onClick={handleBtnClick} style={{ width: '100%' }}>
         {isDeploying ? (
           <>
-            <Loader type='TailSpin' color='white' height='15px' width='15px' /> 
+            <LoaderSpinner /> 
             <span style={{ marginLeft: '15px' }}>Deploying, please wait...</span>
           </>
         ) : (

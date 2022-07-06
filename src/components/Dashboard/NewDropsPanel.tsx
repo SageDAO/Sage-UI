@@ -1,16 +1,11 @@
 import { useGetDropsPendingApprovalQuery } from '@/store/services/dropsReducer';
-import Loader from 'react-loader-spinner';
+import LoaderDots from '../LoaderDots';
 import NewDropCard from './NewDropCard';
 
 export function NewDropsPanel() {
   const { data: drops, isFetching } = useGetDropsPendingApprovalQuery();
   if (isFetching) {
-    return (
-      <div style={{ margin: '25px' }}>
-        <br />
-        <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
-      </div>
-    );
+    return <LoaderDots />;
   }
   if (drops?.length == 0) {
     return (

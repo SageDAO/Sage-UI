@@ -7,8 +7,8 @@ import {
   useGetUnclaimedPrizesQuery,
 } from '@/store/services/prizesReducer';
 import { GamePrize } from '@/prisma/types';
-import Loader from 'react-loader-spinner';
 import CollectionTile from './Tiles/CollectionTile';
+import LoaderDots from './LoaderDots';
 
 export function MyCollection() {
   const { data: claimedPrizes, isFetching: fetchingClaimedPrizes } = useGetClaimedPrizesQuery();
@@ -31,12 +31,7 @@ export function MyCollection() {
     fetchingClaimedAuctionNfts ||
     fetchingUnclaimedAuctionNfts
   ) {
-    return (
-      <div className='profile-page'>
-        <br />
-        <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
-      </div>
-    );
+    return <LoaderDots />;
   }
 
   return (

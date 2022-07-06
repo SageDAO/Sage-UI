@@ -1,5 +1,5 @@
+import LoaderDots from '@/components/LoaderDots';
 import { useEffect, useState } from 'react';
-import Loader from 'react-loader-spinner';
 
 export default function press() {
   const mediumURL =
@@ -15,7 +15,6 @@ export default function press() {
       const data = await response.json();
       setFeedImage(data.feed.image);
       setFeedLink(data.feed.link);
-      // const items = data.items.filter((item: any) => item.categories.length > 0);
       setFeedItems(data.items);
       setIsLoading(false);
     };
@@ -24,12 +23,7 @@ export default function press() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div style={{ margin: '25px auto 25px' }}>
-        <br />
-        <Loader type='ThreeDots' color='white' height={10} width={50} timeout={0} />
-      </div>
-    );
+    return <LoaderDots />;
   }
   return (
     <>

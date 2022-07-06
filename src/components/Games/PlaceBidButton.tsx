@@ -1,8 +1,8 @@
-import Loader from 'react-loader-spinner';
 import type { Auction_include_Nft } from '@/prisma/types';
 import { computeAuctionStatus } from '@/utilities/status';
 import Countdown from '@/components/Countdown';
 import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
+import LoaderSpinner from '../LoaderSpinner';
 
 interface Props {
   pending: boolean;
@@ -26,7 +26,7 @@ export default function PlaceBidButton({ pending, onClick, auction }: Props) {
       <button className='btn-place-bid' disabled={pending} onClick={onClick}>
         {pending ? (
           <>
-            <Loader type='TailSpin' color='white' height='20px' width='20px' /> Bidding...
+            <LoaderSpinner /> Bidding...
           </>
         ) : (
           'Place bid'
