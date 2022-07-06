@@ -8,6 +8,7 @@ import {
 } from '@/prisma/types';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
 import splitterJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
+import { toast } from 'react-toastify';
 
 export const dropsApi = createApi({
   reducerPath: 'dropsApi',
@@ -43,6 +44,7 @@ async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   inspectDropGamesEndTimes(drop);
   await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);
   await processSplitter(drop.SecondarySplitter, signer, fetchWithBQ);
+  return;
   await createNftCollection(drop, signer);
   await createAuctions(drop, signer, fetchWithBQ);
   await createLotteries(drop, signer, fetchWithBQ);
@@ -53,27 +55,38 @@ function inspectDropGamesEndTimes(drop: DropFull) {
   const now = Math.floor(Date.now() / 1000);
   const games = new Array().concat(drop.Auctions, drop.Lotteries);
   for (var game of games) {
-    if (game.endTime < now && !game.contractAddress) {
-      throw new Error('One or more games have already ended; please fix dates and try again.');
+    const endTime = Math.floor(new Date(game.endTime).getTime() / 1000);
+    if (endTime < now && !game.contractAddress) {
+      const errMsg = 'One or more games have already ended; please fix dates and try again.';
+      toast.error(errMsg);
+      throw new Error(errMsg);
     }
   }
 }
 
-async function processSplitter(splitter: Splitter_include_Entries, signer: Signer, fetchWithBQ: any) {
+async function processSplitter(
+  splitter: Splitter_include_Entries,
+  signer: Signer,
+  fetchWithBQ: any
+) {
   if (!splitter) {
     return;
   }
   if (!splitter.splitterAddress) {
     // reuse existing deployed splitters with matching entries (percents & destinations)
     const queryUrl = `drops?action=FindSplitterAddress&id=${splitter.id}`;
-    const matchingSplitters = await fetchWithBQ(queryUrl);
+    const { data: matchingSplitters } = await fetchWithBQ(queryUrl);
     if (matchingSplitters.length > 0) {
+      console.log(`processSplitter() :: Found existing matching splitter!`);
       splitter.splitterAddress = matchingSplitters[0].splitterAddress;
-    } else { 
+    } else {
+      console.log(`processSplitter() :: Deploying new splitter contract...`);
       splitter.splitterAddress = await deploySplitter(splitter, signer);
     }
-    const params = `id=${splitter.id}&address=${splitter.splitterAddress}`;
-    await fetchWithBQ(`drops?action=UpdateSplitterAddress&${params}`);
+    if (splitter.splitterAddress) {
+      const params = `id=${splitter.id}&address=${splitter.splitterAddress}`;
+      await fetchWithBQ(`drops?action=UpdateSplitterAddress&${params}`);
+    }
   }
 }
 
