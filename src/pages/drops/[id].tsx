@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';
+import { useRouter } from 'next/router';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -43,27 +44,96 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   const hasAuctions: boolean = auctions.length > 0;
   const hasDrawings: boolean = drawings.length > 0;
   const hasLotteries: boolean = lotteries.length > 0;
+  const router = useRouter();
 
   return (
     <>
-      <header className='drop-page__parallax-base'>
+      <div className='drop-page__parallax-base'>
         <img src={drop.bannerImageS3Path} className='drop-page__parallax-img' />
-      </header>
+      </div>
       <div className='page drop-page'>
-        <section className='drop-page__header'>
+        <header className='drop-page__header'>
           <div className='drop-page__header-logotype'>
             <Logotype />
           </div>
-          <div className='drop-page__header-drop-info'></div>
-        </section>
+          <section className='drop-page__header-drop-info'>
+            <div className='drop-page__header-logo-column'>
+              <div className='drop-page__header-logo-container'>
+                <BaseMedia src='/icons/sage.svg'></BaseMedia>
+              </div>
+            </div>
+            <div className='drop-page__header-main-column'>
+              <h1 className='drop-page__header-drop-name'>
+                {drop.name} by {artist.displayName}
+              </h1>
+              <p className='drop-page__header-drop-description'>{drop.description}</p>
+              <div className='drop-page__header-drop-details'>
+                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
+                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
+                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
+                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
+                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
+                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
+              </div>
+            </div>
+          </section>
+        </header>
         <section className='drop-page__content'>
           <div className='drop-page__grid'>
-            <div className='drop-page__grid-item'>
-              <div className='drop-page__grid-item-img'>
-                <BaseMedia src={drop.bannerImageS3Path}></BaseMedia>
-              </div>
-              <div className='drop-page__grid-item-info'></div>
-            </div>
+            {lotteries.map((l) => {
+              return (
+                <div
+                  className='drop-page__grid-item'
+                  onClick={() => router.push(`/games/lotteries/${l.id}`)}
+                >
+                  <div className='drop-page__grid-item-img'>
+                    <BaseMedia src={l.Nfts[0].s3Path}></BaseMedia>
+                  </div>
+                  <div className='drop-page__grid-item-info'>
+                    <h1 className='drop-page__grid-item-info-drop-name'>
+                      {drop.name} by {artist.displayName}
+                    </h1>
+                    <h1 className='drop-page__grid-item-info-game-name'>Lottery</h1>
+                  </div>
+                </div>
+              );
+            })}
+            {drawings.map((d) => {
+              return (
+                <div
+                  className='drop-page__grid-item'
+                  onClick={() => router.push(`/games/lotteries/${d.id}`)}
+                >
+                  <div className='drop-page__grid-item-img'>
+                    <BaseMedia src={d.Nfts[0].s3Path}></BaseMedia>
+                  </div>
+                  <div className='drop-page__grid-item-info'>
+                    <h1 className='drop-page__grid-item-info-drop-name'>
+                      {drop.name} by {artist.displayName}
+                    </h1>
+                    <h1 className='drop-page__grid-item-info-game-name'>{d.Nfts[0].name}</h1>
+                  </div>
+                </div>
+              );
+            })}
+            {auctions.map((a) => {
+              return (
+                <div
+                  className='drop-page__grid-item'
+                  onClick={() => router.push(`/games/auctions/${a.id}`)}
+                >
+                  <div className='drop-page__grid-item-img'>
+                    <BaseMedia src={a.Nft.s3Path}></BaseMedia>
+                  </div>
+                  <div className='drop-page__grid-item-info'>
+                    <h1 className='drop-page__grid-item-info-drop-name'>
+                      {drop.name} by {artist.displayName}
+                    </h1>
+                    <h1 className='drop-page__grid-item-info-game-name'>Lottery</h1>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       </div>
