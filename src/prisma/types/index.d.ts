@@ -45,6 +45,17 @@ export type DropWithArtist = Prisma.DropGetPayload<{
   };
 }>;
 
+export type DropFull = Prisma.DropGetPayload<{
+  include: {
+    Artist: true;
+    Auctions: { include: { Nft: true } };
+    Lotteries: { include: { Nfts: true } };
+    PrimarySplitter: { include: { SplitterEntries: true } };
+    SecondarySplitter: { include: { SplitterEntries: true } };
+    Whitelist: { include: { WhitelistEntries: true } };
+  };
+}>;
+
 export interface GamePrize {
   nftId: number;
   dropId: number;
@@ -97,3 +108,9 @@ export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{
 export type SafeUserUpdate = Partial<
   Pick<User, 'displayName' | 'username' | 'email' | 'bio' | 'profilePicture'>
 >;
+
+export type Splitter_include_Entries = Prisma.SplitterGetPayload<{
+  include: {
+    SplitterEntries: true;
+  };
+}>;

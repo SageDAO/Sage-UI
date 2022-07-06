@@ -1,6 +1,9 @@
 import { DropWithArtist } from '@/prisma/types';
-import { useApproveDropMutation } from '@/store/services/dropsReducer';
+import { useApproveAndDeployDropMutation } from '@/store/services/dropsReducer';
+import { Signer } from 'ethers';
+import Loader from 'react-loader-spinner';
 import { toast } from 'react-toastify';
+import { useSigner } from 'wagmi';
 import { BaseMedia, PfpImage } from '../Media';
 
 interface Props {
@@ -8,11 +11,20 @@ interface Props {
 }
 
 export default function NewDropCard({ drop }: Props) {
-  const [approveDrop] = useApproveDropMutation();
+  const { data: signer } = useSigner();
+  const [approveAndDeployDrop, { isLoading: isDeploying }] = useApproveAndDeployDropMutation();
 
-  const handleApproveDropClick = async () => {
-    await approveDrop(drop.id);
-    toast.success('Drop Approved!');
+  const handleBtnClick = async () => {
+    if (!signer) {
+      toast.info('Sign In With Ethereum before continuing');
+      return;
+    }
+    const result = await approveAndDeployDrop({ dropId: drop.id, signer: signer as Signer });
+    if ((result as any).data) {
+      toast.success('Drop Approved and Deployed!');
+    } else {
+      toast.error('Error deploying drop, check browser console for details.');
+    }
   };
 
   return (
@@ -29,8 +41,15 @@ export default function NewDropCard({ drop }: Props) {
           <div className='collection__tile-artist-name'>by {drop.Artist.displayName || 'anon'}</div>
         </div>
       </div>
-      <button className='nft-tile__claimbutton' onClick={handleApproveDropClick} style={{ width: '100%' }}>
-        Approve Drop
+      <button className='nft-tile__claimbutton' onClick={handleBtnClick} style={{ width: '100%' }}>
+        {isDeploying ? (
+          <>
+            <Loader type='TailSpin' color='white' height='15px' width='15px' /> 
+            <span style={{ marginLeft: '15px' }}>Deploying, please wait...</span>
+          </>
+        ) : (
+          <>Approve &amp; Deploy Drop</>
+        )}
       </button>
     </div>
   );

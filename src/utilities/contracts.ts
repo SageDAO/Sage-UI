@@ -2,21 +2,24 @@ import { BigNumber, Contract, ethers, Signer, utils } from 'ethers';
 import Rewards from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
 import Lottery from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
 import Auction from '@/constants/abis/Auction/Auction.sol/Auction.json';
+import NFT from '@/constants/abis/ERC-1155/NFT.sol/NFT.json';
 import ERC20Standard from '@/constants/abis/ERC-20/ERC20Standard.json';
 import {
   Lottery as LotteryContract,
   Auction as AuctionContract,
   Rewards as RewardsContract,
   ERC20Standard as ERC20Contract,
+  NFT as NFTContract,
 } from '@/types/contracts';
 import { parameters } from '../constants/config';
 import { toast } from 'react-toastify';
 
-const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NETWORK_NAME, CHAIN_ID } = parameters;
+const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NFT_ADDRESS, NETWORK_NAME, CHAIN_ID } =
+  parameters;
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
-type AppContractNames = 'Lottery' | 'Auction' | 'Rewards';
+type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'NFT';
 
 type AppContractDetailsMap = {
   [key in AppContractNames]: ContractDetails;
@@ -34,6 +37,10 @@ const contractMap: AppContractDetailsMap = {
   Rewards: {
     address: REWARDS_ADDRESS,
     abi: Rewards.abi,
+  },
+  NFT: {
+    address: NFT_ADDRESS,
+    abi: NFT.abi,
   },
 };
 
@@ -71,38 +78,27 @@ var ContractFactory = (function () {
 })();
 
 export async function getLotteryContract(signer?: Signer): Promise<LotteryContract> {
-  const { address, abi } = contractMap.Lottery;
-  if (signer) {
-    const contract = new ethers.Contract(address, abi, signer) as LotteryContract;
-    console.log('created signer lotteryContract instance: ', contract);
-    return contract;
-  }
-  return (await ContractFactory.getInstance({
-    address,
-    abi,
-  })) as LotteryContract;
+  return await getContract(contractMap.Lottery, signer) as LotteryContract;
 }
 
 export async function getAuctionContract(signer?: Signer): Promise<AuctionContract> {
-  const { address, abi } = contractMap.Auction;
-  if (signer) {
-    return new ethers.Contract(address, abi, signer) as AuctionContract;
-  }
-  return (await ContractFactory.getInstance({
-    address,
-    abi,
-  })) as AuctionContract;
+  return await getContract(contractMap.Auction, signer) as AuctionContract;
 }
 
 export async function getRewardsContract(signer?: Signer): Promise<RewardsContract> {
-  const { address, abi } = contractMap.Rewards;
+  return await getContract(contractMap.Rewards, signer) as RewardsContract;
+}
+
+export async function getNFTContract(signer?: Signer): Promise<NFTContract> {
+  return await getContract(contractMap.NFT, signer) as NFTContract;
+}
+
+async function getContract(details: ContractDetails, signer?: Signer) {
+  const { address, abi } = details;
   if (signer) {
-    return new ethers.Contract(address, abi, signer) as RewardsContract;
+    return new ethers.Contract(address, abi, signer);
   }
-  return (await ContractFactory.getInstance({
-    address,
-    abi,
-  })) as RewardsContract;
+  return await ContractFactory.getInstance({ address, abi });  
 }
 
 export function extractErrorMessage(err: any): string {
