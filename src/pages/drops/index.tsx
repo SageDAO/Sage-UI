@@ -10,6 +10,7 @@ import Countdown from '@/components/Countdown';
 import { computeDropStatus } from '@/utilities/status';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import { getDropsPageData } from '@/prisma/functions';
 
 interface Props {
   drops: Drop_include_GamesAndArtist[];
@@ -46,7 +47,7 @@ function drops({ drops }: Props) {
           const buttonDisplay = status === 'Upcoming' ? 'get notifications' : 'view drop artworks';
           async function buttonHandler() {
             if (status === 'Upcoming') {
-							//TODO: handle notifications
+              //TODO: handle notifications
               toast.warning('not implemented!');
               return;
             }
@@ -98,11 +99,7 @@ export default drops;
 export async function getStaticProps(
   _context: GetStaticPropsContext
 ): Promise<GetStaticPropsResult<Props>> {
-  const drops = await prisma.drop.findMany({
-    orderBy: { approvedAt: 'desc' },
-    include: { Auctions: true, Lotteries: true, Artist: true },
-    take: 3,
-  });
+  const drops = await getDropsPageData(prisma);
 
   return {
     props: {

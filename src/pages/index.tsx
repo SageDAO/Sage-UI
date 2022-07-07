@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Hero from '@/components/Hero';
 import Countdown from '@/components/Countdown';
 import { computeDropStatus } from '@/utilities/status';
+import { getHomePageData } from '@/prisma/functions';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -91,22 +92,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
 }
 
 export async function getStaticProps() {
-  let drops: Drop_include_GamesAndArtist[] = await prisma.drop.findMany({
-    where: { approvedAt: { not: null } },
-    orderBy: {
-      approvedAt: 'desc',
-    },
-    include: {
-      Artist: true,
-      Lotteries: { where: { contractAddress: { not: null } } },
-      Auctions: { where: { contractAddress: { not: null } } },
-    },
-  });
-
-  const upcomingDrops = drops.splice(0, 4);
-  //TODO: discuss and implement choosing and querying featured drop
-  const featuredDrop = upcomingDrops[0];
-
+  const { featuredDrop, upcomingDrops } = await getHomePageData(prisma);
   return {
     props: {
       featuredDrop,
