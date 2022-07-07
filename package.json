@@ -11,7 +11,8 @@
     "prisma:studio": "npx prisma studio --schema=./src/prisma/schema.prisma",
     "prisma:db-pull": "npx prisma db pull --schema=./src/prisma/schema.prisma",
     "postinstall": "npm run prisma:generate && npm run typechain",
-    "test": "mocha --config mocharc.yml"
+    "test:data": "mocha --config mocharc.yml", 
+    "test:frontend": "npx cypress run"
   },
   "dependencies": {
     "@apollo/client": "^3.6.6",

@@ -3,7 +3,7 @@ import { BaseMedia } from '@/components/Media';
 import { User } from '@prisma/client';
 import prisma from '@/prisma/client';
 import { useRouter } from 'next/router';
-
+import { getArtistsPageData } from '@/prisma/functions';
 
 interface Props {
   artists: User[];
@@ -163,10 +163,7 @@ export default function artists({ artists }: Props) {
 }
 
 export async function getStaticProps() {
-  let artists: User[] = await prisma.user.findMany({
-    take: 5,
-    where: { role: 'ARTIST' },
-  });
+  const artists = getArtistsPageData(prisma);
 
   return {
     props: {

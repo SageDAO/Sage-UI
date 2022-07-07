@@ -1,16 +1,14 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
 import prisma from '@/prisma/client';
-import { Drop as DropType, Lottery, Prisma, User } from '@prisma/client';
+import { Drop as DropType, Lottery, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
-import LotteryTile from '@/components/Tiles/LotteryTile';
-import AuctionTile from '@/components/Tiles/AuctionTile';
-import { BaseMedia, PfpImage } from '@/components/Media';
-import Image from 'next/image';
+import { BaseMedia } from '@/components/Media';
 import { useSession } from 'next-auth/react';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';
 import { useRouter } from 'next/router';
+import { getIndividualDropsPagePaths, getIndividualDropsPageData } from '@/prisma/functions';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -35,15 +33,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
     new Array().concat(drawings, lotteries) as Lottery[],
     walletAddress as string
   );
-  //TODO: restrict access to unapproved drops
-  if (!drop) {
-    return (
-      <div className=''>Oops it appears the drop you are trying to reach is not available</div>
-    );
-  }
-  const hasAuctions: boolean = auctions.length > 0;
-  const hasDrawings: boolean = drawings.length > 0;
-  const hasLotteries: boolean = lotteries.length > 0;
+  // const hasAuctions: boolean = auctions.length > 0;
+  // const hasDrawings: boolean = drawings.length > 0;
+  // const hasLotteries: boolean = lotteries.length > 0;
   const router = useRouter();
 
   return (
@@ -144,14 +136,6 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
 export async function getStaticProps({
   params,
 }: GetStaticPropsContext): Promise<GetStaticPropsResult<Props>> {
-  const dropPageQuery = Prisma.validator<Prisma.DropArgs>()({
-    include: {
-      Artist: true,
-      Lotteries: { include: { Nfts: true } },
-      Auctions: { include: { Nft: true } },
-    },
-  });
-
   if (!params) {
     return {
       redirect: {
@@ -161,10 +145,7 @@ export async function getStaticProps({
     };
   }
 
-  const drop = await prisma.drop.findFirst({
-    ...dropPageQuery,
-    where: { id: Number(params.id) },
-  });
+  const drop = await getIndividualDropsPageData(prisma, Number(params.id));
 
   if (!drop) {
     return {
@@ -190,16 +171,6 @@ export async function getStaticProps({
 }
 
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
-  let drops: DropType[] = await prisma.drop.findMany({
-    where: {
-      approvedAt: {
-        not: null,
-      },
-    },
-  });
-
-  const paths = drops.map((drop) => ({
-    params: { id: String(drop.id) },
-  }));
+  const paths = await getIndividualDropsPagePaths(prisma);
   return { paths, fallback: 'blocking' };
 }

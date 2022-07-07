@@ -1,8 +1,21 @@
 import { parameters } from '../constants/config';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma, Role } from '@prisma/client';
 
 const { LOTTERY_ADDRESS, AUCTION_ADDRESS } = parameters;
+
+const FilterDropApprovedOnly: Prisma.DropWhereInput = {
+  approvedAt: { not: null },
+};
+
+const FilterDropContractValidation: Prisma.DropWhereInput = {
+  Lotteries: { every: { contractAddress: { not: null, equals: LOTTERY_ADDRESS } } },
+  Auctions: { every: { contractAddress: { not: null, equals: AUCTION_ADDRESS } } },
+};
+
+const FilterUserIsArtist: Prisma.UserWhereInput = {
+  role: Role.ARTIST,
+};
 
 export async function getHomePageData(prisma: PrismaClient) {
   let drops: Drop_include_GamesAndArtist[] = await prisma.drop.findMany({
@@ -15,9 +28,8 @@ export async function getHomePageData(prisma: PrismaClient) {
       Auctions: true,
     },
     where: {
-      approvedAt: { not: null },
-      Lotteries: { every: { contractAddress: { not: null, equals: LOTTERY_ADDRESS } } },
-      Auctions: { every: { contractAddress: { not: null, equals: AUCTION_ADDRESS } } },
+      ...FilterDropApprovedOnly,
+      ...FilterDropContractValidation,
     },
     take: 4,
   });
@@ -37,11 +49,74 @@ export async function getDropsPageData(prisma: PrismaClient) {
       Artist: true,
     },
     where: {
-      Lotteries: { every: { contractAddress: { not: null, equals: LOTTERY_ADDRESS } } },
-      Auctions: { every: { contractAddress: { not: null, equals: AUCTION_ADDRESS } } },
+      ...FilterDropContractValidation,
+      ...FilterDropApprovedOnly,
     },
     take: 3,
   });
 
   return drops;
+}
+
+export async function getIndividualDropsPagePaths(prisma: PrismaClient) {
+  let drops = await prisma.drop.findMany({
+    where: {
+      ...FilterDropApprovedOnly,
+      ...FilterDropContractValidation,
+    },
+  });
+
+  const paths = drops.map((drop) => ({
+    params: { id: String(drop.id) },
+  }));
+
+  return paths;
+}
+
+export async function getIndividualDropsPageData(prisma: PrismaClient, id: number) {
+  const drop = await prisma.drop.findFirst({
+    include: {
+      Artist: true,
+      Lotteries: { include: { Nfts: true } },
+      Auctions: { include: { Nft: true } },
+    },
+    where: {
+      id,
+      ...FilterDropApprovedOnly,
+      ...FilterDropContractValidation,
+    },
+  });
+
+  return drop;
+}
+
+export async function getArtistsPageData(prisma: PrismaClient) {
+  let artists = await prisma.user.findMany({
+    take: 5,
+    where: {
+      ...FilterUserIsArtist,
+    },
+  });
+
+  return artists;
+}
+
+export async function getIndividualArtistsPagePaths(prisma: PrismaClient) {
+  let artists = await prisma.user.findMany({
+    where: { ...FilterUserIsArtist },
+    take: 20,
+  });
+
+  const paths = artists.map((artist) => ({
+    params: { id: String(artist.walletAddress) },
+  }));
+
+  return paths;
+}
+
+export async function getIndividualArtistsPageData(prisma: PrismaClient, walletAddress: string) {
+  const artist = await prisma.user.findUnique({
+    where: { walletAddress },
+  });
+  return artist;
 }

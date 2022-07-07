@@ -2,6 +2,7 @@ import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } fro
 import { User } from '@prisma/client';
 import prisma from '@/prisma/client';
 import Hero from '@/components/Hero';
+import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
 Hero;
 
 interface Props {
@@ -28,7 +29,7 @@ export async function getStaticProps({
     };
   }
 
-  const artist = await prisma.user.findUnique({ where: { walletAddress: String(params.id) } });
+  const artist = await getIndividualArtistsPageData(prisma, String(params.id));
 
   if (!artist) {
     return {
@@ -43,16 +44,6 @@ export async function getStaticProps({
 }
 
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
-  let artists: User[] = await prisma.user.findMany({
-    where: { role: 'ARTIST' },
-    take: 20,
-  });
-
-  // Get the paths we want to pre-render based on drops
-  const paths = artists.map((artist) => ({
-    params: { id: String(artist.walletAddress) },
-  }));
-  // We'll pre-render only these paths at build time.
-  // { fallback: blocking } allows for ISR, if a new page is needed for a new drop then the server will serve the page for the first request and cache static html for all future reqeusts
+  const paths = await getIndividualArtistsPagePaths(prisma);
   return { paths, fallback: 'blocking' };
 }
