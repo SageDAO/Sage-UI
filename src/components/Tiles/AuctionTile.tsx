@@ -7,7 +7,7 @@ import useModal from '@/hooks/useModal';
 import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
 import PlaceBidButton from '@/components/Games/PlaceBidButton';
 import { PfpImage } from '@/components/Media';
-import { useGetUserQuery } from '@/store/user';
+import { useGetUserQuery } from '@/store/usersReducer';
 import Status from '@/components/Status';
 import { useSession } from 'next-auth/react';
 

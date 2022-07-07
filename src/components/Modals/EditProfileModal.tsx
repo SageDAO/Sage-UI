@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal, { Props as ModalProps } from '@/components/Modals';
-import { useUpdateUserMutation } from '@/store/user';
+import { useUpdateUserMutation } from '@/store/usersReducer';
 import type { SafeUserUpdate } from '@/prisma/types';
 
 //union type for all the keys of SafeUserUpdate

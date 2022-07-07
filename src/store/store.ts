@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { userApi } from './user';
+import { usersApi } from './usersReducer';
 import { prizesApi } from './prizesReducer';
 import { lotteriesApi } from './lotteriesReducer';
 import { auctionsApi } from './auctionsReducer';
@@ -8,7 +8,7 @@ import { dashboardApi } from './dashboardReducer';
 import { dropsApi } from './dropsReducer';
 
 const rootReducer = combineReducers({
-  [userApi.reducerPath]: userApi.reducer,
+  [usersApi.reducerPath]: usersApi.reducer,
   [prizesApi.reducerPath]: prizesApi.reducer,
   [auctionsApi.reducerPath]: auctionsApi.reducer,
   [lotteriesApi.reducerPath]: lotteriesApi.reducer,
@@ -22,7 +22,7 @@ const store = configureStore({
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(userApi.middleware)
+      .concat(usersApi.middleware)
       .concat(prizesApi.middleware)
       .concat(auctionsApi.middleware)
       .concat(lotteriesApi.middleware)

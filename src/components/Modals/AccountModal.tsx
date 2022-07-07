@@ -12,7 +12,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import Loader from 'react-loader-spinner';
 import shortenAddress from '@/utilities/shortenAddress';
 import { getCsrfToken, useSession } from 'next-auth/react';
-import { useSignInMutation, useSignOutMutation } from '@/store/user';
+import { useSignInMutation, useSignOutMutation } from '@/store/usersReducer';
 import { BaseMedia } from '@/components/Media';
 import Image from 'next/image';
 

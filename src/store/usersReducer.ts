@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '@prisma/client';
-import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
-import { parameters } from '@/constants/config';
 import type { SafeUserUpdate } from '@/prisma/types';
 import { signIn, signOut } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
@@ -23,9 +21,9 @@ export type UserDisplayInfo = Pick<User, 'username' | 'displayName' | 'profilePi
 //     return false;
 //   }
 // }
-export const userApi = createApi({
+export const usersApi = createApi({
   reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: ['User', 'Wallet'],
   endpoints: (builder) => ({
     signIn: builder.mutation<null, { message: SiweMessage; signature: string }>({
@@ -49,7 +47,7 @@ export const userApi = createApi({
     getUser: builder.query<User, void>({
       query: () => {
         return {
-          url: 'api/user',
+          url: 'user',
           method: 'GET',
         };
       },
@@ -58,7 +56,7 @@ export const userApi = createApi({
     getUserDisplayInfo: builder.query<UserDisplayInfo, string>({
       query: (address: string) => {
         return {
-          url: `api/user/?wallet=${address}`,
+          url: `user/?wallet=${address}`,
           method: 'GET',
         };
       },
@@ -66,7 +64,7 @@ export const userApi = createApi({
     updateUser: builder.mutation<User, SafeUserUpdate>({
       query: (user) => {
         return {
-          url: 'api/user',
+          url: 'user',
           method: 'PATCH',
           body: { user },
         };
@@ -83,7 +81,7 @@ export const userApi = createApi({
     getSearchResults: builder.query<any, { term: string; category: string }>({
       query: ({ category, term }) => {
         return {
-          url: 'api/search',
+          url: 'search',
           method: 'GET',
           params: {
             term,
@@ -102,4 +100,4 @@ export const {
   useUpdateUserMutation,
   useSignInMutation,
   useSignOutMutation,
-} = userApi;
+} = usersApi;

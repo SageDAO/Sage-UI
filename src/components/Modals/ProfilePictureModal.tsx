@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import AvatarEditor from 'react-avatar-editor';
 import type { SafeUserUpdate } from '@/prisma/types';
-import { useGetUserQuery, useUpdateUserMutation } from '@/store/user';
+import { useGetUserQuery, useUpdateUserMutation } from '@/store/usersReducer';
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 

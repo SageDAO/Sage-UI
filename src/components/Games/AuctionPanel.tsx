@@ -2,7 +2,7 @@ import { useAccount, useBalance } from 'wagmi';
 import { User } from '@prisma/client';
 import { Auction_include_Nft } from '@/prisma/types';
 import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
-import { useGetUserDisplayInfoQuery } from '@/store/user';
+import { useGetUserDisplayInfoQuery } from '@/store/usersReducer';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import Status from '@/components/Status';

@@ -2,7 +2,7 @@ import type { SafeUserUpdate } from '@/prisma/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/prisma/client';
 import { getSession } from 'next-auth/react';
-import { UserDisplayInfo } from '@/store/user';
+import { UserDisplayInfo } from '@/store/usersReducer';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {

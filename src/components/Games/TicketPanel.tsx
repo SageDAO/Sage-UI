@@ -1,5 +1,5 @@
 import { Lottery_include_Nft } from '@/prisma/types';
-import { useGetUserDisplayInfoQuery } from '@/store/user';
+import { useGetUserDisplayInfoQuery } from '@/store/usersReducer';
 useGetUserDisplayInfoQuery;
 import { useBalance, useAccount } from 'wagmi';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
