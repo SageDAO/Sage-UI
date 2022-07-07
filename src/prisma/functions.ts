@@ -2,10 +2,7 @@ import { parameters } from '../constants/config';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { PrismaClient } from '@prisma/client';
 
-console.log('functions()');
 const { LOTTERY_ADDRESS, AUCTION_ADDRESS } = parameters;
-// const LOTTERY_ADDRESS = '';
-// const AUCTION_ADDRESS = '';
 
 export async function getHomePageData(prisma: PrismaClient) {
   let drops: Drop_include_GamesAndArtist[] = await prisma.drop.findMany({
