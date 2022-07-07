@@ -5,7 +5,7 @@ import { useSortBy, useTable, usePagination, useGlobalFilter } from 'react-table
 import { UserDetailsModal } from './UserDetailsModal';
 import { GlobalFilter } from './GlobalFilter';
 import shortenAddress from '@/utilities/shortenAddress';
-import { useGetAllUsersAndEarnedPointsQuery } from '@/store/services/dashboardReducer';
+import { useGetAllUsersAndEarnedPointsQuery } from '@/store/dashboardReducer';
 import { User } from '@prisma/client';
 import useModal from '@/hooks/useModal';
 import { PfpImage } from '@/components/Media';

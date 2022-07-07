@@ -1,6 +1,6 @@
 import React from 'react';
 import { Role } from '@prisma/client';
-import { useGetUserQuery } from '@/store/services/user';
+import { useGetUserQuery } from '@/store/user';
 import { DashBoardPage } from '@/components/Dashboard/DashboardPage';
 import LoaderDots from '@/components/LoaderDots';
 

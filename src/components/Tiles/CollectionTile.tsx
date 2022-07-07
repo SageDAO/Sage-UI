@@ -1,7 +1,7 @@
 import { BaseMedia, PfpImage } from '../Media';
-import { ClaimPrizeRequest, useClaimLotteryPrizeMutation } from '@/store/services/prizesReducer';
+import { ClaimPrizeRequest, useClaimLotteryPrizeMutation } from '@/store/prizesReducer';
 import { GamePrize } from '@/prisma/types';
-import { useClaimAuctionNftMutation } from '@/store/services/auctionsReducer';
+import { useClaimAuctionNftMutation } from '@/store/auctionsReducer';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';

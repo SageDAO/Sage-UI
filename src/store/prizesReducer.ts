@@ -1,10 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Prisma } from '@prisma/client';
-import { toast } from 'react-toastify';
-import { extractErrorMessage, getLotteryContract } from '../../utilities/contracts';
-import { playErrorSound, playPrizeClaimedSound } from '../../utilities/sounds';
-import { GamePrize } from '@/prisma/types';
 import { Signer } from 'ethers';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { GamePrize } from '@/prisma/types';
+import { toast } from 'react-toastify';
+import { extractErrorMessage, getLotteryContract } from '../utilities/contracts';
+import { playErrorSound, playPrizeClaimedSound } from '../utilities/sounds';
 
 export interface ClaimPrizeRequest {
   lotteryId: number;

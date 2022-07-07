@@ -1,16 +1,16 @@
-import { BuyTicketRequest, useBuyTicketsMutation } from '@/store/services/lotteriesReducer';
-import Modal, { Props as ModalProps } from '@/components/Modals';
-import { useSession } from 'next-auth/react';
-import { Lottery_include_Nft, Nft } from '@/prisma/types';
-import { User } from '@prisma/client';
-import GamesModalHeader from './GamesModalHeader';
 import { useState } from 'react';
-import { useAccount, useSigner } from 'wagmi';
-import GetTicketsButton from '@/components/Games/GetTicketsButton';
-import Status from '@/components/Status';
-import { useGetEarnedPointsQuery } from '@/store/services/pointsReducer';
+import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
+import { User } from '@prisma/client';
+import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
+import { Lottery_include_Nft, Nft } from '@/prisma/types';
+import { BuyTicketRequest, useBuyTicketsMutation } from '@/store/lotteriesReducer';
+import { useGetEarnedPointsQuery } from '@/store/pointsReducer';
+import Modal, { Props as ModalProps } from '@/components/Modals';
+import Status from '@/components/Status';
+import GetTicketsButton from '@/components/Games/GetTicketsButton';
+import GamesModalHeader from './GamesModalHeader';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -21,10 +21,9 @@ interface Props extends ModalProps {
 //@scss : '@/styles/components/_games-modal.scss'
 function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
-  const { data: accountData } = useAccount();
   const { data: sessionData } = useSession();
   const [buyTickets, { isLoading }] = useBuyTicketsMutation();
-  const { data: earnedPoints } = useGetEarnedPointsQuery(sessionData?.address as string, {
+  const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, {
     skip: !sessionData,
   });
   const { data: signer } = useSigner();

@@ -86,13 +86,8 @@ export const lotteriesApi = createApi({
 });
 
 async function buyTicketsWithoutPoints(buyRequest: BuyTicketRequest): Promise<ContractTransaction> {
-  const value = BigInt(buyRequest.numberOfTickets) * buyRequest.ticketCostCoins;
-  // const value = ethers.BigNumber.from(1);
   const contract = await getLotteryContract(buyRequest.signer);
-  console.log('numberoftix: ', buyRequest.numberOfTickets);
-  const tx = await contract.buyTickets(buyRequest.lotteryId, buyRequest.numberOfTickets);
-
-  return tx;
+  return await contract.buyTickets(buyRequest.lotteryId, buyRequest.numberOfTickets);
 }
 
 async function buyTicketsUsingPoints({
@@ -104,9 +99,6 @@ async function buyTicketsUsingPoints({
   try {
     const contract = await getLotteryContract(signer);
     const points = Number(earnedPoints.totalPointsEarned);
-    console.log(
-      `buyTicketsWithSignedMessage()  :: ${points} :: ${lotteryId} :: ${numberOfTickets} :: ${earnedPoints.signedMessage}`
-    );
     const tx = await contract.buyTicketsWithSignedMessage(
       points,
       lotteryId,

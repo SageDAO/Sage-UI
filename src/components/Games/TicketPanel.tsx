@@ -1,11 +1,11 @@
 import { Lottery_include_Nft } from '@/prisma/types';
-import { useGetUserDisplayInfoQuery } from '@/store/services/user';
+import { useGetUserDisplayInfoQuery } from '@/store/user';
 useGetUserDisplayInfoQuery;
 import { useBalance, useAccount } from 'wagmi';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
 import { Lottery, User } from '@prisma/client';
-import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
+import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/pointsReducer';
 import Status from '@/components/Status';
 import GetTicketsButton from './GetTicketsButton';
 import { parameters } from '@/constants/config';

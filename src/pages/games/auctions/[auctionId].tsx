@@ -14,8 +14,8 @@ import {
 } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
-import { useGetUserDisplayInfoQuery } from '@/store/services/user';
+import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
+import { useGetUserDisplayInfoQuery } from '@/store/user';
 import { getBlockchainTimestamp } from '@/utilities/contracts';
 import { useSession } from 'next-auth/react';
 import { BaseMedia } from '@/components/Media';

@@ -1,13 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import walletReducer from './walletSlice';
-import themeReducer from './themeSlice';
-import { userApi } from './services/user';
-import { prizesApi } from './services/prizesReducer';
-import { lotteriesApi } from './services/lotteriesReducer';
-import { auctionsApi } from './services/auctionsReducer';
-import { pointsApi } from './services/pointsReducer';
-import { dashboardApi } from './services/dashboardReducer';
-import { dropsApi } from './services/dropsReducer';
+import { userApi } from './user';
+import { prizesApi } from './prizesReducer';
+import { lotteriesApi } from './lotteriesReducer';
+import { auctionsApi } from './auctionsReducer';
+import { pointsApi } from './pointsReducer';
+import { dashboardApi } from './dashboardReducer';
+import { dropsApi } from './dropsReducer';
 
 const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
@@ -17,8 +15,6 @@ const rootReducer = combineReducers({
   [pointsApi.reducerPath]: pointsApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [dropsApi.reducerPath]: dropsApi.reducer,
-  themeReducer,
-  walletReducer,
 });
 
 const store = configureStore({

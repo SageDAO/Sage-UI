@@ -1,5 +1,5 @@
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { useGetApprovedDropsQuery } from '@/store/services/dropsReducer';
+import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
 import { gql, useQuery } from '@apollo/client';
 import { utils } from 'ethers';

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import prisma from '@/prisma/client';
 import { Prisma } from '@prisma/client';
 import { useRouter } from 'next/router';
-import { useGetTicketCountsQuery } from '@/store/services/lotteriesReducer';
+import { useGetTicketCountsQuery } from '@/store/lotteriesReducer';
 import { useSession } from 'next-auth/react';
-import { useGetPrizesByUserAndLotteryQuery } from '@/store/services/prizesReducer';
-import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/services/pointsReducer';
+import { useGetPrizesByUserAndLotteryQuery } from '@/store/prizesReducer';
+import { useGetPointsBalanceQuery, useGetEscrowPointsQuery } from '@/store/pointsReducer';
 // import { getBlockchainTimestamp, getCoinBalance } from '@/utilities/contracts';
 import { Drop, Lottery_include_Nft, Auction_include_Nft, User } from '@/prisma/types';
 import {

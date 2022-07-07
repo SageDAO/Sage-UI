@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
-import { useGetAuctionStateQuery, usePlaceBidMutation } from '@/store/services/auctionsReducer';
+import { useGetAuctionStateQuery, usePlaceBidMutation } from '@/store/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';

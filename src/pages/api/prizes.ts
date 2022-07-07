@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma, PrizeProof } from '@prisma/client';
+import { getSession } from 'next-auth/react';
 import prisma from '@/prisma/client';
 import { GamePrize, PrizeWithNftAndArtist } from '@/prisma/types';
-import { getSession } from 'next-auth/react';
 
 function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
   return {

@@ -1,11 +1,8 @@
 import {
   useGetClaimedAuctionNftsQuery,
   useGetUnclaimedAuctionNftsQuery,
-} from '@/store/services/auctionsReducer';
-import {
-  useGetClaimedPrizesQuery,
-  useGetUnclaimedPrizesQuery,
-} from '@/store/services/prizesReducer';
+} from '@/store/auctionsReducer';
+import { useGetClaimedPrizesQuery, useGetUnclaimedPrizesQuery } from '@/store/prizesReducer';
 import { GamePrize } from '@/prisma/types';
 import CollectionTile from './Tiles/CollectionTile';
 import LoaderDots from './LoaderDots';

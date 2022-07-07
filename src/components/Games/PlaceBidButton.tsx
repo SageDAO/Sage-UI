@@ -1,7 +1,7 @@
 import type { Auction_include_Nft } from '@/prisma/types';
 import { computeAuctionStatus } from '@/utilities/status';
 import Countdown from '@/components/Countdown';
-import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
+import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
 import LoaderSpinner from '../LoaderSpinner';
 
 interface Props {

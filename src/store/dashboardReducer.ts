@@ -1,6 +1,5 @@
 import { User } from '@prisma/client';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { toast } from 'react-toastify';
 import type { Lottery as LotteryContract } from '@/types/contracts';
 import { getLotteryContract } from '@/utilities/contracts';
 
@@ -26,18 +25,17 @@ export interface LotteryStats {
 
 export const dashboardApi = createApi({
   reducerPath: 'dashboardApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
-  // refetch queries every 5 minutes
-  refetchOnMountOrArgChange: 300,
+  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+  refetchOnMountOrArgChange: 300, // refetch queries every 5 minutes
   endpoints: (builder) => ({
     getAllUsersAndEarnedPoints: builder.query<User[], void>({
-      query: () => '/api/user?action=GetAllUsersAndEarnedPoints',
+      query: () => 'user?action=GetAllUsersAndEarnedPoints',
     }),
     getLotteriesStats: builder.query<LotteryStats[], void>({
       queryFn: async () => {
         try {
-          console.time('getLotteryStats()');
-          let prizesResponse = fetch('/api/prizes?action=GetPrizesStats');
+          console.time('getLotteriesStats()');
+          let prizesResponse = fetch('prizes?action=GetPrizesStats');
           let allStats: LotteryStats[] = [];
           const lotteryContract = await getLotteryContract();
           const lotteryCount = await lotteryContract.getLotteryCount();
@@ -62,7 +60,7 @@ export const dashboardApi = createApi({
           console.log(e);
           return { data: [] };
         } finally {
-          console.timeEnd('getLotteryStats()');
+          console.timeEnd('getLotteriesStats()');
         }
       },
     }),

@@ -56,7 +56,7 @@ export const auctionsApi = createApi({
     }),
     placeBid: builder.mutation<null, BidArgs>({
       queryFn: async ({ auctionId, amount, signer }) => {
-        console.log(`bid(${auctionId}, ${amount})`);
+        console.log(`placeBid(${auctionId}, ${amount})`);
         const weiValue = ethers.utils.parseEther(amount.toString());
         try {
           const auctionContract = await getAuctionContract(signer);
@@ -98,6 +98,8 @@ export const auctionsApi = createApi({
           });
           await tx.wait();
           var claimedAt = await updateDbPrizeClaimedDate(_fetchWithBQ, id);
+          playPrizeClaimedSound();
+          return { data: claimedAt };
         } catch (e) {
           console.error(e);
           const errMsg = extractErrorMessage(e);
@@ -105,8 +107,6 @@ export const auctionsApi = createApi({
           playErrorSound();
           return { error: { status: 500, data: null } };
         }
-        playPrizeClaimedSound();
-        return { data: claimedAt };
       },
       invalidatesTags: ['Auction', 'AuctionState'],
     }),

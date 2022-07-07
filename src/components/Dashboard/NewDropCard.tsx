@@ -1,5 +1,5 @@
 import { DropWithArtist } from '@/prisma/types';
-import { useApproveAndDeployDropMutation } from '@/store/services/dropsReducer';
+import { useApproveAndDeployDropMutation } from '@/store/dropsReducer';
 import { Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';

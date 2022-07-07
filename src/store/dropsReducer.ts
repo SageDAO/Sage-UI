@@ -6,14 +6,14 @@ import {
   Drop_include_GamesAndArtist,
   Splitter_include_Entries,
 } from '@/prisma/types';
+import { toast } from 'react-toastify';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
 import splitterJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
-import { toast } from 'react-toastify';
 
 export const dropsApi = createApi({
   reducerPath: 'dropsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  refetchOnMountOrArgChange: 60,
+  refetchOnMountOrArgChange: 120, // refetch every 2 minutes
   tagTypes: ['PendingDrops'],
   endpoints: (builder) => ({
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
@@ -25,16 +25,16 @@ export const dropsApi = createApi({
       providesTags: ['PendingDrops'],
     }),
     approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
-      queryFn: async ({ dropId, signer }, {}, _, fetchWithBQ) => {
+      queryFn: async ({ dropId, signer }, { dispatch }, _, fetchWithBQ) => {
         try {
           await deployDrop(dropId, signer, fetchWithBQ);
+          dispatch(dropsApi.util.invalidateTags(['PendingDrops'])); // refetch pending drops
           return { data: true };
         } catch (e) {
           console.log(e);
           return { data: false };
         }
       },
-      invalidatesTags: ['PendingDrops'],
     }),
   }),
 });
@@ -44,7 +44,6 @@ async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   inspectDropGamesEndTimes(drop);
   await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);
   await processSplitter(drop.SecondarySplitter, signer, fetchWithBQ);
-  return;
   await createNftCollection(drop, signer);
   await createAuctions(drop, signer, fetchWithBQ);
   await createLotteries(drop, signer, fetchWithBQ);
@@ -124,7 +123,7 @@ async function createNftCollection(drop: DropFull, signer: Signer) {
   const collectionExists = await nftContract.collectionExists(drop.id);
 
   if (collectionExists) {
-    console.log(`Collection already exists for drop ${drop.id}`);
+    console.log(`createNftCollection() :: Collection already exists for drop ${drop.id}`);
     return;
   }
 
@@ -149,7 +148,7 @@ async function createNftCollection(drop: DropFull, signer: Signer) {
     primarySalesDestination!
   );
   await tx.wait();
-  console.log('Collection created');
+  console.log('createNftCollection() :: Collection created');
 }
 
 async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) {
@@ -158,7 +157,9 @@ async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
 
   for (const auction of drop.Auctions) {
     if (auction.contractAddress) {
-      console.log(`Auction ${auction.id} has already been deployed to ${auction.contractAddress}`);
+      console.log(
+        `createAuctions() :: Auction ${auction.id} has already been deployed to ${auction.contractAddress}`
+      );
       continue;
     }
 
@@ -167,7 +168,7 @@ async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
     const minimumPrice = ethers.utils.parseEther(auction.minimumPrice!);
 
     console.log(
-      `AuctionContract.createAuction(${auction.id}, ${auction.dropId}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${nftContractAddress})`
+      `createAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.dropId}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${nftContractAddress})`
     );
     const tx = await auctionContract.createAuction(
       auction.id,
@@ -191,7 +192,9 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
 
   for (const l of drop.Lotteries) {
     if (l.contractAddress) {
-      console.log(`Lottery ${l.id} has already been deployed to ${l.contractAddress}`);
+      console.log(
+        `createLotteries() :: Lottery ${l.id} has already been deployed to ${l.contractAddress}`
+      );
       continue;
     }
 

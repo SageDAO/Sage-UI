@@ -1,8 +1,8 @@
 import { useAccount, useBalance } from 'wagmi';
 import { User } from '@prisma/client';
 import { Auction_include_Nft } from '@/prisma/types';
-import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
-import { useGetUserDisplayInfoQuery } from '@/store/services/user';
+import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
+import { useGetUserDisplayInfoQuery } from '@/store/user';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import Status from '@/components/Status';
@@ -66,7 +66,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
         <div className='game-panel__balance-label'>
           Balance
           <div className='game-panel__balance'>
-            {(userBalance && userBalance.formatted + ' ' + userBalance.symbol)}
+            {userBalance && userBalance.formatted + ' ' + userBalance.symbol}
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function AuctionPanel({ auction, artist }: Props) {
             <h1 className='game-panel__pricing-label'>Highest Bidder</h1>
             <div className='game-panel__highest-bidder'>
               <div className='game-panel__highest-bidder-pfp'>
-                <PfpImage src={highestBidder?.profilePicture}  />
+                <PfpImage src={highestBidder?.profilePicture} />
               </div>
               <div className='game-panel__highest-bidder-name'>
                 {highestBidder?.displayName}

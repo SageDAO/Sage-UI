@@ -5,7 +5,7 @@ import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
 import type { User } from '@prisma/client';
 import GetTicketsButton from '../Games/GetTicketsButton';
-import { useGetUserQuery } from '@/store/services/user';
+import { useGetUserQuery } from '@/store/user';
 import { PfpImage } from '../Media';
 import Status from '../Status';
 import { useSession } from 'next-auth/react';

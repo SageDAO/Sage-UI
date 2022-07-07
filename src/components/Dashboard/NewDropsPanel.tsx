@@ -1,4 +1,4 @@
-import { useGetDropsPendingApprovalQuery } from '@/store/services/dropsReducer';
+import { useGetDropsPendingApprovalQuery } from '@/store/dropsReducer';
 import LoaderDots from '../LoaderDots';
 import NewDropCard from './NewDropCard';
 

@@ -1,4 +1,4 @@
-import { useGetPointsBalanceQuery } from '@/store/services/pointsReducer';
+import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { PfpImage } from '@/components/Media';
 import LoaderDots from '../LoaderDots';

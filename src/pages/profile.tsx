@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import { toast } from 'react-toastify';
-import { useGetUserQuery } from '@/store/services/user';
+import { useGetUserQuery } from '@/store/user';
 import shortenAddress from '@/utilities/shortenAddress';
 import EditProfileModal from '@/components/Modals/EditProfileModal';
 import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';

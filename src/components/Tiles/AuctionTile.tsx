@@ -4,10 +4,10 @@ import type { User } from '@prisma/client';
 import { basePathAuctions } from '@/constants/paths';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
-import { useGetAuctionStateQuery } from '@/store/services/auctionsReducer';
+import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
 import PlaceBidButton from '@/components/Games/PlaceBidButton';
 import { PfpImage } from '@/components/Media';
-import { useGetUserQuery } from '@/store/services/user';
+import { useGetUserQuery } from '@/store/user';
 import Status from '@/components/Status';
 import { useSession } from 'next-auth/react';
 
