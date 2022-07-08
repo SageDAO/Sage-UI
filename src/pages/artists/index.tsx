@@ -163,7 +163,7 @@ export default function artists({ artists }: Props) {
 }
 
 export async function getStaticProps() {
-  const artists = getArtistsPageData(prisma);
+  const artists = await getArtistsPageData(prisma);
 
   return {
     props: {
