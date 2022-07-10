@@ -78,6 +78,10 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                   className='drop-page__grid-item'
                   onClick={() => router.push(`/games/lotteries/${l.id}`)}
                 >
+                  <div className='drop-page__grid-item-header'>
+                    <h1 className='drop-page__grid-item-header-left'>edition size:</h1>
+                    <div className='drop-page__grid-item-header-right'>system: </div>
+                  </div>
                   <div className='drop-page__grid-item-img'>
                     <BaseMedia src={l.Nfts[0].s3Path}></BaseMedia>
                   </div>

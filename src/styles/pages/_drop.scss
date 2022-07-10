@@ -47,18 +47,18 @@
   width: 100%;
   flex: 1;
   color: c.$white;
-	gap: 40px;
+  gap: 40px;
 }
 
 .drop-page__header-logo-column {
-	// background-color: red;
-	height: 100%;
+  // background-color: red;
+  height: 100%;
 }
 
 .drop-page__header-logo-container {
-	position:relative;
-	aspect-ratio: 45/47;
-	width: 60px;
+  position: relative;
+  aspect-ratio: 45/47;
+  width: 60px;
 }
 
 .drop-page__header-main-column {
@@ -109,7 +109,6 @@
   border: 2px solid transparent;
   color: white;
   height: 487px;
-  // grid-column: span 2 / span 2;
   aspect-ratio: 345/487;
   color: c.$white;
   img {
@@ -123,6 +122,14 @@
       transform: scale(1.05);
     }
   }
+}
+
+.drop-page__grid-item-header {
+  display: flex;
+	align-items: center;
+  justify-content: space-between;
+	height: 30px;
+	padding: 0 5px;
 }
 
 .drop-page__grid-item-img {

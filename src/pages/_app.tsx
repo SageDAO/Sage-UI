@@ -37,13 +37,14 @@ const wagmiClient = createClient({
   autoConnect: true,
 });
 
+const { SUBGRAPH_URL } = parameters;
+const apolloClient = new ApolloClient({
+  uri: SUBGRAPH_URL,
+  cache: new InMemoryCache(),
+});
+
 function App({ Component, pageProps, router }: AppProps) {
   if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <MaintenancePage />;
-  const { SUBGRAPH_URL } = parameters;
-  const apolloClient = new ApolloClient({
-    uri: SUBGRAPH_URL,
-    cache: new InMemoryCache(),
-  });
   return (
     <ReduxProvider store={store}>
       <WagmiProvider client={wagmiClient}>
