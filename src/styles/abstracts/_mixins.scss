@@ -1,4 +1,4 @@
-@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/colors' as *;
 @mixin img-container {
   position: relative;
   overflow: hidden;
@@ -50,6 +50,51 @@
   border-radius: 999px;
 }
 
+$themes: (
+  dark: (
+    base: $black,
+    base2: $dark,
+    accent: $gold,
+    contrast2: $light,
+    contrast: $white,
+  ),
+  light: (
+    base: $white,
+    base2: $light,
+    accent: $red,
+    contrast2: $dark,
+    contrast: $black,
+  ),
+);
+
+// From Sass 2.0 on, it is no longer allowed to declare globals on the fly.
+$theme-map: null;
+
+@mixin theme() {
+  @each $theme, $map in $themes {
+    // $theme: darkTheme, lightTheme
+    // $map: ('text-color': ..., 'bg-color': ...)
+
+    // make the $map globally accessible, so that theme-get() can access it
+    $theme-map: $map !global;
+
+    // make a class for each theme using interpolation -> #{}
+    // use & for making the theme class ancestor of the class
+    // from which you use @include theme() {...}
+    .#{$theme} & {
+			transition-duration: 200ms;
+      @content; // the content inside @include theme() {...}
+    }
+  }
+  // no use of the variable $theme-map now
+  $theme-map: null !global;
+}
+
+@function t($key) {
+  @return map-get($theme-map, $key);
+}
+
+
 @mixin animate-highlight {
   animation-duration: 900ms;
   animation-iteration-count: 7;
@@ -58,6 +103,6 @@
 
 @keyframes highlight {
   60% {
-    background-color: c.$bg-base;
+    // background-color: c.$bg-base;
   }
 }

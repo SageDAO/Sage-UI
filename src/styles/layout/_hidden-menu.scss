@@ -1,9 +1,18 @@
+@use '@/styles/abstracts/mixins' as m;
 .hidden-menu {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 10px 0px;
-	width: 80vw;
+  width: 80vw;
   background: transparent;
+}
+
+.theme-switch {
+  @include m.theme() {
+    background-color: m.t('base');
+    border: 1px solid m.t('contrast');
+    color: m.t('contrast2');
+  }
 }

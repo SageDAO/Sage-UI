@@ -51,7 +51,6 @@
 }
 
 .drop-page__header-logo-column {
-  // background-color: red;
   height: 100%;
 }
 
@@ -65,7 +64,6 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  // background-color: brown;
   max-width: 700px;
 }
 
@@ -92,7 +90,9 @@
 .drop-page__content {
   display: flex;
   justify-content: center;
-  background-color: c.$dark;
+  @include m.theme() {
+    background-color: m.t(base2);
+  }
   width: 100vw;
   padding: 110px 0;
 }
@@ -107,29 +107,39 @@
 .drop-page__grid-item {
   transition-duration: 200ms;
   border: 2px solid transparent;
-  color: white;
+  @include m.theme() {
+    background-color: m.t(base2);
+    color: m.t(contrast);
+  }
   height: 487px;
   aspect-ratio: 345/487;
-  color: c.$white;
   img {
     transition-duration: 200ms;
   }
   @include m.interact {
-    background-color: c.$white;
-    border: 2px solid c.$white;
-    color: c.$dark;
+    @include m.theme() {
+      background-color: m.t(contrast2);
+      color: m.t(base2);
+    }
+
     img {
+      background-color: c.$white;
       transform: scale(1.05);
+
+      @include m.theme() {
+        background-color: m.t(contrast);
+        border: 2px solid m.t(contrast);
+      }
     }
   }
 }
 
 .drop-page__grid-item-header {
   display: flex;
-	align-items: center;
+  align-items: center;
   justify-content: space-between;
-	height: 30px;
-	padding: 0 5px;
+  height: 30px;
+  padding: 0 5px;
 }
 
 .drop-page__grid-item-img {
@@ -148,7 +158,7 @@
   font-weight: 400;
   font-size: 10px;
   line-height: 130%;
-  color: #c4c4c4;
+  color: inherit;
 }
 
 .drop-page__grid-item-info-game-name {

@@ -59,9 +59,11 @@
     margin-left: 10px;
   }
   @include m.hover {
-    background-color: c.$accent;
+    @include m.theme() {
+      background-color: m.t(accent);
+      color: m.t(base);
+    }
     transform: translate3d(-10px, -10px, 0px);
-    color: black;
 
     // &:after,
     // &:before {
@@ -112,31 +114,26 @@
 .artists-page__item-content {
   display: flex;
   flex-direction: column;
-  color: inherit;
   height: 336px;
-	padding: 10px 0;
-	gap: 10px;
+  padding: 10px 0;
+  gap: 10px;
   aspect-ratio: 466/336;
 }
 
 .artists-page__item-content-header {
-	margin: 0px 20px 0px;
+  margin: 0px 20px 0px;
   font-style: normal;
   font-weight: 400;
   font-size: 40px;
   line-height: 51px;
-  color: inherit;
 }
 
 .artists-page__item-content-description {
-	margin: 0px 20px;
-	text-overflow: ellipsis;
-  // overflow: hidden;
-  // overflow: visible;
-  // white-space: nowrap;
+	color: inherit;
+  margin: 0px 20px;
+  text-overflow: ellipsis;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 130%;
-  color: inherit;
 }

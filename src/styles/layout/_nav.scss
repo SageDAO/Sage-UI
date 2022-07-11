@@ -11,6 +11,9 @@
   align-items: center;
   justify-content: center;
 	z-index: 998;
+	@include m.theme() {
+		
+	}
 }
 
 .nav__menu {

@@ -8,10 +8,12 @@
 
 .modal__backdrop {
   position: fixed;
-  background-color: c.$dark;
-  opacity: 0.9;
+  opacity: 0.5;
   backdrop-filter: blur(4px);
   inset: 0;
+  @include m.theme() {
+    background-color: m.t(base2);
+  }
 }
 
 .modal__container {
@@ -23,15 +25,16 @@
 }
 
 .modal__panel {
-	position: relative;
+  position: relative;
   overflow: hidden;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  background: c.$dark;
-  // box-shadow: 0px 4px 50px -10px rgba(83, 45, 234, 0.3), 0px 4px 50px #000000;
+  @include m.theme() {
+    background-color: m.t(base2);
+    color: m.t(contrast);
+  }
   min-width: 300px;
-  color: white;
   padding: 20px;
 }
 
@@ -47,12 +50,3 @@
   align-items: center;
 }
 
-// .modal__close-button {
-// 	@include m.interact;
-//   position: absolute;
-//   width: 30px;
-// 	top: 5%;
-// 	right: 5%;
-//   height: 30px;
-// }
-// fixed inset-0 flex items-center justify-center p-4

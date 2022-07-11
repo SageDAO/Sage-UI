@@ -38,8 +38,6 @@
   font-weight: 400;
   font-size: min(50px, 3.5vw);
   line-height: min(60px, 1.5em);
-
-  color: c.$white;
 }
 
 .drops-page__subheader-info {
@@ -87,12 +85,14 @@
 }
 
 .drops-page__drop-header-countdown {
-  color: c.$accent;
+  @include m.theme() {
+    color: m.t(accent);
+    border: 1px solid m.t(accent);
+  }
   display: flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-  border: 1px solid c.$accent;
   aspect-ratio: 466/85;
   width: min(400px, 10em);
 
@@ -134,7 +134,9 @@
   aspect-ratio: 345/50;
 
   &[data-status='Live'] {
-    background-color: c.$accent;
+    @include m.theme() {
+      background-color: m.t(accent);
+    }
   }
 }
 
@@ -158,4 +160,4 @@
   width: 80vw;
   aspect-ratio: 1196/640;
   z-index: 2;
- }
+}

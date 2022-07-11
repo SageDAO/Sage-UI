@@ -1,4 +1,5 @@
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 
 $indent: max(1em, 10vw);
 
@@ -6,12 +7,15 @@ $indent: max(1em, 10vw);
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: c.$white;
-  background-color: c.$dark;
   perspective: 10px;
   height: 100vh;
   overflow: overlay;
   overflow-x: hidden;
+
+  @include m.theme() {
+    background-color: m.t('base2');
+		color: m.t('contrast');
+  }
 
   &::-webkit-scrollbar {
     width: 10px;
@@ -20,7 +24,10 @@ $indent: max(1em, 10vw);
 
   &::-webkit-scrollbar-thumb {
     border-radius: 999px;
-    background-color: c.$accent;
+  @include m.theme() {
+    background-color: m.t('accent');
+		color: m.t('contrast');
+  }
   }
 
   .page {
