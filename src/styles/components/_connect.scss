@@ -2,11 +2,15 @@
 @use '@/styles/abstracts/mixins' as m;
 
 .connect {
-  @include m.btn;
+  @include m.hover {
+    cursor: pointer;
+  }
   @include m.theme() {
-    color: m.t(contrast);
-    background-color: transparent;
-    border: 1px solid m.t(contrast);
+    background: transparent;
+    backdrop-filter: invert(100%);
+    filter: invert(100%);
+    border: 1px solid ;
+    mix-blend-mode: difference;
   }
   font-weight: 400;
   font-size: 10px;
