@@ -94,7 +94,6 @@
 .home-page__upcoming-drops-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  aspect-ratio: 1/1;
   gap: 20px;
 }
 
@@ -103,9 +102,15 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 
 .home-page__upcoming-drops-tile {
   @include m.interact;
+  aspect-ratio: 1/1;
   transition-duration: 300ms;
   transition-timing-function: ease-out;
   position: relative;
+
+  &[data-span2='true'] {
+    aspect-ratio: 2/1;
+    grid-column: span 2 / span 2;
+  }
 }
 
 .home-page__upcoming-drops-tile-img-container {

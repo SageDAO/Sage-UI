@@ -28,8 +28,8 @@ export async function getHomePageData(prisma: PrismaClient) {
       Auctions: true,
     },
     where: {
-      ...FilterDropApprovedOnly,
       ...FilterDropContractValidation,
+      ...FilterDropApprovedOnly,
     },
     take: 4,
   });

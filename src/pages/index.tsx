@@ -38,7 +38,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
             THE GLOBE.
           </div>
           <div className='home-page__upcoming-drops-header'>
-            <h1 className='home-page__upcoming-drops-header-left'>Upcoming Drops</h1>
+            <h1 className='home-page__upcoming-drops-header-left'>DROPS</h1>
             <div className='home-page__upcoming-drops-header-right'>
               <div className='home-page__upcoming-drops-header-right-dot'></div>
               <h1 className='home-page__upcoming-drops-header-right-text'>
@@ -48,8 +48,17 @@ function home({ featuredDrop, upcomingDrops }: Props) {
             </div>
           </div>
           <div className='home-page__upcoming-drops-grid'>
-            {upcomingDrops.map((d) => {
+            {upcomingDrops.map((d, i: number) => {
               const src = d.bannerImageS3Path;
+
+              //handle drop tile span behavior
+              let shouldTileSpanTwoColumns: boolean = false;
+              const isIndexEven = Boolean(i % 2 === 0);
+              const nextIndexNull = Boolean(!upcomingDrops[i + 1]);
+              if (isIndexEven && nextIndexNull) {
+                shouldTileSpanTwoColumns = true;
+              }
+
               async function onClick() {
                 await router.push(`/drops/${d.id}`);
               }
@@ -57,7 +66,12 @@ function home({ featuredDrop, upcomingDrops }: Props) {
               const { startTime, status } = computeDropStatus(d);
               const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
               return (
-                <div className='home-page__upcoming-drops-tile' key={d.id} onClick={onClick}>
+                <div
+                  data-span2={String(shouldTileSpanTwoColumns)}
+                  className='home-page__upcoming-drops-tile'
+                  key={d.id}
+                  onClick={onClick}
+                >
                   <div className='home-page__upcoming-drops-countdown' data-status={status}>
                     {display}
                   </div>
