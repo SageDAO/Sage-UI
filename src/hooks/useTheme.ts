@@ -11,7 +11,6 @@ export default function useTheme() {
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
 
   function toggleTheme() {
-    console.log('toggleTheme()');
     if (theme === DARK_THEME) {
       document.body.classList.replace(DARK_THEME, LIGHT_THEME);
       localStorage.setItem(KEY, LIGHT_THEME);
@@ -23,12 +22,11 @@ export default function useTheme() {
     }
   }
 
-  useEffect(() => console.log(localStorage.getItem(KEY)), [theme]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem(KEY);
     if (savedTheme) {
-      document.body.classList.add(theme);
+      document.body.classList.add(savedTheme);
     }
   }, []);
 
