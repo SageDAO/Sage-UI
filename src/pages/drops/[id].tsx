@@ -9,6 +9,7 @@ import React from 'react';
 import Logotype from '@/components/Logotype';
 import { useRouter } from 'next/router';
 import { getIndividualDropsPagePaths, getIndividualDropsPageData } from '@/prisma/functions';
+import System, { computeDropSystems } from '@/components/Icons/System';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -37,6 +38,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   // const hasDrawings: boolean = drawings.length > 0;
   // const hasLotteries: boolean = lotteries.length > 0;
   const router = useRouter();
+  const systems = computeDropSystems({ lotteries, auctions, drawings });
 
   return (
     <>
@@ -60,12 +62,23 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               </h1>
               <p className='drop-page__header-drop-description'>{drop.description}</p>
               <div className='drop-page__header-drop-details'>
-                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
-                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
-                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
-                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
-                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
-                <h1 className='drop-page__header-drop-details-item'>drop detail</h1>
+                <h1 className='drop-page__header-drop-details-item'>
+                  MINTED BY: {artist.displayName}
+                </h1>
+                <h1 className='drop-page__header-drop-details-item'>edition size:</h1>
+                <h1 className='drop-page__header-drop-details-item'>
+                  creation date: {drop.createdAt.toLocaleDateString().replaceAll('/', '.')}
+                </h1>
+              </div>
+              <div className='drop-page__header-drop-details-systems'>
+                Systems in this drop:
+                {systems.map((type) => {
+                  return (
+                    <div key={type} className='drop-page__systems-icon'>
+                      <System type={type}></System>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -75,15 +88,24 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
             {lotteries.map((l) => {
               return (
                 <div
+                  key={l.id}
                   className='drop-page__grid-item'
                   onClick={() => router.push(`/games/lotteries/${l.id}`)}
                 >
                   <div className='drop-page__grid-item-header'>
-                    <h1 className='drop-page__grid-item-header-left'>edition size:</h1>
-                    <div className='drop-page__grid-item-header-right'>system: </div>
+                    <h1 className='drop-page__grid-item-header-left'>
+                      edition size: {l.Nfts.length}
+                    </h1>
+                    <div className='drop-page__grid-item-header-right'>
+                      system:{' '}
+                      <div className='drop-page__grid-item-system'>
+                        <System type='lotteries'></System>
+                      </div>
+                    </div>
                   </div>
                   <div className='drop-page__grid-item-img'>
                     <BaseMedia src={l.Nfts[0].s3Path}></BaseMedia>
+                    <div className='drop-page__grid-item-focus'>enter lottery</div>
                   </div>
                   <div className='drop-page__grid-item-info'>
                     <h1 className='drop-page__grid-item-info-drop-name'>
@@ -97,11 +119,13 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
             {drawings.map((d) => {
               return (
                 <div
+                  key={d.id}
                   className='drop-page__grid-item'
                   onClick={() => router.push(`/games/lotteries/${d.id}`)}
                 >
                   <div className='drop-page__grid-item-img'>
                     <BaseMedia src={d.Nfts[0].s3Path}></BaseMedia>
+                    <div className='drop-page__grid-item-focus'>enter drawing</div>
                   </div>
                   <div className='drop-page__grid-item-info'>
                     <h1 className='drop-page__grid-item-info-drop-name'>
@@ -115,11 +139,13 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
             {auctions.map((a) => {
               return (
                 <div
+                  key={a.id}
                   className='drop-page__grid-item'
                   onClick={() => router.push(`/games/auctions/${a.id}`)}
                 >
                   <div className='drop-page__grid-item-img'>
                     <BaseMedia src={a.Nft.s3Path}></BaseMedia>
+                    <div className='drop-page__grid-item-focus'>place bid</div>
                   </div>
                   <div className='drop-page__grid-item-info'>
                     <h1 className='drop-page__grid-item-info-drop-name'>
@@ -161,12 +187,14 @@ export async function getStaticProps({
   }
 
   const { drawings, lotteries } = filterDrawingsFromLottery(drop.Lotteries);
+  const auctions = drop.Auctions;
+  const artist = drop.Artist;
 
   return {
     props: {
       drop,
-      artist: drop.Artist,
-      auctions: drop.Auctions,
+      artist,
+      auctions,
       lotteries,
       drawings,
     },

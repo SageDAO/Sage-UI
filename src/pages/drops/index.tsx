@@ -3,7 +3,7 @@ import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import useDropDown from '@/hooks/useDropDown';
 import Logotype from '@/components/Logotype';
 import { BaseMedia } from '@/components/Media';
-import { Drop_include_GamesAndArtist } from '@/prisma/types';
+import {  Lottery_include_Nft } from '@/prisma/types';
 import prisma from '@/prisma/client';
 import Image from 'next/image';
 import Countdown from '@/components/Countdown';
@@ -11,9 +11,17 @@ import { computeDropStatus } from '@/utilities/status';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { getDropsPageData } from '@/prisma/functions';
+import System, { computeDropSystems } from '@/components/Icons/System';
 
 interface Props {
-  drops: Drop_include_GamesAndArtist[];
+  drops: Awaited<ReturnType<typeof getDropsPageData>>;
+}
+
+function filterLotteries(unfiltered: Lottery_include_Nft[]) {
+  if (unfiltered.length === 0) return { drawings: [], lotteries: unfiltered };
+  const drawings = unfiltered.filter((l) => l.Nfts.length === 1);
+  const lotteries = unfiltered.filter((l) => l.Nfts.length > 1);
+  return { drawings, lotteries };
 }
 
 function drops({ drops }: Props) {
@@ -45,6 +53,12 @@ function drops({ drops }: Props) {
           const { status, startTime } = computeDropStatus(d);
           const counterDisplay = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
           const buttonDisplay = status === 'Upcoming' ? 'get notifications' : 'view drop artworks';
+          const { drawings, lotteries } = filterLotteries(d.Lotteries);
+          const systems = computeDropSystems({
+            lotteries,
+            auctions: d.Auctions,
+            drawings,
+          });
           async function buttonHandler() {
             if (status === 'Upcoming') {
               //TODO: handle notifications
@@ -54,7 +68,7 @@ function drops({ drops }: Props) {
             await router.push(`/drops/${d.id}`);
           }
           return (
-            <div className='drops-page__drop'>
+            <div key={d.id} className='drops-page__drop'>
               <div className='drops-page__drop-header'>
                 <h1 className='drops-page__drop-header-title'>
                   {d.name} by {d.Artist.displayName}
@@ -83,6 +97,15 @@ function drops({ drops }: Props) {
                   data-status={status}
                 >
                   {buttonDisplay}
+                </div>
+                <div className='drops-page__drop-content-systems'>
+                  {systems.map((type) => {
+                    return (
+                      <div className='drops-page__drop-content-systems-icon'>
+                        <System type={type} />
+                      </div>
+                    );
+                  })}
                 </div>
                 <p className='drops-page__drop-content-description'>{d.description}</p>
               </div>

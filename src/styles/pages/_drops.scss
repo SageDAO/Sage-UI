@@ -105,10 +105,10 @@
 }
 
 .drops-page__drop-content {
+	gap: 20px;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex: 1;
   z-index: 1;
   width: 80vw;
@@ -116,6 +116,7 @@
 
 .drops-page__drop-content-btn {
   @include m.interact;
+	margin-right: auto;
   transition-duration: 200ms;
   display: flex;
   align-items: center;
@@ -138,6 +139,23 @@
       background-color: m.t(accent);
     }
   }
+}
+
+
+.drops-page__drop-content-systems {
+	display: flex;
+	margin-left: auto;
+	gap: 10px;
+}
+
+.drops-page__drop-content-systems-icon {
+  position: relative;
+	backdrop-filter: invert(1);
+  width: 30px;
+	height: 30px;
+	@include m.theme() {
+		background-color: m.t(accent);
+	}
 }
 
 .drops-page__drop-content-description {
