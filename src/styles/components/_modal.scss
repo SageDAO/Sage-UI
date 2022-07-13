@@ -9,7 +9,7 @@
 .modal__backdrop {
   position: fixed;
   opacity: 0.5;
-  backdrop-filter: blur(4px);
+  // backdrop-filter: blur(4px);
   inset: 0;
   @include m.theme() {
     background-color: m.t(base2);

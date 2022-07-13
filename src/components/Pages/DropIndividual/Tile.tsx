@@ -3,7 +3,6 @@ import { Auction_include_Nft, Lottery_include_Nft, User } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
-import { useRouter } from 'next/router';
 import useModal from '@/hooks/useModal';
 
 interface Props {

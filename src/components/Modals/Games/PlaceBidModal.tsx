@@ -107,8 +107,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
             </div>
             <h1 className='games-modal__highest-bid-label'>current highest bid</h1>
             <h1 className='games-modal__highest-bid-value'>{auctionState?.highestBidNumber} ASH</h1>
-            <button className='games-modal__place-bid-button'>place bid</button>
+            <button  className='games-modal__place-bid-button' onClick={handlePlaceBidClick}>place bid</button>
           </div>
+        </section>
+        <section className='games-modal__bid-history-section'>
+          <button className='games-modal__see-bid-history-button'>click here to see bids</button>
         </section>
       </div>
     </Modal>

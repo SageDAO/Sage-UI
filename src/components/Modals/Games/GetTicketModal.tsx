@@ -11,14 +11,18 @@ import Modal, { Props as ModalProps } from '@/components/Modals';
 import Status from '@/components/Status';
 import GetTicketsButton from '@/components/Games/GetTicketsButton';
 import GamesModalHeader from './GamesModalHeader';
+import Image from 'next/image';
+import { BaseMedia } from '@/components/Media';
+import System, { SystemTypes } from '@/components/Icons/System';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
   artist: User;
+  dropName: string;
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
-function GetTicketModal({ isOpen, closeModal, lottery, artist}: Props) {
+function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props) {
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const { data: sessionData } = useSession();
   const [buyTickets, { isLoading }] = useBuyTicketsMutation();
@@ -83,81 +87,43 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist}: Props) {
     await buyTickets(request);
   };
 
+  const systemType: SystemTypes = lottery.Nfts.length > 1 ? 'lotteries' : 'drawings';
+
   return (
     <Modal title='Get a Ticket' isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
-        <div className='games-modal__rules'>
-          <div className='games-modal__rules-item'>
-            <div className='games-modal__rules-label'>Drawing For</div>
-            <div className='games-modal__rules-value'>{}</div>
+        <section className='games-modal__header'>
+          <div className='games-modal__sage-logo'>
+            <Image src={'/branding/sage-full-logo.svg'} width={170} height={40} />
           </div>
-          <div className='games-modal__rules-item'>
-            <div className='games-modal__rules-label'>Refundable</div>
-            <div className='games-modal__rules-value'>{lottery.isRefundable ? 'Yes' : 'No'}</div>
+        </section>
+        <section className='games-modal__body'>
+          <div className='games-modal__main-img-container'>
+            <BaseMedia src={lottery.Nfts[0].s3Path} />
           </div>
-          <div className='games-modal__rules-item'>
-            <div className='games-modal__rules-label'>Drawing</div>
-            <div className='games-modal__rules-value'>{lottery.endTime.toLocaleDateString()}</div>
-          </div>
-        </div>
-        <div className='games-modal__heading'>
-          <h1 className='games-modal__heading-label'>Price per ticket</h1>
-          <div className='games-modal__heading-value games-modal__heading-value--green'>
-            {lottery.costPerTicketPoints} PIXEL
-          </div>
-        </div>
-        <div className='games-modal__tickets-section'>
-          <div className='games-modal__tickets-inner'>
-            <div className='games-modal__tickets-controls'>
-              <button
-                onClick={handleTicketSubClick}
-                className='games-modal__tickets-sub'
-                disabled={isLoading}
-              >
-                -
-              </button>
-              <input
-                type='number'
-                className='games-modal__tickets-input'
-                value={desiredTicketAmount}
-                onChange={handleTicketInputChange}
-                min={1}
-                max={hasMaxTicketsPerUser ? lottery.maxTicketsPerUser : undefined}
-                disabled={isLoading}
-              ></input>
-              <button
-                onClick={handleTicketAddClick}
-                className='games-modal__tickets-add'
-                disabled={isLoading}
-              >
-                +
-              </button>
+          <div className='games-modal__main-content'>
+            <h1 className='games-modal__drop-name'>{dropName}</h1>
+            <h1 className='games-modal__game-name'>{lottery.Nfts[0].name}</h1>
+            <p className='games-modal__game-name'>{lottery.Nfts[0].description}</p>
+            <div className='games-modal__system'>
+              <div className='games-modal__system-icon-container'>
+                <System type={systemType}></System>
+              </div>
+              <h1 className='games-modal__system-info'>
+                This is a fair drop mechanic. Buy purchasing one or more tickets for this drop, you
+                have the opportunity to be selected to buy this NFT. Losing tickets will be
+                refunded.
+              </h1>
             </div>
+            <h1 className='games-modal__ticket-cost-label'>ticket cost</h1>
+            <h1 className='games-modal__ticket-cost-value'>
+              {lottery.costPerTicketTokens} ASH + {lottery.costPerTicketTokens} PIXELS
+            </h1>
+            <button onClick={handleBuyTicketClick} className='games-modal__buy-tickets-button'>
+              Buy Tickets
+            </button>
           </div>
-          <div className='games-modal__tickets-total'>
-            <span className='games-modal__tickets-total-label'>Total </span>
-            {lottery.costPerTicketPoints > 0 && (
-              <span>{desiredTicketAmount * lottery.costPerTicketPoints} PIXEL</span>
-            )}
-            {lottery.costPerTicketPoints > 0 && lottery.costPerTicketTokens > 0 && (
-              <span>{' + '}</span>
-            )}
-            {lottery.costPerTicketTokens > 0 && (
-              <span>{desiredTicketAmount * lottery.costPerTicketTokens} ASH</span>
-            )}
-          </div>
-          <div className='games-modal__btn-container'>
-            <GetTicketsButton
-              onClick={handleBuyTicketClick}
-              pending={isLoading}
-              startTime={lottery.startTime}
-              endTime={lottery.endTime}
-            />
-          </div>
-        </div>
-        <div className='games-modal__status-container'>
-          <Status startTime={lottery.startTime} endTime={lottery.endTime} settled={false} />
-        </div>
+        </section>
       </div>
     </Modal>
   );
