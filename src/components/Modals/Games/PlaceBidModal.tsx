@@ -7,11 +7,14 @@ import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
 import GamesModalHeader from './GamesModalHeader';
 import Status from '@/components/Status';
-import PlaceBidButton from '@/components/Games/PlaceBidButton';
+import { BaseMedia } from '@/components/Media';
+import Image from 'next/image';
+import System from '@/components/Icons/System';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
   artist: User;
+  dropName: string;
 }
 
 type DesiredBidValue = number;
@@ -27,7 +30,7 @@ const initialState: State = {
 };
 
 //@scss : '@/styles/components/_games-modal.scss'
-function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
+function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props) {
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
@@ -81,77 +84,32 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist }: Props) {
   }, [auctionState]);
 
   return (
-    <Modal title='Place a Bid' isOpen={isOpen} closeModal={closeModal}>
+    <Modal isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
-        <GamesModalHeader
-          src={auction.Nft.s3Path}
-          isVideo={auction.Nft.isVideo}
-          nftName={auction.Nft.name}
-          nftEditions={auction.Nft.numberOfEditions}
-          artist={artist}
-        ></GamesModalHeader>
-        <div className='games-modal__rules'>
-          <div className='games-modal__rules-item'>
-            <div className='games-modal__rules-label'>Current Bid</div>
-            <div className='games-modal__rules-value'>
-              {auctionState && auctionState.highestBidNumber}
+        <section className='games-modal__header'>
+          <div className='games-modal__sage-logo'>
+            <Image src={'/branding/sage-full-logo.svg'} width={170} height={40} />
+          </div>
+        </section>
+        <section className='games-modal__body'>
+          <div className='games-modal__main-img-container'>
+            <BaseMedia src={auction.Nft.s3Path} />
+          </div>
+          <div className='games-modal__main-content'>
+            <h1 className='games-modal__drop-name'>{dropName}</h1>
+            <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
+            <p className='games-modal__game-name'>{auction.Nft.description}</p>
+            <div className='games-modal__system'>
+              <div className='games-modal__system-icon-container'>
+                <System type='auctions'></System>
+              </div>
+              <h1 className='games-modal__system-info'>This is an auction</h1>
             </div>
+            <h1 className='games-modal__highest-bid-label'>current highest bid</h1>
+            <h1 className='games-modal__highest-bid-value'>{auctionState?.highestBidNumber} ASH</h1>
+            <button className='games-modal__place-bid-button'>place bid</button>
           </div>
-          <div className='games-modal__rules-item'>
-            <div className='games-modal__rules-label'>Bid extension</div>
-            <div className='games-modal__rules-value'>
-              {auctionState?.timeExtension! / 60} minutes
-            </div>
-          </div>
-          <div className='games-modal__rules-item'>
-            <div className='games-modal__rules-label'>Bid increment</div>
-            <div className='games-modal__rules-value'>
-              {auctionState?.bidIncrementPercentage! / 100}%
-            </div>
-          </div>
-          <div className='games-modal__rules-divider-container'>
-            <div className='games-modal__rules-divider-rectangle'></div>
-          </div>
-          <div className='games-modal__rules-item'>
-            <div className='games-modal__rules-label'>Minimum Bid</div>
-            <div className='games-modal__rules-value'>{state.minBid}</div>
-          </div>
-        </div>
-        <div className='games-modal__heading'></div>
-        <div className='games-modal__bid-section'>
-          <div className='games-modal__bid-controls'>
-            <input
-              type='number'
-              className='games-modal__bid-input'
-              value={state.desiredBidValue}
-              onChange={handleBidInputChange}
-              min={state.minBid}
-              disabled={isPlaceBidLoading}
-            ></input>
-            <span className='games-modal__bid-unit'>ASH</span>
-            <button
-              className='games-modal__bid-min-btn'
-              disabled={isPlaceBidLoading}
-              onClick={handleMinButtonClick}
-            >
-              min
-            </button>
-          </div>
-          <div className='games-modal__btn-container'>
-            <PlaceBidButton
-              pending={isPlaceBidLoading}
-              onClick={handlePlaceBidClick}
-              auction={auction}
-            />
-          </div>
-        </div>
-        <div className='games-modal__status-container'>
-          <Status
-            endTime={auctionState?.endTime as number}
-            settled={auctionState?.settled as boolean}
-            startTime={auction.startTime}
-          />
-        </div>
+        </section>
       </div>
     </Modal>
   );

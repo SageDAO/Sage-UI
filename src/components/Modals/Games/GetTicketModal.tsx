@@ -4,7 +4,7 @@ import { Signer } from 'ethers';
 import { User } from '@prisma/client';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
-import { Lottery_include_Nft, Nft } from '@/prisma/types';
+import { Lottery_include_Nft } from '@/prisma/types';
 import { BuyTicketRequest, useBuyTicketsMutation } from '@/store/lotteriesReducer';
 import { useGetEarnedPointsQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
@@ -14,12 +14,11 @@ import GamesModalHeader from './GamesModalHeader';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
-  nft: Nft;
   artist: User;
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
-function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
+function GetTicketModal({ isOpen, closeModal, lottery, artist}: Props) {
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const { data: sessionData } = useSession();
   const [buyTickets, { isLoading }] = useBuyTicketsMutation();
@@ -87,17 +86,10 @@ function GetTicketModal({ isOpen, closeModal, lottery, artist, nft }: Props) {
   return (
     <Modal title='Get a Ticket' isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
-        <GamesModalHeader
-          src={nft.s3Path}
-          isVideo={nft.isVideo}
-          nftName={nft.name}
-          nftEditions={nft.numberOfEditions}
-          artist={artist}
-        ></GamesModalHeader>
         <div className='games-modal__rules'>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Drawing For</div>
-            <div className='games-modal__rules-value'>{nft.name}</div>
+            <div className='games-modal__rules-value'>{}</div>
           </div>
           <div className='games-modal__rules-item'>
             <div className='games-modal__rules-label'>Refundable</div>

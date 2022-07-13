@@ -10,6 +10,7 @@ import Logotype from '@/components/Logotype';
 import { useRouter } from 'next/router';
 import { getIndividualDropsPagePaths, getIndividualDropsPageData } from '@/prisma/functions';
 import System, { computeDropSystems } from '@/components/Icons/System';
+import Tile from '@/components/Pages/DropIndividual/Tile';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -27,18 +28,35 @@ function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
   };
 }
 
+function computeEditionSize({
+  drawings,
+  auctions,
+  lotteries,
+}: Pick<Props, 'drawings' | 'auctions' | 'lotteries'>) {
+  let editionSize: number = 0;
+
+  drawings.forEach((d) => {
+    d.Nfts.forEach((nft) => {
+      editionSize = editionSize + nft.numberOfEditions;
+    });
+  });
+
+  lotteries.forEach((l) => {
+    l.Nfts.forEach((nft) => {
+      editionSize = editionSize + nft.numberOfEditions;
+    });
+  });
+
+  auctions.forEach((a) => {
+    editionSize = editionSize + a.Nft.numberOfEditions;
+  });
+
+  return editionSize;
+}
+
 export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
-  const { data: sessionData } = useSession();
-  const walletAddress = sessionData?.address;
-  const ticketCount = useTicketCount(
-    new Array().concat(drawings, lotteries) as Lottery[],
-    walletAddress as string
-  );
-  // const hasAuctions: boolean = auctions.length > 0;
-  // const hasDrawings: boolean = drawings.length > 0;
-  // const hasLotteries: boolean = lotteries.length > 0;
-  const router = useRouter();
   const systems = computeDropSystems({ lotteries, auctions, drawings });
+  const editionSize = computeEditionSize({ lotteries, auctions, drawings });
 
   return (
     <>
@@ -65,7 +83,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                 <h1 className='drop-page__header-drop-details-item'>
                   MINTED BY: {artist.displayName}
                 </h1>
-                <h1 className='drop-page__header-drop-details-item'>edition size:</h1>
+                <h1 className='drop-page__header-drop-details-item'>edition size: {editionSize}</h1>
                 <h1 className='drop-page__header-drop-details-item'>
                   creation date: {drop.createdAt.toLocaleDateString().replaceAll('/', '.')}
                 </h1>
@@ -86,74 +104,49 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
         <section className='drop-page__content'>
           <div className='drop-page__grid'>
             {lotteries.map((l) => {
+              let editionSize: number = 0;
+              l.Nfts.forEach((nft) => {
+                editionSize = editionSize + nft.numberOfEditions;
+              });
               return (
-                <div
+                <Tile
                   key={l.id}
-                  className='drop-page__grid-item'
-                  onClick={() => router.push(`/games/lotteries/${l.id}`)}
-                >
-                  <div className='drop-page__grid-item-header'>
-                    <h1 className='drop-page__grid-item-header-left'>
-                      edition size: {l.Nfts.length}
-                    </h1>
-                    <div className='drop-page__grid-item-header-right'>
-                      system:{' '}
-                      <div className='drop-page__grid-item-system'>
-                        <System type='lotteries'></System>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='drop-page__grid-item-img'>
-                    <BaseMedia src={l.Nfts[0].s3Path}></BaseMedia>
-                    <div className='drop-page__grid-item-focus'>enter lottery</div>
-                  </div>
-                  <div className='drop-page__grid-item-info'>
-                    <h1 className='drop-page__grid-item-info-drop-name'>
-                      {drop.name} by {artist.displayName}
-                    </h1>
-                    <h1 className='drop-page__grid-item-info-game-name'>Lottery</h1>
-                  </div>
-                </div>
+                  imgSrc={l.Nfts[0].s3Path}
+                  dropName={drop.name}
+                  artist={artist}
+                  editionSize={editionSize}
+                  systemType='lotteries'
+                  id={l.id}
+                  lottery={l}
+                ></Tile>
               );
             })}
             {drawings.map((d) => {
               return (
-                <div
+                <Tile
                   key={d.id}
-                  className='drop-page__grid-item'
-                  onClick={() => router.push(`/games/lotteries/${d.id}`)}
-                >
-                  <div className='drop-page__grid-item-img'>
-                    <BaseMedia src={d.Nfts[0].s3Path}></BaseMedia>
-                    <div className='drop-page__grid-item-focus'>enter drawing</div>
-                  </div>
-                  <div className='drop-page__grid-item-info'>
-                    <h1 className='drop-page__grid-item-info-drop-name'>
-                      {drop.name} by {artist.displayName}
-                    </h1>
-                    <h1 className='drop-page__grid-item-info-game-name'>{d.Nfts[0].name}</h1>
-                  </div>
-                </div>
+                  imgSrc={d.Nfts[0].s3Path}
+                  dropName={drop.name}
+                  artist={artist}
+                  editionSize={d.Nfts[0].numberOfEditions}
+                  systemType='drawings'
+                  id={d.id}
+                  lottery={d}
+                ></Tile>
               );
             })}
             {auctions.map((a) => {
               return (
-                <div
+                <Tile
                   key={a.id}
-                  className='drop-page__grid-item'
-                  onClick={() => router.push(`/games/auctions/${a.id}`)}
-                >
-                  <div className='drop-page__grid-item-img'>
-                    <BaseMedia src={a.Nft.s3Path}></BaseMedia>
-                    <div className='drop-page__grid-item-focus'>place bid</div>
-                  </div>
-                  <div className='drop-page__grid-item-info'>
-                    <h1 className='drop-page__grid-item-info-drop-name'>
-                      {drop.name} by {artist.displayName}
-                    </h1>
-                    <h1 className='drop-page__grid-item-info-game-name'>Lottery</h1>
-                  </div>
-                </div>
+                  imgSrc={a.Nft.s3Path}
+                  dropName={drop.name}
+                  artist={artist}
+                  editionSize={a.Nft.numberOfEditions}
+                  systemType='auctions'
+                  id={a.id}
+                  auction={a}
+                ></Tile>
               );
             })}
           </div>
