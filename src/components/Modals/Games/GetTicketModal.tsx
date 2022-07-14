@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
 import { User } from '@prisma/client';
@@ -8,9 +8,6 @@ import { Lottery_include_Nft } from '@/prisma/types';
 import { BuyTicketRequest, useBuyTicketsMutation } from '@/store/lotteriesReducer';
 import { useGetEarnedPointsQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
-import Status from '@/components/Status';
-import GetTicketsButton from '@/components/Games/GetTicketsButton';
-import GamesModalHeader from './GamesModalHeader';
 import Image from 'next/image';
 import { BaseMedia } from '@/components/Media';
 import System, { SystemTypes } from '@/components/Icons/System';
@@ -48,27 +45,23 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
 
   function handleTicketInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = +e.target.value;
-    if (val < 0) {
-      return;
-    }
-    if (val > lottery.maxTicketsPerUser) {
+
+    if (val > lottery.maxTicketsPerUser && lottery.maxTicketsPerUser !== 0) {
       e.currentTarget.value = String(lottery.maxTicketsPerUser);
       setDesiredTicketAmount(lottery.maxTicketsPerUser);
     }
     setDesiredTicketAmount(+e.target.value);
   }
 
-  // ? lottery db field will only have one tier?
-  const getPriceCoins = (): bigint => {
-    return BigInt(lottery.costPerTicketTokens * 1000) * BigInt(10 ** 15);
-  };
-
-  // ? lottery db field will only have one tier?
-  const getPricePoints = (): bigint => {
-    return BigInt(lottery.costPerTicketPoints);
-  };
-
   const handleBuyTicketClick = async () => {
+    //TODO: pull ash token decimals to handle this
+    const getPriceCoins = (): bigint => {
+      return BigInt(lottery.costPerTicketTokens * 1000) * BigInt(10 ** 15);
+    };
+    const getPricePoints = (): bigint => {
+      return BigInt(lottery.costPerTicketPoints);
+    };
+
     const pricePoints = getPricePoints();
 
     if (!earnedPoints) {
@@ -117,8 +110,23 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
             </div>
             <h1 className='games-modal__ticket-cost-label'>ticket cost</h1>
             <h1 className='games-modal__ticket-cost-value'>
-              {lottery.costPerTicketTokens} ASH + {lottery.costPerTicketTokens} PIXELS
+              {lottery.costPerTicketTokens * desiredTicketAmount} ASH +
+              {lottery.costPerTicketTokens * desiredTicketAmount} PIXELS
             </h1>
+            <div className='games-modal__tickets-controls'>
+              <div onClick={handleTicketSubClick} className='games-modal__tickets-sub'>
+                <BaseMedia src='/icons/minus.svg'></BaseMedia>
+              </div>
+              <input
+                type='number'
+                onChange={handleTicketInputChange}
+                className='games-modal__tickets-input'
+                value={desiredTicketAmount}
+              />
+              <div onClick={handleTicketAddClick} className='games-modal__tickets-add'>
+                <BaseMedia src='/icons/plus.svg'></BaseMedia>
+              </div>
+            </div>
             <button onClick={handleBuyTicketClick} className='games-modal__buy-tickets-button'>
               Buy Tickets
             </button>

@@ -18,7 +18,6 @@
   flex-direction: column;
   gap: 20px;
   width: 996px;
-  // height: 789px;
 }
 
 .games-modal__header {
@@ -44,6 +43,7 @@
 }
 
 .games-modal__main-content {
+  gap: 30px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -86,7 +86,6 @@
 }
 
 .games-modal__system {
-  margin-top: 40px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -115,7 +114,6 @@
 }
 
 @mixin game-info-label {
-  margin-top: 20px;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -147,6 +145,13 @@
   }
 }
 
+.games-modal__bid-info-group {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .games-modal__highest-bid-value {
   @include game-info-value;
 }
@@ -155,8 +160,38 @@
   @include game-info-value;
 }
 
+.games-modal__see-more-bids {
+  font-style: normal;
+  align-items: center;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 130%;
+  display: flex;
+  gap: 4px;
+  text-align: right;
+  text-transform: uppercase;
+
+  color: #f5f5f5;
+  @include m.theme() {
+    color: m.t(contrast2);
+  }
+
+  @include m.interact() {
+  }
+}
+
+.games-modal__see-more-bids-icon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  transition-duration: 200ms;
+
+  &[data-active='true'] {
+    transform: rotate(90deg);
+  }
+}
+
 @mixin game-interact-button {
-  margin-top: auto;
   width: 100%;
   aspect-ratio: 397/65;
   font-style: normal;
@@ -212,4 +247,62 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+.games-modal__bid-history-table {
+  transition-duration: 200ms;
+  height: 0px;
+
+  &[data-active='true'] {
+    height: auto;
+  }
+}
+
+.games-modal__bid-history-data {
+}
+
+.games-modal__bid-history-row {
+  display: flex;
+  gap: 20px;
+}
+
+.games-modal__tickets-controls {
+  display: flex;
+  gap: 11px;
+}
+
+@mixin tickets-amount-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  position: relative;
+  @include m.interact;
+}
+
+.games-modal__tickets-input {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 169%;
+  /* or 41px */
+
+  text-align: center;
+  text-transform: uppercase;
+
+  background: transparent;
+  width: 101px;
+  height: 40px;
+  @include m.theme() {
+    border: 1px solid m.t(contrast2);
+    color: m.t(contrast2);
+  }
+}
+
+.games-modal__tickets-add {
+  @include tickets-amount-button;
+}
+
+.games-modal__tickets-sub {
+  @include tickets-amount-button;
 }

@@ -6,10 +6,11 @@
 @use '@/styles/abstracts/colors' as c;
 
 html {
+  text-transform: uppercase;
 }
 
 body {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 html,

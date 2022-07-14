@@ -14,12 +14,24 @@ import {
 import { parameters } from '../constants/config';
 import { toast } from 'react-toastify';
 
-const { REWARDS_ADDRESS, LOTTERY_ADDRESS, AUCTION_ADDRESS, NFT_ADDRESS, NETWORK_NAME, CHAIN_ID } =
-  parameters;
+const {
+  REWARDS_ADDRESS,
+  ASHTOKEN_ADDRESS,
+  LOTTERY_ADDRESS,
+  AUCTION_ADDRESS,
+  NFT_ADDRESS,
+  NETWORK_NAME,
+  CHAIN_ID,
+} = parameters;
+
+interface ContractDetails {
+  address: string;
+  abi: any;
+}
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
-type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'NFT';
+type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'NFT' | 'ERC20';
 
 type AppContractDetailsMap = {
   [key in AppContractNames]: ContractDetails;
@@ -42,12 +54,11 @@ const contractMap: AppContractDetailsMap = {
     address: NFT_ADDRESS,
     abi: NFT.abi,
   },
+  ERC20: {
+    address: ASHTOKEN_ADDRESS,
+    abi: ERC20Standard.abi,
+  },
 };
-
-interface ContractDetails {
-  address: string;
-  abi: any;
-}
 
 var ContractFactory = (function () {
   var instances = new Map<string, Contract>();
@@ -78,19 +89,23 @@ var ContractFactory = (function () {
 })();
 
 export async function getLotteryContract(signer?: Signer): Promise<LotteryContract> {
-  return await getContract(contractMap.Lottery, signer) as LotteryContract;
+  return (await getContract(contractMap.Lottery, signer)) as LotteryContract;
 }
 
 export async function getAuctionContract(signer?: Signer): Promise<AuctionContract> {
-  return await getContract(contractMap.Auction, signer) as AuctionContract;
+  return (await getContract(contractMap.Auction, signer)) as AuctionContract;
 }
 
 export async function getRewardsContract(signer?: Signer): Promise<RewardsContract> {
-  return await getContract(contractMap.Rewards, signer) as RewardsContract;
+  return (await getContract(contractMap.Rewards, signer)) as RewardsContract;
 }
 
 export async function getNFTContract(signer?: Signer): Promise<NFTContract> {
-  return await getContract(contractMap.NFT, signer) as NFTContract;
+  return (await getContract(contractMap.NFT, signer)) as NFTContract;
+}
+
+export async function getERC20Contract(signer?: Signer): Promise<ERC20Contract> {
+  return (await getContract(contractMap.ERC20, signer)) as ERC20Contract;
 }
 
 async function getContract(details: ContractDetails, signer?: Signer) {
@@ -98,7 +113,7 @@ async function getContract(details: ContractDetails, signer?: Signer) {
   if (signer) {
     return new ethers.Contract(address, abi, signer);
   }
-  return await ContractFactory.getInstance({ address, abi });  
+  return await ContractFactory.getInstance({ address, abi });
 }
 
 export function extractErrorMessage(err: any): string {
@@ -165,3 +180,19 @@ export async function getUnclaimedAuctionWinner(auctionId: number): Promise<stri
   }
   return auctionState.highestBidder;
 }
+
+/**
+	ERC20, currently we use ASH
+ */
+export async function getAshTokenInfo() {
+  const AshContract = await getERC20Contract();
+  const decimals = await AshContract.decimals();
+  return { decimals };
+}
+
+// export async function getLotteryCost({}) {
+//   const { decimals } = await getAshTokenInfo();
+
+//   // const costTokens = BigInt(lottery.costPerTicketTokens * 1000) * BigInt(10 ** 15);
+//   // const costPoints = BigInt(lottery.costPerTicketPoints);
+// }
