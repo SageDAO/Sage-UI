@@ -90,7 +90,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
   const systemType: SystemTypes = lottery.Nfts.length > 1 ? 'lotteries' : 'drawings';
 
   return (
-    <Modal title='Get a Ticket' isOpen={isOpen} closeModal={closeModal}>
+    <Modal isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
         <section className='games-modal__header'>
           <div className='games-modal__sage-logo'>

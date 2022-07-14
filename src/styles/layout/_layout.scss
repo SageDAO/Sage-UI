@@ -4,17 +4,19 @@
 $indent: max(1em, 10vw);
 
 .layout {
+  text-transform: uppercase;
   display: flex;
   flex-direction: column;
   align-items: center;
   perspective: 10px;
   height: 100vh;
+	width: 100vw;
   overflow: overlay;
   overflow-x: hidden;
 
   @include m.theme() {
     background-color: m.t('base2');
-		color: m.t('contrast');
+    color: m.t('contrast');
   }
 
   &::-webkit-scrollbar {
@@ -24,10 +26,10 @@ $indent: max(1em, 10vw);
 
   &::-webkit-scrollbar-thumb {
     border-radius: 999px;
-  @include m.theme() {
-    background-color: m.t('accent');
-		color: m.t('contrast');
-  }
+    @include m.theme() {
+      background-color: m.t('accent');
+      color: m.t('contrast');
+    }
   }
 
   .page {

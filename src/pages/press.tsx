@@ -2,26 +2,26 @@ import { useEffect, useState } from 'react';
 import LoaderDots from '@/components/LoaderDots';
 
 export default function press() {
-  const mediumURL =
+  const mediumurl =
     'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@dontbuymeme';
-  const [isLoading, setIsLoading] = useState(true);
-  const [feedImage, setFeedImage] = useState<string>('');
-  const [feedLink, setFeedLink] = useState<string>('');
-  const [feedTitle, setFeedTitle] = useState<string>('');
-  const [feedItems, setFeedItems] = useState<any[]>();
+  const [isloading, setisloading] = usestate(true);
+  const [feedimage, setfeedimage] = usestate<string>('');
+  const [feedlink, setfeedlink] = usestate<string>('');
+  const [feedtitle, setfeedtitle] = usestate<string>('');
+  const [feeditems, setfeeditems] = usestate<any[]>();
 
-  useEffect(() => {
-    const fetchMediumPosts = async () => {
-      const response = await fetch(mediumURL);
+  useeffect(() => {
+    const fetchmediumposts = async () => {
+      const response = await fetch(mediumurl);
       const data = await response.json();
-      setFeedImage(data.feed.image);
-      setFeedTitle(data.feed.title);
-      setFeedLink(data.feed.link);
-      setFeedItems(data.items);
-      setIsLoading(false);
+      setfeedimage(data.feed.image);
+      setfeedtitle(data.feed.title);
+      setfeedlink(data.feed.link);
+      setfeeditems(data.items);
+      setisloading(false);
     };
 
-    fetchMediumPosts();
+    fetchmediumposts();
   }, []);
 
   if (isLoading) {
