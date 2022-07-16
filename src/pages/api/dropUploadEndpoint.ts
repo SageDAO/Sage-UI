@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import aws from 'aws-sdk';
 import NextCors from 'nextjs-cors';
 import prisma from '@/prisma/client';
-import { Role } from '@prisma/client';
 import { createUcanRequestToken } from '@/utilities/nftStorage';
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
@@ -182,7 +181,14 @@ async function insertDrop(data: any, response: NextApiResponse) {
         tags: data.tags || '',
         bannerImageS3Path: data.bannerImageS3Path,
         metadataS3Path: '',
-        dropMetadataCid: '',
+        NftContract: {
+          connect: {
+            where: {
+              artistAddress: data.artistAddress
+            }
+          }
+        }
+        /*
         Artist: {
           connectOrCreate: {
             where: {
@@ -194,6 +200,8 @@ async function insertDrop(data: any, response: NextApiResponse) {
             },
           },
         },
+        */
+        /*
         PrimarySplitter: {
           create: {
             SplitterEntries: {
@@ -213,6 +221,7 @@ async function insertDrop(data: any, response: NextApiResponse) {
           },
         },
         Whitelist: null || {},
+        */
       },
     };
     /* TODO add whitelist feature
@@ -226,7 +235,8 @@ async function insertDrop(data: any, response: NextApiResponse) {
     }
     */
     var record = await prisma.drop.create(insertData);
-    response.json({ dropId: record.id });
+    const nftContractAddress = ''; // TODO deploy or reuse
+    response.json({ dropId: record.id, nftContractAddress });
   } catch (e: any) {
     console.log(e);
     response.json({ error: e.message });
@@ -251,10 +261,9 @@ async function insertAuction(data: any, response: NextApiResponse) {
             name: data.name,
             description: data.description || '',
             tags: data.tags || '',
-            rarity: '',
             numberOfEditions: 1,
             isVideo: 'true' == data.isVideo,
-            ipfsPath: data.ipfsPath,
+            metadataPath: data.metadataPath,
             s3Path: data.s3Path,
           },
         },
@@ -278,7 +287,7 @@ async function insertNft(data: any, response: NextApiResponse) {
         rarity: data.rarity || '',
         numberOfEditions: toNumber(data.numberOfEditions),
         isVideo: 'true' == data.isVideo,
-        ipfsPath: data.ipfsPath,
+        metadataPath: data.metadataPath,
         s3Path: data.s3Path,
         Auction: null || {},
         Lottery: null || {},
@@ -348,20 +357,21 @@ async function updateDefaultPrize(data: any, response: NextApiResponse) {
 
 async function updateMetadataCid(data: any, response: NextApiResponse) {
   console.log('updateMetadataCid()');
-  try {
-    await prisma.drop.update({
-      where: {
-        id: Number(data.dropId),
-      },
-      data: {
-        dropMetadataCid: data.dropMetadataCid,
-      },
-    });
-    response.json({ success: true });
-  } catch (e: any) {
-    console.log(e);
-    response.json({ error: e.message });
-  }
+  throw new Error("deprecated!!");
+//   try {
+//     await prisma.drop.update({
+//       where: {
+//         id: Number(data.dropId),
+//       },
+//       data: {
+//         dropMetadataCid: data.dropMetadataCid,
+//       },
+//     });
+//     response.json({ success: true });
+//   } catch (e: any) {
+//     console.log(e);
+//     response.json({ error: e.message });
+//   }
 }
 
 const toNumber = (val: string): number => (val ? Number(val) : 0);

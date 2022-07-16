@@ -12,9 +12,9 @@ function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
     lotteryTicketNumber: dbPrize.ticketNumber,
     lotteryProof: dbPrize.proof,
     nftName: dbPrize.Nft.name,
-    artistUsername: dbPrize.Nft.Lottery?.Drop.Artist.username!,
-    artistDisplayName: dbPrize.Nft.Lottery?.Drop.Artist.displayName!,
-    artistProfilePicture: dbPrize.Nft.Lottery?.Drop.Artist.profilePicture!,
+    artistUsername: dbPrize.Nft.Lottery?.Drop.NftContract.Artist.username!,
+    artistDisplayName: dbPrize.Nft.Lottery?.Drop.NftContract.Artist.displayName!,
+    artistProfilePicture: dbPrize.Nft.Lottery?.Drop.NftContract.Artist.profilePicture!,
     s3Path: dbPrize.Nft.s3Path,
     isVideo: dbPrize.Nft.isVideo,
     claimedAt: dbPrize.claimedAt || undefined,
@@ -62,20 +62,14 @@ async function getClaimedPrizes(walletAddress: string, response: NextApiResponse
         where: {
           winnerAddress: walletAddress,
           NOT: {
-            claimedAt: null
-          }
+            claimedAt: null,
+          },
         },
         include: {
           Nft: {
             include: {
               Lottery: {
-                include: {
-                  Drop: {
-                    include: {
-                      Artist: true,
-                    },
-                  },
-                },
+                include: { Drop: { include: { NftContract: { include: { Artist: true } } } } },
               },
             },
           },
@@ -103,13 +97,7 @@ async function getUnclaimedPrizes(walletAddress: string, response: NextApiRespon
           Nft: {
             include: {
               Lottery: {
-                include: {
-                  Drop: {
-                    include: {
-                      Artist: true,
-                    },
-                  },
-                },
+                include: { Drop: { include: { NftContract: { include: { Artist: true } } } } },
               },
             },
           },
@@ -143,13 +131,7 @@ async function getPrizesByUserAndLottery(
         Nft: {
           include: {
             Lottery: {
-              include: {
-                Drop: {
-                  include: {
-                    Artist: true,
-                  },
-                },
-              },
+              include: { Drop: { include: { NftContract: { include: { Artist: true } } } } },
             },
           },
         },

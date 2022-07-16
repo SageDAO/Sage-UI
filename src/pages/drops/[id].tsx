@@ -3,7 +3,6 @@ import prisma from '@/prisma/client';
 import { Drop as DropType, Lottery, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
-import { useSession } from 'next-auth/react';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';
@@ -181,7 +180,7 @@ export async function getStaticProps({
 
   const { drawings, lotteries } = filterDrawingsFromLottery(drop.Lotteries);
   const auctions = drop.Auctions;
-  const artist = drop.Artist;
+  const artist = drop.NftContract.Artist;
 
   return {
     props: {

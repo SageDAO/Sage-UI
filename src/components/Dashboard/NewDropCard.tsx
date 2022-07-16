@@ -34,11 +34,11 @@ export default function NewDropCard({ drop }: Props) {
       </div>
       <div className='collection__tile-details'>
         <div className='collection__tile-artist-pfp'>
-          <PfpImage src={drop.Artist.profilePicture} />
+          <PfpImage src={drop.NftContract.Artist.profilePicture} />
         </div>
         <div className='collection__tile-artist-info'>
           <div className='collection__tile-nft-name'>{drop.name}</div>
-          <div className='collection__tile-artist-name'>by {drop.Artist.displayName || 'anon'}</div>
+          <div className='collection__tile-artist-name'>by {drop.NftContract.Artist.displayName || 'anon'}</div>
         </div>
       </div>
       <button className='nft-tile__claimbutton' onClick={handleBtnClick} style={{ width: '100%' }}>

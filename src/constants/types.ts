@@ -10,7 +10,6 @@ export interface Parameters {
   AUCTION_ADDRESS: string;
   REWARDS_ADDRESS: string;
   ASHTOKEN_ADDRESS: string;
-  NFT_ADDRESS: string;
 }
 
 export interface Configuration {

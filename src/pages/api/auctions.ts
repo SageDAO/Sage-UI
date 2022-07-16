@@ -67,11 +67,15 @@ async function getAuction(auctionId: number, response: NextApiResponse) {
           Nft: true,
           Drop: {
             include: {
-              Artist: {
-                select: {
-                  username: true,
-                  displayName: true,
-                  profilePicture: true,
+              NftContract: {
+                include: {
+                  Artist: {
+                    select: {
+                      username: true,
+                      displayName: true,
+                      profilePicture: true,
+                    },
+                  },
                 },
               },
             },
@@ -101,14 +105,18 @@ async function getClaimedAuctionNfts(walletAddress: string, response: NextApiRes
           Nft: true,
           Drop: {
             include: {
-              Artist: true,
+              NftContract: {
+                include: {
+                  Artist: true,
+                },
+              },
             },
           },
         },
       });
       const claimedNfts = Array<GamePrize>();
       claimedAuctions.forEach((a) =>
-        claimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.Artist }))
+        claimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
       );
       console.log(`getClaimedAuctionNfts() :: ${claimedNfts.length}`);
       response.json(claimedNfts);
@@ -134,14 +142,18 @@ async function getUnclaimedAuctionNfts(walletAddress: string, response: NextApiR
           Nft: true,
           Drop: {
             include: {
-              Artist: true,
+              NftContract: {
+                include: {
+                  Artist: true,
+                },
+              },
             },
           },
         },
       });
       const unclaimedNfts = Array<GamePrize>();
       unclaimedAuctions.forEach((a) =>
-        unclaimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.Artist }))
+        unclaimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
       );
       console.log(`getUnclaimedAuctionNfts() :: ${unclaimedNfts.length}`);
       response.json(unclaimedNfts);

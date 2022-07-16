@@ -25,7 +25,7 @@ async function getLottery(lotteryId: number, response: NextApiResponse) {
         where: { id: lotteryId },
         include: {
           Nfts: true,
-          Drop: { include: { Artist: true } },
+          Drop: { include: { NftContract: { include: { Artist: true } } } },
         },
       });
       response.json(lottery);

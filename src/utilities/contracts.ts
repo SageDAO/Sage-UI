@@ -2,7 +2,7 @@ import { BigNumber, Contract, ethers, Signer, utils } from 'ethers';
 import Rewards from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
 import Lottery from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
 import Auction from '@/constants/abis/Auction/Auction.sol/Auction.json';
-import NFT from '@/constants/abis/ERC-1155/NFT.sol/NFT.json';
+import SageNFT from '@/constants/abis/NFT/SageNFT.sol/SageNFT.json';
 import ERC20Standard from '@/constants/abis/ERC-20/ERC20Standard.json';
 import {
   Lottery as LotteryContract,
@@ -19,7 +19,6 @@ const {
   ASHTOKEN_ADDRESS,
   LOTTERY_ADDRESS,
   AUCTION_ADDRESS,
-  NFT_ADDRESS,
   NETWORK_NAME,
   CHAIN_ID,
 } = parameters;
@@ -31,7 +30,7 @@ interface ContractDetails {
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
-type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'NFT' | 'ERC20';
+type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'ERC20';
 
 type AppContractDetailsMap = {
   [key in AppContractNames]: ContractDetails;
@@ -49,10 +48,6 @@ const contractMap: AppContractDetailsMap = {
   Rewards: {
     address: REWARDS_ADDRESS,
     abi: Rewards.abi,
-  },
-  NFT: {
-    address: NFT_ADDRESS,
-    abi: NFT.abi,
   },
   ERC20: {
     address: ASHTOKEN_ADDRESS,
@@ -100,8 +95,8 @@ export async function getRewardsContract(signer?: Signer): Promise<RewardsContra
   return (await getContract(contractMap.Rewards, signer)) as RewardsContract;
 }
 
-export async function getNFTContract(signer?: Signer): Promise<NFTContract> {
-  return (await getContract(contractMap.NFT, signer)) as NFTContract;
+export async function getNFTContract(address: string, signer?: Signer): Promise<NFTContract> {
+  return (await getContract({ address, abi: SageNFT.abi }, signer)) as NFTContract;
 }
 
 export async function getERC20Contract(signer?: Signer): Promise<ERC20Contract> {

@@ -21,10 +21,10 @@ export default function Drop({ drop }: Props) {
       <div className='details'>
         <div className='artist'>
           <div className='artist-pfp'>
-            <PfpImage src={drop.Artist.profilePicture || undefined} />
+            <PfpImage src={drop.NftContract.Artist.profilePicture || undefined} />
           </div>
           <h1 className='artist-name'>
-            {drop.Artist.username || shortenAddress(drop.artistAddress)}
+            {drop.NftContract.Artist.username || shortenAddress(drop.NftContract.artistAddress)}
           </h1>
         </div>
         <div className='drop__status' data-status='drawn'>

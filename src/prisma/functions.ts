@@ -23,7 +23,7 @@ export async function getHomePageData(prisma: PrismaClient) {
       approvedAt: 'desc',
     },
     include: {
-      Artist: true,
+      NftContract: { include: { Artist: true } },
       Lotteries: true,
       Auctions: true,
     },
@@ -44,9 +44,9 @@ export async function getDropsPageData(prisma: PrismaClient) {
   const drops = await prisma.drop.findMany({
     orderBy: { approvedAt: 'desc' },
     include: {
+      NftContract: { include: { Artist: true } },
       Lotteries: { include: { Nfts: true } },
       Auctions: { include: { Nft: true } },
-      Artist: true,
     },
     where: {
       ...FilterDropContractValidation,
@@ -76,7 +76,7 @@ export async function getIndividualDropsPagePaths(prisma: PrismaClient) {
 export async function getIndividualDropsPageData(prisma: PrismaClient, id: number) {
   const drop = await prisma.drop.findFirst({
     include: {
-      Artist: true,
+      NftContract: { include: { Artist: true } },
       Lotteries: { include: { Nfts: true } },
       Auctions: { include: { Nft: true } },
     },

@@ -119,40 +119,40 @@ async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer
 }
 
 async function createNftCollection(drop: DropFull, signer: Signer) {
-  const nftContract = await getNFTContract(signer);
-  const collectionExists = await nftContract.collectionExists(drop.id);
+  // const nftContract = await getNFTContract(signer);
+  // const collectionExists = await nftContract.collectionExists(drop.id);
 
-  if (collectionExists) {
-    console.log(`createNftCollection() :: Collection already exists for drop ${drop.id}`);
-    return;
-  }
+  // if (collectionExists) {
+  //   console.log(`createNftCollection() :: Collection already exists for drop ${drop.id}`);
+  //   return;
+  // }
 
-  const royaltyAddress = drop.secondarySplitterId
-    ? drop.SecondarySplitter?.splitterAddress
-    : drop.artistAddress;
-  const primarySalesDestination = drop.primarySplitterId
-    ? drop.PrimarySplitter?.splitterAddress
-    : drop.artistAddress;
+  // const royaltyAddress = drop.secondarySplitterId
+  //   ? drop.SecondarySplitter?.splitterAddress
+  //   : drop.artistAddress;
+  // const primarySalesDestination = drop.primarySplitterId
+  //   ? drop.PrimarySplitter?.splitterAddress
+  //   : drop.artistAddress;
 
-  // percentage in basis points (2.00% = 200)
-  const royaltyPercentageBasisPoints = Math.floor(drop.royaltyPercentage * 100);
-  const dropBaseUrl = `https://arweave.net/${drop.dropMetadataCid}/`;
-  console.log(
-    `NFTContract.createCollection(${drop.id}, ${royaltyAddress}, ${royaltyPercentageBasisPoints}, ${dropBaseUrl}, ${primarySalesDestination})`
-  );
-  const tx = await nftContract.createCollection(
-    drop.id,
-    royaltyAddress!,
-    royaltyPercentageBasisPoints,
-    dropBaseUrl,
-    primarySalesDestination!
-  );
-  await tx.wait();
+  // // percentage in basis points (2.00% = 200)
+  // const royaltyPercentageBasisPoints = Math.floor(drop.royaltyPercentage * 100);
+  // const dropBaseUrl = `https://arweave.net/${drop.dropMetadataCid}/`;
+  // console.log(
+  //   `NFTContract.createCollection(${drop.id}, ${royaltyAddress}, ${royaltyPercentageBasisPoints}, ${dropBaseUrl}, ${primarySalesDestination})`
+  // );
+  // const tx = await nftContract.createCollection(
+  //   drop.id,
+  //   royaltyAddress!,
+  //   royaltyPercentageBasisPoints,
+  //   dropBaseUrl,
+  //   primarySalesDestination!
+  // );
+  // await tx.wait();
   console.log('createNftCollection() :: Collection created');
 }
 
 async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) {
-  const nftContractAddress = (await getNFTContract(signer)).address;
+  const nftContractAddress = (await getNFTContract('', signer)).address;
   const auctionContract = await getAuctionContract(signer);
 
   for (const auction of drop.Auctions) {
@@ -187,7 +187,7 @@ async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
 }
 
 async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any) {
-  const nftContractAddress = (await getNFTContract(signer)).address;
+  const nftContractAddress = (await getNFTContract('', signer)).address;
   const lotteryContract = await getLotteryContract(signer);
 
   for (const l of drop.Lotteries) {

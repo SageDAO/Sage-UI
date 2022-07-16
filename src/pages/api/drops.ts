@@ -51,7 +51,11 @@ async function getApprovedDrops(response: NextApiResponse) {
     const result = await prisma.drop.findMany({
       where: { approvedAt: { not: null } },
       include: {
-        Artist: true,
+        NftContract: {
+          include: {
+            Artist: true,
+          }
+        },
         Lotteries: { include: { Nfts: true } },
         Auctions: { include: { Nft: true } },
       },
@@ -74,7 +78,11 @@ async function getDropsPendingApproval(response: NextApiResponse) {
         approvedAt: null,
       },
       include: {
-        Artist: true,
+        NftContract: {
+          include: {
+            Artist: true,
+          }
+        },
       },
     });
     response.json(result);
@@ -90,11 +98,13 @@ async function getFullDrop(id: number, response: NextApiResponse) {
     const result = await prisma.drop.findUnique({
       where: { id },
       include: {
-        Artist: true,
+        NftContract: {
+          include: {
+            Artist: true,
+          }
+        },
         Auctions: { include: { Nft: true } },
         Lotteries: { include: { Nfts: true } },
-        PrimarySplitter: { include: { SplitterEntries: true } },
-        SecondarySplitter: { include: { SplitterEntries: true } },
         Whitelist: { include: { WhitelistEntries: true } },
       },
     });
