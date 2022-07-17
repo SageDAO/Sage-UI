@@ -35,22 +35,23 @@ function home({ featuredDrop, upcomingDrops }: Props) {
                 artist | {featuredDrop.NftContract.Artist.displayName}
               </div>
             </div>
-            <div className='home-page__statement'>
-              SAGE IS A NEW WAY TO HANDLE NFTS & INVESTMENTS. CURATED, HAND SELECTED FROM THE BEST
-              OF THE GLOBE.
-            </div>
-            <div className='home-page__upcoming-drops-header'>
-              <h1 className='home-page__upcoming-drops-header-left'>DROPS</h1>
-              <div className='home-page__upcoming-drops-header-right'>
-                <div className='home-page__upcoming-drops-header-right-dot'></div>
-                <h1 className='home-page__upcoming-drops-header-right-text'>
-                  SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL STANDARDS AND
-                  NEW STRUCTURES IN NFT ASSETS. A VISION IN THE CRYPTO SPACE.
-                </h1>
-              </div>
-            </div>
           </>
         )}
+
+        <div className='home-page__statement'>
+          SAGE IS A NEW WAY TO HANDLE NFTS & INVESTMENTS. CURATED, HAND SELECTED FROM THE BEST OF
+          THE GLOBE.
+        </div>
+        <div className='home-page__upcoming-drops-header'>
+          <h1 className='home-page__upcoming-drops-header-left'>DROPS</h1>
+          <div className='home-page__upcoming-drops-header-right'>
+            <div className='home-page__upcoming-drops-header-right-dot'></div>
+            <h1 className='home-page__upcoming-drops-header-right-text'>
+              SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL STANDARDS AND NEW
+              STRUCTURES IN NFT ASSETS. A VISION IN THE CRYPTO SPACE.
+            </h1>
+          </div>
+        </div>
         <div className='home-page__upcoming-drops-grid'>
           {upcomingDrops.map((d, i: number) => {
             const src = d.bannerImageS3Path;
