@@ -8,7 +8,8 @@ import {
 } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
-import splitterJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
+import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
+import { nftsApi } from './nftsReducer';
 
 export const dropsApi = createApi({
   reducerPath: 'dropsApi',
@@ -27,7 +28,7 @@ export const dropsApi = createApi({
     approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
       queryFn: async ({ dropId, signer }, { dispatch }, _, fetchWithBQ) => {
         try {
-          await deployDrop(dropId, signer, fetchWithBQ);
+          await deployDrop(dropId, signer, dispatch, fetchWithBQ);
           dispatch(dropsApi.util.invalidateTags(['PendingDrops'])); // refetch pending drops
           return { data: true };
         } catch (e) {
@@ -39,12 +40,16 @@ export const dropsApi = createApi({
   }),
 });
 
-async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
+async function deployDrop(dropId: number, signer: Signer, dispatch: any, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
   inspectDropGamesEndTimes(drop);
-  await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);
-  await processSplitter(drop.SecondarySplitter, signer, fetchWithBQ);
-  await createNftCollection(drop, signer);
+  //await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);
+  //await processSplitter(drop.SecondarySplitter, signer, fetchWithBQ);
+  //await createNftCollection(drop, signer);
+  drop.nftContractAddress = dispatch(
+    nftsApi.endpoints.fetchOrDeployNftContract.initiate({ artistAddress: drop.artistAddress, signer })
+  );
+  console.log('NFT CONTRACT ADDRESS RECEIVED = ' + drop.nftContractAddress);
   await createAuctions(drop, signer, fetchWithBQ);
   await createLotteries(drop, signer, fetchWithBQ);
   await updateDbApprovedDateAndIsLiveFlags(drop, fetchWithBQ);
@@ -103,8 +108,8 @@ async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer
       weights.push(Math.floor(splitter.SplitterEntries[i].percent * 100)); // royalty percentage using basis points. 1% = 100
     }
     const contractFactory = new ethers.ContractFactory(
-      splitterJson.abi,
-      splitterJson.bytecode,
+      splitterContractJson.abi,
+      splitterContractJson.bytecode,
       signer
     );
     const contractInstance = await contractFactory.deploy(

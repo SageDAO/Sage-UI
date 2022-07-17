@@ -1,8 +1,7 @@
-import prisma from '@/prisma/client';
-import { Prisma } from '@prisma/client';
-import { split } from 'cypress/types/lodash';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
+import prisma from '@/prisma/client';
+import { Prisma } from '@prisma/client';
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -23,6 +22,16 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'GetFullDrop':
       await getFullDrop(Number(id), response);
+      break;
+    case 'GetNftContractAddress':
+      await getNftContractAddress(address as string, response);
+      break;
+    case 'UpdateNftContractAddress':
+      await updateNftContractAddress(
+        request.query.artistAddress as string,
+        request.query.contractAddress as string,
+        response
+      );
       break;
     case 'FindSplitterAddress':
       await findSplitterAddress(Number(id), response);
@@ -51,11 +60,7 @@ async function getApprovedDrops(response: NextApiResponse) {
     const result = await prisma.drop.findMany({
       where: { approvedAt: { not: null } },
       include: {
-        NftContract: {
-          include: {
-            Artist: true,
-          }
-        },
+        NftContract: { include: { Artist: true } },
         Lotteries: { include: { Nfts: true } },
         Auctions: { include: { Nft: true } },
       },
@@ -74,16 +79,8 @@ async function getDropsPendingApproval(response: NextApiResponse) {
   console.log(`getDropsPendingApproval()`);
   try {
     const result = await prisma.drop.findMany({
-      where: {
-        approvedAt: null,
-      },
-      include: {
-        NftContract: {
-          include: {
-            Artist: true,
-          }
-        },
-      },
+      where: { approvedAt: null },
+      include: { NftContract: { include: { Artist: true } } },
     });
     response.json(result);
   } catch (e) {
@@ -98,15 +95,42 @@ async function getFullDrop(id: number, response: NextApiResponse) {
     const result = await prisma.drop.findUnique({
       where: { id },
       include: {
-        NftContract: {
-          include: {
-            Artist: true,
-          }
-        },
+        NftContract: { include: { Artist: true } },
         Auctions: { include: { Nft: true } },
         Lotteries: { include: { Nfts: true } },
         Whitelist: { include: { WhitelistEntries: true } },
       },
+    });
+    response.json(result);
+  } catch (e) {
+    console.log({ e });
+    response.status(500);
+  }
+}
+
+async function getNftContractAddress(artistAddress: string, response: NextApiResponse) {
+  console.log(`getNftContractAddress(${artistAddress})`);
+  try {
+    const result = await prisma.nftContract.findUnique({
+      where: { artistAddress },
+    });
+    response.json(result);
+  } catch (e) {
+    console.log({ e });
+    response.status(500);
+  }
+}
+
+async function updateNftContractAddress(
+  artistAddress: string,
+  contractAddress: string,
+  response: NextApiResponse
+) {
+  console.log(`updateNftContractAddress(${artistAddress}, ${contractAddress})`);
+  try {
+    const result = await prisma.nftContract.update({
+      where: { artistAddress },
+      data: { contractAddress },
     });
     response.json(result);
   } catch (e) {
@@ -122,9 +146,7 @@ async function findSplitterAddress(id: number, response: NextApiResponse) {
   console.log(`findSplitterAddress(${id})`);
   try {
     var splitEntries = await prisma.splitEntry.findMany({
-      where: {
-        splitterId: id,
-      },
+      where: { splitterId: id },
     });
     if (splitEntries.length! <= 1) {
       response.json([]);
@@ -152,12 +174,8 @@ async function updateSplitterAddress(id: number, address: string, response: Next
   console.log(`updateSplitterAddress(${id}, ${address})`);
   try {
     const result = await prisma.splitter.update({
-      where: {
-        id,
-      },
-      data: {
-        splitterAddress: address,
-      },
+      where: { id },
+      data: { splitterAddress: address },
     });
     response.json(result);
   } catch (e) {
@@ -174,12 +192,8 @@ async function updateAuctionContractAddress(
   console.log(`updateAuctionContractAddress(${id}, ${contractAddress})`);
   try {
     const result = await prisma.auction.update({
-      where: {
-        id,
-      },
-      data: {
-        contractAddress,
-      },
+      where: { id },
+      data: { contractAddress },
     });
     response.json(result);
   } catch (e) {
@@ -196,12 +210,8 @@ async function updateLotteryContractAddress(
   console.log(`updateLotteryContractAddress(${id}, ${contractAddress})`);
   try {
     const result = await prisma.lottery.update({
-      where: {
-        id,
-      },
-      data: {
-        contractAddress,
-      },
+      where: { id },
+      data: { contractAddress },
     });
     response.json(result);
   } catch (e) {
@@ -216,32 +226,21 @@ async function updateApprovedDateAndIsLiveFlags(
   response: NextApiResponse
 ) {
   console.log(`updateApprovedDateAndIsLiveFlags(${id}, ${walletAddress})`);
-  let now = new Date();
   try {
     const { approvedAt } = await prisma.drop.update({
-      where: {
-        id: Number(id),
-      },
+      where: { id: Number(id) },
       data: {
-        approvedAt: now,
+        approvedAt: new Date(),
         approvedBy: walletAddress,
       },
     });
     await prisma.auction.updateMany({
-      where: {
-        dropId: Number(id),
-      },
-      data: {
-        isLive: true,
-      },
+      where: { dropId: Number(id) },
+      data: { isLive: true },
     });
     await prisma.lottery.updateMany({
-      where: {
-        dropId: Number(id),
-      },
-      data: {
-        isLive: true,
-      },
+      where: { dropId: Number(id) },
+      data: { isLive: true },
     });
     response.json(approvedAt);
   } catch (e) {

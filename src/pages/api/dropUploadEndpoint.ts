@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import aws from 'aws-sdk';
 import NextCors from 'nextjs-cors';
 import prisma from '@/prisma/client';
+import { Role } from '@prisma/client';
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import Transaction from 'arweave/node/lib/transaction';
 import { computePrimes } from 'jwk-rsa-compute-primes';
-import { Role } from '@prisma/client';
 
 const arweaveJwk = computePrimes(JSON.parse(process.env.ARWEAVE_JSON_JWK || ''));
 
@@ -103,7 +103,7 @@ async function sendArweaveTransaction(
   const transaction = await arweave.createTransaction({ data }, jwk);
   transaction.addTag('Content-Type', contentType);
   await arweave.transactions.sign(transaction, jwk);
-  let uploader = await arweave.transactions.getUploader(transaction);
+  const uploader = await arweave.transactions.getUploader(transaction);
   while (!uploader.isComplete) {
     await uploader.uploadChunk();
     console.log(
@@ -128,6 +128,7 @@ async function uploadNftMetadataToArweave(nftMetadataFile: any, response: NextAp
 }
 
 /**
+ * Manifests are used for 1155's
  * Based upon https://github.com/ArweaveTeam/arweave/wiki/Path-Manifests#schema
  */
 function createArweaveManifest(nftMetadataFiles: any[]): string {
@@ -186,27 +187,6 @@ async function insertDrop(data: any, response: NextApiResponse) {
         },
       },
     });
-        /*
-        PrimarySplitter: {
-          create: {
-            SplitterEntries: {
-              createMany: {
-                data: data.primarySalesSplitEntries,
-              },
-            },
-          },
-        },
-        SecondarySplitter: {
-          create: {
-            SplitterEntries: {
-              createMany: {
-                data: data.royaltySplitEntries,
-              },
-            },
-          },
-        },
-        Whitelist: null || {},
-        */
     response.json({ dropId: record.id });
   } catch (e: any) {
     console.log(e);
@@ -261,21 +241,14 @@ async function insertNft(data: any, response: NextApiResponse) {
         s3Path: data.s3Path,
         Auction: null || {},
         Lottery: null || {},
+        artistAddress: data.artistAddress || null,
       },
     };
-    // NFT either belongs to an Auction or to a Lottery
+    // Game NFT either belongs to an Auction or to a Lottery
     if (data.auctionId) {
-      insertData.data.Auction = {
-        connect: {
-          id: data.auctionId,
-        },
-      };
-    } else {
-      insertData.data.Lottery = {
-        connect: {
-          id: data.drawingId,
-        },
-      };
+      insertData.data.Auction = { connect: { id: data.auctionId } };
+    } else if (data.drawingId) {
+      insertData.data.Lottery = { connect: { id: data.drawingId } };
     }
     var record = await prisma.nft.create(insertData);
     response.json({ nftId: record.id });

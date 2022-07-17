@@ -6,6 +6,7 @@ import { auctionsApi } from './auctionsReducer';
 import { pointsApi } from './pointsReducer';
 import { dashboardApi } from './dashboardReducer';
 import { dropsApi } from './dropsReducer';
+import { nftsApi } from './nftsReducer';
 
 const rootReducer = combineReducers({
   [usersApi.reducerPath]: usersApi.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   [pointsApi.reducerPath]: pointsApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [dropsApi.reducerPath]: dropsApi.reducer,
+  [nftsApi.reducerPath]: nftsApi.reducer,
 });
 
 const store = configureStore({
@@ -29,6 +31,7 @@ const store = configureStore({
       .concat(pointsApi.middleware)
       .concat(dashboardApi.middleware)
       .concat(dropsApi.middleware)
+      .concat(nftsApi.middleware)
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
