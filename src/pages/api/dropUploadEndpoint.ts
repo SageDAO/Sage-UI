@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import aws from 'aws-sdk';
 import NextCors from 'nextjs-cors';
 import prisma from '@/prisma/client';
-import { createUcanRequestToken } from '@/utilities/nftStorage';
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import Transaction from 'arweave/node/lib/transaction';
 import { computePrimes } from 'jwk-rsa-compute-primes';
+import { Role } from '@prisma/client';
 
 const arweaveJwk = computePrimes(JSON.parse(process.env.ARWEAVE_JSON_JWK || ''));
 
@@ -42,9 +42,6 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'UploadNftMetadataToArweave':
       await uploadNftMetadataToArweave(request.body, response);
       break;
-    case 'CreateNftStorageRequestToken':
-      await createNftStorageRequestToken(response);
-      break;
     case 'InsertDrop':
       await insertDrop(request.body, response);
       break;
@@ -56,12 +53,6 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'InsertNft':
       await insertNft(request.body, response);
-      break;
-    case 'UpdateDefaultPrize':
-      await updateDefaultPrize(request.body, response);
-      break;
-    case 'UpdateMetadataCid':
-      await updateMetadataCid(request.body, response);
       break;
     default:
       response.status(400).json('Bad Request');
@@ -123,15 +114,14 @@ async function sendArweaveTransaction(
   return transaction;
 }
 
-async function uploadNftMetadataToArweave(nftMetadataFiles: any, response: NextApiResponse) {
+async function uploadNftMetadataToArweave(nftMetadataFile: any, response: NextApiResponse) {
   var metadataType = 'application/json';
-  for (const item of nftMetadataFiles) {
-    const tx = await sendArweaveTransaction(item.filename, item.data, metadataType, arweaveJwk);
-    item.txId = tx.id;
-  }
-  const manifest = createArweaveManifest(nftMetadataFiles);
-  const manifestType = 'application/x.arweave-manifest+json';
-  const tx = await sendArweaveTransaction('manifest', manifest, manifestType, arweaveJwk);
+  const tx = await sendArweaveTransaction(
+    nftMetadataFile.filename,
+    nftMetadataFile.data,
+    metadataType,
+    arweaveJwk
+  );
   const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
   const balance = await arweave.wallets.getBalance(walletAddress);
   response.json({ id: tx.id, balance });
@@ -156,51 +146,46 @@ function createArweaveManifest(nftMetadataFiles: any[]): string {
   return manifest;
 }
 
-/**
- * https://github.com/nftstorage/ucan.storage#creating-a-request-token-to-upload-content
- */
-async function createNftStorageRequestToken(response: NextApiResponse) {
-  try {
-    const token = await createUcanRequestToken();
-    response.json({ token });
-  } catch (e: any) {
-    console.log(e);
-    response.json({ error: e.message });
-  }
-}
-
 async function insertDrop(data: any, response: NextApiResponse) {
   console.log('insertDrop()');
   try {
-    var insertData = {
+    // Create user if it doesn't exist
+    await prisma.user.upsert({
+      where: {
+        walletAddress: data.artistWallet,
+      },
+      update: {},
+      create: {
+        walletAddress: data.artistWallet,
+        role: Role.ARTIST,
+      },
+    });
+    // Create nft contract record if it doesn't exist
+    await prisma.nftContract.upsert({
+      where: {
+        artistAddress: data.artistWallet,
+      },
+      update: {},
+      create: {
+        artistAddress: data.artistWallet,
+        royaltyPercentage: parseFloat(data.rltyPercent)
+      },
+    });
+    // Create drop
+    var record = await prisma.drop.create({
       data: {
         name: data.name,
         description: data.description || '',
         createdAt: new Date(),
-        royaltyPercentage: toNumber(data.rltyPercent),
         tags: data.tags || '',
         bannerImageS3Path: data.bannerImageS3Path,
-        metadataS3Path: '',
         NftContract: {
           connect: {
-            where: {
-              artistAddress: data.artistAddress
-            }
-          }
-        }
-        /*
-        Artist: {
-          connectOrCreate: {
-            where: {
-              walletAddress: data.artistWallet,
-            },
-            create: {
-              walletAddress: data.artistWallet,
-              role: Role.ARTIST,
-            },
+            artistAddress: data.artistWallet,
           },
         },
-        */
+      },
+    });
         /*
         PrimarySplitter: {
           create: {
@@ -222,21 +207,7 @@ async function insertDrop(data: any, response: NextApiResponse) {
         },
         Whitelist: null || {},
         */
-      },
-    };
-    /* TODO add whitelist feature
-    if ("new" == data.whitelist) {
-      insertData.data.Whitelist = {
-        create: {
-          name: data.whitelistNewEntryName,
-          contractAddress: data.whitelistNewEntryToken,
-        },
-      };
-    }
-    */
-    var record = await prisma.drop.create(insertData);
-    const nftContractAddress = ''; // TODO deploy or reuse
-    response.json({ dropId: record.id, nftContractAddress });
+    response.json({ dropId: record.id });
   } catch (e: any) {
     console.log(e);
     response.json({ error: e.message });
@@ -284,7 +255,6 @@ async function insertNft(data: any, response: NextApiResponse) {
         name: data.name,
         description: data.description || '',
         tags: data.tags || '',
-        rarity: data.rarity || '',
         numberOfEditions: toNumber(data.numberOfEditions),
         isVideo: 'true' == data.isVideo,
         metadataPath: data.metadataPath,
@@ -321,7 +291,7 @@ async function insertDrawing(data: any, response: NextApiResponse) {
     var record = await prisma.lottery.create({
       data: {
         dropId: Number(data.dropId),
-        costPerTicketTokens: toNumber(data.ticketCostCoins),
+        costPerTicketTokens: toNumber(data.ticketCostTokens),
         costPerTicketPoints: toNumber(data.ticketCostPoints),
         maxTickets: toNumber(data.maxTickets),
         maxTicketsPerUser: toNumber(data.maxTicketsPerUser),
@@ -335,43 +305,6 @@ async function insertDrawing(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
-}
-
-async function updateDefaultPrize(data: any, response: NextApiResponse) {
-  console.log('updateDefaultPrize()');
-  try {
-    await prisma.lottery.update({
-      where: {
-        id: Number(data.drawingId),
-      },
-      data: {
-        defaultPrizeId: Number(data.nftId),
-      },
-    });
-    response.json({ success: true });
-  } catch (e: any) {
-    console.log(e);
-    response.json({ error: e.message });
-  }
-}
-
-async function updateMetadataCid(data: any, response: NextApiResponse) {
-  console.log('updateMetadataCid()');
-  throw new Error("deprecated!!");
-//   try {
-//     await prisma.drop.update({
-//       where: {
-//         id: Number(data.dropId),
-//       },
-//       data: {
-//         dropMetadataCid: data.dropMetadataCid,
-//       },
-//     });
-//     response.json({ success: true });
-//   } catch (e: any) {
-//     console.log(e);
-//     response.json({ error: e.message });
-//   }
 }
 
 const toNumber = (val: string): number => (val ? Number(val) : 0);

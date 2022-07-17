@@ -24,22 +24,24 @@ export default function EventSlider() {
 
   useEffect(() => {
     fetchMediumPosts((data) => {
-      setState((prevState) => {
-        return {
-          ...prevState,
-          image: data.feed.image,
-          title: data.feed.title,
-          link: data.feed.link,
-          items: data.feed.items,
-          description: data.feed.description,
-        };
-      });
+      if (data) {
+        setState((prevState) => {
+          return {
+            ...prevState,
+            image: data.feed.image,
+            title: data.feed.title,
+            link: data.feed.link,
+            items: data.feed.items,
+            description: data.feed.description,
+          };
+        });
+      }
     });
   }, []);
 
   return (
     <div className='home-page__events'>
-      <a target="__blank" className='home-page__event-slide' href={state.link}>
+      <a target='__blank' className='home-page__event-slide' href={state.link}>
         <h1 className='home-page__event-slide-header'>
           news / events / <br /> interviews / blog
         </h1>

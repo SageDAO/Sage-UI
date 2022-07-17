@@ -214,9 +214,9 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
         l.costPerTicketPoints
       }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${nftContractAddress}, ${
         l.isRefundable
-      }, ${l.defaultPrizeId || 0}, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0}, [${
-        prizeIds.length
-      }], [${prizeAmounts.length}])`
+      }, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0}, [${prizeIds.length}], [${
+        prizeAmounts.length
+      }])`
     );
     const tx = await lotteryContract.createLottery(
       l.id,
@@ -227,7 +227,7 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
       endTime,
       nftContractAddress,
       l.isRefundable,
-      l.defaultPrizeId || 0,
+      0, // default prize
       l.maxTickets || 0,
       l.maxTicketsPerUser || 0,
       prizeIds,
