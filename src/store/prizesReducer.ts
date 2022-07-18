@@ -52,7 +52,7 @@ export const prizesApi = createApi({
             lotteryId,
             walletAddress,
             nftId,
-            ticketNumber,
+            '', // TODO nft URL
             toByteArray(proof)
           );
           toast.promise(tx.wait(), {

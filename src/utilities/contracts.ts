@@ -3,13 +3,15 @@ import Rewards from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
 import Lottery from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
 import Auction from '@/constants/abis/Auction/Auction.sol/Auction.json';
 import SageNFT from '@/constants/abis/NFT/SageNFT.sol/SageNFT.json';
+import NFTFactory from '@/constants/abis/NFT/NFTFactory.sol/NFTFactory.json';
 import ERC20Standard from '@/constants/abis/ERC-20/ERC20Standard.json';
 import {
   Lottery as LotteryContract,
   Auction as AuctionContract,
   Rewards as RewardsContract,
   ERC20Standard as ERC20Contract,
-  NFT as NFTContract,
+  SageNFT as NftContract,
+  NFTFactory as NftFactoryContract,
 } from '@/types/contracts';
 import { parameters } from '../constants/config';
 import { toast } from 'react-toastify';
@@ -19,6 +21,7 @@ const {
   ASHTOKEN_ADDRESS,
   LOTTERY_ADDRESS,
   AUCTION_ADDRESS,
+  NFTFACTORY_ADDRESS,
   NETWORK_NAME,
   CHAIN_ID,
 } = parameters;
@@ -30,7 +33,7 @@ interface ContractDetails {
 
 export type SignerOrProvider = Signer | Signer['provider'];
 
-type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'ERC20';
+type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'NftFactory' | 'ERC20';
 
 type AppContractDetailsMap = {
   [key in AppContractNames]: ContractDetails;
@@ -48,6 +51,10 @@ const contractMap: AppContractDetailsMap = {
   Rewards: {
     address: REWARDS_ADDRESS,
     abi: Rewards.abi,
+  },
+  NftFactory: {
+    address: NFTFACTORY_ADDRESS,
+    abi: NFTFactory.abi,
   },
   ERC20: {
     address: ASHTOKEN_ADDRESS,
@@ -95,12 +102,16 @@ export async function getRewardsContract(signer?: Signer): Promise<RewardsContra
   return (await getContract(contractMap.Rewards, signer)) as RewardsContract;
 }
 
-export async function getNFTContract(address: string, signer?: Signer): Promise<NFTContract> {
-  return (await getContract({ address, abi: SageNFT.abi }, signer)) as NFTContract;
+export async function getNFTContract(address: string, signer?: Signer): Promise<NftContract> {
+  return (await getContract({ address, abi: SageNFT.abi }, signer)) as NftContract;
 }
 
 export async function getERC20Contract(signer?: Signer): Promise<ERC20Contract> {
   return (await getContract(contractMap.ERC20, signer)) as ERC20Contract;
+}
+
+export async function getNftFactoryContract(signer?: Signer): Promise<NftFactoryContract> {
+  return (await getContract(contractMap.NftFactory, signer)) as NftFactoryContract;
 }
 
 async function getContract(details: ContractDetails, signer?: Signer) {

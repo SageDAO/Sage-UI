@@ -12,7 +12,7 @@ export default function Mint() {
     description: '',
     tags: '',
     price: '0',
-    file: new File([],'emptyFile'),
+    file: null,
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,10 +25,28 @@ export default function Mint() {
       return;
     }
     // TODO data validation
-    const nftId = await mintSingleNft({ name: data.name, description: data.description, tags: data.tags, price: parseFloat(data.price.toString()), file: data.file, signer });
-    toast.success(`Success! NFT minted with id ${nftId}`);
+    // const nftId = await mintSingleNft({
+    //   name: data.name,
+    //   description: data.description,
+    //   tags: data.tags,
+    //   price: parseFloat(data.price.toString()),
+    //   file: data.file,
+    //   signer,
+    // });
+    // toast.success(`Success! NFT minted with id ${nftId}`);
   };
 
+  const ethers = require('ethers')
+  function createWallet() {
+const wallet = ethers.Wallet.createRandom()
+console.log('address:', wallet.address)
+console.log('mnemonic:', wallet.mnemonic.phrase)
+console.log('privateKey:', wallet.privateKey)
+console.log('-------------------------------------------------------------')
+  }
+
+  for (var i = 1; i <= 10; i++) createWallet();
+  
   return (
     <div>
       <br />

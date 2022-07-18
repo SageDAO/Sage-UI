@@ -177,12 +177,12 @@ async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
     );
     const tx = await auctionContract.createAuction(
       auction.id,
-      auction.dropId,
       auction.nftId,
       minimumPrice,
       startTime,
       endTime,
-      nftContractAddress
+      nftContractAddress,
+      '' // TODO NFT_URL
     );
     await tx.wait();
 
@@ -225,18 +225,16 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
     );
     const tx = await lotteryContract.createLottery(
       l.id,
-      l.dropId,
       l.costPerTicketPoints,
       costPerTicketTokens,
       startTime,
       endTime,
       nftContractAddress,
       l.isRefundable,
-      0, // default prize
       l.maxTickets || 0,
       l.maxTicketsPerUser || 0,
-      prizeIds,
-      prizeAmounts
+      1, // TODO firstPrizeId
+      10 // lastPrizeId
     );
     await tx.wait();
 

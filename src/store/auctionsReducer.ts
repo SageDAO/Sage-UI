@@ -60,7 +60,7 @@ export const auctionsApi = createApi({
         const weiValue = ethers.utils.parseEther(amount.toString());
         try {
           const auctionContract = await getAuctionContract(signer);
-          const tokenAddress = await auctionContract.token();
+          const tokenAddress = await auctionContract.erc20();
           await approveERC20Transfer(tokenAddress, signer, amount);
         } catch (e) {
           console.error(e);
@@ -118,9 +118,9 @@ export async function getAuctionContractState(auctionId: number) {
   const auctionContract = await getAuctionContract();
   try {
     const auctionStruct = await auctionContract.getAuction(auctionId);
-    const timeExtension = Number(await auctionContract.defaultTimeExtension());
+    const timeExtension = Number(await auctionContract.getDefaultTimeExtension());
     const endTime = auctionStruct.endTime * 1000;
-    const bidIncrementPercentage = await auctionContract.bidIncrementPercentage();
+    const bidIncrementPercentage = await auctionContract.getBidIncrementPercentage();
     const highestBidNumber = utils.formatUnits(auctionStruct.highestBid);
     const nextMinBid = Number(
       utils.formatUnits(
