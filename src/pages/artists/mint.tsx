@@ -35,17 +35,6 @@ export default function Mint() {
     // });
     // toast.success(`Success! NFT minted with id ${nftId}`);
   };
-
-  const ethers = require('ethers')
-  function createWallet() {
-const wallet = ethers.Wallet.createRandom()
-console.log('address:', wallet.address)
-console.log('mnemonic:', wallet.mnemonic.phrase)
-console.log('privateKey:', wallet.privateKey)
-console.log('-------------------------------------------------------------')
-  }
-
-  for (var i = 1; i <= 10; i++) createWallet();
   
   return (
     <div>
