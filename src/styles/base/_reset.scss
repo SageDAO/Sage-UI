@@ -5,13 +5,14 @@
 
 @use '@/styles/abstracts/colors' as c;
 
-html {
+html, button {
   text-transform: uppercase;
 }
 
 body {
   overflow: hidden;
 }
+
 
 html,
 body,

@@ -1,6 +1,9 @@
+@use '@/styles/abstracts/mixins' as m;
 .artist-page {
+  @include m.page;
   width: 100%;
   width: min(1440px, 80vw);
 }
 
-.artist-page {}
+.artist-page {
+}

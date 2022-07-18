@@ -1,8 +1,7 @@
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/mixins' as m;
 .artists-page {
-  display: flex;
-  flex-direction: column;
+	@include m.page;
   gap: 30px;
   width: 100%;
   align-items: center;

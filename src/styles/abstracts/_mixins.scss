@@ -9,6 +9,15 @@
   aspect-ratio: 1/1;
 }
 
+@mixin page {
+  padding: 80px 0;
+	width: 100vw;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @mixin noselect {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
@@ -82,7 +91,7 @@ $theme-map: null;
     // use & for making the theme class ancestor of the class
     // from which you use @include theme() {...}
     .#{$theme} & {
-			transition-duration: 200ms;
+      transition-duration: 200ms;
       @content; // the content inside @include theme() {...}
     }
   }
@@ -93,7 +102,6 @@ $theme-map: null;
 @function t($key) {
   @return map-get($theme-map, $key);
 }
-
 
 @mixin animate-highlight {
   animation-duration: 900ms;

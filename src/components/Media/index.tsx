@@ -48,10 +48,11 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps)
 }
 interface PfpImageProps {
   src: string | null | undefined;
+  className?: string;
 }
 
-function PfpImage({ src }: PfpImageProps) {
-  return <BaseMedia src={src || DEFAULT_PROFILE_PICTURE} isVideo={false} />;
+function PfpImage({ src, className }: PfpImageProps) {
+  return <Image src={src || DEFAULT_PROFILE_PICTURE} layout='fill' objectFit='cover' />;
 }
 
 export { BaseMedia, PfpImage };
