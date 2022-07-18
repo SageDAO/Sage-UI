@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ethers, Signer } from 'ethers';
-import nftContractJson from '@/constants/abis/NFT/SageNFT.sol/SageNFT.json';
+import { Signer } from 'ethers';
+import { getNftFactoryContract } from '@/utilities/contracts';
 
 export const nftsApi = createApi({
   reducerPath: 'nftsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: ['NftContract'],
   endpoints: (builder) => ({
-    fetchOrDeployNftContract: builder.query<string, { artistAddress: string; signer: Signer }>({
+    fetchOrCreateNftContract: builder.query<string, { artistAddress: string; signer: Signer }>({
       queryFn: async ({ artistAddress, signer }, { dispatch }, _, fetchWithBQ) => {
         try {
-          const contractAddress = await _fetchOrDeployNftContract(
+          const contractAddress = await _fetchOrCreateNftContract(
             artistAddress,
             signer,
             fetchWithBQ
@@ -36,7 +36,7 @@ export const nftsApi = createApi({
         try {
           const artistAddress = await signer.getAddress();
           const nftContractAddress = dispatch(
-            nftsApi.endpoints.fetchOrDeployNftContract.initiate({ artistAddress, signer })
+            nftsApi.endpoints.fetchOrCreateNftContract.initiate({ artistAddress, signer })
           );
           // TODO upload media to S3
           const s3Path = '';
@@ -51,7 +51,7 @@ export const nftsApi = createApi({
             tags,
             price,
             s3Path,
-            metadataPath
+            metadataPath,
           };
           const { data } = await fetchWithBQ({
             url: `dropUploadEndpoint?action=InsertNft`,
@@ -69,7 +69,7 @@ export const nftsApi = createApi({
   }),
 });
 
-async function _fetchOrDeployNftContract(
+export async function _fetchOrCreateNftContract(
   artistAddress: string,
   signer: Signer,
   fetchWithBQ: any
@@ -77,44 +77,29 @@ async function _fetchOrDeployNftContract(
   const { data } = await fetchWithBQ(`drops?action=GetNftContractAddress&address=${artistAddress}`);
   if (data.contractAddress) {
     console.log(
-      `_fetchOrDeployNftContract() :: Found existing NFT contract at ${data.contractAddress}`
+      `_fetchOrCreateNftContract() :: Found existing NFT contract at ${data.contractAddress}`
     );
     return data.contractAddress;
   }
   console.log(
-    `_fetchOrDeployNftContract() :: Deploying new NFT contract for Artist ${artistAddress}`
+    `_fetchOrCreateNftContract() :: Creating new NFT contract for Artist ${artistAddress}`
   );
-  const keccak256 = require('keccak256');
-  const MINTER_ROLE = keccak256('MINTER_ROLE');
-  const BURNER_ROLE = keccak256('BURNER_ROLE');
-  const royalties = Math.floor(parseFloat(data.royaltyPercentage) * 100);
-  const deployerAddress = await signer.getAddress();
-  const contractFactory = new ethers.ContractFactory(
-    nftContractJson.abi,
-    nftContractJson.bytecode,
-    signer
-  );
-  console.log('3');
-  const contractInstance = await contractFactory.deploy();
-  console.log('4');
-  contractInstance.initialize(
-    'Sage',
-    'SAGE',
-    artistAddress, // sales destination
-    royalties,
-    artistAddress // royalties destination
-  );
-  console.log('5');
-  await contractInstance.grantRole(MINTER_ROLE, artistAddress);
-  console.log('6');
-  await contractInstance.grantRole(BURNER_ROLE, deployerAddress);
-  console.log('7');
+
+  const nftFactoryContract = await getNftFactoryContract(signer);
+  var artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
+  if (
+    !artistContractAddress ||
+    artistContractAddress == '0x0000000000000000000000000000000000000000'
+  ) {
+    console.log(`_fetchOrCreateNftContract() :: Creating new NFT contract...`);
+    await nftFactoryContract.createNFTContract(artistAddress, 'Sage', 'SAGE');
+    artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
+  }
   await fetchWithBQ(
-    `drops?action=UpdateNftContractAddress&artistAddress=${artistAddress}&contractAddress=${contractInstance.address}`
+    `drops?action=UpdateNftContractAddress&artistAddress=${artistAddress}&contractAddress=${artistContractAddress}`
   );
-  console.log('8');
-  console.log(`_fetchOrDeployNftContract() :: Contract deployed to ${contractInstance.address}`);
-  return contractInstance.address;
+  console.log(`_fetchOrCreateNftContract() :: Contract deployed to ${artistContractAddress}`);
+  return artistContractAddress;
 }
 
-export const { useFetchOrDeployNftContractQuery, useMintSingleNftMutation } = nftsApi;
+export const { useFetchOrCreateNftContractQuery, useMintSingleNftMutation } = nftsApi;

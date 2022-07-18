@@ -4,12 +4,13 @@ import {
   DropFull,
   DropWithArtist,
   Drop_include_GamesAndArtist,
+  Nft,
   Splitter_include_Entries,
 } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
 import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
-import { nftsApi } from './nftsReducer';
+import { nftsApi, _fetchOrCreateNftContract } from './nftsReducer';
 
 export const dropsApi = createApi({
   reducerPath: 'dropsApi',
@@ -46,12 +47,16 @@ async function deployDrop(dropId: number, signer: Signer, dispatch: any, fetchWi
   //await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);
   //await processSplitter(drop.SecondarySplitter, signer, fetchWithBQ);
   //await createNftCollection(drop, signer);
-  drop.nftContractAddress = dispatch(
-    nftsApi.endpoints.fetchOrDeployNftContract.initiate({ artistAddress: drop.artistAddress, signer })
+  const artistNftContractAddress = await _fetchOrCreateNftContract(
+    drop.artistAddress,
+    signer,
+    fetchWithBQ
   );
-  console.log('NFT CONTRACT ADDRESS RECEIVED = ' + drop.nftContractAddress);
-  await createAuctions(drop, signer, fetchWithBQ);
-  await createLotteries(drop, signer, fetchWithBQ);
+  if (artistNftContractAddress == '0x0000000000000000000000000000000000000000') {
+    throw new Error('Unable to deploy a new artist NFT contract');
+  }
+  await createAuctions(drop, artistNftContractAddress, signer, fetchWithBQ);
+  await createLotteries(drop, artistNftContractAddress, signer, fetchWithBQ);
   await updateDbApprovedDateAndIsLiveFlags(drop, fetchWithBQ);
 }
 
@@ -156,8 +161,12 @@ async function createNftCollection(drop: DropFull, signer: Signer) {
   console.log('createNftCollection() :: Collection created');
 }
 
-async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) {
-  const nftContractAddress = (await getNFTContract('', signer)).address;
+async function createAuctions(
+  drop: DropFull,
+  artistNftContractAddress: string,
+  signer: Signer,
+  fetchWithBQ: any
+) {
   const auctionContract = await getAuctionContract(signer);
 
   for (const auction of drop.Auctions) {
@@ -173,7 +182,7 @@ async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
     const minimumPrice = ethers.utils.parseEther(auction.minimumPrice!);
 
     console.log(
-      `createAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.dropId}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${nftContractAddress})`
+      `createAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath}`
     );
     const tx = await auctionContract.createAuction(
       auction.id,
@@ -181,8 +190,8 @@ async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
       minimumPrice,
       startTime,
       endTime,
-      nftContractAddress,
-      '' // TODO NFT_URL
+      artistNftContractAddress,
+      auction.Nft.metadataPath
     );
     await tx.wait();
 
@@ -191,8 +200,12 @@ async function createAuctions(drop: DropFull, signer: Signer, fetchWithBQ: any) 
   }
 }
 
-async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any) {
-  const nftContractAddress = (await getNFTContract('', signer)).address;
+async function createLotteries(
+  drop: DropFull,
+  artistNftContractAddress: string,
+  signer: Signer,
+  fetchWithBQ: any
+) {
   const lotteryContract = await getLotteryContract(signer);
 
   for (const l of drop.Lotteries) {
@@ -206,22 +219,16 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
     const startTime = Math.floor(new Date(l.startTime).getTime() / 1000);
     const endTime = Math.floor(new Date(l.endTime).getTime() / 1000);
     const costPerTicketTokens = ethers.utils.parseEther(l.costPerTicketTokens.toString());
-    const prizeIds = Array();
-    const prizeAmounts = Array();
-    for (const nft of l.Nfts) {
-      if (nft.numberOfEditions > 0) {
-        prizeIds.push(nft.id);
-        prizeAmounts.push(nft.numberOfEditions);
-      }
-    }
+    const nftsSortedById = l.Nfts.sort((a, b) => a.id - b.id);
+    const lowestId = nftsSortedById[0].id;
+    const highestId = nftsSortedById[nftsSortedById.length - 1].id;
+
     console.log(
       `LotteryContract.createLottery(${l.id}, ${l.dropId}, ${
         l.costPerTicketPoints
-      }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${nftContractAddress}, ${
+      }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${artistNftContractAddress}, ${
         l.isRefundable
-      }, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0}, [${prizeIds.length}], [${
-        prizeAmounts.length
-      }])`
+      }, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0}, ${lowestId}, ${highestId})`
     );
     const tx = await lotteryContract.createLottery(
       l.id,
@@ -229,12 +236,12 @@ async function createLotteries(drop: DropFull, signer: Signer, fetchWithBQ: any)
       costPerTicketTokens,
       startTime,
       endTime,
-      nftContractAddress,
+      artistNftContractAddress,
       l.isRefundable,
       l.maxTickets || 0,
       l.maxTicketsPerUser || 0,
-      1, // TODO firstPrizeId
-      10 // lastPrizeId
+      lowestId,
+      highestId
     );
     await tx.wait();
 
