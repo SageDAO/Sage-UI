@@ -92,7 +92,8 @@ export async function _fetchOrCreateNftContract(
     artistContractAddress == '0x0000000000000000000000000000000000000000'
   ) {
     console.log(`_fetchOrCreateNftContract() :: Creating new NFT contract...`);
-    await nftFactoryContract.createNFTContract(artistAddress, 'Sage', 'SAGE');
+    var tx = await nftFactoryContract.createNFTContract(artistAddress, 'Sage', 'SAGE');
+    await tx.wait();
     artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
   }
   await fetchWithBQ(

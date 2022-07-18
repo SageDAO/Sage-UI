@@ -224,7 +224,7 @@ async function createLotteries(
     const highestId = nftsSortedById[nftsSortedById.length - 1].id;
 
     console.log(
-      `LotteryContract.createLottery(${l.id}, ${l.dropId}, ${
+      `LotteryContract.createLottery(${l.id}, ${
         l.costPerTicketPoints
       }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${artistNftContractAddress}, ${
         l.isRefundable
