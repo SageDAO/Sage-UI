@@ -4,10 +4,11 @@ import {
 } from '@/store/auctionsReducer';
 import { useGetClaimedPrizesQuery, useGetUnclaimedPrizesQuery } from '@/store/prizesReducer';
 import { GamePrize } from '@/prisma/types';
-import CollectionTile from './Tiles/CollectionTile';
-import LoaderDots from './LoaderDots';
+import CollectionTile from '@/components/Tiles/CollectionTile';
+import LoaderDots from '@/components/LoaderDots';
+import { BaseMedia } from '@/components/Media';
 
-export function MyCollection() {
+export default function CollectionPanel() {
   const { data: claimedPrizes, isFetching: fetchingClaimedPrizes } = useGetClaimedPrizesQuery();
   const { data: unclaimedPrizes, isFetching: fetchingUnclaimedPrizes } =
     useGetUnclaimedPrizesQuery();
@@ -32,16 +33,20 @@ export function MyCollection() {
   }
 
   return (
-    <div className='collection'>
-      <div className='collection__header'>My Collection</div>
-      {myNfts?.length == 0 && (
-        <div style={{ marginTop: '50px', marginLeft: '50px', color: '#6f676e' }}>
-          Nothing to showcase here (yet)!
-        </div>
-      )}
-      <div className='collection__grid'>
+    <div className='collection-panel'>
+      <div className='collection-panel__grid'>
         {myNfts?.map((item: GamePrize) => {
-          return <CollectionTile item={item} key={item.nftId} />;
+          return (
+            <div className='collection-panel__tile'>
+              <div className='collection-panel__img-container'>
+                <BaseMedia src={item.s3Path} isVideo={item.isVideo}></BaseMedia>
+              </div>
+              <h1 className='collection-panel__tile-header'>
+                {item.dropId} by {item.artistDisplayName || item}
+                <h1 className='collection-panel__tile-name'>it is getting late</h1>
+              </h1>
+            </div>
+          );
         })}
       </div>
     </div>

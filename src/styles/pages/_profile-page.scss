@@ -2,80 +2,12 @@
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/breakpoints' as b;
-.profile-page {
-  @include m.page;
-  flex-direction: row;
-  align-items: flex-start;
-  width: 80vw;
-  gap: clamp(20px, 5vw, 160px);
-  flex-wrap: wrap;
-}
 
-.profile-page__sage-logo-container {
-  position: relative;
-  width: 300px;
-  height: 100px;
-}
-
+// ------------------------ local mixins ----------------------------------
 @mixin group {
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
-
-.profile-page__menu {
-  @include group;
-}
-
-.profile-page__pfp-container {
-  margin-top: 20px;
-  position: relative;
-  background-color: grey;
-  width: 100px;
-  overflow: hidden;
-  @include m.circle;
-}
-
-.profile-page__tabs {
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-page__tabs-tab {
-  padding: 4px 16px;
-  transition-duration: 20ms;
-  outline: none;
-
-  @include m.noselect;
-
-  @include m.theme() {
-    color: m.t(contrast);
-		text-align: left;
-    background-color: transparent;
-    @include m.interact() {
-      background-color: m.t(contrast);
-      color: m.t(base);
-    }
-
-    &[data-active='true'] {
-      background-color: m.t(contrast);
-      color: m.t(base2);
-    }
-  }
-}
-
-.profile-page__main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
-}
-
-.profile-page__balances {
-  text-overflow: ellipsis;
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(20px, 5vw, 160px);
 }
 
 @mixin balance-group {
@@ -106,6 +38,103 @@
   }
 }
 
+@mixin input-label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+
+  @include m.theme() {
+    color: m.t(contrast);
+  }
+}
+@mixin input-field {
+  min-height: 30px;
+  flex: 1;
+  @include m.theme() {
+    background: c.$white;
+    border: 1px solid c.$grey;
+  }
+}
+
+@mixin input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+// ------------------------ local mixins ----------------------------------
+
+.profile-page {
+  @include m.page;
+  flex-direction: row;
+  align-items: flex-start;
+  max-width: 80vw;
+  gap: clamp(20px, 5vw, 160px);
+  flex-wrap: wrap;
+}
+
+.profile-page__sage-logo-container {
+  position: relative;
+  width: 300px;
+  height: 100px;
+}
+
+.profile-page__menu {
+  @include group;
+}
+
+.profile-page__pfp-container {
+  margin-top: 20px;
+  position: relative;
+  background-color: grey;
+  width: 100px;
+  overflow: hidden;
+  @include m.circle;
+}
+
+.profile-page__tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page__tabs-tab {
+  padding: 4px 16px;
+  transition-duration: 20ms;
+  outline: none;
+
+  @include m.noselect;
+
+  @include m.theme() {
+    color: m.t(contrast);
+    text-align: left;
+    background-color: transparent;
+    @include m.interact() {
+      background-color: m.t(contrast);
+      color: m.t(base);
+    }
+
+    &[data-active='true'] {
+      background-color: m.t(contrast);
+      color: m.t(base2);
+    }
+  }
+}
+
+.profile-page__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.profile-page__balances {
+  max-width: 80vw;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(20px, 5vw, 160px);
+}
+
 .profile-page__balances-points {
   @include balance-group;
 }
@@ -133,6 +162,8 @@
 
 .profile-page__tabs-panels {
   display: flex;
+  max-width: 80vw;
+  min-height: 50vh;
 }
 
 .profile-page__tabs-panel {
@@ -167,44 +198,19 @@
   }
 }
 
-//---------------------------Tab Panels--------------------------------
-@mixin profile-panel-label {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
+//---------------------------Profile Panel--------------------------------
 
-  @include m.theme() {
-    color: m.t(contrast);
-  }
-}
-@mixin profile-panel-field {
-  min-height: 30px;
-  flex: 1;
-  max-width: 345px;
-  @include m.theme() {
-    background: c.$white;
-    border: 1px solid c.$grey;
-  }
-}
-
-@mixin profile-panel-group {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-
-.panel-profile {
+.profile-panel {
   display: flex;
   flex-direction: column;
   gap: 23px;
 }
 
-.panel-profile__pfp-group {
-  @include profile-panel-group;
+.profile-panel__pfp-group {
+  @include input-group;
 }
 
-.panel-profile__pfp-container {
+.profile-panel__pfp-container {
   overflow: hidden;
   @include m.interact {
   }
@@ -215,31 +221,31 @@
   border-radius: 100%;
 }
 
-.panel-profile__pfp-label {
-  @include profile-panel-label;
+.profile-panel__pfp-label {
+  @include input-label;
 }
 
-.panel-profile__personal-group {
-  @include profile-panel-group;
+.profile-panel__personal-group {
+  @include input-group;
 }
 
-.panel-profile__personal-label {
-  @include profile-panel-label;
+.profile-panel__personal-label {
+  @include input-label;
 }
-.panel-profile__personal-field {
-  @include profile-panel-field;
+.profile-panel__personal-field {
+  @include input-field;
 }
 
-.panel-profile__bio-group {
-  @include profile-panel-group;
+.profile-panel__bio-group {
+  @include input-group;
   flex: 1;
 }
 
-.panel-profile__bio-label {
-  @include profile-panel-label;
+.profile-panel__bio-label {
+  @include input-label;
 }
 
-.panel-profile__bio-field {
+.profile-panel__bio-field {
   border: 1px solid c.$grey;
   background-color: c.$white;
   display: flex;
@@ -247,25 +253,25 @@
   min-height: 150px;
 }
 
-.panel-profile__socials-group {
-  @include profile-panel-group;
+.profile-panel__socials-group {
+  @include input-group;
   flex-wrap: wrap;
 }
 
-.panel-profile__socials-label {
-  @include profile-panel-label;
+.profile-panel__socials-label {
+  @include input-label;
 }
 
-.panel-profile__socials-field-container {
+.profile-panel__socials-field-container {
   display: flex;
   flex-wrap: wrap;
   gap: 24px 20px;
 }
-.panel-profile__socials-field {
-  @include profile-panel-field;
+.profile-panel__socials-field {
+  @include input-field;
 }
 
-.panel-profile__save-button {
+.profile-panel__save-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -288,22 +294,134 @@
   }
 }
 
-// .panel-profile__social-group {
-//   @include profile-panel-group;
-// }
+//---------------------------Profile Panel--------------------------------
+//---------------------------Collection Panel--------------------------------
 
-/*
+.collection-panel__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 21px;
+  height: auto;
+}
 
-    <div className='panel-profile'>
-      <div className='panel-profile__upload-pfp-group'>
-        <div className='panel-profile__upload-pfp'>
-          <PfpImage src='/'></PfpImage>
-        </div>
-        <h2 className='panel-profile__upload-pfp-label'>add a profile picture</h2>
-      </div>
-      <div className='panel-profile__upload-bio-group'>
-        <h2 className='panel-profile__upload-bio-label'>about section, max 400 characters</h2>
-        <textarea className='panel-profile__upload-bio-field' />
-      </div>
-    </div>
-*/
+.collection-panel__tile {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition-duration: 200ms;
+
+  @include m.theme() {
+    background-color: m.t(base2);
+    color: m.t(contrast2);
+    border: 1px solid transparent;
+    @include m.interact() {
+      border: 1px solid contrast2;
+      color: m.t(base2);
+      background-color: m.t(contrast2);
+      img {
+        transition-duration: 200ms;
+        transform: scale(1.02);
+      }
+    }
+  }
+}
+
+.collection-panel__img-container {
+  overflow: hidden;
+  position: relative;
+  width: 345px;
+  aspect-ratio: 1/1;
+}
+
+.collection-panel__tile-header {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 130%;
+  text-transform: uppercase;
+}
+
+.collection-panel__tile-name {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 130%;
+  text-transform: uppercase;
+}
+
+//---------------------------Collection Panel--------------------------------
+
+.creations-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+
+.creations-panel__file-upload-group {
+  @include input-group;
+}
+
+.creations-panel__file-upload-field-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 200ms;
+  width: 100%;
+  aspect-ratio: 851/420;
+  @include m.theme() {
+    background-color: m.t(base2);
+    border: 1px solid m.t(contrast2);
+  }
+  @include m.interact;
+}
+
+.creations-panel__file-upload-field {
+  @include m.interact;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+#file-input::-webkit-file-upload-button {
+  visibility: hidden;
+  user-select: none;
+}
+#file-input {
+  display: none;
+  user-select: none;
+}
+
+
+.creations-panel__file-upload-plus-icon {
+  position: absolute;
+}
+
+.creations-panel__file-upload-label {
+  @include input-label;
+}
+
+.creations-panel__file-title-group {
+  @include input-group;
+}
+.creations-panel__file-title-label {
+  @include input-label;
+}
+.creations-panel__file-title-field {
+  @include input-field;
+  width: 100%;
+  background-color: red;
+}
+
+.creations-panel__file-desc-group {
+  @include input-group;
+  width: 100%;
+  flex: 1;
+}
+.creations-panel__file-desc-label {
+  @include input-label;
+}
+.creations-panel__file-desc-field {
+  flex: 1;
+  min-height: 150px;
+}

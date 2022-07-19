@@ -4,15 +4,32 @@
 */
 
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 
-html, button {
+html,
+button {
   text-transform: uppercase;
+}
+
+//element highlights in accented color
+*::selection {
+  @include m.theme() {
+    background-color: m.t(accent);
+  }
+}
+
+//reset default button on file inputs
+input[type='file'] {
+  opacity: 0;
+}
+
+input[type='file']::file-selector-button {
+  display: none;
 }
 
 body {
   overflow: hidden;
 }
-
 
 html,
 body,

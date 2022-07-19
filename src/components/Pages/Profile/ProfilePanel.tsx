@@ -40,15 +40,15 @@ export default function ProfilePanel() {
     });
   }, [data]);
   return (
-    <form onSubmit={handleFormSubmit} className='panel-profile'>
-      <div className='panel-profile__pfp-group'>
-        <div className='panel-profile__pfp-container'>
+    <form onSubmit={handleFormSubmit} className='profile-panel'>
+      <div className='profile-panel__pfp-group'>
+        <div className='profile-panel__pfp-container'>
           <PfpImage src={state?.profilePicture}></PfpImage>
         </div>
-        <h2 className='panel-profile__pfp-label'>add a profile picture</h2>
+        <h2 className='profile-panel__pfp-label'>add a profile picture</h2>
       </div>
-      <div className='panel-profile__personal-group'>
-        <h2 className='panel-profile__personal-label'>sage display name</h2>
+      <div className='profile-panel__personal-group'>
+        <h2 className='profile-panel__personal-label'>sage display name</h2>
         <input
           type='text'
           value={state?.displayName ?? ''}
@@ -57,16 +57,16 @@ export default function ProfilePanel() {
               return { ...prevState, displayName: e.target.value.trim() };
             });
           }}
-          className='panel-profile__personal-field'
+          className='profile-panel__personal-field'
         />
       </div>
-      <div className='panel-profile__socials-group'>
-        <h2 className='panel-profile__socials-label'>add up to 4 social profiles</h2>
-        <div className='panel-profile__socials-field-container'>
+      <div className='profile-panel__socials-group'>
+        <h2 className='profile-panel__socials-label'>add up to 4 social profiles</h2>
+        <div className='profile-panel__socials-field-container'>
           <input
             type='text'
             value={state.twitterLink ?? ''}
-            className='panel-profile__socials-field'
+            className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
                 return { ...prevState, twitterLink: e.target.value.trim() };
@@ -77,7 +77,7 @@ export default function ProfilePanel() {
           <input
             type='text'
             value={state.instagramLink ?? ''}
-            className='panel-profile__socials-field'
+            className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
                 return { ...prevState, instagramLink: e.target.value.trim() };
@@ -88,7 +88,7 @@ export default function ProfilePanel() {
           <input
             type='text'
             value={state.mediumLink ?? ''}
-            className='panel-profile__socials-field'
+            className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
                 return { ...prevState, mediumLink: e.target.value.trim() };
@@ -99,7 +99,7 @@ export default function ProfilePanel() {
           <input
             type='text'
             value={state.webpage ?? ''}
-            className='panel-profile__socials-field'
+            className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
                 return { ...prevState, webpage: e.target.value.trim() };
@@ -109,15 +109,15 @@ export default function ProfilePanel() {
           />
         </div>
       </div>
-      <div className='panel-profile__bio-group'>
-        <h2 className='panel-profile__bio-label'>about section, max 400 characters</h2>
+      <div className='profile-panel__bio-group'>
+        <h2 className='profile-panel__bio-label'>about section, max 400 characters</h2>
         <textarea
           value={state.bio as string}
           onChange={handleBioInput}
-          className='panel-profile__bio-field'
+          className='profile-panel__bio-field'
         />
       </div>
-      <button type='submit' className='panel-profile__save-button'>
+      <button type='submit' className='profile-panel__save-button'>
         save your changes
       </button>
     </form>

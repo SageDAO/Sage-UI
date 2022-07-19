@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { useGetUserQuery } from '@/store/usersReducer';
+import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
 import { parameters } from '@/constants/config';
 import useModal from '@/hooks/useModal';
@@ -13,6 +13,8 @@ import Image from 'next/image';
 import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
 import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
 import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
+import Balances from '@/components/Pages/Profile/Balances';
+import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
 
 type TabItem = {
   name: string;
@@ -25,11 +27,12 @@ function profile() {
   const { data: sessionData } = useSession();
   const { data: userData, isFetching: isFetchingUser } = useGetUserQuery();
   const { data: pointsData } = useGetPointsBalanceQuery();
-  const { data: accountData } = useAccount();
   const { data: walletBalance } = useBalance({
     token: parameters.ASHTOKEN_ADDRESS,
     addressOrName: userData?.walletAddress,
   });
+  const { data: accountData } = useAccount();
+  const [signOut] = useSignOutMutation();
   const { ASHTOKEN_ADDRESS } = parameters;
   const {
     isOpen: isEditModalOpen,
@@ -56,10 +59,9 @@ function profile() {
       panel: CollectionPanel(),
       subheader: 'your collection of artwork on sage',
     },
-    { name: 'bids and purchases', panel: null },
-    { name: 'creations / mint', panel: null },
-    { name: 'settings', panel: null },
-    { name: 'log out', panel: null },
+    { name: 'bids and purchases', panel: null, subheader: 'your bids and purchases' },
+    { name: 'creations / mint', panel: CreationsPanel(), subheader: 'upload a new artwork to your profile' },
+    { name: 'settings', panel: null, disabled: true },
   ];
 
   if (!sessionData) {
@@ -70,13 +72,7 @@ function profile() {
   }
 
   return (
-    <Tab.Group
-      as='div'
-      defaultIndex={0}
-      className='profile-page'
-      vertical
-      selectedIndex={selectedTabIndex}
-    >
+    <Tab.Group as='div' className='profile-page' vertical selectedIndex={selectedTabIndex}>
       <ProfilePictureModal
         isOpen={isProfilePicModalOpen}
         closeModal={closeProfilePicModal}
@@ -109,19 +105,13 @@ function profile() {
               </Tab>
             );
           })}
+          <button onClick={() => signOut(null)} className='profile-page__tabs-tab'>
+            log out
+          </button>
         </Tab.List>
       </section>
       <section className='profile-page__main'>
-        <div className='profile-page__balances'>
-          <div className='profile-page__balances-points'>
-            <h1 className='profile-page__balances-points-value'>{pointsData}</h1>
-            <h1 className='profile-page__balances-points-label'>your pixel balance</h1>
-          </div>
-          <div className='profile-page__balances-token'>
-            <h1 className='profile-page__balances-token-value'>{walletBalance?.formatted}</h1>
-            <h1 className='profile-page__balances-points-label'>your ash balance</h1>
-          </div>
-        </div>
+        <Balances />
         <Tab.Panels as='div' className='profile-page__tabs-panels'>
           {tabItems.map((item) => {
             return (
