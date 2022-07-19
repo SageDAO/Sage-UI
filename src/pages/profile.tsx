@@ -1,13 +1,9 @@
 import React from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { toast } from 'react-toastify';
 import { useGetUserQuery } from '@/store/usersReducer';
-import shortenAddress from '@/utilities/shortenAddress';
-import EditProfileModal from '@/components/Modals/EditProfileModal';
 import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
 import { parameters } from '@/constants/config';
 import useModal from '@/hooks/useModal';
-import { MyCollection } from '@/components/MyCollection';
 import { PfpImage } from '@/components/Media';
 import { useSession } from 'next-auth/react';
 import LoaderDots from '@/components/LoaderDots';
@@ -19,12 +15,14 @@ import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
 type TabItem = {
   name: string;
   panel?: any;
+  disabled?: boolean;
 };
 
 function profile() {
   const { data: sessionData } = useSession();
   const { data: userData, isFetching: isFetchingUser } = useGetUserQuery();
   const { data: accountData } = useAccount();
+  const { data: balanceData } = useBalance({ token: parameters.ASHTOKEN_ADDRESS });
   const { ASHTOKEN_ADDRESS } = parameters;
   const { data: userBalance } = useBalance({
     addressOrName: accountData?.address,
@@ -45,7 +43,7 @@ function profile() {
 
   const tabItems: TabItem[] = [
     { name: 'profile', panel: ProfilePanel() },
-    { name: 'notifications', panel: null },
+    { name: 'notifications', panel: null, disabled: true },
     { name: 'collection', panel: null },
     { name: 'bids and purchases', panel: null },
     { name: 'creations / mint', panel: null },
@@ -61,8 +59,13 @@ function profile() {
   }
 
   return (
-    <Tab.Group as='div' className='profile-page' vertical selectedIndex={selectedTabIndex}>
-      <EditProfileModal isOpen={isEditModalOpen} closeModal={closeEditModal} title='Edit Profile' />
+    <Tab.Group
+      as='div'
+      defaultIndex={0}
+      className='profile-page'
+      vertical
+      selectedIndex={selectedTabIndex}
+    >
       <ProfilePictureModal
         isOpen={isProfilePicModalOpen}
         closeModal={closeProfilePicModal}
@@ -80,9 +83,10 @@ function profile() {
           <PfpImage src={userData?.profilePicture}></PfpImage>
         </div>
         <Tab.List className='profile-page__tabs'>
-          {tabItems.map((t) => {
+          {tabItems.map((t, i: number) => {
+            const isActive: boolean = i === selectedTabIndex;
             return (
-              <Tab as='div' key={t.name} className='profile-page__tabs-tab'>
+              <Tab as='button' disabled={t.disabled} data-active={isActive} onClick={() => handleTabsClick(i)} key={t.name} className='profile-page__tabs-tab'>
                 {t.name}
               </Tab>
             );
@@ -92,11 +96,11 @@ function profile() {
       <section className='profile-page__main'>
         <div className='profile-page__balances'>
           <div className='profile-page__balances-points'>
-            <h1 className='profile-page__balances-points-value'>1000000</h1>
+            <h1 className='profile-page__balances-points-value'>{userBalance?.formatted}</h1>
             <h1 className='profile-page__balances-points-label'>your pixel balance</h1>
           </div>
           <div className='profile-page__balances-token'>
-            <h1 className='profile-page__balances-token-value'>1000000</h1>
+            <h1 className='profile-page__balances-token-value'>{balanceData?.value}</h1>
             <h1 className='profile-page__balances-points-label'>your ash balance</h1>
           </div>
         </div>

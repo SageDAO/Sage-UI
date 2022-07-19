@@ -10,6 +10,7 @@
     "prisma:generate": "npx prisma generate --schema=./src/prisma/schema.prisma",
     "prisma:studio": "npx prisma studio --schema=./src/prisma/schema.prisma",
     "prisma:db-pull": "npx prisma db pull --schema=./src/prisma/schema.prisma",
+    "prisma:db-push": "npx prisma db push --schema=./src/prisma/schema.prisma",
     "postinstall": "npm run prisma:generate && npm run typechain",
     "test:data": "mocha --config mocharc.yml",
     "test:frontend": "npx cypress run"

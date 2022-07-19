@@ -92,7 +92,7 @@ export async function getIndividualDropsPageData(prisma: PrismaClient, id: numbe
 
 export async function getArtistsPageData(prisma: PrismaClient) {
   let artists = await prisma.user.findMany({
-    take: 5,
+    take: 10,
     where: {
       ...FilterUserIsArtist,
     },

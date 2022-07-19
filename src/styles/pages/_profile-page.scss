@@ -44,6 +44,7 @@
 .profile-page__tabs-tab {
   padding: 4px 16px;
   transition-duration: 20ms;
+  outline: none;
 
   @include m.noselect;
 
@@ -56,6 +57,7 @@
 
     &[data-active='true'] {
       background-color: m.t(contrast);
+      color: m.t(base2);
     }
   }
 }
@@ -68,6 +70,7 @@
 }
 
 .profile-page__balances {
+  text-overflow: ellipsis;
   display: flex;
   flex-wrap: wrap;
   gap: clamp(20px, 5vw, 160px);

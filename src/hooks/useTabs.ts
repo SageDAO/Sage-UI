@@ -3,7 +3,8 @@ import { TabProps, TabsProps, TabListProps, TabPanelProps } from 'react-tabs';
 
 export default function useTabs() {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
-  const handleTabsClick: TabsProps['onSelect'] = (index, _last, _event) => {
+  const handleTabsClick = (index: number) => {
+		console.log('handleTabsClick()')
     setSelectedTabIndex(index);
   };
 

@@ -8,7 +8,15 @@ import type { SafeUserUpdate } from '@/prisma/types';
 
 interface State extends SafeUserUpdate {}
 
-const INITIAL_STATE: State = { displayName: '', profilePicture: '', bio: '' };
+const INITIAL_STATE: State = {
+  displayName: '',
+  profilePicture: '',
+  bio: '',
+  webpage: '',
+  twitterLink: '',
+  instagramLink: '',
+  mediumLink: '',
+};
 
 export default function ProfilePanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
@@ -28,7 +36,7 @@ export default function ProfilePanel() {
 
   useEffect(() => {
     setState((prevState) => {
-      return { ...prevState, ...data };
+      return { ...data };
     });
   }, [data]);
   return (
@@ -43,10 +51,10 @@ export default function ProfilePanel() {
         <h2 className='panel-profile__personal-label'>sage display name</h2>
         <input
           type='text'
-          value={state?.displayName as string}
+          value={state?.displayName ?? ''}
           onChange={(e) => {
             setState((prevState) => {
-              return { ...prevState, displayName: e.target.value };
+              return { ...prevState, displayName: e.target.value.trim() };
             });
           }}
           className='panel-profile__personal-field'
@@ -55,16 +63,56 @@ export default function ProfilePanel() {
       <div className='panel-profile__socials-group'>
         <h2 className='panel-profile__socials-label'>add up to 4 social profiles</h2>
         <div className='panel-profile__socials-field-container'>
-          <input type='text' className='panel-profile__socials-field' />
-          <input type='text' className='panel-profile__socials-field' />
-          <input type='text' className='panel-profile__socials-field' />
-          <input type='text' className='panel-profile__socials-field' />
+          <input
+            type='text'
+            value={state.twitterLink ?? ''}
+            className='panel-profile__socials-field'
+            onChange={(e) => {
+              setState((prevState) => {
+                return { ...prevState, twitterLink: e.target.value.trim() };
+              });
+            }}
+            placeholder='twitter'
+          />
+          <input
+            type='text'
+            value={state.instagramLink ?? ''}
+            className='panel-profile__socials-field'
+            onChange={(e) => {
+              setState((prevState) => {
+                return { ...prevState, instagramLink: e.target.value.trim() };
+              });
+            }}
+            placeholder='instagram'
+          />
+          <input
+            type='text'
+            value={state.mediumLink ?? ''}
+            className='panel-profile__socials-field'
+            onChange={(e) => {
+              setState((prevState) => {
+                return { ...prevState, mediumLink: e.target.value.trim() };
+              });
+            }}
+            placeholder='medium'
+          />
+          <input
+            type='text'
+            value={state.webpage ?? ''}
+            className='panel-profile__socials-field'
+            onChange={(e) => {
+              setState((prevState) => {
+                return { ...prevState, webpage: e.target.value.trim() };
+              });
+            }}
+            placeholder='webpage'
+          />
         </div>
       </div>
       <div className='panel-profile__bio-group'>
         <h2 className='panel-profile__bio-label'>about section, max 400 characters</h2>
         <textarea
-          value={state.bio!}
+          value={state.bio as string}
           onChange={handleBioInput}
           className='panel-profile__bio-field'
         />
