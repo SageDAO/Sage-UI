@@ -11,9 +11,12 @@ import { Tab } from '@headlessui/react';
 import useTabs from '@/hooks/useTabs';
 import Image from 'next/image';
 import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
+import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
+import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
 
 type TabItem = {
   name: string;
+  subheader?: string;
   panel?: any;
   disabled?: boolean;
 };
@@ -21,13 +24,13 @@ type TabItem = {
 function profile() {
   const { data: sessionData } = useSession();
   const { data: userData, isFetching: isFetchingUser } = useGetUserQuery();
+  const { data: pointsData } = useGetPointsBalanceQuery();
   const { data: accountData } = useAccount();
-  const { data: balanceData } = useBalance({ token: parameters.ASHTOKEN_ADDRESS });
-  const { ASHTOKEN_ADDRESS } = parameters;
-  const { data: userBalance } = useBalance({
-    addressOrName: accountData?.address,
-    token: ASHTOKEN_ADDRESS,
+  const { data: walletBalance } = useBalance({
+    token: parameters.ASHTOKEN_ADDRESS,
+    addressOrName: userData?.walletAddress,
   });
+  const { ASHTOKEN_ADDRESS } = parameters;
   const {
     isOpen: isEditModalOpen,
     closeModal: closeEditModal,
@@ -42,9 +45,17 @@ function profile() {
   const { handleTabsClick, selectedTabIndex } = useTabs();
 
   const tabItems: TabItem[] = [
-    { name: 'profile', panel: ProfilePanel() },
+    {
+      name: 'profile',
+      panel: ProfilePanel(),
+      subheader: 'complete or update your profile on sage',
+    },
     { name: 'notifications', panel: null, disabled: true },
-    { name: 'collection', panel: null },
+    {
+      name: 'collection',
+      panel: CollectionPanel(),
+      subheader: 'your collection of artwork on sage',
+    },
     { name: 'bids and purchases', panel: null },
     { name: 'creations / mint', panel: null },
     { name: 'settings', panel: null },
@@ -86,7 +97,14 @@ function profile() {
           {tabItems.map((t, i: number) => {
             const isActive: boolean = i === selectedTabIndex;
             return (
-              <Tab as='button' disabled={t.disabled} data-active={isActive} onClick={() => handleTabsClick(i)} key={t.name} className='profile-page__tabs-tab'>
+              <Tab
+                as='button'
+                disabled={t.disabled}
+                data-active={isActive}
+                onClick={() => handleTabsClick(i)}
+                key={t.name}
+                className='profile-page__tabs-tab'
+              >
                 {t.name}
               </Tab>
             );
@@ -96,11 +114,11 @@ function profile() {
       <section className='profile-page__main'>
         <div className='profile-page__balances'>
           <div className='profile-page__balances-points'>
-            <h1 className='profile-page__balances-points-value'>{userBalance?.formatted}</h1>
+            <h1 className='profile-page__balances-points-value'>{pointsData}</h1>
             <h1 className='profile-page__balances-points-label'>your pixel balance</h1>
           </div>
           <div className='profile-page__balances-token'>
-            <h1 className='profile-page__balances-token-value'>{balanceData?.value}</h1>
+            <h1 className='profile-page__balances-token-value'>{walletBalance?.formatted}</h1>
             <h1 className='profile-page__balances-points-label'>your ash balance</h1>
           </div>
         </div>
@@ -110,7 +128,7 @@ function profile() {
               <Tab.Panel as='div' key={item.name} className='profile-page__tabs-panel'>
                 <h1 className='profile-page__tabs-panel-header'>
                   {item.name}
-                  <span className='profile-page__tabs-panel-subheader'>some subheader</span>
+                  <span className='profile-page__tabs-panel-subheader'>{item.subheader}</span>
                 </h1>
                 {item.panel}
               </Tab.Panel>
