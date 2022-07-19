@@ -11,9 +11,10 @@ interface BaseMediaProps {
   isVideo?: boolean;
   onClickHandler?: React.MouseEventHandler<HTMLImageElement>;
   isZoomable?: boolean;
+  type?: string;
 }
 
-function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps) {
+function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type }: BaseMediaProps) {
   if (!isVideo) {
     isVideo = false;
   }
@@ -27,8 +28,21 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable }: BaseMediaProps)
         )}
       >
         {isVideo ? (
-          <video preload='auto' autoPlay muted loop playsInline style={{ overflow: 'hidden' }}>
-            <source src={src} type='video/mp4' />
+          <video
+            preload='auto'
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              overflow: 'hidden',
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          >
+            <source src={src} type={type} />
           </video>
         ) : isZoomable ? (
           <Image draggable={false} src={src} layout='fill' objectFit='cover' />

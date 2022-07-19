@@ -4,7 +4,6 @@ import {
 } from '@/store/auctionsReducer';
 import { useGetClaimedPrizesQuery, useGetUnclaimedPrizesQuery } from '@/store/prizesReducer';
 import { GamePrize } from '@/prisma/types';
-import CollectionTile from '@/components/Tiles/CollectionTile';
 import LoaderDots from '@/components/LoaderDots';
 import { BaseMedia } from '@/components/Media';
 
@@ -35,6 +34,7 @@ export default function CollectionPanel() {
   return (
     <div className='collection-panel'>
       <div className='collection-panel__grid'>
+				{!myNfts.length && 'a little bit empty...'}
         {myNfts?.map((item: GamePrize) => {
           return (
             <div className='collection-panel__tile'>
