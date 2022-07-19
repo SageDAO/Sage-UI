@@ -50,6 +50,8 @@
 
   @include m.theme() {
     color: m.t(contrast);
+		text-align: left;
+    background-color: transparent;
     @include m.interact() {
       background-color: m.t(contrast);
       color: m.t(base);
