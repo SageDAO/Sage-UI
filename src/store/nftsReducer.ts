@@ -38,6 +38,7 @@ export const nftsApi = createApi({
         fetchWithBQ
       ) => {
         try {
+          var nftId = 0;
           const numberOfEditions = 1;
           const artistAddress = await signer.getAddress();
           console.log(`mintSingleNft() :: Minting NFT for artist ${artistAddress}...`);
@@ -70,9 +71,9 @@ export const nftsApi = createApi({
               numberOfEditions,
             },
           });
-          const nftId = (dbRecord as any).nftId;
+          nftId = (dbRecord as any).nftId;
           // TODO mint NFT on blockchain
-          if (!nftId) {
+          if (!nftId || nftId == 0) {
             throw new Error('Failed inserting NFT into database');
           }
           console.log(`mintSingleNft() :: Database NFT ID = ${nftId}`);
