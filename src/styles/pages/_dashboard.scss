@@ -1,4 +1,5 @@
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 
 .dashboard-page {
   margin: 2rem 5rem 2rem 5rem;
@@ -171,5 +172,62 @@
 }
 
 .dashboard__user-details-pfp-container {
-	position: relative;
+  position: relative;
+}
+
+/*--------------------------------------------------------------*/
+
+.dashboard__new-drops-grid {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.dashboard__tile {
+  display: flex;
+  flex-direction: column;
+	width: 300px;
+	padding: 6px;
+  gap: 6px;
+  @include m.theme() {
+  }
+}
+
+.dashboard__tile-img {
+  position: relative;
+  width:100%;
+  aspect-ratio: 1/1;
+}
+
+.dashboard__tile-artist-pfp {
+  position: relative;
+  width: 40px;
+  border-radius: 100%;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+}
+
+.dashboard__tile-details {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
+}
+.dashboard__tile {
 }

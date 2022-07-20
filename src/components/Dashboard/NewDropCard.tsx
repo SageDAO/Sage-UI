@@ -28,17 +28,17 @@ export default function NewDropCard({ drop }: Props) {
   };
 
   return (
-    <div className='collection__tile'>
-      <div className='collection__tile-img'>
+    <div className='dashboard__tile'>
+      <div className='dashboard__tile-img'>
         <BaseMedia src={drop.bannerImageS3Path} isVideo={false} />
       </div>
-      <div className='collection__tile-details'>
-        <div className='collection__tile-artist-pfp'>
+      <div className='dashboard__tile-details'>
+        <div className='dashboard__tile-artist-pfp'>
           <PfpImage src={drop.NftContract.Artist.profilePicture} />
         </div>
-        <div className='collection__tile-artist-info'>
-          <div className='collection__tile-nft-name'>{drop.name}</div>
-          <div className='collection__tile-artist-name'>by {drop.NftContract.Artist.displayName || 'anon'}</div>
+        <div className='dashboard__tile-artist-info'>
+          <div className='dashboard__tile-nft-name'>{drop.name}</div>
+          <div className='dashboard__tile-artist-name'>by {drop.NftContract.Artist.displayName || 'anon'}</div>
         </div>
       </div>
       <button className='nft-tile__claimbutton' onClick={handleBtnClick} style={{ width: '100%' }}>
