@@ -111,8 +111,10 @@ async function getFullDrop(id: number, response: NextApiResponse) {
 async function getNftContractAddress(artistAddress: string, response: NextApiResponse) {
   console.log(`getNftContractAddress(${artistAddress})`);
   try {
-    const result = await prisma.nftContract.findUnique({
+    const result = await prisma.nftContract.upsert({
       where: { artistAddress },
+      update: {},
+      create: { artistAddress, royaltyPercentage: 10 },
     });
     response.json(result);
   } catch (e) {

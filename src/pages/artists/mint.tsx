@@ -18,19 +18,25 @@ export default function Mint() {
     const price = parseFloat((document.getElementById('__price') as HTMLInputElement).value);
     const fileInput = document.getElementById('__file') as HTMLInputElement;
     const file = fileInput.files ? fileInput.files[0] : undefined;
-    if (file) {
-      const result = await mintSingleNft({ name, description, tags, price, file, signer });
-      const nftId = (result as any).nftId;
-      if (!nftId || nftId == 0) {
-        toast.error('Failure minting NFT');
-      } else {
-        toast.success(`Success! NFT minted with id ${nftId}`);
-      }
+    if (price == 0) {
+      toast.error('Invalid price');
+      return;
+    }
+    if (!file) {
+      toast.error('No file selected');
+      return;
+    }
+    const result = await mintSingleNft({ name, description, tags, price, file, signer });
+    const nftId = (result as any).data;
+    if (!nftId || nftId == 0) {
+      toast.error('Failure minting NFT');
+    } else {
+      toast.success(`Success! NFT minted with id ${nftId}`);
     }
   };
 
   return (
-    <div>
+    <div style={{ textAlign: 'center' }}>
       <br />
       <br />
       <br />
@@ -43,16 +49,20 @@ export default function Mint() {
       nft title: <input type='text' id='__name' name='name' value='Listing NFT' />
       <br />
       <br />
-      nft description: <input type='text' id='__description' name='description' value='Test Description' />
+      nft description:{' '}
+      <input type='text' id='__description' name='description' value='Test Description' />
       <br />
       <br />
       nft tags: <input type='text' id='__tags' name='tags' value='test dev' />
       <br />
       <br />
-      nft price ash: <input type='text' id='__price' name='price' value='0,01' />
+      nft price ash: <input type='text' id='__price' name='price' value='0.01' />
       <br />
       <br />
-      nft file: <input type='file' id='__file' name='file' />
+      nft file:{' '}
+      <label style={{ backgroundColor: 'white' }}>
+        <input type='file' id='__file' name='file' />
+      </label>
       <br />
       <br />
       <br />

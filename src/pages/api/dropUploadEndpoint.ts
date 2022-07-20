@@ -239,6 +239,7 @@ async function insertNft(data: any, response: NextApiResponse) {
         isVideo: 'true' == data.isVideo,
         metadataPath: data.metadataPath,
         s3Path: data.s3Path,
+        price: data.price || undefined,
         Auction: null || {},
         Lottery: null || {},
         NftContract: null || {},

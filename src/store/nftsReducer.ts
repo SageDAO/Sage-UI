@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Signer } from 'ethers';
+import { ethers, Signer } from 'ethers';
 import {
   getMarketplaceContract,
   getNFTContract,
@@ -40,6 +40,7 @@ export const nftsApi = createApi({
         try {
           const numberOfEditions = 1;
           const artistAddress = await signer.getAddress();
+          console.log(`mintSingleNft() :: Minting NFT for artist ${artistAddress}...`);
           const nftContractAddress = await _fetchOrCreateNftContract(
             artistAddress,
             signer,
@@ -76,15 +77,18 @@ export const nftsApi = createApi({
           }
           console.log(`mintSingleNft() :: Database NFT ID = ${nftId}`);
           const nftContract = await getNFTContract(nftContractAddress, signer);
+          const owner = await nftContract.owner();
+          console.log(`mintSingleNft() :: NFT Contract Owner is ${owner}`);
           console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
           const mintTx = await nftContract.creatorMint(artistAddress, nftId, metadataPath);
           await mintTx.wait();
           const marketplaceContract = await getMarketplaceContract(signer);
-          console.log(`mintSingleNft() :: Putting up for sale on Marketplace Contract...`);
+          const weiPrice = ethers.utils.parseEther(price.toString());
+          console.log(`mintSingleNft() :: Putting up for sale for ${price} (${weiPrice}) on Marketplace Contract...`);
           const putUpForSaleTx = await marketplaceContract.createSellOffer(
             nftContractAddress,
             nftId,
-            price
+            weiPrice
           );
           await putUpForSaleTx.wait();
           return { data: nftId };
@@ -109,20 +113,19 @@ export async function _fetchOrCreateNftContract(
     );
     return data.contractAddress;
   }
-  console.log(
-    `_fetchOrCreateNftContract() :: Creating new NFT contract for Artist ${artistAddress}`
-  );
-
   const nftFactoryContract = await getNftFactoryContract(signer);
+  console.log(
+    `_fetchOrCreateNftContract() :: Creating new NFT contract using Factory ${nftFactoryContract.address}`
+  );
   var artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
-  if (
-    !artistContractAddress ||
-    artistContractAddress == '0x0000000000000000000000000000000000000000'
-  ) {
+  if (!artistContractAddress || artistContractAddress == ethers.constants.AddressZero) {
     console.log(`_fetchOrCreateNftContract() :: Creating new NFT contract...`);
     var tx = await nftFactoryContract.createNFTContract(artistAddress, 'Sage', 'SAGE');
-    await tx.wait();
+    await tx.wait(1);
     artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
+    if (artistContractAddress == ethers.constants.AddressZero) {
+      throw new Error('Unable to create a new NFT contract');
+    }
   }
   await fetchWithBQ(
     `drops?action=UpdateNftContractAddress&artistAddress=${artistAddress}&contractAddress=${artistContractAddress}`
