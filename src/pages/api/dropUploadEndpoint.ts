@@ -7,6 +7,7 @@ import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import Transaction from 'arweave/node/lib/transaction';
 import { computePrimes } from 'jwk-rsa-compute-primes';
+import { getSession } from 'next-auth/react';
 
 const arweaveJwk = computePrimes(JSON.parse(process.env.ARWEAVE_JSON_JWK || ''));
 
@@ -20,11 +21,7 @@ const arweave = Arweave.init({
  * TODO authenticate requests coming from the (external) upload app
  */
 async function handler(request: NextApiRequest, response: NextApiResponse) {
-  await NextCors(request, response, {
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-    origin: '*',
-    optionsSuccessStatus: 200,
-  });
+  await setupCors(request, response);
   const {
     query: { action },
   } = request;
@@ -54,10 +51,21 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'InsertNft':
       await insertNft(request.body, response);
       break;
+    case 'DeleteNft':
+      await deleteNft(Number(request.query.id), request, response);
+      break;
     default:
       response.status(400).json('Bad Request');
   }
   response.end();
+}
+
+async function setupCors(request: NextApiRequest, response: NextApiResponse) {
+  await NextCors(request, response, {
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    origin: '*',
+    optionsSuccessStatus: 200,
+  });
 }
 
 /**
@@ -163,13 +171,11 @@ async function insertDrop(data: any, response: NextApiResponse) {
     });
     // Create nft contract record if it doesn't exist
     await prisma.nftContract.upsert({
-      where: {
-        artistAddress: data.artistWallet,
-      },
+      where: { artistAddress: data.artistWallet },
       update: {},
       create: {
         artistAddress: data.artistWallet,
-        royaltyPercentage: parseFloat(data.rltyPercent)
+        royaltyPercentage: parseFloat(data.rltyPercent),
       },
     });
     // Create drop
@@ -180,11 +186,7 @@ async function insertDrop(data: any, response: NextApiResponse) {
         createdAt: new Date(),
         tags: data.tags || '',
         bannerImageS3Path: data.bannerImageS3Path,
-        NftContract: {
-          connect: {
-            artistAddress: data.artistWallet,
-          },
-        },
+        NftContract: { connect: { artistAddress: data.artistWallet } },
       },
     });
     response.json({ dropId: record.id });
@@ -199,11 +201,7 @@ async function insertAuction(data: any, response: NextApiResponse) {
   try {
     var record = await prisma.auction.create({
       data: {
-        Drop: {
-          connect: {
-            id: Number(data.dropId),
-          },
-        },
+        Drop: { connect: { id: Number(data.dropId) } },
         minimumPrice: data.minPrice,
         startTime: new Date(Number(data.startDate) * 1000),
         endTime: new Date(Number(data.endDate) * 1000),
@@ -252,7 +250,7 @@ async function insertNft(data: any, response: NextApiResponse) {
       insertData.data.Lottery = { connect: { id: data.drawingId } };
     }
     if (data.artistAddress) {
-      insertData.data.NftContract = { connect: { artistAddress: data.artistAddress }};
+      insertData.data.NftContract = { connect: { artistAddress: data.artistAddress } };
     }
     var record = await prisma.nft.create(insertData);
     response.json({ nftId: record.id });
@@ -260,6 +258,22 @@ async function insertNft(data: any, response: NextApiResponse) {
     console.log(e);
     response.json({ error: e.message });
   }
+}
+
+async function deleteNft(nftId: number, request: NextApiRequest, response: NextApiResponse) {
+  console.log(`deleteNft(${nftId})`);
+  const session = await getSession({ req: request });
+  const { address: walletAddress } = session!;
+  if (!session || !walletAddress) {
+    return;
+  }
+  await prisma.nft.deleteMany({
+    where: {
+      id: nftId,
+      artistAddress: walletAddress as string,
+      ownerAddress: undefined
+    },
+  });
 }
 
 async function insertDrawing(data: any, response: NextApiResponse) {
