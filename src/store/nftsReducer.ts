@@ -5,6 +5,8 @@ import {
   getNFTContract,
   getNftFactoryContract,
 } from '@/utilities/contracts';
+import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3';
+import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave';
 
 export const nftsApi = createApi({
   reducerPath: 'nftsApi',
@@ -46,15 +48,21 @@ export const nftsApi = createApi({
             signer,
             fetchWithBQ
           );
-          // TODO upload media to S3
+          const endpoint = '/api/dropUploadEndpoint/';
           console.log(`mintSingleNft() :: Uploading media to AWS S3...`);
-          const s3Path = 'https://dev-sage.s3.us-east-2.amazonaws.com/1658180149445/nft_1.jpg';
-          // TODO upload media to Arweave
+          const s3Path = await uploadFileToS3Bucket(endpoint, createBucketName(), file.name, file);
           console.log(`mintSingleNft() :: Uploading media to Arweave...`);
-          const ipfsPath = 'https://arweave.net/cDAQNJYsa8vNTQh0HOzpAxlTmbRQkeiD8DTNSl5OXo4';
-          // TODO upload metadata to Arweave
+          const ipfsPath = await copyFromS3toArweave(endpoint, s3Path);
           console.log(`mintSingleNft() :: Uploading metadata to Arweave...`);
-          const metadataPath = 'https://arweave.net/nlausWAy3229BZO2MU-6_5Hk_MRBumuCW0cX601dibg';
+          const isVideo = file.name.toLowerCase().endsWith('mp4');
+          const metadataId = await createNftMetadataOnArweave(
+            endpoint,
+            name,
+            description,
+            ipfsPath,
+            isVideo
+          );
+          const metadataPath = `https://arweave.net/${metadataId}`;
           console.log(`mintSingleNft() :: Creating database record...`);
           const { data: dbRecord } = await fetchWithBQ({
             url: `dropUploadEndpoint?action=InsertNft`,
