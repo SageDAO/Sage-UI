@@ -11,6 +11,7 @@ export interface Parameters {
   REWARDS_ADDRESS: string;
   ASHTOKEN_ADDRESS: string;
   NFTFACTORY_ADDRESS: string;
+  MARKETPLACE_ADDRESS: string;
 }
 
 export interface Configuration {

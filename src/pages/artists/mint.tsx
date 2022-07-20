@@ -1,5 +1,4 @@
 import { useMintSingleNftMutation } from '@/store/nftsReducer';
-import { ChangeEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
 
@@ -7,35 +6,29 @@ export default function Mint() {
   const [mintSingleNft] = useMintSingleNftMutation();
   const { data: signer } = useSigner();
 
-  const [data, setData] = useState({
-    name: '',
-    description: '',
-    tags: '',
-    price: '0',
-    file: null,
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
-
   const handleMintButtonClick = async () => {
-    if (!signer) {
+    if (!signer || !document) {
       toast.info('Sign In With Ethereum before continuing');
       return;
     }
     // TODO data validation
-    // const nftId = await mintSingleNft({
-    //   name: data.name,
-    //   description: data.description,
-    //   tags: data.tags,
-    //   price: parseFloat(data.price.toString()),
-    //   file: data.file,
-    //   signer,
-    // });
-    // toast.success(`Success! NFT minted with id ${nftId}`);
+    const name = (document.getElementById('__name') as HTMLInputElement).value;
+    const description = (document.getElementById('__description') as HTMLInputElement).value;
+    const tags = (document.getElementById('__tags') as HTMLInputElement).value;
+    const price = parseFloat((document.getElementById('__price') as HTMLInputElement).value);
+    const fileInput = document.getElementById('__file') as HTMLInputElement;
+    const file = fileInput.files ? fileInput.files[0] : undefined;
+    if (file) {
+      const result = await mintSingleNft({ name, description, tags, price, file, signer });
+      const nftId = (result as any).nftId;
+      if (!nftId || nftId == 0) {
+        toast.error('Failure minting NFT');
+      } else {
+        toast.success(`Success! NFT minted with id ${nftId}`);
+      }
+    }
   };
-  
+
   return (
     <div>
       <br />
@@ -47,19 +40,19 @@ export default function Mint() {
       <br />
       <br />
       <br />
-      nft title: <input type='text' name='name' onChange={handleChange} />
+      nft title: <input type='text' id='__name' name='name' value='Listing NFT' />
       <br />
       <br />
-      nft description: <input type='text' name='description' onChange={handleChange} />
+      nft description: <input type='text' id='__description' name='description' value='Test Description' />
       <br />
       <br />
-      nft tags: <input type='text' name='tags' onChange={handleChange} />
+      nft tags: <input type='text' id='__tags' name='tags' value='test dev' />
       <br />
       <br />
-      nft price ash: <input type='text' name='price' onChange={handleChange} />
+      nft price ash: <input type='text' id='__price' name='price' value='0,01' />
       <br />
       <br />
-      nft file: <input type='file' name='file' onChange={handleChange} />
+      nft file: <input type='file' id='__file' name='file' />
       <br />
       <br />
       <br />

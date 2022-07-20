@@ -1,10 +1,13 @@
 import { BigNumber, Contract, ethers, Signer, utils } from 'ethers';
-import Rewards from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
-import Lottery from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
-import Auction from '@/constants/abis/Auction/Auction.sol/Auction.json';
-import SageNFT from '@/constants/abis/NFT/SageNFT.sol/SageNFT.json';
-import NFTFactory from '@/constants/abis/NFT/NFTFactory.sol/NFTFactory.json';
-import ERC20Standard from '@/constants/abis/ERC-20/ERC20Standard.json';
+import { toast } from 'react-toastify';
+import { parameters } from '@/constants/config';
+import RewardsJson from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
+import LotteryJson from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
+import AuctionJson from '@/constants/abis/Auction/Auction.sol/Auction.json';
+import SageNFTJson from '@/constants/abis/NFT/SageNFT.sol/SageNFT.json';
+import NFTFactoryJson from '@/constants/abis/NFT/NFTFactory.sol/NFTFactory.json';
+import MarketplaceJson from '@/constants/abis/Market/Marketplace.sol/Marketplace.json';
+import ERC20StandardJson from '@/constants/abis/ERC-20/ERC20Standard.json';
 import {
   Lottery as LotteryContract,
   Auction as AuctionContract,
@@ -12,9 +15,8 @@ import {
   ERC20Standard as ERC20Contract,
   SageNFT as NftContract,
   NFTFactory as NftFactoryContract,
+  Marketplace as MarketplaceContract,
 } from '@/types/contracts';
-import { parameters } from '../constants/config';
-import { toast } from 'react-toastify';
 
 const {
   REWARDS_ADDRESS,
@@ -22,49 +24,16 @@ const {
   LOTTERY_ADDRESS,
   AUCTION_ADDRESS,
   NFTFACTORY_ADDRESS,
+  MARKETPLACE_ADDRESS,
   NETWORK_NAME,
   CHAIN_ID,
 } = parameters;
 
-interface ContractDetails {
-  address: string;
-  abi: any;
-}
-
 export type SignerOrProvider = Signer | Signer['provider'];
-
-type AppContractNames = 'Lottery' | 'Auction' | 'Rewards' | 'NftFactory' | 'ERC20';
-
-type AppContractDetailsMap = {
-  [key in AppContractNames]: ContractDetails;
-};
-
-const contractMap: AppContractDetailsMap = {
-  Lottery: {
-    address: LOTTERY_ADDRESS,
-    abi: Lottery.abi,
-  },
-  Auction: {
-    address: AUCTION_ADDRESS,
-    abi: Auction.abi,
-  },
-  Rewards: {
-    address: REWARDS_ADDRESS,
-    abi: Rewards.abi,
-  },
-  NftFactory: {
-    address: NFTFACTORY_ADDRESS,
-    abi: NFTFactory.abi,
-  },
-  ERC20: {
-    address: ASHTOKEN_ADDRESS,
-    abi: ERC20Standard.abi,
-  },
-};
 
 var ContractFactory = (function () {
   var instances = new Map<string, Contract>();
-  async function createInstance({ address, abi }: ContractDetails) {
+  async function createInstance(address: string, abi: any) {
     console.log(`Creating contract instance for address ${address}`);
     const contract = new ethers.Contract(
       address,
@@ -78,10 +47,10 @@ var ContractFactory = (function () {
     return contract;
   }
   return {
-    getInstance: async function ({ address, abi }: ContractDetails) {
+    getInstance: async function (address: string, abi: any) {
       const existingContract = instances.get(address);
       if (!existingContract) {
-        let contract = await createInstance({ address, abi });
+        let contract = await createInstance(address, abi);
         instances.set(address, contract);
         return contract;
       }
@@ -91,35 +60,38 @@ var ContractFactory = (function () {
 })();
 
 export async function getLotteryContract(signer?: Signer): Promise<LotteryContract> {
-  return (await getContract(contractMap.Lottery, signer)) as LotteryContract;
+  return (await getContract(LOTTERY_ADDRESS, LotteryJson.abi, signer)) as LotteryContract;
 }
 
 export async function getAuctionContract(signer?: Signer): Promise<AuctionContract> {
-  return (await getContract(contractMap.Auction, signer)) as AuctionContract;
+  return (await getContract(AUCTION_ADDRESS, AuctionJson.abi, signer)) as AuctionContract;
 }
 
 export async function getRewardsContract(signer?: Signer): Promise<RewardsContract> {
-  return (await getContract(contractMap.Rewards, signer)) as RewardsContract;
+  return (await getContract(REWARDS_ADDRESS, RewardsJson.abi, signer)) as RewardsContract;
 }
 
 export async function getNFTContract(address: string, signer?: Signer): Promise<NftContract> {
-  return (await getContract({ address, abi: SageNFT.abi }, signer)) as NftContract;
+  return (await getContract(address, SageNFTJson.abi, signer)) as NftContract;
 }
 
 export async function getERC20Contract(signer?: Signer): Promise<ERC20Contract> {
-  return (await getContract(contractMap.ERC20, signer)) as ERC20Contract;
+  return (await getContract(ASHTOKEN_ADDRESS, ERC20StandardJson.abi, signer)) as ERC20Contract;
 }
 
 export async function getNftFactoryContract(signer?: Signer): Promise<NftFactoryContract> {
-  return (await getContract(contractMap.NftFactory, signer)) as NftFactoryContract;
+  return (await getContract(NFTFACTORY_ADDRESS, NFTFactoryJson.abi, signer)) as NftFactoryContract;
 }
 
-async function getContract(details: ContractDetails, signer?: Signer) {
-  const { address, abi } = details;
+export async function getMarketplaceContract(signer?: Signer): Promise<MarketplaceContract> {
+  return (await getContract(MARKETPLACE_ADDRESS, MarketplaceJson.abi, signer)) as MarketplaceContract;
+}
+
+async function getContract(address: string, abi: any, signer?: Signer) {
   if (signer) {
     return new ethers.Contract(address, abi, signer);
   }
-  return await ContractFactory.getInstance({ address, abi });
+  return await ContractFactory.getInstance(address, abi);
 }
 
 export function extractErrorMessage(err: any): string {
@@ -150,7 +122,7 @@ export async function getBlockchainTimestamp(): Promise<number> {
 export async function approveERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
   const erc20Contract = new ethers.Contract(
     erc20Address,
-    ERC20Standard.abi,
+    ERC20StandardJson.abi,
     signer
   ) as ERC20Contract;
   const wallet = await signer.getAddress();
@@ -179,7 +151,7 @@ export async function getUnclaimedAuctionWinner(auctionId: number): Promise<stri
   const providerUrl = process.env.RPC_PROVIDER_URL || '';
   const provider = new ethers.providers.JsonRpcProvider(providerUrl);
   const signer = new ethers.Wallet(privateKey, provider);
-  const contract = new ethers.Contract(AUCTION_ADDRESS, Auction.abi, signer);
+  const contract = new ethers.Contract(AUCTION_ADDRESS, AuctionJson.abi, signer);
   const auctionState = await contract.getAuction(auctionId);
   if (auctionState.endTime > new Date().getTime() / 1000) {
     throw Error(`Auction ${auctionId} hasn't finished yet.`);

@@ -241,7 +241,7 @@ async function insertNft(data: any, response: NextApiResponse) {
         s3Path: data.s3Path,
         Auction: null || {},
         Lottery: null || {},
-        artistAddress: data.artistAddress || undefined,
+        NftContract: null || {},
       },
     };
     // Game NFT either belongs to an Auction or to a Lottery
@@ -249,6 +249,9 @@ async function insertNft(data: any, response: NextApiResponse) {
       insertData.data.Auction = { connect: { id: data.auctionId } };
     } else if (data.drawingId) {
       insertData.data.Lottery = { connect: { id: data.drawingId } };
+    }
+    if (data.artistAddress) {
+      insertData.data.NftContract = { connect: { artistAddress: data.artistAddress }};
     }
     var record = await prisma.nft.create(insertData);
     response.json({ nftId: record.id });

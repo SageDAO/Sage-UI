@@ -1,6 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Signer } from 'ethers';
-import { getNftFactoryContract } from '@/utilities/contracts';
+import {
+  getMarketplaceContract,
+  getNFTContract,
+  getNftFactoryContract,
+} from '@/utilities/contracts';
 
 export const nftsApi = createApi({
   reducerPath: 'nftsApi',
@@ -34,32 +38,56 @@ export const nftsApi = createApi({
         fetchWithBQ
       ) => {
         try {
+          const numberOfEditions = 1;
           const artistAddress = await signer.getAddress();
-          const nftContractAddress = dispatch(
-            nftsApi.endpoints.fetchOrCreateNftContract.initiate({ artistAddress, signer })
+          const nftContractAddress = await _fetchOrCreateNftContract(
+            artistAddress,
+            signer,
+            fetchWithBQ
           );
           // TODO upload media to S3
-          const s3Path = '';
+          console.log(`mintSingleNft() :: Uploading media to AWS S3...`);
+          const s3Path = 'https://dev-sage.s3.us-east-2.amazonaws.com/1658180149445/nft_1.jpg';
           // TODO upload media to Arweave
-          const ipfsPath = '';
+          console.log(`mintSingleNft() :: Uploading media to Arweave...`);
+          const ipfsPath = 'https://arweave.net/cDAQNJYsa8vNTQh0HOzpAxlTmbRQkeiD8DTNSl5OXo4';
           // TODO upload metadata to Arweave
-          const metadataPath = '';
-          const nftData = {
-            artistAddress,
-            name,
-            description,
-            tags,
-            price,
-            s3Path,
-            metadataPath,
-          };
-          const { data } = await fetchWithBQ({
+          console.log(`mintSingleNft() :: Uploading metadata to Arweave...`);
+          const metadataPath = 'https://arweave.net/nlausWAy3229BZO2MU-6_5Hk_MRBumuCW0cX601dibg';
+          console.log(`mintSingleNft() :: Creating database record...`);
+          const { data: dbRecord } = await fetchWithBQ({
             url: `dropUploadEndpoint?action=InsertNft`,
             method: 'POST',
-            body: { data: nftData },
+            body: {
+              artistAddress,
+              name,
+              description,
+              tags,
+              price,
+              s3Path,
+              metadataPath,
+              numberOfEditions,
+            },
           });
+          const nftId = (dbRecord as any).nftId;
           // TODO mint NFT on blockchain
-          return { data: 123 };
+          if (!nftId) {
+            throw new Error('Failed inserting NFT into database');
+          }
+          console.log(`mintSingleNft() :: Database NFT ID = ${nftId}`);
+          const nftContract = await getNFTContract(nftContractAddress, signer);
+          console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
+          const mintTx = await nftContract.creatorMint(artistAddress, nftId, metadataPath);
+          await mintTx.wait();
+          const marketplaceContract = await getMarketplaceContract(signer);
+          console.log(`mintSingleNft() :: Putting up for sale on Marketplace Contract...`);
+          const putUpForSaleTx = await marketplaceContract.createSellOffer(
+            nftContractAddress,
+            nftId,
+            price
+          );
+          await putUpForSaleTx.wait();
+          return { data: nftId };
         } catch (e) {
           console.log(e);
           return { data: 0 };
