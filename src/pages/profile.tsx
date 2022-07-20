@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
-import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
 import { parameters } from '@/constants/config';
 import useModal from '@/hooks/useModal';
 import { PfpImage } from '@/components/Media';
@@ -39,11 +38,6 @@ function profile() {
     closeModal: closeEditModal,
     openModal: openEditModal,
   } = useModal();
-  const {
-    isOpen: isProfilePicModalOpen,
-    closeModal: closeProfilePicModal,
-    openModal: openProfilePicModal,
-  } = useModal();
 
   const { handleTabsClick, selectedTabIndex } = useTabs();
 
@@ -73,11 +67,6 @@ function profile() {
 
   return (
     <Tab.Group as='div' className='profile-page' vertical selectedIndex={selectedTabIndex}>
-      <ProfilePictureModal
-        isOpen={isProfilePicModalOpen}
-        closeModal={closeProfilePicModal}
-        title='Profile Picture'
-      />
       <section className='profile-page__menu'>
         <div className='profile-page__sage-logo-container'>
           <Image

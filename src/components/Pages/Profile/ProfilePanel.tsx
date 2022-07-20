@@ -1,10 +1,11 @@
 import { PfpImage } from '@/components/Media';
 import { useGetUserQuery } from '@/store/usersReducer';
-import { User } from '@prisma/client';
 import { useState, useEffect } from 'react';
 
 import { useUpdateUserMutation } from '@/store/usersReducer';
 import type { SafeUserUpdate } from '@/prisma/types';
+import useModal from '@/hooks/useModal';
+import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
 
 interface State extends SafeUserUpdate {}
 
@@ -22,6 +23,11 @@ export default function ProfilePanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [updateUser] = useUpdateUserMutation();
   const { data } = useGetUserQuery();
+  const {
+    isOpen: isProfilePicModalOpen,
+    closeModal: closeProfilePicModal,
+    openModal: openProfilePicModal,
+  } = useModal();
 
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,9 +47,16 @@ export default function ProfilePanel() {
   }, [data]);
   return (
     <form onSubmit={handleFormSubmit} className='profile-panel'>
+      <ProfilePictureModal
+        isOpen={isProfilePicModalOpen}
+        closeModal={closeProfilePicModal}
+        title='Profile Picture'
+      />
       <div className='profile-panel__pfp-group'>
         <div className='profile-panel__pfp-container'>
-          <PfpImage src={state?.profilePicture}></PfpImage>
+          <a onClick={openProfilePicModal}>
+            <PfpImage src={state?.profilePicture}></PfpImage>
+          </a>
         </div>
         <h2 className='profile-panel__pfp-label'>add a profile picture</h2>
       </div>
