@@ -1,12 +1,16 @@
 @use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
 .hidden-menu {
-  display: flex;
   align-items: center;
   flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 10px 0px;
+  justify-content: flex-end;
+  padding: 10px 10vw;
   width: 80vw;
   background: transparent;
+  display: none;
+  @include b.min-width('medium') {
+    display: flex;
+  }
 }
 
 .theme-switch {

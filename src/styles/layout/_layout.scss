@@ -1,15 +1,15 @@
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
 
 $indent: max(1em, 10vw);
 
 .layout {
   display: flex;
   flex-direction: column;
-  align-items: center;
   perspective: 10px;
   height: 100vh;
-	width: 100vw;
+  width: 100vw;
   overflow: overlay;
   overflow-x: hidden;
 
@@ -18,19 +18,20 @@ $indent: max(1em, 10vw);
     color: m.t('contrast');
   }
 
-  &::-webkit-scrollbar {
-    width: 10px;
-    background: transparent;
-  }
+  @include b.min-width(medium) {
+    &::-webkit-scrollbar {
+      width: 10px;
+      background: transparent;
+    }
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    @include m.theme() {
-      background-color: m.t('accent');
-      color: m.t('contrast');
+    &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      @include m.theme() {
+        background-color: m.t('accent');
+        color: m.t('contrast');
+      }
     }
   }
-
 }
 
 .layout__destroying-fakes {

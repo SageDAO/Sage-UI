@@ -54,7 +54,7 @@ export default function ProfilePanel() {
           value={state?.displayName ?? ''}
           onChange={(e) => {
             setState((prevState) => {
-              return { ...prevState, displayName: e.target.value.trim() };
+              return { ...prevState, displayName: e.target.value };
             });
           }}
           className='profile-panel__personal-field'
@@ -69,7 +69,7 @@ export default function ProfilePanel() {
             className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
-                return { ...prevState, twitterLink: e.target.value.trim() };
+                return { ...prevState, twitterLink: e.target.value };
               });
             }}
             placeholder='twitter'
@@ -80,7 +80,7 @@ export default function ProfilePanel() {
             className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
-                return { ...prevState, instagramLink: e.target.value.trim() };
+                return { ...prevState, instagramLink: e.target.value };
               });
             }}
             placeholder='instagram'
@@ -91,7 +91,7 @@ export default function ProfilePanel() {
             className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
-                return { ...prevState, mediumLink: e.target.value.trim() };
+                return { ...prevState, mediumLink: e.target.value };
               });
             }}
             placeholder='medium'
@@ -102,7 +102,7 @@ export default function ProfilePanel() {
             className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
-                return { ...prevState, webpage: e.target.value.trim() };
+                return { ...prevState, webpage: e.target.value };
               });
             }}
             placeholder='webpage'

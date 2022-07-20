@@ -22,13 +22,13 @@ export default function CreationsPanel() {
 
   function handleTitleInput(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
-      return { ...prevState, title: e.target.value.trim() };
+      return { ...prevState, title: e.target.value };
     });
   }
 
   function handleDescriptionInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setState((prevState) => {
-      return { ...prevState, description: e.target.value.trim() };
+      return { ...prevState, description: e.target.value};
     });
   }
 

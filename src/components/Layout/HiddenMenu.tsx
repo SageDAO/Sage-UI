@@ -7,7 +7,6 @@ export default function HiddenMenu() {
 
   return (
     <div className='hidden-menu'>
-      <button className='theme-switch' onClick={toggleTheme}>{theme}</button>
       <Connect />
     </div>
   );

@@ -93,6 +93,9 @@
   flex-direction: row;
   align-items: flex-start;
   max-width: 80vw;
+  padding-left: 10vw;
+  padding-right: 10vw;
+  flex: 1;
   gap: clamp(20px, 5vw, 160px);
   flex-wrap: wrap;
 }
@@ -375,7 +378,7 @@
 }
 
 .creations-panel__file-upload-field-wrapper {
-	overflow:hidden;
+  overflow: hidden;
   position: relative;
   display: flex;
   justify-content: center;

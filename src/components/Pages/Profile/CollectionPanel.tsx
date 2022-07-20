@@ -34,20 +34,22 @@ export default function CollectionPanel() {
   return (
     <div className='collection-panel'>
       <div className='collection-panel__grid'>
-				{!myNfts.length && 'a little bit empty...'}
-        {myNfts?.map((item: GamePrize) => {
-          return (
-            <div className='collection-panel__tile'>
-              <div className='collection-panel__img-container'>
-                <BaseMedia src={item.s3Path} isVideo={item.isVideo}></BaseMedia>
+        {!myNfts.length && 'a little bit empty...'}
+        {myNfts &&
+          myNfts?.map((item: GamePrize) => {
+            if (!item?.s3Path) return;
+            return (
+              <div className='collection-panel__tile'>
+                <div className='collection-panel__img-container'>
+                  <BaseMedia src={item.s3Path} isVideo={item.isVideo}></BaseMedia>
+                </div>
+                <h1 className='collection-panel__tile-header'>
+                  {item.dropId} by {item.artistDisplayName || item}
+                  <h1 className='collection-panel__tile-name'>it is getting late</h1>
+                </h1>
               </div>
-              <h1 className='collection-panel__tile-header'>
-                {item.dropId} by {item.artistDisplayName || item}
-                <h1 className='collection-panel__tile-name'>it is getting late</h1>
-              </h1>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );
