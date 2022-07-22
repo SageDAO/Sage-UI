@@ -5,9 +5,9 @@
 .nav {
   top: 0;
   position: sticky;
-  height: 44px;
+  min-height: 44px;
   background-color: c.$black;
-  justify-content: flex-start;
+  justify-content: center;
   z-index: 998;
   max-width: 80vw;
   padding-left: 10vw;
@@ -37,6 +37,10 @@
 }
 
 .nav__personal {
+  position: absolute;
+  left: 10vw;
+  top: -50%;
+
   overflow: visible;
   display: flex;
   align-items: center;
@@ -76,4 +80,5 @@
 }
 
 .nav__search {
+  position: absolute;
 }

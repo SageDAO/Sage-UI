@@ -93,26 +93,26 @@
   height: 30px;
 }
 
-@mixin auth-button {
-  @include m.interact {
-  }
-  background: transparent;
-  align-items: center;
-  gap: 10px;
-  display: flex;
-  cursor: pointer;
-  transition-duration: 200ms;
-  @include m.theme() {
-    color: m.t(contrast);
-    border: 1px solid m.t(contrast);
-  }
-  padding: 10px 20px;
-}
+// @mixin auth-button {
+//   @include m.interact {
+//   }
+//   background: transparent;
+//   align-items: center;
+//   gap: 10px;
+//   display: flex;
+//   cursor: pointer;
+//   transition-duration: 200ms;
+//   @include m.theme() {
+//     color: m.t(contrast);
+//     border: 1px solid m.t(contrast);
+//   }
+//   padding: 10px 20px;
+// }
 
-.accountmodal__auth-sign-in-button {
-  @include auth-button;
-}
+// .accountmodal__auth-sign-in-button {
+//   @include auth-button;
+// }
 
-.accountmodal__auth-sign-out-button {
-  @include auth-button;
-}
+// .accountmodal__auth-sign-out-button {
+//   @include auth-button;
+// }

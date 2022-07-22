@@ -16,9 +16,6 @@ function index({ closeModal, children, isOpen, title }: Props) {
       {/* {container: covers entire screen, is always transparent, centers panel} */}
       <div className='modal__container'>
         <Dialog.Panel className='modal__panel' as='div'>
-          <div className='modal__header'>
-            <Dialog.Title as='h1'>{title}</Dialog.Title>
-          </div>
           {children}
         </Dialog.Panel>
       </div>

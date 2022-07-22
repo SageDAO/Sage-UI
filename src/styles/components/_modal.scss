@@ -3,12 +3,12 @@
 
 .modal {
   position: relative;
-  z-index: 999;
+  z-index: 998;
 }
 
 .modal__backdrop {
   position: fixed;
-  opacity: 0.5;
+  opacity: 0.9;
   // backdrop-filter: blur(4px);
   inset: 0;
   @include m.theme() {
@@ -20,13 +20,10 @@
   position: fixed;
   inset: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .modal__panel {
   position: relative;
-  overflow: hidden;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -34,8 +31,6 @@
     background-color: m.t(base2);
     color: m.t(contrast);
   }
-  min-width: 300px;
-  padding: 20px;
 }
 
 .modal__header {

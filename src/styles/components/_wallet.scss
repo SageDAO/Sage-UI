@@ -1,0 +1,220 @@
+@use '@/styles/abstracts/mixins' as m;
+
+.wallet {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+  margin-top: 60px;
+}
+
+.wallet__header-prompt {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 136.6%;
+  letter-spacing: 0.1em;
+
+  @include m.theme() {
+    color: m.t(contrast);
+  }
+}
+
+.wallet__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
+}
+
+.wallet__header-sage-logo {
+  position: relative;
+  width: 183px;
+  height: 50px;
+  aspect-ratio: 183/50;
+}
+
+.wallet__header-info {
+  // text-transform: uppercase;
+  // font-style: normal;
+  // font-weight: 400;
+  // font-size: 16px;
+  // line-height: 130%;
+  // width: 345px;
+
+  font-family: 'Marine';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 8px;
+  line-height: 130%;
+  /* or 8px */
+
+  color: #ffffff;
+  @include m.theme() {
+    color: contrast;
+  }
+}
+
+.wallet__header-close-button {
+  @include m.interact;
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.wallet__wallets {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+}
+
+.wallet__wallet-item {
+  @include m.interact {
+    transform: scale(1.04);
+  }
+  background-color: transparent;
+  cursor: pointer;
+  transition-duration: 30ms;
+  gap: 30px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  &:disabled {
+    pointer-events: none;
+    filter: brightness(0.3);
+  }
+}
+
+.wallet__wallet-icon {
+  flex: 1;
+  // width: 120px;
+  // height: 120px;
+  // position: relative;
+}
+
+.wallet__wallet-name {
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  text-align: center;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
+}
+
+.wallet__auth {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wallet__auth-ethereum-icon {
+  width: 20px;
+  height: 30px;
+}
+
+@mixin auth-button {
+  @include m.interact {
+  }
+  background: transparent;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  cursor: pointer;
+  transition-duration: 200ms;
+  @include m.theme() {
+    color: m.t(contrast);
+    border: 1px solid m.t(contrast);
+  }
+  padding: 10px 20px;
+}
+
+.wallet__auth-sign-in-button {
+  @include auth-button;
+}
+
+.wallet__auth-sign-out-button {
+  @include auth-button;
+}
+
+//
+
+.wallet__user {
+  display: flex;
+  flex-direction: column;
+  margin-top: 60px;
+  gap: 20px;
+  padding: 0 30px;
+}
+
+.wallet__user-personal-message {
+  @include m.theme() {
+    color: m.t(contrast2);
+  }
+}
+
+.wallet__user-section {
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.wallet__user-pfp-container {
+  position: relative;
+  @include m.circle;
+  overflow: hidden;
+  width: clamp(40px, 30vw, 86px);
+}
+
+.wallet__user-pfp-src {
+}
+
+.wallet__user-metamask-container {
+  position: relative;
+  @include m.circle;
+  overflow: hidden;
+  width: clamp(40px, 30vw, 86px);
+}
+
+.wallet__user-metamask-src {
+}
+
+.wallet__user-connection-inidicator {
+  height: 0px;
+  width: 65px;
+  border: 1px solid white;
+}
+
+.wallet__utils-section {
+  display: flex;
+	align-items: end;
+	gap: 30px;
+	justify-content: center;
+}
+
+.wallet__utils-info {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 130%;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
+}
+
+.wallet__profile-button {
+  aspect-ratio: 86/34;
+  @include m.theme() {
+    color: m.t(contrast);
+    background-color: m.t(base);
+    border: 1px solid m.t(contrast);
+  }
+  @include m.interact;
+}

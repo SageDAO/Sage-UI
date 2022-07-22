@@ -1,7 +1,19 @@
 @use '@/styles/abstracts/mixins' as m;
 .sage-logotype {
-	@include m.noselect;
+  @include m.noselect;
+  overflow: visible;
   position: relative;
   width: 100%;
   aspect-ratio: 1196/384;
+}
+
+.sage-logotype__src {
+  position: absolute;
+}
+
+.sage-logotype__destroying-fakes {
+  height: 100%;
+  position: absolute;
+  transform: translateX(-10%);
+  left: -5%;
 }

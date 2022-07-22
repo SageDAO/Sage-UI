@@ -10,7 +10,10 @@ import useWatchNetwork from '@/hooks/useWatchNetwork';
 import WrongNetworkModal from '@/components/Modals/WrongNetworkModal';
 import React, { useEffect, useRef } from 'react';
 import HiddenMenu from './HiddenMenu';
-import Image from 'next/image';
+import MobileMenu from '@/components/Mobile/MobileMenu';
+import MenuToggle from '@/components/Mobile/MenuToggle';
+import DestroyingFakes from './DestroyingFakes';
+import useModal from '@/hooks/useModal';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -27,6 +30,13 @@ export default function Layout({ children, router }: Props) {
 
   const cursorEl = useRef<HTMLDivElement>(null);
   const layoutEl = useRef<HTMLDivElement>(null);
+
+  const {
+    closeModal: closeMobileMenu,
+    openModal: openMobileMenu,
+    isOpen: isMobileMenuOpen,
+    toggleModal: toggleMobileMenu,
+  } = useModal(true);
 
   useEffect(() => {
     // layoutEl.current?.addEventListener('mousemove', (e) => {
@@ -45,6 +55,8 @@ export default function Layout({ children, router }: Props) {
         <title>Sage Marketplace</title>
         <link rel='icon' href='/icons/sage.svg' />
       </Head>
+      <MenuToggle toggleMobileMenu={toggleMobileMenu} />
+      <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
       <WrongNetworkModal
         isOpen={isNetworkModalOpen}
         closeModal={closeNetworkModal}
@@ -62,19 +74,12 @@ export default function Layout({ children, router }: Props) {
         draggable
         pauseOnHover
         data-cy='toast-container'
-      />{' '}
+      />
       <motion.div ref={layoutEl} key={router.route} className='layout'>
         <HiddenMenu />
         <Nav />
         {children}
-        <div className='layout__destroying-fakes'>
-          <Image
-            draggable={false}
-            src='/branding/destroying-fakes.svg'
-            width={19}
-            height={384}
-          ></Image>
-        </div>
+        <DestroyingFakes></DestroyingFakes>
         <Footer></Footer>
       </motion.div>
     </React.Fragment>
