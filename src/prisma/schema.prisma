@@ -133,11 +133,11 @@ model PrizeProof {
   createdAt     DateTime
   nftId         Int
   lotteryId     Int
-  ticketNumber  Int 
+  uri           String
   Nft           Nft       @relation(fields: [nftId], references: [id])
   Lottery       Lottery   @relation(fields: [lotteryId], references: [id])
   
-  @@id([lotteryId, winnerAddress, nftId, ticketNumber])
+  @@id([lotteryId, winnerAddress, nftId])
 }
 
 model TokenTransaction {
@@ -149,6 +149,7 @@ model TokenTransaction {
   assetType      AssetType
   id             Int       @id @default(autoincrement())
   txHash         String    @db.Char(66)
+
   @@index([from, to])
 }
 
@@ -173,21 +174,30 @@ model RewardType {
 model User {
   walletAddress                 String        @id @db.Char(42)
   email                         String?       @db.Char(40)
-  twitterLink               		String?       @db.VarChar(40)
-  instagramLink             		String?       @db.VarChar(40)
-  webpage                       String?       @db.VarChar(50)
-  mediumLink                		String?       @db.VarChar(40)
+  twitterUsername               String?       @db.Char(40)
+  instagramUsername             String?       @db.Char(40)
+  webpage                       String?       @db.Char(50)
+  mediumUsername                String?       @db.Char(40)
   createdAt                     DateTime      @default(now())
   role                          Role          @default(USER)
   bio                           String?       @db.VarChar(200)
   profilePicture                String?
+  receiveEmailNotification      Boolean       @default(true)
   username                      String?       @db.VarChar(40)
   displayName                   String?       @db.VarChar(40)
   DropsApproved                 Drop[]        @relation("Drop_approvedByToUser")
   NftContract                   NftContract?  @relation("ArtistContract")
   EarnedPoints                  EarnedPoints?
   FavoriteDrops                 Drop[]        @relation("userFavoriteDrops")
+
   @@index([walletAddress])
+}
+
+model Follow {
+  walletAddress                 String @db.Char(42)
+  followedAddress               String @db.Char(42)
+
+  @@id([walletAddress, followedAddress])  
 }
 
 enum AssetType {
