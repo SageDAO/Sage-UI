@@ -65,6 +65,11 @@ export default function MobileMenu({ isOpen, closeModal }: Props) {
         </h1>
       </section>
       <Wallet closeModal={closeModal}></Wallet>
+      <section className='mobile-menu__socials'>
+        <h1 className='mobile-menu__socials-header'>follow us on</h1>
+        <div className='mobile-menu__socials-icons'></div>
+      </section>
+      <h1 className='mobile-menu__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h1>
     </div>
   );
 }

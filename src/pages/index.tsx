@@ -22,7 +22,9 @@ function home({ featuredDrop, upcomingDrops }: Props) {
       <div className='home-page__main'>
         {featuredDrop && (
           <>
-            <Hero imgSrc={featuredDrop.bannerImageS3Path} />
+            <div onClick={() => router.push(`/drops/${featuredDrop.id}`)}>
+              <Hero imgSrc={featuredDrop.bannerImageS3Path} />
+            </div>
             <div
               className='home-page__featured-drop-tag'
               onClick={() => router.push(`/drops/${featuredDrop.id}`)}

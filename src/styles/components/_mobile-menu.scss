@@ -2,67 +2,8 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/breakpoints' as b;
 
-$menu-z: 998;
+$menu-z: 996;
 $menu-toggle-z: $menu-z + 1;
-
-.mobile-menu__toggle {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  right: 20px;
-  top: 20px;
-	@include m.interact;
-
-  z-index: $menu-toggle-z;
-}
-
-.mobile-menu__toggle-inner {
-  width: 20px;
-  height: 15px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@mixin toggle-line {
-  transition-duration: 200ms;
-	transition-timing-function: ease-out;
-  position: absolute;
-  width: 20px;
-  height: 3px;
-  background-color: white;
-}
-
-.mobile-menu__toggle-line1 {
-  @include toggle-line;
-  &[data-is-landscape='true'] {
-    transform: rotate(90deg);
-  }
-}
-
-.mobile-menu__toggle-line2 {
-  transition-delay: 20ms;
-  @include toggle-line;
-  top: 0;
-  &[data-is-landscape='true'] {
-    top: initial;
-    transform: rotate(90deg) translateY(-6px);
-  }
-}
-
-.mobile-menu__toggle-line3 {
-  transition-delay: 50ms;
-  @include toggle-line;
-  bottom: 0;
-  &[data-is-landscape='true'] {
-    bottom: initial;
-
-    transform: rotate(90deg) translateY(6px);
-  }
-}
 
 .mobile-menu {
   overflow-y: auto;
@@ -73,24 +14,26 @@ $menu-toggle-z: $menu-z + 1;
   z-index: $menu-z;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   @include m.theme() {
     background-color: m.t(base);
   }
 
-	transform: translateY(-100%);
+  transform: translateY(-100%);
 
-	&[data-is-open='true'] {
-	transform: translateY(0%);
-		
-	} 
+  &[data-is-open='true'] {
+    transform: translateY(0%);
+  }
 }
 
 .mobile-menu__logotype {
-	margin-top: 95px;
+  margin-top: 95px;
+  width: 100%;
 }
 
 .mobile-menu__nav {
+  width: 100%;
   margin-top: 30px;
   display: flex;
   flex-direction: column;
@@ -120,7 +63,91 @@ $menu-toggle-z: $menu-z + 1;
   &[data-active='true'] {
     &:after {
       content: 'active';
-      background-color: red;
     }
+  }
+}
+
+// -------------------------------- Menu Toggle ---------------------------
+
+.mobile-menu__toggle {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  right: 40px;
+  top: 40px;
+  @include m.interact;
+
+  z-index: $menu-toggle-z;
+}
+
+.mobile-menu__toggle-inner {
+  width: 20px;
+  height: 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@mixin toggle-line {
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  position: absolute;
+  width: 20px;
+  height: 3px;
+  @include m.theme() {
+    background-color: m.t(contrast);
+  }
+}
+
+.mobile-menu__toggle-line1 {
+  @include toggle-line;
+  transition-delay: 20ms;
+  &[data-is-open='false'] {
+    transform: rotate(90deg);
+  }
+}
+
+.mobile-menu__toggle-line2 {
+  @include toggle-line;
+  transition-delay: 40ms;
+  top: 0;
+  &[data-is-open='false'] {
+    top: initial;
+    transform: rotate(90deg) translateY(-6px);
+  }
+}
+
+.mobile-menu__toggle-line3 {
+  @include toggle-line;
+  transition-delay: 60ms;
+  bottom: 0;
+  &[data-is-open='false'] {
+    bottom: initial;
+    transform: rotate(90deg) translateY(6px);
+  }
+}
+
+.mobile-menu__socials {
+}
+
+.mobile-menu__socials-header {
+}
+
+.mobile-menu__socials-icons {
+}
+
+.mobile-menu__copyright {
+  margin-top: auto;
+  margin-bottom: 32px;
+  font-weight: 400;
+  font-size: 5px;
+  line-height: 6px;
+
+  letter-spacing: 0.1em;
+  @include m.theme() {
+    color: m.t(contrast);
   }
 }

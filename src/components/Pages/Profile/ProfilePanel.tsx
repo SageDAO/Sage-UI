@@ -14,9 +14,9 @@ const INITIAL_STATE: State = {
   profilePicture: '',
   bio: '',
   webpage: '',
-  twitterLink: '',
-  instagramLink: '',
-  mediumLink: '',
+  twitterUsername: '',
+  instagramUsername: '',
+  mediumUsername: '',
 };
 
 export default function ProfilePanel() {
@@ -78,33 +78,33 @@ export default function ProfilePanel() {
         <div className='profile-panel__socials-field-container'>
           <input
             type='text'
-            value={state.twitterLink ?? ''}
+            value={state.twitterUsername ?? ''}
             className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
-                return { ...prevState, twitterLink: e.target.value };
+                return { ...prevState, twitterUsername: e.target.value };
               });
             }}
             placeholder='twitter'
           />
           <input
             type='text'
-            value={state.instagramLink ?? ''}
+            value={state.instagramUsername ?? ''}
             className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
-                return { ...prevState, instagramLink: e.target.value };
+                return { ...prevState, instagramUsername: e.target.value };
               });
             }}
             placeholder='instagram'
           />
           <input
             type='text'
-            value={state.mediumLink ?? ''}
+            value={state.mediumUsername ?? ''}
             className='profile-panel__socials-field'
             onChange={(e) => {
               setState((prevState) => {
-                return { ...prevState, mediumLink: e.target.value };
+                return { ...prevState, mediumUsername: e.target.value };
               });
             }}
             placeholder='medium'

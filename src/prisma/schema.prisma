@@ -10,57 +10,57 @@ datasource db {
 }
 
 model Drop {
-  id                               Int         @id @default(autoincrement())
-  name                             String
-  whitelistId                      Int?
-  createdAt                        DateTime    @default(now())
-  approvedAt                       DateTime?
-  approvedBy                       String?     @db.Char(42)
-  bannerImageS3Path                String
-  description                      String
-  tags                             String
-  artistAddress                    String      @db.Char(42)
-  NftContract                      NftContract @relation("ContractDrops", fields:[artistAddress], references: [artistAddress])
-  ApprovedByUser                   User?       @relation("Drop_approvedByToUser", fields: [approvedBy], references: [walletAddress])
-  Whitelist                        Whitelist?  @relation(fields: [whitelistId], references: [id])
-  Auctions                         Auction[]
-  Lotteries                        Lottery[]
-  UserFavoriteDrops                User[]      @relation("userFavoriteDrops")
+  id                Int         @id @default(autoincrement())
+  name              String
+  whitelistId       Int?
+  createdAt         DateTime    @default(now())
+  approvedAt        DateTime?
+  approvedBy        String?     @db.Char(42)
+  bannerImageS3Path String
+  description       String
+  tags              String
+  artistAddress     String      @db.Char(42)
+  ApprovedByUser    User?       @relation("Drop_approvedByToUser", fields: [approvedBy], references: [walletAddress])
+  NftContract       NftContract @relation("ContractDrops", fields: [artistAddress], references: [artistAddress])
+  Whitelist         Whitelist?  @relation(fields: [whitelistId], references: [id])
+  Auctions          Auction[]
+  Lotteries         Lottery[]
+  UserFavoriteDrops User[]      @relation("userFavoriteDrops")
 }
 
 model Lottery {
-  id                          Int        @id @default(autoincrement()) 
-  dropId                      Int    
-  isRefundable                Boolean    @default(false) 
-  isLive                      Boolean    @default(false)
-  contractAddress             String?    @db.Char(42)
-  costPerTicketTokens         Float      @default(0.0)
-  costPerTicketPoints         Int        @default(0)
-  maxTickets                  Int        @default(0)
-  maxTicketsPerUser           Int        @default(0)
-  prizesAwardedAt             DateTime?
-  endTime                     DateTime
-  startTime                   DateTime
-  Drop                        Drop       @relation(fields: [dropId], references: [id])
-  Nfts                        Nft[]
-  PrizeProofs                 PrizeProof[]   
+  id                  Int          @id @default(autoincrement())
+  dropId              Int
+  isRefundable        Boolean      @default(false)
+  isLive              Boolean      @default(false)
+  contractAddress     String?      @db.Char(42)
+  costPerTicketTokens Float        @default(0.0)
+  costPerTicketPoints Int          @default(0)
+  maxTickets          Int          @default(0)
+  maxTicketsPerUser   Int          @default(0)
+  prizesAwardedAt     DateTime?
+  endTime             DateTime
+  startTime           DateTime
+  Drop                Drop         @relation(fields: [dropId], references: [id])
+  Nfts                Nft[]
+  PrizeProofs         PrizeProof[]
 }
 
 model Auction {
-  id                    Int        @id @default(autoincrement())
-  dropId                Int        
-  lastUpdatedAt         DateTime?
-  minimumPrice          String?
-  settled               Boolean    @default(false)
-  startTime             DateTime
-  endTime               DateTime
-  isLive                Boolean    @default(false) 
-  nftId                 Int 
-  winnerAddress         String?     @db.Char(42)
-  claimedAt             DateTime?
-  contractAddress       String?   @db.Char(42)
-  Drop                  Drop @relation(fields: [dropId], references: [id])
-  Nft                   Nft  @relation(fields: [nftId], references: [id])
+  id              Int       @id @default(autoincrement())
+  dropId          Int
+  lastUpdatedAt   DateTime?
+  minimumPrice    String?
+  settled         Boolean   @default(false)
+  startTime       DateTime
+  endTime         DateTime
+  isLive          Boolean   @default(false)
+  nftId           Int       @unique
+  winnerAddress   String?   @db.Char(42)
+  claimedAt       DateTime?
+  contractAddress String?   @db.Char(42)
+  Drop            Drop      @relation(fields: [dropId], references: [id])
+  Nft             Nft       @relation(fields: [nftId], references: [id])
 }
 
 model SplitEntry {
@@ -72,10 +72,10 @@ model SplitEntry {
 }
 
 model Splitter {
-  id                     Int          @id @default(autoincrement())
-  splitterAddress        String?      @db.Char(42)
-  NftContract            NftContract[] @relation("Splitter")
-  SplitterEntries        SplitEntry[]
+  id              Int           @id @default(autoincrement())
+  splitterAddress String?       @db.Char(42)
+  NftContract     NftContract[] @relation("Splitter")
+  SplitterEntries SplitEntry[]
 }
 
 model WhitelistEntry {
@@ -96,34 +96,34 @@ model Whitelist {
 }
 
 model Nft {
-  id                       Int          @id @default(autoincrement())
-  name                     String
-  description              String
-  metadataPath             String
-  s3Path                   String
-  tags                     String
-  numberOfEditions         Int          @default(0)
-  isVideo                  Boolean      @default(false)
-  isHidden                 Boolean      @default(false)
-  lotteryId                Int?
-  price                    Float?
-  ownerAddress             String?      @db.Char(42)
-  artistAddress            String?      @db.Char(42) 
-  PrizeProof               PrizeProof[]
-  Auction                  Auction?  
-  Lottery                  Lottery?     @relation(fields: [lotteryId], references: [id])
-  NftContract              NftContract? @relation(fields: [artistAddress], references: [artistAddress])
+  id               Int          @id @default(autoincrement())
+  name             String
+  description      String
+  metadataPath     String
+  s3Path           String
+  tags             String
+  numberOfEditions Int          @default(0)
+  isVideo          Boolean      @default(false)
+  isHidden         Boolean      @default(false)
+  lotteryId        Int?
+  price            Float?
+  ownerAddress     String?      @db.Char(42)
+  artistAddress    String?      @db.Char(42)
+  NftContract      NftContract? @relation(fields: [artistAddress], references: [artistAddress])
+  Lottery          Lottery?     @relation(fields: [lotteryId], references: [id])
+  Auction          Auction?
+  PrizeProof       PrizeProof[]
 }
 
 model NftContract {
-  artistAddress          String  @id @db.Char(42)
-  contractAddress        String? @db.Char(42)
-  royaltyPercentage      Float       @default(0.0)
-  splitterId             Int?  
-  Splitter               Splitter?   @relation("Splitter", fields: [splitterId], references: [id])
-  Artist                 User        @relation("ArtistContract", fields: [artistAddress], references: [walletAddress])
-  Drops                  Drop[]  @relation("ContractDrops")
-  ListingNfts            Nft[]              
+  contractAddress   String?   @db.Char(42)
+  artistAddress     String    @id @db.Char(42)
+  royaltyPercentage Float     @default(0.0)
+  splitterId        Int?
+  Artist            User      @relation("ArtistContract", fields: [artistAddress], references: [walletAddress])
+  Splitter          Splitter? @relation("Splitter", fields: [splitterId], references: [id])
+  Drops             Drop[]    @relation("ContractDrops")
+  ListingNfts       Nft[]
 }
 
 model PrizeProof {
@@ -172,23 +172,23 @@ model RewardType {
 }
 
 model User {
-  walletAddress                 String        @id @db.Char(42)
-  email                         String?       @db.Char(40)
-  twitterUsername               String?       @db.Char(40)
-  instagramUsername             String?       @db.Char(40)
-  webpage                       String?       @db.Char(50)
-  mediumUsername                String?       @db.Char(40)
-  createdAt                     DateTime      @default(now())
-  role                          Role          @default(USER)
-  bio                           String?       @db.VarChar(200)
-  profilePicture                String?
-  receiveEmailNotification      Boolean       @default(true)
-  username                      String?       @db.VarChar(40)
-  displayName                   String?       @db.VarChar(40)
-  DropsApproved                 Drop[]        @relation("Drop_approvedByToUser")
-  NftContract                   NftContract?  @relation("ArtistContract")
-  EarnedPoints                  EarnedPoints?
-  FavoriteDrops                 Drop[]        @relation("userFavoriteDrops")
+  walletAddress            String        @id @db.Char(42)
+  email                    String?       @db.Char(40)
+  webpage                  String?       @db.Char(50)
+  createdAt                DateTime      @default(now())
+  role                     Role          @default(USER)
+  bio                      String?       @db.VarChar(200)
+  profilePicture           String?
+  username                 String?       @db.VarChar(40)
+  displayName              String?       @db.VarChar(40)
+  receiveEmailNotification Boolean       @default(true)
+  instagramUsername        String?       @db.Char(40)
+  mediumUsername           String?       @db.Char(40)
+  twitterUsername          String?       @db.Char(40)
+  DropsApproved            Drop[]        @relation("Drop_approvedByToUser")
+  EarnedPoints             EarnedPoints?
+  NftContract              NftContract?  @relation("ArtistContract")
+  FavoriteDrops            Drop[]        @relation("userFavoriteDrops")
 
   @@index([walletAddress])
 }

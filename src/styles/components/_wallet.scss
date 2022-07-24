@@ -1,10 +1,15 @@
 @use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
 
 .wallet {
   display: flex;
   flex-direction: column;
   gap: 21px;
   margin-top: 60px;
+  max-width: 247px;
+  @include b.min-width('medium') {
+    max-width: 400px;
+  }
 }
 
 .wallet__header-prompt {
@@ -143,16 +148,6 @@
   @include auth-button;
 }
 
-//
-
-.wallet__user {
-  display: flex;
-  flex-direction: column;
-  margin-top: 60px;
-  gap: 20px;
-  padding: 0 30px;
-}
-
 .wallet__user-personal-message {
   @include m.theme() {
     color: m.t(contrast2);
@@ -194,9 +189,9 @@
 
 .wallet__utils-section {
   display: flex;
-	align-items: end;
-	gap: 30px;
-	justify-content: center;
+  align-items: end;
+  gap: 30px;
+  justify-content: center;
 }
 
 .wallet__utils-info {

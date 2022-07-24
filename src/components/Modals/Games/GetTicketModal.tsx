@@ -89,6 +89,9 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
           <div className='games-modal__sage-logo'>
             <Image src={'/branding/sage-full-logo.svg'} width={170} height={40} />
           </div>
+          <div onClick={closeModal} className='games-modal__close-button'>
+            <Image src='/interactive/close.svg' layout='fill'></Image>
+          </div>
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>

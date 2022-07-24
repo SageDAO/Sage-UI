@@ -34,15 +34,14 @@ export default function Nav() {
   const { data: userData } = useGetUserQuery();
   const { data: ensData } = useEnsName({ address: userData?.walletAddress });
   return (
-    <div
-      className='nav'
-      data-cy='nav'
-      onClick={() => {
-        router.push('/profile');
-      }}
-    >
+    <div className='nav' data-cy='nav'>
       <div className='nav__personal'>
-        <div className='nav__personal-pfp-container'>
+        <div
+          onClick={() => {
+            router.push('/profile');
+          }}
+          className='nav__personal-pfp-container'
+        >
           <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
         </div>
         <h1 className='nav__personal-message'>

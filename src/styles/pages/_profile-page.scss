@@ -68,8 +68,8 @@
   flex-direction: column;
   font-style: normal;
   font-weight: 400;
-  font-size: 64px;
-  line-height: 82px;
+  font-size: clamp(32px, 8vw, 64px);
+  line-height: clamp(48px, 2em, 82px);
 
   @include m.theme() {
     color: m.t(contrast2);
@@ -294,8 +294,8 @@
   text-align: center;
   letter-spacing: 0.2em;
 
-  width: 365px;
-  height: 50px;
+  width: min(365px, 80vw);
+  min-height: 50px;
 
   @include m.interact;
   @include m.theme() {
@@ -384,7 +384,7 @@
   justify-content: center;
   align-items: center;
   transition-duration: 200ms;
-  width: 100%;
+  // width: 100%;
   aspect-ratio: 851/420;
   @include m.theme() {
     background-color: m.t(base2);
@@ -395,7 +395,7 @@
 
 .creations-panel__file-upload-field {
   @include m.interact;
-  width: 100%;
+  // width: 100%;
   height: 100%;
   position: absolute;
   z-index: 2;
@@ -419,13 +419,13 @@
 }
 .creations-panel__file-title-field {
   @include input-field;
-  width: 100%;
+  // width: 100%;
   background-color: red;
 }
 
 .creations-panel__file-desc-group {
   @include input-group;
-  width: 100%;
+  // width: 100%;
   flex: 1;
 }
 .creations-panel__file-desc-label {

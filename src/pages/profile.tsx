@@ -1,8 +1,5 @@
 import React from 'react';
-import { useAccount, useBalance } from 'wagmi';
 import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
-import { parameters } from '@/constants/config';
-import useModal from '@/hooks/useModal';
 import { PfpImage } from '@/components/Media';
 import { useSession } from 'next-auth/react';
 import LoaderDots from '@/components/LoaderDots';
@@ -11,7 +8,6 @@ import useTabs from '@/hooks/useTabs';
 import Image from 'next/image';
 import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
 import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
-import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
 import Balances from '@/components/Pages/Profile/Balances';
 import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
 
@@ -25,19 +21,7 @@ type TabItem = {
 function profile() {
   const { data: sessionData } = useSession();
   const { data: userData, isFetching: isFetchingUser } = useGetUserQuery();
-  const { data: pointsData } = useGetPointsBalanceQuery();
-  const { data: walletBalance } = useBalance({
-    token: parameters.ASHTOKEN_ADDRESS,
-    addressOrName: userData?.walletAddress,
-  });
-  const { data: accountData } = useAccount();
   const [signOut] = useSignOutMutation();
-  const { ASHTOKEN_ADDRESS } = parameters;
-  const {
-    isOpen: isEditModalOpen,
-    closeModal: closeEditModal,
-    openModal: openEditModal,
-  } = useModal();
 
   const { handleTabsClick, selectedTabIndex } = useTabs();
 
@@ -54,7 +38,11 @@ function profile() {
       subheader: 'your collection of artwork on sage',
     },
     { name: 'bids and purchases', panel: null, subheader: 'your bids and purchases' },
-    { name: 'creations / mint', panel: CreationsPanel(), subheader: 'upload a new artwork to your profile' },
+    {
+      name: 'creations / mint',
+      panel: CreationsPanel(),
+      subheader: 'upload a new artwork to your profile',
+    },
     { name: 'settings', panel: null, disabled: true },
   ];
 

@@ -99,6 +99,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
           <div className='games-modal__sage-logo'>
             <Image src={'/branding/sage-full-logo.svg'} width={170} height={40} />
           </div>
+          <div onClick={closeModal} className='games-modal__close-button'>
+            <Image src='/interactive/close.svg' layout='fill'></Image>
+          </div>
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
@@ -133,17 +136,26 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                 see active bids
               </div>
             </div>
+            <input
+              onChange={handleBidInputChange}
+              type='number'
+              className='games-modal__bid-input'
+              min={auctionState?.nextMinBid}
+              value={state.desiredBidValue}
+            />
             <button className='games-modal__place-bid-button' onClick={handlePlaceBidClick}>
               place bid
             </button>
           </div>
         </section>
-        <section className='games-modal__bid-history-section'>
-          <BidHistoryTable
-            isActive={state.shouldShowBidHistory}
-            auctionId={auction.id}
-          ></BidHistoryTable>
-        </section>
+        {state.shouldShowBidHistory && (
+          <section className='games-modal__bid-history-section'>
+            <BidHistoryTable
+              isActive={state.shouldShowBidHistory}
+              auctionId={auction.id}
+            ></BidHistoryTable>
+          </section>
+        )}
       </div>
     </Modal>
   );
