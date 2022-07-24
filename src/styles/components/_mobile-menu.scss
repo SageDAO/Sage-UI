@@ -2,7 +2,7 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/breakpoints' as b;
 
-$menu-z: 998;
+$menu-z: 996;
 $menu-toggle-z: $menu-z + 1;
 
 .mobile-menu {

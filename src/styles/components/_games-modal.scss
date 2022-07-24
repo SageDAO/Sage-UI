@@ -15,6 +15,7 @@
 // }
 
 .games-modal {
+	z-index: 998;
   display: flex;
   flex-direction: column;
   gap: 20px;

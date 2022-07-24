@@ -1,4 +1,5 @@
 @use '@/styles/abstracts/colors' as *;
+@use '@/styles/abstracts/breakpoints' as b;
 @mixin img-container {
   position: relative;
   overflow: hidden;
@@ -10,13 +11,16 @@
 }
 
 @mixin page {
-  padding: 80px 0 0;
+  padding: 97px 0 0;
   width: 100vw;
   align-items: center;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  @include b.min-width('medium') {
+    padding: 80px 0 0;
+  }
 }
 
 @mixin noselect {
