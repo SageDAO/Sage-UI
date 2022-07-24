@@ -1,6 +1,6 @@
 import { GamePrize } from '@/prisma/types';
 import {
-  approveERC20Transfer,
+  approveAuctionERC20Transfer,
   extractErrorMessage,
   getAuctionContract,
 } from '@/utilities/contracts';
@@ -61,11 +61,12 @@ export const auctionsApi = createApi({
         try {
           const auctionContract = await getAuctionContract(signer);
           const tokenAddress = await auctionContract.erc20();
-          await approveERC20Transfer(tokenAddress, signer, amount);
+          await approveAuctionERC20Transfer(tokenAddress, signer, amount);
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
           playErrorSound();
+          return { data: null };
         }
         try {
           const auctionContract = await getAuctionContract(signer);

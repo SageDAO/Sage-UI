@@ -119,7 +119,7 @@ export async function getBlockchainTimestamp(): Promise<number> {
   return blockTimestamp;
 }
 
-export async function approveERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
+export async function approveAuctionERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
   const erc20Contract = new ethers.Contract(
     erc20Address,
     ERC20StandardJson.abi,
@@ -128,7 +128,7 @@ export async function approveERC20Transfer(erc20Address: string, signer: Signer,
   const wallet = await signer.getAddress();
   const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, AUCTION_ADDRESS);
   console.log(
-    `approveERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
+    `approveAuctionERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
   );
   const amountBN = BigNumber.from(utils.parseEther(String(amount)));
   if (allowance.lt(amountBN)) {
@@ -139,6 +139,30 @@ export async function approveERC20Transfer(erc20Address: string, signer: Signer,
       error: 'Failure! Unable to complete request.',
     });
     await tx.wait();
+  }
+}
+
+export async function approveMarketplaceERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
+  const erc20Contract = new ethers.Contract(
+    erc20Address,
+    ERC20StandardJson.abi,
+    signer
+  ) as ERC20Contract;
+  console.log(`approveMarketplaceERC20Transfer(${erc20Address}, ${await signer.getAddress()}, ${amount})`)
+  const wallet = await signer.getAddress();
+  const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, MARKETPLACE_ADDRESS);
+  console.log(
+    `approveMarketplaceERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
+  );
+  const amountBN = BigNumber.from(utils.parseEther(String(amount)));
+  if (allowance.lt(amountBN)) {
+    var tx = await erc20Contract.approve(MARKETPLACE_ADDRESS, ethers.constants.MaxUint256);
+    toast.promise(tx.wait(), {
+      pending: 'Approval submitted to the blockchain, awaiting confirmation...',
+      success: `Approved! Preparing marketplace transaction...`,
+      error: 'Failure! Unable to complete request.',
+    });
+    await tx.wait(1);
   }
 }
 

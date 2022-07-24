@@ -29,8 +29,6 @@ export type AuctionNftWithArtist = Prisma.AuctionGetPayload<{
   };
 }>;
 
-export type Game = Auction_include_Nft | Lottery_include_Nft;
-
 export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   include: {
     Lotteries: true;
@@ -64,6 +62,9 @@ export type DropFull = Prisma.DropGetPayload<{
   };
 }>;
 
+export type Game = Auction_include_Nft | Lottery_include_Nft;
+
+
 export interface GamePrize {
   nftId: number;
   dropId: number;
@@ -93,6 +94,10 @@ export type LotteryWithNftsAndArtist = Prisma.LotteryGetPayload<{
       };
     };
   };
+}>;
+
+export type Nft_include_NftContract = Prisma.NftGetPayload<{
+  include: { NftContract: true }
 }>;
 
 export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{

@@ -1,18 +1,26 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ethers, Signer } from 'ethers';
 import {
+  approveMarketplaceERC20Transfer,
   getMarketplaceContract,
   getNFTContract,
   getNftFactoryContract,
 } from '@/utilities/contracts';
 import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3';
 import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave';
+import { Nft_include_NftContract } from '@/prisma/types';
+import { toast } from 'react-toastify';
+import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 
 export const nftsApi = createApi({
   reducerPath: 'nftsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  tagTypes: ['NftContract'],
+  tagTypes: ['NftContract', 'Nfts'],
   endpoints: (builder) => ({
+    getArtistNfts: builder.query<Nft_include_NftContract[], string>({
+      query: (artistAddress: string) => `nfts?action=GetArtistNfts&address=${artistAddress}`,
+      providesTags: ['Nfts'],
+    }),
     fetchOrCreateNftContract: builder.query<string, { artistAddress: string; signer: Signer }>({
       queryFn: async ({ artistAddress, signer }, { dispatch }, _, fetchWithBQ) => {
         try {
@@ -54,15 +62,13 @@ export const nftsApi = createApi({
           console.log(`mintSingleNft() :: Uploading media to Arweave...`);
           const ipfsPath = await copyFromS3toArweave(endpoint, s3Path);
           console.log(`mintSingleNft() :: Uploading metadata to Arweave...`);
-          const isVideo = file.name.toLowerCase().endsWith('mp4');
-          const metadataId = await createNftMetadataOnArweave(
+          const metadataPath = await createNftMetadataOnArweave(
             endpoint,
             name,
             description,
             ipfsPath,
-            isVideo
+            file.name.toLowerCase().endsWith('mp4')
           );
-          const metadataPath = `https://arweave.net/${metadataId}`;
           console.log(`mintSingleNft() :: Creating database record...`);
           const { data: dbRecord } = await fetchWithBQ({
             url: `dropUploadEndpoint?action=InsertNft`,
@@ -108,6 +114,54 @@ export const nftsApi = createApi({
           return { data: 0 };
         }
       },
+      invalidatesTags: ['Nfts'],
+    }),
+    buySingleNft: builder.mutation<
+      boolean,
+      { artistContractAddress: string; nftId: number; price: number; signer: Signer }
+    >({
+      queryFn: async (
+        { artistContractAddress, nftId, price, signer },
+        { dispatch },
+        _,
+        fetchWithBQ
+      ) => {
+        const marketplaceContract = await getMarketplaceContract(signer);
+        try {
+          const tokenAddress = await marketplaceContract.token();
+          await approveMarketplaceERC20Transfer(tokenAddress, signer, price);
+        } catch (e) {
+          console.error(e);
+          toast.error(`Error approving transfer`);
+          playErrorSound();
+          return { data: false };
+        }
+        try {
+          console.log(`takeSellOffer(${artistContractAddress}, ${nftId})`)
+          const tx = await marketplaceContract.takeSellOffer(artistContractAddress, nftId);
+          toast.promise(tx.wait(), {
+            pending: 'Request submitted to the blockchain, awaiting confirmation...',
+            success: `Success! You've bought an NFT!`,
+            error: 'Failure! Unable to complete request.',
+          });
+          await tx.wait();
+          await fetchWithBQ({
+            url: `nfts?action=UpdateOwner`,
+            method: 'POST',
+            body: {
+              id: nftId,
+              address: await signer.getAddress(),
+            },
+          });
+          playTxSuccessSound();
+          return { data: true };
+        } catch (e) {
+          console.log(e);
+          toast.error('Error buying NFT');
+          return { data: false };
+        }
+      },
+      invalidatesTags: ['Nfts'],
     }),
   }),
 });
@@ -143,4 +197,9 @@ export async function _fetchOrCreateNftContract(
   return artistContractAddress;
 }
 
-export const { useFetchOrCreateNftContractQuery, useMintSingleNftMutation } = nftsApi;
+export const {
+  useGetArtistNftsQuery,
+  useFetchOrCreateNftContractQuery,
+  useMintSingleNftMutation,
+  useBuySingleNftMutation,
+} = nftsApi;

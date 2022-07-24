@@ -6,11 +6,11 @@ import { buildNftMetadata } from './nftMetadata';
 export async function copyFromS3toArweave(endpoint: string, s3Path: string): Promise<string> {
   const response = await fetch(`${endpoint}?action=CopyFromS3toArweave&s3Path=${s3Path}`);
   const { id, balance, error } = await response.json();
+  console.log(`Arweave balance = ${balance}`);
   if (error) {
     console.log(error);
     throw new Error(error);
   }
-  console.log(`Arweave balance = ${balance}`);
   return `https://arweave.net/${id}`;
 }
 
@@ -42,5 +42,5 @@ export async function createNftMetadataOnArweave(
   console.log(
     `createNftMetadataOnArweave() :: '${name}' metadata saved to ${id} (balance = ${balance})`
   );
-  return id;
+  return `https://arweave.net/${id}`;
 }
