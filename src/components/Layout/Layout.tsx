@@ -12,7 +12,6 @@ import React, { useEffect, useRef } from 'react';
 import HiddenMenu from './HiddenMenu';
 import MobileMenu from '@/components/Mobile/MobileMenu';
 import MenuToggle from '@/components/Mobile/MenuToggle';
-import DestroyingFakes from './DestroyingFakes';
 import useModal from '@/hooks/useModal';
 
 type Props = {
@@ -33,7 +32,6 @@ export default function Layout({ children, router }: Props) {
 
   const {
     closeModal: closeMobileMenu,
-    openModal: openMobileMenu,
     isOpen: isMobileMenuOpen,
     toggleModal: toggleMobileMenu,
   } = useModal(true);
@@ -55,7 +53,7 @@ export default function Layout({ children, router }: Props) {
         <title>Sage Marketplace</title>
         <link rel='icon' href='/icons/sage.svg' />
       </Head>
-      <MenuToggle toggleMobileMenu={toggleMobileMenu} />
+      <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
       <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
       <WrongNetworkModal
         isOpen={isNetworkModalOpen}
@@ -79,7 +77,6 @@ export default function Layout({ children, router }: Props) {
         <HiddenMenu />
         <Nav />
         {children}
-        <DestroyingFakes></DestroyingFakes>
         <Footer></Footer>
       </motion.div>
     </React.Fragment>

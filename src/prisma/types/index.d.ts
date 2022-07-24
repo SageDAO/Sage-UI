@@ -120,9 +120,9 @@ export type SafeUserUpdate = Partial<
     | 'email'
     | 'bio'
     | 'profilePicture'
-    | 'mediumLink'
-    | 'twitterLink'
-    | 'instagramLink'
+    | 'mediumUsername'
+    | 'twitterUsername'
+    | 'instagramUsername'
     | 'webpage'
   >
 >;

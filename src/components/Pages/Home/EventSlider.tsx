@@ -43,7 +43,7 @@ export default function EventSlider() {
     <div className='home-page__events'>
       <a target='__blank' className='home-page__event-slide' href={state.link}>
         <h1 className='home-page__event-slide-header'>
-          news / events / <br /> interviews / blog
+          news 
         </h1>
         <Image
           src={state.image}

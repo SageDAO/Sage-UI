@@ -1,16 +1,21 @@
 @use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
 .hero {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  aspect-ratio: 1/1;
+  aspect-ratio: 322/380;
+  @include b.min-width('medium') {
+    aspect-ratio: 1/1;
+  }
 }
 
-.hero__logotype {
+.hero__logotype-container {
   @include m.noselect;
   position: absolute;
-  aspect-ratio: 1200/384;
+  overflow: visible;
+  aspect-ratio: 311/99.5;
   width: 100%;
   z-index: 1;
 }
@@ -18,10 +23,13 @@
 .hero__banner {
   @include m.noselect;
   @include m.interact;
-  transform: translateY(31%);
+  margin-top: auto;
   overflow: hidden;
   position: relative;
   transition-duration: 300ms;
   width: 100%;
-  aspect-ratio: 1196/872;
+  aspect-ratio: 322/311;
+  @include b.min-width('medium') {
+    aspect-ratio: 1196/928;
+  }
 }

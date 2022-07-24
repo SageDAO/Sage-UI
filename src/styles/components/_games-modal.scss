@@ -1,5 +1,6 @@
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
 
 // /* Chrome, Safari, Edge, Opera */
 // input::-webkit-outer-spin-button,
@@ -17,46 +18,90 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 996px;
+  width: 100vw;
+  align-items: center;
+  overflow-y: auto;
+  height: 100vh;
+
+  @include b.min-width('medium') {
+    width: 996px;
+    padding: 0;
+    height: auto;
+  }
 }
 
 .games-modal__header {
   display: flex;
+  padding-top: 160px;
   width: max-content;
+  align-items: center;
+  width: 90%;
   margin-top: 5px;
   gap: 0 25px;
-  justify-content: center;
+
+  @include b.min-width('medium') {
+    padding-top: 20px;
+  }
 }
 
 .games-modal__sage-logo {
 }
 
+.games-modal__close-button {
+  position: relative;
+  margin-left: auto;
+  height: 21px;
+  width: 21px;
+  aspect-ratio: 1/1;
+  @include m.interact;
+}
+
 .games-modal__body {
+  min-width: 90%;
   display: flex;
-  gap: 40px;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(17px, 2vw, 40px);
+  align-items: stretch;
+  padding-bottom: 160px;
+
+  @include b.min-width('medium') {
+    flex-direction: row;
+    align-items: stretch;
+    padding-bottom: 60px;
+  }
 }
 
 .games-modal__main-img-container {
   position: relative;
-  width: 487px;
-  height: 527px;
+  // width: clamp(311px, 80vw, 487px);
+  // height: clamp(300px, 80vw, 527px);
+  width: 100%;
+  aspect-ratio: 487/527;
+
+  @include b.min-width('medium') {
+    width: 50%;
+    width: 487px;
+  }
 }
 
 .games-modal__main-content {
-  gap: 30px;
+  gap: clamp(10px, 1vw, 30px);
   flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  // padding-bottom: 160px;
 }
 
 .games-modal__drop-name {
   font-style: normal;
   font-weight: 400;
-  font-size: 10px;
+  font-size: clamp(6px, 0.8vw, 10px);
   line-height: 130%;
   text-transform: uppercase;
-  color: #c4c4c4;
+
   @include m.theme() {
     color: m.t(contrast2);
   }
@@ -86,6 +131,7 @@
 }
 
 .games-modal__system {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -111,17 +157,24 @@
   @include m.theme() {
     color: m.t(contrast);
   }
+
+  @include b.min-width('medium') {
+    max-width: 400px;
+  }
 }
 
 @mixin game-info-label {
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: clamp(6px, 1vw, 16px);
   line-height: 130%;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
 
+  @include b.min-width('medium') {
+    margin-top: auto;
+  }
   @include m.theme() {
-    color: m.t(contrast2);
+    color: m.t(accent);
   }
 }
 
@@ -136,9 +189,8 @@
 @mixin game-info-value {
   font-style: normal;
   font-weight: 400;
-  font-size: 36px;
+  font-size: clamp(20px, 1vw, 36px);
   line-height: 130%;
-  text-transform: uppercase;
 
   @include m.theme() {
     color: m.t(contrast2);
@@ -146,10 +198,12 @@
 }
 
 .games-modal__bid-info-group {
-  margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @include b.min-width('medium') {
+  }
 }
 
 .games-modal__highest-bid-value {
@@ -192,8 +246,10 @@
 }
 
 @mixin game-interact-button {
+  margin-top: clamp(28px, 4vw, 67px);
   width: 100%;
   aspect-ratio: 397/65;
+  max-width: 397px;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -208,6 +264,24 @@
   }
 
   @include m.interact() {
+  }
+}
+
+.games-modal__bid-input {
+  margin-top: clamp(10px, 2vw, 40px);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 169%;
+  /* or 41px */
+
+  text-align: center;
+  text-transform: uppercase;
+  background: transparent;
+  height: 40px;
+  @include m.theme() {
+    border: 1px solid m.t(contrast2);
+    color: m.t(contrast2);
   }
 }
 

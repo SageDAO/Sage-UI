@@ -181,7 +181,7 @@ export default function Wallet({ closeModal }: Props) {
         </section>
       )}
 
-      {sessionStatus === 'authenticated' && (
+      {sessionStatus === 'authenticated' && sessionData !== null && (
         <>
           <section className='wallet__user-section'>
             <div className='wallet__user-pfp-container' onClick={goToProfile}>

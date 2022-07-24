@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import { BaseMedia } from './Media';
+import Logotype from '@/components/Logotype';
+import { BaseMedia } from '@/components/Media';
 
 interface Props {
   imgSrc: string;
@@ -10,8 +11,8 @@ export default function Hero({ imgSrc, path }: Props) {
   const router = useRouter();
   return (
     <div className='hero'>
-      <div className='hero__logotype'>
-        <BaseMedia src='/branding/sage-logotype.svg' isVideo={false} />
+      <div className='hero__logotype-container'>
+        <Logotype></Logotype>
       </div>
       <div className='hero__banner'>
         <BaseMedia

@@ -9,6 +9,6 @@
   box-sizing: border-box;
   @include m.interact;
   position: relative;
-  width: 16px;
-  height: 16px;
+  height: 18px;
+	aspect-ratio: 1/1;
 }

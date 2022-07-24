@@ -10,28 +10,26 @@ export default function Footer() {
         </div>
       </div>
       <div className='footer__middle'>
-        <div className='footer__middle-item'>
-          <div className='footer__middle-item-header'>contact sage</div>
-          <div className='footer__middle-item-content'>
-            <div className='footer__middle-item-content-link'>apply for artists</div>
-            <div className='footer__middle-item-content-link'>business inquiry</div>
-            <div className='footer__middle-item-content-link'>get in touch</div>
-          </div>
-        </div>
-        <div className='footer__middle-item'>
-          <div className='footer__middle-item-header'>token + lp</div>
-          <div className='footer__middle-item-content'>
-            <div className='footer__middle-item-content-link'>ash nft contract address</div>
-            <div className='footer__middle-item-content-link'>ash token information</div>
-            <div className='footer__middle-item-content-link'>eth/ash on uniswap</div>
-          </div>
-        </div>
-        <div className='footer__middle-item'>
-          <div className='footer__middle-item-header'>follow us on</div>
-          <div className='footer__middle-item-content'>
+        <ul className='footer__middle-item'>
+          <li className='footer__middle-item-header'>contact sage</li>
+          <li className='footer__middle-item-content'>
+            <li className='footer__middle-item-content-link'>apply for artists</li>
+            <li className='footer__middle-item-content-link'>business inquiry</li>
+            <li className='footer__middle-item-content-link'>support</li>
+          </li>
+        </ul>
+        <ul className='footer__middle-item'>
+          <li className='footer__middle-item-header'>token + lp</li>
+          <li className='footer__middle-item-content'>
+            <li className='footer__middle-item-content-link'>how to buy ash</li>
+          </li>
+        </ul>
+        <ul className='footer__follow'>
+          <li className='footer__middle-item-header'>follow us on</li>
+          <li className='footer__middle-item-content'>
             <Socials></Socials>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
       <div className='footer__bottom'>
         <h4 className='footer__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h4>
