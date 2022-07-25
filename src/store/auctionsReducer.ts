@@ -147,21 +147,22 @@ export async function getAuctionContractState(auctionId: number) {
 }
 
 /*
-from MemeXAuction.sol:
+from Auction.sol:
 event BidPlaced(
-  uint256 indexed auctionId,
-  address indexed bidder,
-  uint256 bidAmount,
-  uint256 newEndTime
-);
+        uint256 indexed auctionId,
+        address indexed newBidder,
+        address indexed previousBidder,
+        uint256 bidAmount,
+        uint256 newEndTime
+    );
 */
 async function setupBidListener(auctionId: number, newBidHandler: () => void) {
   console.log(`setupBidListener(${auctionId})`);
   const auctionContract = await getAuctionContract();
   if (auctionContract.listenerCount('BidPlaced') < 1) {
-    auctionContract.on('BidPlaced', (auctionId, bidder, bidAmount, newEndTime) => {
+    auctionContract.on('BidPlaced', (auctionId, newBidder, previousBidder, bidAmount, newEndTime) => {
       console.log(
-        `Contract Event: BidPlaced(${auctionId}, ${bidder}, ${bidAmount}, ${newEndTime})`
+        `Contract Event: BidPlaced(${auctionId}, ${newBidder}, ${previousBidder}, ${bidAmount}, ${newEndTime})`
       );
       toast.info(
         `Auction ${auctionId} has a new higher bidder with a bid of ${bidAmount / 10 ** 18}`
