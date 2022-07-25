@@ -137,6 +137,7 @@ export async function getTicketCountPerUser(lotteryId: number, address: string):
 from MemeXLottery.sol:
 event TicketSold(
         uint256 indexed lotteryId,
+        uint256 ticketNumber,
         address indexed participantAddress,
         PriceTier tier
     );
@@ -146,8 +147,10 @@ export async function setupTicketSoldListener(lotteryId: number, countUpdateCall
   const contract = await getLotteryContract();
   if (!contract.listenerCount()) {
     console.log('Adding contract listener for TicketSold event');
-    contract.on('TicketSold', (lotteryId, participantAddress, tier) => {
-      console.log(`Contract Event: TicketSold(${lotteryId}, ${participantAddress}, ${tier})`);
+    contract.on('TicketSold', (lotteryId, ticketNumber, participantAddress, tier) => {
+      console.log(
+        `Contract Event: TicketSold(${lotteryId}, ${ticketNumber}, ${participantAddress}, ${tier})`
+      );
       countUpdateCallback();
     });
   }
