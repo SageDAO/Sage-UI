@@ -10,6 +10,28 @@
   aspect-ratio: 1/1;
 }
 
+@mixin no-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+}
+
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 10px;
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    @include theme() {
+      background-color: t('accent');
+      color: t('contrast');
+    }
+  }
+}
+
 @mixin page {
   padding: 97px 0 0;
   width: 100vw;

@@ -1,8 +1,10 @@
 import { PfpImage } from '@/components/Media';
+import { User } from '@prisma/client';
 import { useRouter } from 'next/router';
-import type { Props as ArtistsPageProps } from '../../../pages/artists';
 
-interface Props extends ArtistsPageProps {}
+interface Props {
+  artists: User[];
+}
 
 export default function Row({ artists }: Props) {
   const router = useRouter();

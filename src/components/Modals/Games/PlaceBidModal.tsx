@@ -109,7 +109,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
           </div>
           <div className='games-modal__main-content'>
             <div>
-              <h1 className='games-modal__drop-name'>{dropName}</h1>
+              <h1 className='games-modal__drop-name'>{dropName} by {artist.displayName}</h1>
               <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
             </div>
             <p className='games-modal__game-description'>{auction.Nft.description}</p>
@@ -143,7 +143,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
               min={auctionState?.nextMinBid}
               value={state.desiredBidValue}
             />
-            <button className='games-modal__place-bid-button' onClick={handlePlaceBidClick}>
+            <button disabled={isPlaceBidLoading} className='games-modal__place-bid-button' onClick={handlePlaceBidClick}>
               place bid
             </button>
           </div>

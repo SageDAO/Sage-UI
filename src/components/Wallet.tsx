@@ -1,4 +1,5 @@
 import { BaseMedia, PfpImage } from './Media';
+import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
 import {
   useConnect,
   useAccount,
@@ -18,6 +19,7 @@ import { useGetUserQuery, useSignInMutation, useSignOutMutation } from '@/store/
 import Image from 'next/image';
 import { parameters } from '@/constants/config';
 import { useRouter } from 'next/router';
+import PersonalizedMessage from './PersonalizedMessage';
 
 interface Props {
   closeModal?: ModalProps['closeModal'];
@@ -33,6 +35,8 @@ export default function Wallet({ closeModal }: Props) {
     token: parameters.ASHTOKEN_ADDRESS,
     addressOrName: sessionData?.address as string,
   });
+  const { data: pointsData } = useGetPointsBalanceQuery();
+
   const [signIn] = useSignInMutation();
   const [signOut] = useSignOutMutation();
   const { signMessageAsync, isLoading: isSigningMessage } = useSignMessage();
@@ -84,11 +88,15 @@ export default function Wallet({ closeModal }: Props) {
   return (
     <div className='wallet'>
       <section className='wallet__header'>
-        <h1 className='wallet__header-prompt'>connect</h1>
-        <h1 className='wallet__header-info'>
-          SELECT YOUR WALLET YOU WANT TO CONNECT. REMEMBER SAGE WILL NEVER ASK FOR YOUR SECRET KEYS
-          OR ANY CONFIDENTIAL INFO.
+        <h1 className='wallet__header-prompt'>
+          <PersonalizedMessage></PersonalizedMessage>
         </h1>
+        {!isConnected && (
+          <h1 className='wallet__header-info'>
+            SELECT YOUR WALLET YOU WANT TO CONNECT. REMEMBER SAGE WILL NEVER ASK FOR YOUR SECRET
+            KEYS OR ANY CONFIDENTIAL INFO.
+          </h1>
+        )}
       </section>
 
       {showWalletSelection && (
@@ -187,7 +195,7 @@ export default function Wallet({ closeModal }: Props) {
             <div className='wallet__user-pfp-container' onClick={goToProfile}>
               <PfpImage className='wallet__user-pfp-src' src={userData?.profilePicture}></PfpImage>
             </div>
-            <div className='wallet__user-connection-inidicator'></div>
+            <div className='wallet__user-connection-indicator'></div>
             <div className='wallet__user-metamask-container'>
               <Image
                 layout='fill'
@@ -198,8 +206,15 @@ export default function Wallet({ closeModal }: Props) {
           </section>
           <section className='wallet__utils-section'>
             <div className='wallet__utils-info'>
-              <h1 className='wallet__points-balance'>pixel balance: </h1>
-              <h1 className='wallet__token-balance'>ash balance: {balanceData?.formatted}</h1>
+              <h1 className='wallet__points-balance'>
+                pixel balance: <span className='wallet__points-value'>{pointsData}</span>
+              </h1>
+              <h1 className='wallet__token-balance'>
+                ash balance:
+                <span className='wallet__token-value'>
+                  {Number(balanceData?.formatted).toFixed(4)}
+                </span>
+              </h1>
             </div>
             <button onClick={goToProfile} className='wallet__profile-button'>
               go to profile

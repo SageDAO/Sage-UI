@@ -4,17 +4,18 @@ import prisma from '@/prisma/client';
 import { getArtistsPageData } from '@/prisma/functions';
 
 export interface Props {
-  artists: Awaited<ReturnType<typeof getArtistsPageData>>;
+  artistGroups: Awaited<ReturnType<typeof getArtistsPageData>>[];
 }
 
-export default function artists({ artists }: Props) {
+export default function artists({ artistGroups }: Props) {
   return (
     <div className='artists-page page'>
       <div className='artists-page__logotype'>
         <Logotype />
       </div>
-      <ArtistsRow artists={artists}></ArtistsRow>
-      <ArtistsRow artists={artists}></ArtistsRow>
+      {artistGroups.map((artists, i: number) => {
+        return <ArtistsRow key={i} artists={artists}></ArtistsRow>;
+      })}
     </div>
   );
 }
@@ -22,9 +23,14 @@ export default function artists({ artists }: Props) {
 export async function getStaticProps() {
   const artists = await getArtistsPageData(prisma);
 
+  //with two rows
+  const midPoint: number = Math.floor(artists.length / 2);
+  const groupOne = artists.slice(0, midPoint);
+  const groupTwo = artists.slice(midPoint, artists.length);
+
   return {
     props: {
-      artists,
+      artistGroups: [groupOne, groupTwo],
     },
     revalidate: 60,
   };

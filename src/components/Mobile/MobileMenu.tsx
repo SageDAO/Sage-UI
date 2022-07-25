@@ -8,6 +8,7 @@ import { useGetUserQuery } from '@/store/usersReducer';
 import Wallet from '@/components/Wallet';
 import { useRouter } from 'next/router';
 import useWindowDimensions from '@/hooks/useWindowSize';
+import Socials from '@/components/Socials';
 
 interface Props extends ModalProps {}
 
@@ -60,14 +61,13 @@ export default function MobileMenu({ isOpen, closeModal }: Props) {
         })}
       </section>
       <section className='mobile-menu__user'>
-        <h1 className='mobile-menu__user-personal-message'>
-          <PersonalizedMessage></PersonalizedMessage>
-        </h1>
       </section>
       <Wallet closeModal={closeModal}></Wallet>
       <section className='mobile-menu__socials'>
         <h1 className='mobile-menu__socials-header'>follow us on</h1>
-        <div className='mobile-menu__socials-icons'></div>
+        <div className='mobile-menu__socials-icons'>
+          <Socials></Socials>
+        </div>
       </section>
       <h1 className='mobile-menu__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h1>
     </div>

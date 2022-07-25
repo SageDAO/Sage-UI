@@ -1,9 +1,10 @@
+import useTheme from '@/hooks/useTheme';
 import Image from 'next/image';
-import { BaseMedia } from './Media';
 
 export default function Logotype() {
+  const { theme, toggleTheme } = useTheme();
   return (
-    <div className='sage-logotype'>
+    <div onClick={toggleTheme} className='sage-logotype'>
       <img
         className='sage-logotype__destroying-fakes'
         draggable={false}

@@ -19,7 +19,7 @@
   @include m.interact;
   transition-duration: 300ms;
   display: flex;
-  gap: 20px;
+  gap: clamp(10px, 1vw, 20px);
   align-items: center;
 }
 
@@ -28,7 +28,7 @@
     fill: red;
   }
   position: relative;
-  height: max(40px, 3vw);
+  height: clamp(20px, 2vw, 40px);
   aspect-ratio: 44.48/48;
 }
 

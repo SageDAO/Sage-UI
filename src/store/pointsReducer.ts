@@ -13,7 +13,7 @@ export const pointsApi = createApi({
     getEarnedPoints: builder.query<GetEarnedPointsResponse, void>({
       query: () => `points`,
     }),
-    getPointsBalance: builder.query<number, void>({
+    getPointsBalance: builder.query<string, void>({
       queryFn: async (_arg, { dispatch }, _extraOptions, fetchWithBQ) => {
         const { data } = await fetchWithBQ(`points`);
         const pointsEarned = BigInt((data as any).totalPointsEarned);
@@ -23,7 +23,7 @@ export const pointsApi = createApi({
         // as the balance is fresh from contract and database, release any escrow on hold
         dispatch(pointsApi.endpoints.releaseEscrowPoints.initiate());
         console.log(`getPointsBalance() :: ${pointsEarned} - ${pointsUsed} = ${pointsBalance}`);
-        return { data: Number(pointsBalance) };
+        return { data: Number(pointsBalance).toFixed(2) };
       },
       providesTags: ['UserPoints'],
     }),

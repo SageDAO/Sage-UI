@@ -93,8 +93,8 @@
   flex-direction: row;
   align-items: flex-start;
   max-width: 80vw;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  margin-left: auto;
+  margin-right: auto;
   flex: 1;
   gap: clamp(20px, 5vw, 160px);
   flex-wrap: wrap;
@@ -197,6 +197,7 @@
   flex: 1;
   flex-direction: column;
   gap: 45px;
+	max-width: 851px;
   // background-color: brown;
 }
 

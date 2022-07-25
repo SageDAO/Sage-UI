@@ -18,7 +18,7 @@ export default function Balances() {
       </div>
       <div className='profile-page__balances-token'>
         <h1 className='profile-page__balances-token-value'>
-          {Number(walletBalance?.formatted).toFixed(4)}{' '}
+          {Number(walletBalance?.formatted).toFixed(4)}
         </h1>
         <h1 className='profile-page__balances-points-label'>your ash balance</h1>
       </div>

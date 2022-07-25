@@ -11,24 +11,24 @@ export default function Footer() {
       </div>
       <div className='footer__middle'>
         <ul className='footer__middle-item'>
-          <li className='footer__middle-item-header'>contact sage</li>
-          <li className='footer__middle-item-content'>
-            <li className='footer__middle-item-content-link'>apply for artists</li>
-            <li className='footer__middle-item-content-link'>business inquiry</li>
-            <li className='footer__middle-item-content-link'>support</li>
-          </li>
+          <div className='footer__middle-item-header'>contact sage</div>
+          <div className='footer__middle-item-content'>
+            <h1 className='footer__middle-item-content-link'>apply for artists</h1>
+            <h1 className='footer__middle-item-content-link'>business inquiry</h1>
+            <h1 className='footer__middle-item-content-link'>support</h1>
+          </div>
         </ul>
         <ul className='footer__middle-item'>
-          <li className='footer__middle-item-header'>token + lp</li>
-          <li className='footer__middle-item-content'>
-            <li className='footer__middle-item-content-link'>how to buy ash</li>
-          </li>
+          <div className='footer__middle-item-header'>token + lp</div>
+          <div className='footer__middle-item-content'>
+            <div className='footer__middle-item-content-link'>how to buy ash</div>
+          </div>
         </ul>
         <ul className='footer__follow'>
-          <li className='footer__middle-item-header'>follow us on</li>
-          <li className='footer__middle-item-content'>
+          <div className='footer__middle-item-header'>follow us on</div>
+          <div className='footer__middle-item-content'>
             <Socials></Socials>
-          </li>
+          </div>
         </ul>
       </div>
       <div className='footer__bottom'>

@@ -18,19 +18,10 @@ $indent: max(1em, 10vw);
     color: m.t('contrast');
   }
 
-  @include b.min-width(medium) {
-    &::-webkit-scrollbar {
-      width: 10px;
-      background: transparent;
-    }
+  @include m.no-scrollbar;
 
-    &::-webkit-scrollbar-thumb {
-      border-radius: 999px;
-      @include m.theme() {
-        background-color: m.t('accent');
-        color: m.t('contrast');
-      }
-    }
+  @include b.min-width(medium) {
+    @include m.custom-scrollbar;
   }
 }
 

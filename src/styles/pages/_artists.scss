@@ -3,7 +3,7 @@
 @use '@/styles/abstracts/breakpoints' as b;
 .artists-page {
   @include m.page;
-  gap: 30px;
+  gap: clamp(7px, 0.5vw, 30px);
   width: 100%;
   align-items: center;
 }
@@ -94,7 +94,7 @@
   flex-direction: column;
   padding: 10px 0;
   gap: 10px;
-		flex: 1;
+  flex: 1;
   // aspect-ratio: 466/336;
 }
 
@@ -113,5 +113,6 @@
   font-style: normal;
   font-weight: 400;
   font-size: clamp(10px, 1vw, 16px);
+  overflow: clip;
   line-height: 130%;
 }
