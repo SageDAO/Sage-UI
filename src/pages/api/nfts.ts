@@ -3,14 +3,14 @@ import prisma from '@/prisma/client';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
-    query: { action, address, id },
+    query: { action },
   } = request;
   switch (action) {
     case 'GetArtistNfts':
-      await getArtistNfts(address as string, response);
+      await getArtistNfts(request.query.address as string, response);
       break;
     case 'UpdateOwner':
-      await updateOwner(Number(id), address as string, response);
+      await updateOwner(Number(request.body.id), request.body.address as string, response);
       break;
     default:
       response.status(500);
