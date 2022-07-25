@@ -7,6 +7,7 @@ interface State {
   file: File | null;
   title: string;
   description: string;
+  price: string;
   preview: string;
 }
 
@@ -14,7 +15,8 @@ const INITIAL_STATE: State = {
   file: null,
   title: '',
   description: '',
-  preview: '/',
+  price: '',
+  preview: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
 };
 
 export default function CreationsPanel() {
@@ -28,7 +30,7 @@ export default function CreationsPanel() {
 
   function handleDescriptionInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setState((prevState) => {
-      return { ...prevState, description: e.target.value};
+      return { ...prevState, description: e.target.value };
     });
   }
 

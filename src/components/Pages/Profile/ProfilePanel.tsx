@@ -125,7 +125,7 @@ export default function ProfilePanel() {
       <div className='profile-panel__bio-group'>
         <h2 className='profile-panel__bio-label'>about section, max 400 characters</h2>
         <textarea
-          value={state.bio as string}
+          value={state.bio as string || ''}
           onChange={handleBioInput}
           className='profile-panel__bio-field'
         />

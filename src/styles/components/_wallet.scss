@@ -219,7 +219,7 @@
 
 .wallet__utils-section {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   gap: clamp(30px, 5vw, 100px);
   justify-content: center;
 }

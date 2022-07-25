@@ -46,6 +46,7 @@ export const lotteriesApi = createApi({
     }),
     buyTickets: builder.mutation<boolean, BuyTicketRequest>({
       queryFn: async (buyRequest, { dispatch }) => {
+        console.log(`buyTickets(${buyRequest.lotteryId})`);
         const usePoints = Boolean(buyRequest.ticketCostPoints > 0);
         try {
           if (usePoints) {
