@@ -1,9 +1,9 @@
 import { LotteryWithNftsAndArtist } from '@/prisma/types';
 import type { GetEarnedPointsResponse } from '@/api/points';
-import { extractErrorMessage, getLotteryContract } from '@/utilities/contracts';
+import { approveLotteryERC20Transfer, extractErrorMessage, getLotteryContract } from '@/utilities/contracts';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ContractTransaction, Signer } from 'ethers';
+import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { pointsApi } from './pointsReducer';
 
@@ -47,6 +47,20 @@ export const lotteriesApi = createApi({
     buyTickets: builder.mutation<boolean, BuyTicketRequest>({
       queryFn: async (buyRequest, { dispatch }) => {
         console.log(`buyTickets(${buyRequest.lotteryId})`);
+
+        try {
+          const purchaseCost = BigNumber.from(buyRequest.numberOfTickets).mul(buyRequest.ticketCostCoins);
+          console.log(`buyTickets() :: Cost = ${purchaseCost}`);
+          const lotteryContract = await getLotteryContract(buyRequest.signer);
+          const tokenAddress = await lotteryContract.token();
+          await approveLotteryERC20Transfer(tokenAddress, buyRequest.signer, purchaseCost);
+        } catch (e) {
+          console.error(e);
+          toast.error(`Error approving transfer`);
+          playErrorSound();
+          return { data: false };
+        }
+
         const usePoints = Boolean(buyRequest.ticketCostPoints > 0);
         try {
           if (usePoints) {

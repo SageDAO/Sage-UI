@@ -166,6 +166,29 @@ export async function approveMarketplaceERC20Transfer(erc20Address: string, sign
   }
 }
 
+export async function approveLotteryERC20Transfer(erc20Address: string, signer: Signer, amount: BigNumber) {
+  const erc20Contract = new ethers.Contract(
+    erc20Address,
+    ERC20StandardJson.abi,
+    signer
+  ) as ERC20Contract;
+  console.log(`approveLotteryERC20Transfer(${erc20Address}, ${await signer.getAddress()}, ${amount})`)
+  const wallet = await signer.getAddress();
+  const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, LOTTERY_ADDRESS);
+  console.log(
+    `approveLotteryERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
+  );
+  if (allowance.lt(amount)) {
+    var tx = await erc20Contract.approve(LOTTERY_ADDRESS, ethers.constants.MaxUint256);
+    toast.promise(tx.wait(), {
+      pending: 'Approval submitted to the blockchain, awaiting confirmation...',
+      success: `Approved! Preparing transaction...`,
+      error: 'Failure! Unable to complete request.',
+    });
+    await tx.wait(1);
+  }
+}
+
 /**
  * This function is called server-side so winner can't be spoofed
  */
