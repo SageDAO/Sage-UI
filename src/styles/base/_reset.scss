@@ -27,6 +27,19 @@ input[type='file']::file-selector-button {
   display: none;
 }
 
+
+//hide arrows for number inputs
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 body {
   overflow: hidden;
 }

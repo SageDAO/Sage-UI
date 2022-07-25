@@ -2,15 +2,13 @@ import { parameters } from '../constants/config';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { PrismaClient, Prisma, Role } from '@prisma/client';
 
-const { LOTTERY_ADDRESS, AUCTION_ADDRESS } = parameters;
-
 const FilterDropApprovedOnly: Prisma.DropWhereInput = {
   approvedAt: { not: null },
 };
 
 const FilterDropContractValidation: Prisma.DropWhereInput = {
-  Lotteries: { every: { contractAddress: { not: null, equals: LOTTERY_ADDRESS } } },
-  Auctions: { every: { contractAddress: { not: null, equals: AUCTION_ADDRESS } } },
+  Lotteries: { every: { contractAddress: { not: null, equals: parameters.LOTTERY_ADDRESS } } },
+  Auctions: { every: { contractAddress: { not: null, equals: parameters.AUCTION_ADDRESS } } },
 };
 
 const FilterUserIsArtist: Prisma.UserWhereInput = {

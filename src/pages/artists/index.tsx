@@ -14,7 +14,17 @@ export default function artists({ artistGroups }: Props) {
         <Logotype />
       </div>
       {artistGroups.map((artists, i: number) => {
-        return <ArtistsRow key={i} artists={artists}></ArtistsRow>;
+        let shouldStartAsymmetric: boolean = false;
+        if (i % 2 !== 0) {
+          shouldStartAsymmetric = true;
+        }
+        return (
+          <ArtistsRow
+            key={i}
+            shouldStartAsymmetric={shouldStartAsymmetric}
+            artists={artists}
+          ></ArtistsRow>
+        );
       })}
     </div>
   );

@@ -17,8 +17,9 @@
   gap: 1vw;
   display: flex;
   padding-top: 10px;
-  overflow: auto;
 
+  overflow-x: auto;
+  overflow-y: hidden;
   &::-webkit-scrollbar {
     height: 0px;
   }
@@ -93,26 +94,26 @@
   display: flex;
   flex-direction: column;
   padding: 10px 0;
-  gap: 10px;
   flex: 1;
+  gap: 10px;
   // aspect-ratio: 466/336;
 }
 
 .artists-page__item-content-header {
-  margin: 0px 20px 0px;
+  margin: 0px 10px 0px;
   font-style: normal;
   font-weight: 400;
-  font-size: 40px;
-  line-height: 51px;
+  font-size: clamp(16px, 1.2vw, 40px);
+  line-height: clamp(24px, 1em, 51px);
 }
 
 .artists-page__item-content-description {
   color: inherit;
-  margin: 0px 20px;
+  margin: 0px 10px;
   text-overflow: ellipsis;
   font-style: normal;
   font-weight: 400;
-  font-size: clamp(10px, 1vw, 16px);
+  font-size: clamp(8px, 0.9vw, 16px);
   overflow: clip;
   line-height: 130%;
 }

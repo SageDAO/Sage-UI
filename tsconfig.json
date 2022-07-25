@@ -13,7 +13,8 @@
       "@/types/*": ["./types/*"],
       "@/animations/*": ["./src/animations/*"],
       "@/hooks/*": ["./src/hooks/*"],
-      "@/api/*": ["./src/pages/api/*"]
+      "@/api/*": ["./src/pages/api/*"],
+      "@/public/*": ["./public/*"]
     },
     "types": ["node", "mocha", "chai"],
     "allowJs": false,

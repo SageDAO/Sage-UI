@@ -23,9 +23,6 @@
   top: 0px;
   border: 2px solid transparent;
   // box-sizing: border-box;
-  &[data-selected='true'] {
-    border: 2px solid c.$white;
-  }
 }
 
 @mixin arrow {

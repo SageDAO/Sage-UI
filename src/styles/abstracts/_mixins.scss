@@ -33,10 +33,9 @@
 }
 
 @mixin page {
-  padding: 97px 0 0;
   width: 100vw;
-  align-items: center;
   flex: 1;
+  padding: 97px 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -102,6 +101,8 @@ $themes: (
     accent: $gold,
     contrast2: $light,
     contrast: $white,
+    filter-base: invert(100%) sepia(42%) saturate(228%) hue-rotate(47deg) brightness(119%)
+      contrast(100%),
   ),
   light: (
     base: $white,
@@ -109,6 +110,8 @@ $themes: (
     accent: $red,
     contrast2: $dark,
     contrast: $black,
+    filter-base: invert(100%) sepia(42%) saturate(228%) hue-rotate(47deg) brightness(119%)
+      contrast(100%),
   ),
 );
 
