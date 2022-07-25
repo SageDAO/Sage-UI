@@ -24,7 +24,6 @@ export default function CollectionTile({ item }: Props) {
       await claimLotteryPrize({
         lotteryId: prize.lotteryId,
         nftId: prize.nftId,
-        ticketNumber: prize.lotteryTicketNumber,
         proof: prize.lotteryProof,
         walletAddress: sessionData?.address,
         signer: signer as Signer,

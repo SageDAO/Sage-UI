@@ -70,7 +70,6 @@ export interface GamePrize {
   dropId: number;
   auctionId?: number;
   lotteryId?: number;
-  lotteryTicketNumber?: number;
   lotteryProof?: string;
   nftName: string;
   artistUsername: string;

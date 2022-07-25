@@ -9,7 +9,6 @@ function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
     nftId: dbPrize.nftId,
     dropId: dbPrize.Nft.Lottery?.Drop.id!,
     lotteryId: dbPrize.Nft.Lottery?.id!,
-    lotteryTicketNumber: dbPrize.ticketNumber,
     lotteryProof: dbPrize.proof,
     nftName: dbPrize.Nft.name,
     artistUsername: dbPrize.Nft.Lottery?.Drop.NftContract.Artist.username!,
@@ -24,7 +23,7 @@ function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
 export default async function (request: NextApiRequest, response: NextApiResponse) {
   const {
     query: { action, lotteryId },
-    body: { winnerAddress, nftId, ticketNumber },
+    body: { winnerAddress, nftId },
   } = request;
   const session = await getSession({ req: request });
   const { address: walletAddress } = session!;
@@ -42,7 +41,7 @@ export default async function (request: NextApiRequest, response: NextApiRespons
       await getPrizesByUserAndLottery(Number(lotteryId), walletAddress as string, response);
       break;
     case 'UpdatePrizeClaimedDate':
-      await updatePrizeClaimedDate(Number(lotteryId), winnerAddress, nftId, ticketNumber, response);
+      await updatePrizeClaimedDate(Number(lotteryId), winnerAddress, nftId, response);
       break;
     case 'GetPrizesStats':
       await getPrizesStats(response);
@@ -225,18 +224,16 @@ async function updatePrizeClaimedDate(
   lotteryId: number,
   winnerAddress: string,
   nftId: number,
-  ticketNumber: number,
   response: NextApiResponse
 ) {
   let now = new Date();
   try {
     await prisma.prizeProof.update({
       where: {
-        lotteryId_winnerAddress_nftId_ticketNumber: {
+        lotteryId_winnerAddress_nftId: {
           winnerAddress,
           lotteryId,
           nftId,
-          ticketNumber,
         },
       },
       data: {

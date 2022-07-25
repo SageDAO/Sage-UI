@@ -1,7 +1,6 @@
 import useModal from '@/hooks/useModal';
 import { useSession } from 'next-auth/react';
 import AccountModal from '@/components/Modals/AccountModal';
-import { useState } from 'react';
 import { useAccount } from 'wagmi';
 
 export default function Connect() {
@@ -11,7 +10,6 @@ export default function Connect() {
     openModal: openAccountModal,
   } = useModal();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { status: sessionStatus } = useSession();
   const { data: accountData } = useAccount();
   let buttonText: string = 'connect';
@@ -31,9 +29,7 @@ export default function Connect() {
       {buttonText}
       <AccountModal
         isOpen={isAccountModalOpen}
-        isLoading={isLoading}
         closeModal={closeAccountModal}
-        setIsLoading={setIsLoading}
       />
     </button>
   );

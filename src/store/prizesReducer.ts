@@ -8,7 +8,6 @@ import { playErrorSound, playPrizeClaimedSound } from '../utilities/sounds';
 export interface ClaimPrizeRequest {
   lotteryId: number;
   nftId: number;
-  ticketNumber: number;
   proof: string;
   walletAddress: string;
   signer: Signer;
@@ -41,7 +40,7 @@ export const prizesApi = createApi({
     }),
     claimLotteryPrize: builder.mutation<Date, ClaimPrizeRequest>({
       queryFn: async (
-        { lotteryId, nftId, ticketNumber, proof, walletAddress, signer },
+        { lotteryId, nftId, proof, walletAddress, signer },
         {},
         _extraOptions,
         _fetchWithBQ
@@ -65,8 +64,7 @@ export const prizesApi = createApi({
             _fetchWithBQ,
             lotteryId,
             walletAddress,
-            nftId,
-            ticketNumber
+            nftId
           );
         } catch (e) {
           console.log(e);
@@ -77,8 +75,7 @@ export const prizesApi = createApi({
               _fetchWithBQ,
               lotteryId,
               walletAddress,
-              nftId,
-              ticketNumber
+              nftId
             );
           } else {
             toast.error(`Failure! ${errMsg}`);
@@ -98,13 +95,12 @@ async function updateDbPrizeClaimedDate(
   fetchWithBQ: any,
   lotteryId: number,
   winnerAddress: string,
-  nftId: number,
-  ticketNumber: number
+  nftId: number
 ): Promise<Date> {
   const { data } = await fetchWithBQ({
     url: `prizes?action=UpdatePrizeClaimedDate&lotteryId=${lotteryId}`,
     method: 'POST',
-    body: { winnerAddress, nftId, ticketNumber },
+    body: { winnerAddress, nftId },
   });
   return (data as any).claimedAt as Date;
 }

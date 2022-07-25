@@ -16,7 +16,6 @@ export const useTicketCount = (drawings: Lottery[], walletAddress: string) => {
         lottery {
           id
         }
-        ticketNumber
         address
       }
     }

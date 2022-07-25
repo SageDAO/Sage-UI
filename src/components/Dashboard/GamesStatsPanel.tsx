@@ -16,7 +16,6 @@ const GAMES_QUERY = gql`
         id
         txnHash
         address
-        ticketNumber
       }
       claimedPrizes {
         id
@@ -64,11 +63,11 @@ export function GamesStatsPanel() {
 
   function downloadTickets(lotteryId: number) {
     const lotteryIdHexStr = '0x' + lotteryId.toString(16);
-    var filecontents = 'txnHash,wallet,ticketNumber';
+    var filecontents = 'txnHash,wallet';
     graphData.lotteries.forEach((lotto: any) => {
       if (lotteryIdHexStr == lotto.id) {
         lotto.tickets.forEach((item: any) => {
-          filecontents += `\n${item.txnHash},${item.address},${item.ticketNumber}`;
+          filecontents += `\n${item.txnHash},${item.address}`;
         });
       }
     });
