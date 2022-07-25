@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
 import { User } from '@prisma/client';
@@ -11,6 +11,7 @@ import Modal, { Props as ModalProps } from '@/components/Modals';
 import Image from 'next/image';
 import { BaseMedia } from '@/components/Media';
 import System, { SystemTypes } from '@/components/Icons/System';
+import LotterySlider from '@/components/Games/LotterySlider';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -22,7 +23,8 @@ interface Props extends ModalProps {
 function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props) {
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const { data: sessionData } = useSession();
-  const [buyTickets, { isLoading }] = useBuyTicketsMutation();
+  const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0);
+  const [buyTickets, { isLoading: isBuyTicketsLoading }] = useBuyTicketsMutation();
   const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, {
     skip: !sessionData,
   });
@@ -30,7 +32,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   //ui event handlers
   function handleTicketSubClick() {
-    if (desiredTicketAmount == 0) {
+    if (desiredTicketAmount - 1 < 1) {
       return;
     }
     setDesiredTicketAmount((prevState) => prevState - 1);
@@ -45,11 +47,11 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
 
   function handleTicketInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = +e.target.value;
-
     if (val > lottery.maxTicketsPerUser && lottery.maxTicketsPerUser !== 0) {
       e.currentTarget.value = String(lottery.maxTicketsPerUser);
       setDesiredTicketAmount(lottery.maxTicketsPerUser);
     }
+  
     setDesiredTicketAmount(+e.target.value);
   }
 
@@ -95,12 +97,24 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
-            <BaseMedia src={lottery.Nfts[0].s3Path} />
+            {systemType === 'lotteries' ? (
+              <LotterySlider
+                nfts={lottery.Nfts}
+                selectedNftIndex={selectedNftIndex}
+                setSelectedNftIndex={setSelectedNftIndex}
+              ></LotterySlider>
+            ) : (
+              <BaseMedia src={lottery.Nfts[selectedNftIndex].s3Path} />
+            )}
           </div>
           <div className='games-modal__main-content'>
-            <h1 className='games-modal__drop-name'>{dropName}</h1>
-            <h1 className='games-modal__game-name'>{lottery.Nfts[0].name}</h1>
-            <p className='games-modal__game-name'>{lottery.Nfts[0].description}</p>
+            <h1 className='games-modal__drop-name'>
+              {dropName} by {artist.displayName}
+            </h1>
+            <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
+            <p className='games-modal__game-description'>
+              {lottery.Nfts[selectedNftIndex].description}
+            </p>
             <div className='games-modal__system'>
               <div className='games-modal__system-icon-container'>
                 <System type={systemType}></System>
@@ -123,6 +137,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
               <input
                 type='number'
                 onChange={handleTicketInputChange}
+                min={1}
                 className='games-modal__tickets-input'
                 value={desiredTicketAmount}
               />
@@ -130,7 +145,11 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
                 <BaseMedia src='/icons/plus.svg'></BaseMedia>
               </div>
             </div>
-            <button onClick={handleBuyTicketClick} className='games-modal__buy-tickets-button'>
+            <button
+              disabled={isBuyTicketsLoading}
+              onClick={handleBuyTicketClick}
+              className='games-modal__buy-tickets-button'
+            >
               Buy Tickets
             </button>
           </div>

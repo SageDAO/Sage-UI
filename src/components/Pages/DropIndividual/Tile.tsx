@@ -4,6 +4,7 @@ import { BaseMedia } from '@/components/Media';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
+import LotteryThumbnail from './LotteryThumbnail';
 
 interface Props {
   imgSrc: string;
@@ -83,7 +84,11 @@ export default function Tile({
         </div>
       </div>
       <div className='drop-page__grid-item-img'>
-        <BaseMedia src={imgSrc}></BaseMedia>
+        {lottery && lottery?.Nfts.length > 1 ? (
+          <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
+        ) : (
+          <BaseMedia src={imgSrc}></BaseMedia>
+        )}
         <div className='drop-page__grid-item-focus'>{focusText}</div>
       </div>
       <div className='drop-page__grid-item-info'>
