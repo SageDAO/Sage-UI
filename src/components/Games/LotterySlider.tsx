@@ -29,7 +29,7 @@ export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIn
   };
 
   useEffect(() => {
-	console.log('useEffect()')
+    console.log('useEffect()');
     const nftId = nfts[selectedNftIndex].id;
     refs[nftId].current.scrollIntoView({ behavior: 'smooth', alignToTop: false });
   }, [handleRightArrowClick, handleLeftArrowClick]);
@@ -53,9 +53,8 @@ export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIn
         <Image src='/interactive/arrow-left.svg' width={30} height={30}></Image>
       </div>
       <div onClick={handleRightArrowClick} className='lottery-slider__right'>
-
         <Image src='/interactive/arrow-right.svg' width={30} height={30}></Image>
-			</div>
+      </div>
     </div>
   );
 }

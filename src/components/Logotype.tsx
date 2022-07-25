@@ -1,5 +1,6 @@
 import useTheme from '@/hooks/useTheme';
 import Image from 'next/image';
+import LogotypeSVG from '../../public/branding/sage-logotype.svg';
 
 export default function Logotype() {
   const { theme, toggleTheme } = useTheme();
@@ -10,7 +11,7 @@ export default function Logotype() {
         draggable={false}
         src='/branding/destroying-fakes.svg'
       ></img>
-      <Image src='/branding/sage-logotype.svg' layout='fill' className='sage-logotype__src' />
+      <LogotypeSVG className='sage-logotype__svg' currentColor='red' />
     </div>
   );
 }
