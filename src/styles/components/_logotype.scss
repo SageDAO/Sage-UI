@@ -3,23 +3,46 @@
   @include m.noselect;
   overflow: visible;
   position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
   aspect-ratio: 1196/384;
+}
+
+.sage-logotype__side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  justify-content: center;
+  gap: 5px;
+  left: -12px;
+  transform: translateX(-100%);
+  height: 110%;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
 }
 
 .sage-logotype__src {
   position: absolute;
 }
 
-.sage-logotype__destroying-fakes {
-  height: 100%;
-  position: absolute;
-  transform: translateX(-10%);
-  left: -5%;
+.sage-logotype__motto {
+  flex: 1;
+}
+
+.sage-logotype__sage-icon {
+  width: clamp(10px, 1vw, 30px);
+  @include m.theme() {
+    color: m.t(contrast);
+  }
 }
 
 .sage-logotype__svg {
-  width: 100%;
+  flex: 1;
   height: 100%;
-
+  @include m.theme() {
+    color: m.t(contrast);
+  }
 }

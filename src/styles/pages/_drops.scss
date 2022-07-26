@@ -155,11 +155,12 @@
 .drops-page__drop-content-systems-icon {
   position: relative;
   backdrop-filter: invert(1);
-  width: clamp(10px, 4vw, 30px);
+  // width: clamp(10px, 4vw, 30px);
+  display: flex;
   aspect-ratio: 1/1;
-  @include m.theme() {
-    background-color: m.t(accent);
-  }
+  // @include m.theme() {
+  //   background-color: m.t(accent);
+  // }
 }
 
 .drops-page__drop-content-description {

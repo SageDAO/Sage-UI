@@ -1,31 +1,26 @@
-import { BaseMedia } from '@/components/Media';
+import Discord from '@/public/socials/discord.svg';
+import Twitter from '@/public/socials/twitter.svg';
+import Medium from '@/public/socials/medium.svg';
+import Opensea from '@/public/socials/opensea.svg';
+import Uniswap from '@/public/socials/uniswap.svg';
+import CMU from '@/public/socials/cmu.svg';
+
+import React from 'react';
 
 interface SocialLink {
-  icon: string;
+  icon: any;
   link: string;
 }
-
-const SOCIAL_LINKS: SocialLink[] = [
-  { icon: '/telegram.svg', link: '' },
-  { icon: '/discord.svg', link: '' },
-  { icon: '/opensea.svg', link: '' },
-  { icon: '/medium.svg', link: '' },
-  { icon: '/insta.svg', link: '' },
-  { icon: '/twitter.svg', link: '' },
-  { icon: '/uniswap.svg', link: '' },
-];
 
 export default function Socials() {
   return (
     <div className='socials'>
-      {SOCIAL_LINKS.map(({ icon, link }: SocialLink) => {
-        const src = '/socials' + icon;
-        return (
-          <div key={icon} className='socials__icon'>
-            <BaseMedia src={src} isVideo={false}></BaseMedia>
-          </div>
-        );
-      })}
+      <Discord className='socials__icon' />
+      <Twitter className='socials__icon' />
+      <Medium className='socials__icon' />
+      <Uniswap className='socials__icon' />
+      <Opensea className='socials__icon' />
+      <CMU className='socials__icon' />
     </div>
   );
 }

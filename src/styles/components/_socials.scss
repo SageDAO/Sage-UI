@@ -6,9 +6,9 @@
 }
 
 .socials__icon {
-  box-sizing: border-box;
   @include m.interact;
-  position: relative;
-  height: 18px;
-	aspect-ratio: 1/1;
+  @include m.theme() {
+		color: m.t(contrast);
+  }
+	padding: 4px;
 }

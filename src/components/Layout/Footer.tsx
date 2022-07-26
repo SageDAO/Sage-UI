@@ -1,4 +1,4 @@
-import { BaseMedia } from '@/components/Media';
+import SageLogo from '@/public/branding/sage-full-logo.svg';
 import Socials from '@/components/Socials';
 import Image from 'next/image';
 export default function Footer() {
@@ -6,7 +6,7 @@ export default function Footer() {
     <div className='footer' data-cy='footer'>
       <div className='footer__top'>
         <div className='footer__logo'>
-          <BaseMedia isVideo={false} src='/branding/footer-logo.svg' />
+          <SageLogo className='footer__logo-svg'></SageLogo>
         </div>
       </div>
       <div className='footer__middle'>

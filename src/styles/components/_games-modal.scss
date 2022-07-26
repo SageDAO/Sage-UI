@@ -143,10 +143,6 @@
   position: relative;
   height: 30px;
   width: 30px;
-
-  @include m.theme() {
-    background-color: m.t(accent);
-  }
 }
 
 .games-modal__system-info {

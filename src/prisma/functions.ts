@@ -26,7 +26,6 @@ export async function getHomePageData(prisma: PrismaClient) {
       Auctions: true,
     },
     where: {
-      ...FilterDropContractValidation,
       ...FilterDropApprovedOnly,
     },
     take: 4,
