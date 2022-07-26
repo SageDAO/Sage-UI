@@ -1,24 +1,24 @@
-import { BaseMedia } from '@/components/Media';
 import { Lottery_include_Nft } from '@/prisma/types';
+import { BaseMedia } from '@/components/Media';
 
 interface Props {
   lottery: Lottery_include_Nft;
 }
 export default function LotteryThumbnail({ lottery }: Props) {
+  const uniqueImages = new Set<string>();
+  for (const nft of lottery.Nfts) {
+    uniqueImages.add(nft.s3Path);
+  }
   return (
     <div
-      style={{ gridTemplateColumns: `repeat(${lottery.Nfts.length - 1} ,1fr)` }}
+      style={{ gridTemplateColumns: `repeat(${uniqueImages.size - 1}, 1fr)` }}
       className='lottery-thumbnail'
     >
-      {lottery.Nfts.map((nft) => {
+      {Array.from(uniqueImages).map((s3Path, i) => {
         return (
-            <div
-              key={nft.id}
-              data-item={`lottery-nft-${nft.id}`}
-              className='lottery-thumbnail__item'
-            >
-              <BaseMedia src={nft.s3Path}></BaseMedia>
-            </div>
+          <div key={i} data-item={`lottery-nft-${i}`} className='lottery-thumbnail__item'>
+            <BaseMedia src={s3Path}></BaseMedia>
+          </div>
         );
       })}
     </div>
