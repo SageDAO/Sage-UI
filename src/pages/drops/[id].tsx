@@ -1,6 +1,6 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
 import prisma from '@/prisma/client';
-import { Drop as DropType, Lottery, User } from '@prisma/client';
+import { Drop as DropType, Lottery, Nft, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
 import { useTicketCount } from '@/hooks/useTicketCount';
@@ -27,35 +27,40 @@ function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
   };
 }
 
-function computeEditionSize({
+function unique(array: any[], propertyName: string) {
+  return array.filter(
+    (e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i
+  );
+}
+
+function computeEditionSize(nfts: Nft[]) {
+  let editionSize = 0;
+  const uniqueImages = unique(nfts, 's3Path');
+  uniqueImages.forEach((nft) => { editionSize += nft.numberOfEditions });
+  return editionSize;
+}
+
+function computeDropEditionSize({
   drawings,
   auctions,
   lotteries,
 }: Pick<Props, 'drawings' | 'auctions' | 'lotteries'>) {
-  let editionSize: number = 0;
-
+  let dropEditionSize: number = 0;
   drawings.forEach((d) => {
-    d.Nfts.forEach((nft) => {
-      editionSize = editionSize + nft.numberOfEditions;
-    });
+    dropEditionSize += computeEditionSize(d.Nfts);
   });
-
   lotteries.forEach((l) => {
-    l.Nfts.forEach((nft) => {
-      editionSize = editionSize + nft.numberOfEditions;
-    });
+    dropEditionSize += computeEditionSize(l.Nfts);
   });
-
   auctions.forEach((a) => {
-    editionSize = editionSize + a.Nft.numberOfEditions;
+    dropEditionSize += computeEditionSize([a.Nft]);
   });
-
-  return editionSize;
+  return dropEditionSize;
 }
 
 export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
   const systems = computeDropSystems({ lotteries, auctions, drawings });
-  const editionSize = computeEditionSize({ lotteries, auctions, drawings });
+  const editionSize = computeDropEditionSize({ lotteries, auctions, drawings });
 
   return (
     <>
@@ -103,17 +108,13 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
         <section className='drop-page__content'>
           <div className='drop-page__grid'>
             {lotteries.map((l) => {
-              let editionSize: number = 0;
-              l.Nfts.forEach((nft) => {
-                editionSize = editionSize + nft.numberOfEditions;
-              });
               return (
                 <Tile
                   key={l.id}
                   imgSrc={l.Nfts[0].s3Path}
                   dropName={drop.name}
                   artist={artist}
-                  editionSize={editionSize}
+                  editionSize={computeEditionSize(l.Nfts)}
                   systemType='lotteries'
                   id={l.id}
                   lottery={l}

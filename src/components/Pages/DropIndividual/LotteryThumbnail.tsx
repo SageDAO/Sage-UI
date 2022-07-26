@@ -5,19 +5,21 @@ interface Props {
   lottery: Lottery_include_Nft;
 }
 export default function LotteryThumbnail({ lottery }: Props) {
-  const uniqueImages = new Set<string>();
-  for (const nft of lottery.Nfts) {
-    uniqueImages.add(nft.s3Path);
+  function unique(array: any[], propertyName: string) {
+    return array.filter(
+      (e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i
+    );
   }
+  const uniqueImages = unique(lottery.Nfts, 's3Path');
   return (
     <div
-      style={{ gridTemplateColumns: `repeat(${uniqueImages.size - 1}, 1fr)` }}
+      style={{ gridTemplateColumns: `repeat(${uniqueImages.length - 1}, 1fr)` }}
       className='lottery-thumbnail'
     >
-      {Array.from(uniqueImages).map((s3Path, i) => {
+      {uniqueImages.map((nft, i) => {
         return (
-          <div key={i} data-item={`lottery-nft-${i}`} className='lottery-thumbnail__item'>
-            <BaseMedia src={s3Path}></BaseMedia>
+          <div key={i} data-item={`lottery-nft-${nft.id}`} className='lottery-thumbnail__item'>
+            <BaseMedia src={nft.s3Path}></BaseMedia>
           </div>
         );
       })}

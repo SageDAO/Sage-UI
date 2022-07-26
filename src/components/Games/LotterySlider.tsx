@@ -11,15 +11,21 @@ interface Props {
 
 // src/styles/components/_lottery-slider.scss
 export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIndex }: Props) {
-  const refs = nfts.reduce((acc, value) => {
+
+  function unique(array: any[], propertyName: string) {
+    return array.filter(
+      (e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i
+    );
+  }
+  const uniqueImages = unique(nfts, 's3Path');
+
+  const refs = uniqueImages.reduce((acc, value) => {
     acc[value.id] = React.createRef();
     return acc;
   }, {});
 
   const handleRightArrowClick = () => {
-    console.log(selectedNftIndex);
-    console.log(nfts.length);
-    if (selectedNftIndex + 1 >= nfts.length) return;
+    if (selectedNftIndex + 1 >= uniqueImages.length) return;
     setSelectedNftIndex((prev) => prev + 1);
   };
 
@@ -30,13 +36,13 @@ export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIn
 
   useEffect(() => {
     console.log('useEffect()');
-    const nftId = nfts[selectedNftIndex].id;
+    const nftId = uniqueImages[selectedNftIndex].id;
     refs[nftId].current.scrollIntoView({ behavior: 'smooth', alignToTop: false });
   }, [handleRightArrowClick, handleLeftArrowClick]);
 
   return (
     <div className='lottery-slider'>
-      {nfts.map((nft: Nft, i: number) => {
+      {uniqueImages.map((nft: Nft, i: number) => {
         return (
           <div
             className='lottery-slider__slider-item'
