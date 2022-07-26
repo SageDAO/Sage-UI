@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ethers, Signer } from 'ethers';
+import { BigNumber, ethers, Signer } from 'ethers';
 import {
-  approveMarketplaceERC20Transfer,
+  approveERC20Transfer,
   getMarketplaceContract,
   getNFTContract,
   getNftFactoryContract,
@@ -129,7 +129,12 @@ export const nftsApi = createApi({
         const marketplaceContract = await getMarketplaceContract(signer);
         try {
           const tokenAddress = await marketplaceContract.token();
-          await approveMarketplaceERC20Transfer(tokenAddress, signer, price);
+          await approveERC20Transfer(
+            tokenAddress,
+            marketplaceContract.address,
+            BigNumber.from(price),
+            signer
+          );
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
@@ -137,7 +142,7 @@ export const nftsApi = createApi({
           return { data: false };
         }
         try {
-          console.log(`takeSellOffer(${artistContractAddress}, ${nftId})`)
+          console.log(`buySingleNft() :: takeSellOffer(${artistContractAddress}, ${nftId})`);
           const tx = await marketplaceContract.takeSellOffer(artistContractAddress, nftId);
           toast.promise(tx.wait(), {
             pending: 'Request submitted to the blockchain, awaiting confirmation...',

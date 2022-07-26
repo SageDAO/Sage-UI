@@ -1,6 +1,6 @@
 import { GamePrize } from '@/prisma/types';
 import {
-  approveAuctionERC20Transfer,
+  approveERC20Transfer,
   extractErrorMessage,
   getAuctionContract,
 } from '@/utilities/contracts';
@@ -61,7 +61,12 @@ export const auctionsApi = createApi({
         try {
           const auctionContract = await getAuctionContract(signer);
           const tokenAddress = await auctionContract.erc20();
-          await approveAuctionERC20Transfer(tokenAddress, signer, amount);
+          await approveERC20Transfer(
+            tokenAddress,
+            auctionContract.address,
+            BigNumber.from(amount),
+            signer
+          );
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
@@ -72,7 +77,7 @@ export const auctionsApi = createApi({
           const auctionContract = await getAuctionContract(signer);
           var tx = await auctionContract.bid(auctionId, weiValue);
           toast.promise(tx.wait(), {
-            pending: 'Request submitted to the blockchain, awaiting confirmation...',
+            pending: 'Bid submitted to the blockchain, awaiting confirmation...',
             success: `Success! You are now the highest bidder!`,
             error: 'Failure! Unable to complete request.',
           });
@@ -93,7 +98,7 @@ export const auctionsApi = createApi({
           const contract = await getAuctionContract(signer);
           var tx = await contract.settleAuction(id);
           toast.promise(tx.wait(), {
-            pending: 'Request submitted to the blockchain, awaiting confirmation...',
+            pending: 'Claim submitted to the blockchain, awaiting confirmation...',
             success: 'Success! NFT claimed and moved to your collection!',
             error: 'Failure! Unable to complete request.',
           });
@@ -140,9 +145,8 @@ export async function getAuctionContractState(auctionId: number) {
       timeExtension,
     };
   } catch (e) {
-    console.error('error getting auction contract state');
-    console.error(e);
-    throw new Error('error get auction state');
+    console.log(e);
+    throw new Error('Error fetching auction state');
   }
 }
 
@@ -160,15 +164,18 @@ async function setupBidListener(auctionId: number, newBidHandler: () => void) {
   console.log(`setupBidListener(${auctionId})`);
   const auctionContract = await getAuctionContract();
   if (auctionContract.listenerCount('BidPlaced') < 1) {
-    auctionContract.on('BidPlaced', (auctionId, newBidder, previousBidder, bidAmount, newEndTime) => {
-      console.log(
-        `Contract Event: BidPlaced(${auctionId}, ${newBidder}, ${previousBidder}, ${bidAmount}, ${newEndTime})`
-      );
-      toast.info(
-        `Auction ${auctionId} has a new higher bidder with a bid of ${bidAmount / 10 ** 18}`
-      );
-      newBidHandler();
-    });
+    auctionContract.on(
+      'BidPlaced',
+      (auctionId, newBidder, previousBidder, bidAmount, newEndTime) => {
+        console.log(
+          `Contract Event: BidPlaced(${auctionId}, ${newBidder}, ${previousBidder}, ${bidAmount}, ${newEndTime})`
+        );
+        toast.info(
+          `Auction ${auctionId} has a new higher bidder with a bid of ${bidAmount / 10 ** 18}`
+        );
+        newBidHandler();
+      }
+    );
   }
 }
 

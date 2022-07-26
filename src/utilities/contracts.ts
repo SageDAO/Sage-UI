@@ -1,4 +1,4 @@
-import { BigNumber, Contract, ethers, Signer, utils } from 'ethers';
+import { BigNumber, Contract, ethers, Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { parameters } from '@/constants/config';
 import RewardsJson from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
@@ -84,7 +84,11 @@ export async function getNftFactoryContract(signer?: Signer): Promise<NftFactory
 }
 
 export async function getMarketplaceContract(signer?: Signer): Promise<MarketplaceContract> {
-  return (await getContract(MARKETPLACE_ADDRESS, MarketplaceJson.abi, signer)) as MarketplaceContract;
+  return (await getContract(
+    MARKETPLACE_ADDRESS,
+    MarketplaceJson.abi,
+    signer
+  )) as MarketplaceContract;
 }
 
 async function getContract(address: string, abi: any, signer?: Signer) {
@@ -119,69 +123,26 @@ export async function getBlockchainTimestamp(): Promise<number> {
   return blockTimestamp;
 }
 
-export async function approveAuctionERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
+export async function approveERC20Transfer(
+  erc20Address: string,
+  dstContractAddress: string,
+  amount: BigNumber,
+  signer: Signer
+) {
   const erc20Contract = new ethers.Contract(
     erc20Address,
     ERC20StandardJson.abi,
     signer
   ) as ERC20Contract;
   const wallet = await signer.getAddress();
-  const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, AUCTION_ADDRESS);
+  const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, dstContractAddress);
   console.log(
-    `approveAuctionERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
-  );
-  const amountBN = BigNumber.from(utils.parseEther(String(amount)));
-  if (allowance.lt(amountBN)) {
-    var tx = await erc20Contract.approve(AUCTION_ADDRESS, ethers.constants.MaxUint256);
-    toast.promise(tx.wait(), {
-      pending: 'Approval submitted to the blockchain, awaiting confirmation...',
-      success: `Approved! Preparing bid...`,
-      error: 'Failure! Unable to complete request.',
-    });
-    await tx.wait();
-  }
-}
-
-export async function approveMarketplaceERC20Transfer(erc20Address: string, signer: Signer, amount: number) {
-  const erc20Contract = new ethers.Contract(
-    erc20Address,
-    ERC20StandardJson.abi,
-    signer
-  ) as ERC20Contract;
-  console.log(`approveMarketplaceERC20Transfer(${erc20Address}, ${await signer.getAddress()}, ${amount})`)
-  const wallet = await signer.getAddress();
-  const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, MARKETPLACE_ADDRESS);
-  console.log(
-    `approveMarketplaceERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
-  );
-  const amountBN = BigNumber.from(utils.parseEther(String(amount)));
-  if (allowance.lt(amountBN)) {
-    var tx = await erc20Contract.approve(MARKETPLACE_ADDRESS, ethers.constants.MaxUint256);
-    toast.promise(tx.wait(), {
-      pending: 'Approval submitted to the blockchain, awaiting confirmation...',
-      success: `Approved! Preparing marketplace transaction...`,
-      error: 'Failure! Unable to complete request.',
-    });
-    await tx.wait(1);
-  }
-}
-
-export async function approveLotteryERC20Transfer(erc20Address: string, signer: Signer, amount: BigNumber) {
-  const erc20Contract = new ethers.Contract(
-    erc20Address,
-    ERC20StandardJson.abi,
-    signer
-  ) as ERC20Contract;
-  console.log(`approveLotteryERC20Transfer(${erc20Address}, ${await signer.getAddress()}, ${amount})`)
-  const wallet = await signer.getAddress();
-  const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, LOTTERY_ADDRESS);
-  console.log(
-    `approveLotteryERC20Transfer() :: contract ${erc20Address} allowance for wallet ${wallet} is ${allowance}`
+    `approveERC20Transfer() :: ERC20 ${erc20Address} allowance of wallet ${wallet} for contract ${dstContractAddress} is ${allowance}`
   );
   if (allowance.lt(amount)) {
-    var tx = await erc20Contract.approve(LOTTERY_ADDRESS, ethers.constants.MaxUint256);
+    var tx = await erc20Contract.approve(dstContractAddress, ethers.constants.MaxUint256);
     toast.promise(tx.wait(), {
-      pending: 'Approval submitted to the blockchain, awaiting confirmation...',
+      pending: 'Token transfer approval submitted to the blockchain...',
       success: `Approved! Preparing transaction...`,
       error: 'Failure! Unable to complete request.',
     });

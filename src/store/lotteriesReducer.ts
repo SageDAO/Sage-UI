@@ -1,6 +1,10 @@
 import { LotteryWithNftsAndArtist } from '@/prisma/types';
 import type { GetEarnedPointsResponse } from '@/api/points';
-import { approveLotteryERC20Transfer, extractErrorMessage, getLotteryContract } from '@/utilities/contracts';
+import {
+  approveERC20Transfer,
+  extractErrorMessage,
+  getLotteryContract,
+} from '@/utilities/contracts';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
@@ -47,20 +51,25 @@ export const lotteriesApi = createApi({
     buyTickets: builder.mutation<boolean, BuyTicketRequest>({
       queryFn: async (buyRequest, { dispatch }) => {
         console.log(`buyTickets(${buyRequest.lotteryId})`);
-
         try {
-          const purchaseCost = BigNumber.from(buyRequest.numberOfTickets).mul(buyRequest.ticketCostCoins);
+          const purchaseCost = BigNumber.from(buyRequest.numberOfTickets).mul(
+            buyRequest.ticketCostCoins
+          );
           console.log(`buyTickets() :: Cost = ${purchaseCost}`);
           const lotteryContract = await getLotteryContract(buyRequest.signer);
           const tokenAddress = await lotteryContract.token();
-          await approveLotteryERC20Transfer(tokenAddress, buyRequest.signer, purchaseCost);
+          await approveERC20Transfer(
+            tokenAddress,
+            lotteryContract.address,
+            purchaseCost,
+            buyRequest.signer
+          );
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
           playErrorSound();
           return { data: false };
         }
-
         const usePoints = Boolean(buyRequest.ticketCostPoints > 0);
         try {
           if (usePoints) {
@@ -161,7 +170,7 @@ export async function setupTicketSoldListener(lotteryId: number, countUpdateCall
   console.log(`setupTicketSoldListener(${lotteryId})`);
   const contract = await getLotteryContract();
   if (!contract.listenerCount()) {
-    console.log('Adding contract listener for TicketSold event');
+    console.log('setupTicketSoldListener() :: Adding contract listener for TicketSold event');
     contract.on('TicketSold', (lotteryId, ticketNumber, participantAddress, tier) => {
       console.log(
         `Contract Event: TicketSold(${lotteryId}, ${ticketNumber}, ${participantAddress}, ${tier})`
