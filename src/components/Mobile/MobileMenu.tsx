@@ -1,10 +1,5 @@
-import useModal from '@/hooks/useModal';
-import Modal, { Props as ModalProps } from '@/components/Modals/index';
-import Image from 'next/image';
+import { Props as ModalProps } from '@/components/Modals/index';
 import Logotype from '@/components/Logotype';
-import PersonalizedMessage from '@/components/PersonalizedMessage';
-import { BaseMedia, PfpImage } from '@/components/Media';
-import { useGetUserQuery } from '@/store/usersReducer';
 import Wallet from '@/components/Wallet';
 import { useRouter } from 'next/router';
 import useWindowDimensions from '@/hooks/useWindowSize';
@@ -53,15 +48,21 @@ export default function MobileMenu({ isOpen, closeModal }: Props) {
             await router.push(l.url);
             closeModal();
           }
+
+          const isCurrent: boolean = router.pathname === l.url;
           return (
-            <div onClick={handleClick} className='mobile-menu__nav-item'>
+            <div
+              onClick={handleClick}
+              key={l.name}
+              data-is-current={isCurrent}
+              className='mobile-menu__nav-item'
+            >
               {l.name}
             </div>
           );
         })}
       </section>
-      <section className='mobile-menu__user'>
-      </section>
+      <section className='mobile-menu__user'></section>
       <Wallet closeModal={closeModal}></Wallet>
       <section className='mobile-menu__socials'>
         <h1 className='mobile-menu__socials-header'>follow us on</h1>

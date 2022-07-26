@@ -7,6 +7,8 @@ import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
 import GamesModalHeader from './GamesModalHeader';
 import Status from '@/components/Status';
+import SageFullLogo from '@/public/branding/sage-full-logo.svg';
+import CloseSVG from '@/public/interactive/close.svg';
 import { BaseMedia } from '@/components/Media';
 import Image from 'next/image';
 import System from '@/components/Icons/System';
@@ -96,12 +98,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
     <Modal isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
         <section className='games-modal__header'>
-          <div className='games-modal__sage-logo'>
-            <Image src={'/branding/sage-full-logo.svg'} width={170} height={40} />
-          </div>
-          <div onClick={closeModal} className='games-modal__close-button'>
-            <Image src='/interactive/close.svg' layout='fill'></Image>
-          </div>
+          <SageFullLogo className='games-modal__sage-logo' />
+          <CloseSVG onClick={closeModal} className='games-modal__close-button' />
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
@@ -109,7 +107,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
           </div>
           <div className='games-modal__main-content'>
             <div>
-              <h1 className='games-modal__drop-name'>{dropName} by {artist.displayName}</h1>
+              <h1 className='games-modal__drop-name'>
+                {dropName} by {artist.displayName}
+              </h1>
               <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
             </div>
             <p className='games-modal__game-description'>{auction.Nft.description}</p>
@@ -143,7 +143,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
               min={auctionState?.nextMinBid}
               value={state.desiredBidValue}
             />
-            <button disabled={isPlaceBidLoading} className='games-modal__place-bid-button' onClick={handlePlaceBidClick}>
+            <button
+              disabled={isPlaceBidLoading}
+              className='games-modal__place-bid-button'
+              onClick={handlePlaceBidClick}
+            >
               place bid
             </button>
           </div>

@@ -10,7 +10,8 @@ export default function PersonalizedMessage() {
   if (sessionStatus === 'authenticated') {
     return (
       <React.Fragment>
-        Welcome back! <UserHandle />
+        <span>welcome back! </span>
+        <UserHandle />
       </React.Fragment>
     );
   }

@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import SageFullLogo from '@/public/branding/sage-full-logo.svg';
+import CloseSVG from '@/public/interactive/close.svg';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
 import { User } from '@prisma/client';
@@ -12,6 +14,8 @@ import Image from 'next/image';
 import { BaseMedia } from '@/components/Media';
 import System, { SystemTypes } from '@/components/Icons/System';
 import LotterySlider from '@/components/Games/LotterySlider';
+import PlusSVG from '@/public/icons/plus.svg';
+import MinusSVG from '@/public/icons/minus.svg';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -51,7 +55,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
       e.currentTarget.value = String(lottery.maxTicketsPerUser);
       setDesiredTicketAmount(lottery.maxTicketsPerUser);
     }
-  
+
     setDesiredTicketAmount(+e.target.value);
   }
 
@@ -88,12 +92,8 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
     <Modal isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
         <section className='games-modal__header'>
-          <div className='games-modal__sage-logo'>
-            <Image src={'/branding/sage-full-logo.svg'} width={170} height={40} />
-          </div>
-          <div onClick={closeModal} className='games-modal__close-button'>
-            <Image src='/interactive/close.svg' layout='fill'></Image>
-          </div>
+          <SageFullLogo className='games-modal__sage-logo' />
+          <CloseSVG onClick={closeModal} className='games-modal__close-button' />
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
@@ -131,9 +131,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
               {lottery.costPerTicketTokens * desiredTicketAmount} PIXELS
             </h1>
             <div className='games-modal__tickets-controls'>
-              <div onClick={handleTicketSubClick} className='games-modal__tickets-sub'>
-                <BaseMedia src='/icons/minus.svg'></BaseMedia>
-              </div>
+              <MinusSVG onClick={handleTicketSubClick} className='games-modal__tickets-sub' />
               <input
                 type='number'
                 onChange={handleTicketInputChange}
@@ -141,9 +139,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
                 className='games-modal__tickets-input'
                 value={desiredTicketAmount}
               />
-              <div onClick={handleTicketAddClick} className='games-modal__tickets-add'>
-                <BaseMedia src='/icons/plus.svg'></BaseMedia>
-              </div>
+              <PlusSVG onClick={handleTicketAddClick} className='games-modal__tickets-add' />
             </div>
             <button
               disabled={isBuyTicketsLoading}

@@ -90,10 +90,6 @@
 }
 
 .drops-page__drop-header-countdown {
-  @include m.theme() {
-    color: m.t(accent);
-    border: 1px solid m.t(accent);
-  }
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,6 +103,15 @@
   line-height: 130%;
   text-align: center;
   letter-spacing: 0.1em;
+
+  @include m.theme() {
+    color: c.$white;
+    border: 1px solid c.$white;
+    &[data-status='Live'] {
+      color: m.t(accent);
+      border: 1px solid m.t(accent);
+    }
+  }
 }
 
 .drops-page__drop-content {
@@ -132,15 +137,14 @@
   line-height: 136.6%;
   text-align: center;
   letter-spacing: 0.35em;
-  background-color: c.$white;
-  color: c.$black;
-  border: 1px solid black;
-  text-transform: uppercase;
   width: min(345px, 20em);
   aspect-ratio: 345/50;
 
-  &[data-status='Live'] {
-    @include m.theme() {
+  @include m.theme {
+    color: c.$black;
+    background-color: c.$white;
+    &[data-status='Live'] {
+      color: m.t(base);
       background-color: m.t(accent);
     }
   }
@@ -155,7 +159,7 @@
 .drops-page__drop-content-systems-icon {
   position: relative;
   backdrop-filter: invert(1);
-  // width: clamp(10px, 4vw, 30px);
+  width: clamp(10px, 4vw, 30px);
   display: flex;
   aspect-ratio: 1/1;
   // @include m.theme() {

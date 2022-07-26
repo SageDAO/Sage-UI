@@ -61,13 +61,21 @@ export const usersApi = createApi({
         };
       },
     }),
-    updateUser: builder.mutation<User, SafeUserUpdate>({
-      query: (user) => {
-        return {
-          url: 'user',
-          method: 'PATCH',
-          body: { user },
-        };
+    updateUser: builder.mutation<boolean, SafeUserUpdate>({
+      queryFn: async (user, _api, _extraoptions, baseQuery) => {
+        try {
+          await baseQuery({
+            url: 'user',
+            method: 'PATCH',
+            body: { user },
+          });
+          return {
+            data: true,
+            status: 200,
+          };
+        } catch (e) {
+          return { data: false, status: 500 };
+        }
       },
       onQueryStarted: async (_user, { queryFulfilled }) => {
         toast.promise(queryFulfilled, {

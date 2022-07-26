@@ -12,6 +12,10 @@ import { PfpImage } from '@/components/Media';
 import Image from 'next/image';
 import Tile from '@/components/Pages/DropIndividual/Tile';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
+import TwitterSVG from '@/public/socials/twitter.svg';
+import MediumSVG from '@/public/socials/medium.svg';
+import InstagramSVG from '@/public/socials/insta.svg';
+import WebSVG from '@/public/socials/web.svg';
 
 interface Props {
   artist: User;
@@ -19,7 +23,15 @@ interface Props {
 
 export default function artist({ artist }: Props) {
   const { data: nfts } = useGetArtistNftsQuery(artist.walletAddress);
-  const artistSocials = [artist.mediumUsername, artist.twitterUsername, artist.instagramUsername];
+  const [buySingleNft] = useBuySingleNftMutation();
+  const { data: signer } = useSigner();
+  const handleBuyClick = async (artistContractAddress: string, nftId: number, price: number) => {
+    if (!signer) {
+      toast.info('Please Sign In before placing orders.');
+      return;
+    }
+    await buySingleNft({ artistContractAddress, nftId, price, signer });
+  };
 
   return (
     <div className='artist-page' data-cy='artist-page'>
@@ -33,18 +45,18 @@ export default function artist({ artist }: Props) {
           <div>
             <h1 className='artist-page__name'>{artist.displayName}</h1>
             <ul className='artist-page__socials'>
-              <li className='artist-page__socials-item'>
-                <Image layout='fill' src='/socials/twitter.svg'></Image>
-              </li>
-              <li className='artist-page__socials-item'>
-                <Image layout='fill' src='/socials/medium.svg'></Image>
-              </li>
-              <li className='artist-page__socials-item'>
-                <Image layout='fill' src='/socials/insta.svg'></Image>
-              </li>
-              <li className='artist-page__socials-item'>
-                <Image layout='fill' src='/socials/web.svg'></Image>
-              </li>
+              <div className='socials-item'>
+                <TwitterSVG className='artist-page__socials-svg' />
+              </div>
+              <div className='socials-item'>
+                <MediumSVG className='artist-page__socials-svg' />
+              </div>
+              <div className='socials-item'>
+                <InstagramSVG className='artist-page__socials-svg' />
+              </div>
+              <div className='socials-item'>
+                <WebSVG className='artist-page__socials-svg' />
+              </div>
             </ul>
           </div>
         </div>

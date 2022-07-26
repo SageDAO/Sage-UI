@@ -6,10 +6,11 @@ import { BaseMedia } from '@/components/Media';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';
-import { useRouter } from 'next/router';
 import { getIndividualDropsPagePaths, getIndividualDropsPageData } from '@/prisma/functions';
 import System, { computeDropSystems } from '@/components/Icons/System';
-import Tile from '@/components/Pages/DropIndividual/Tile';
+import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
+import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
+import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -109,44 +110,38 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           <div className='drop-page__grid'>
             {lotteries.map((l) => {
               return (
-                <Tile
+                <LotteryTile
                   key={l.id}
                   imgSrc={l.Nfts[0].s3Path}
                   dropName={drop.name}
                   artist={artist}
                   editionSize={computeEditionSize(l.Nfts)}
-                  systemType='lotteries'
-                  id={l.id}
                   lottery={l}
-                ></Tile>
+                />
               );
             })}
             {drawings.map((d) => {
               return (
-                <Tile
+                <DrawingTile
                   key={d.id}
                   imgSrc={d.Nfts[0].s3Path}
                   dropName={drop.name}
                   artist={artist}
                   editionSize={d.Nfts[0].numberOfEditions}
-                  systemType='drawings'
-                  id={d.id}
-                  lottery={d}
-                ></Tile>
+                  drawing={d}
+                />
               );
             })}
             {auctions.map((a) => {
               return (
-                <Tile
+                <AuctionTile
                   key={a.id}
                   imgSrc={a.Nft.s3Path}
                   dropName={drop.name}
                   artist={artist}
                   editionSize={a.Nft.numberOfEditions}
-                  systemType='auctions'
-                  id={a.id}
                   auction={a}
-                ></Tile>
+                />
               );
             })}
           </div>

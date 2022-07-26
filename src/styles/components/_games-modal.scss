@@ -46,15 +46,25 @@
 }
 
 .games-modal__sage-logo {
+  height: 30px;
+  display: flex;
+  justify-content: flex-start;
+  width: 110px;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
 }
 
 .games-modal__close-button {
-  position: relative;
   margin-left: auto;
-  height: 21px;
-  width: 21px;
-  aspect-ratio: 1/1;
+  overflow: visible;
+  position: relative;
+  height: 22px;
+  width: 22px;
   @include m.interact;
+  @include m.theme() {
+    color: m.t(accent);
+  }
 }
 
 .games-modal__body {
@@ -63,7 +73,6 @@
   flex-direction: column;
   align-items: center;
   gap: clamp(17px, 2vw, 40px);
-  align-items: stretch;
   padding-bottom: 160px;
 
   @include b.min-width('medium') {
@@ -247,6 +256,8 @@
 @mixin game-interact-button {
   margin-top: clamp(28px, 4vw, 67px);
   width: 100%;
+	margin-right: auto;
+	margin-left: auto;
   aspect-ratio: 397/65;
   max-width: 397px;
   font-style: normal;
@@ -341,10 +352,11 @@
 
 .games-modal__tickets-controls {
   display: flex;
+  max-width: 397px;
   gap: 11px;
 }
 
-@mixin tickets-amount-button {
+@mixin tickets-controls-button {
   width: 40px;
   height: 40px;
   border-radius: 100%;
@@ -359,6 +371,7 @@
   font-size: 24px;
   line-height: 169%;
   /* or 41px */
+	flex: 1;
 
   text-align: center;
   text-transform: uppercase;
@@ -373,9 +386,9 @@
 }
 
 .games-modal__tickets-add {
-  @include tickets-amount-button;
+  @include tickets-controls-button;
 }
 
 .games-modal__tickets-sub {
-  @include tickets-amount-button;
+  @include tickets-controls-button;
 }

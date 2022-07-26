@@ -39,20 +39,20 @@
 .nav__personal {
   position: absolute;
   left: 10vw;
-		top: -50%;
+  top: -50%;
 
   overflow: visible;
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 180px;
+  width: 280px;
 }
 
 .nav__personal-pfp-container {
   position: relative;
 
   width: 86px;
-		height: 86px;
+  height: 86px;
   border-radius: 100%;
   overflow: hidden;
 
@@ -73,7 +73,7 @@
   font-size: clamp(12px, 0.7vw, 18px);
   line-height: 100%;
   /* or 20px */
-		flex: 1;
+  flex: 1;
 
   letter-spacing: 0.1em;
 

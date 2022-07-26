@@ -21,7 +21,7 @@ const INITIAL_STATE: State = {
 
 export default function ProfilePanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
   const { data } = useGetUserQuery();
   const {
     isOpen: isProfilePicModalOpen,
@@ -125,12 +125,12 @@ export default function ProfilePanel() {
       <div className='profile-panel__bio-group'>
         <h2 className='profile-panel__bio-label'>about section, max 400 characters</h2>
         <textarea
-          value={state.bio as string || ''}
+          value={(state.bio as string) || ''}
           onChange={handleBioInput}
           className='profile-panel__bio-field'
         />
       </div>
-      <button type='submit' className='profile-panel__save-button'>
+      <button disabled={isLoading} type='submit' className='profile-panel__save-button'>
         save your changes
       </button>
     </form>

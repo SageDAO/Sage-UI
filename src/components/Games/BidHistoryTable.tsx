@@ -1,7 +1,6 @@
 import shortenAddress from '@/utilities/shortenAddress';
 import { gql, useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
-import { useState } from 'react';
 
 interface BidHistoryItem {
   bidder: string;
@@ -32,12 +31,10 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
   const {
     data: graphData,
     previousData,
-    loading: isLoading,
     startPolling,
   } = useQuery(BID_HISTORY_QUERY, {
     variables: { auctionId: auctionIdHexStr },
   });
-  console.log(graphData);
   if (!graphData || !graphData.auction || !graphData.auction.bids) return null;
   const sortedBids = sortBidHistory(graphData.auction.bids);
   startPolling(500);

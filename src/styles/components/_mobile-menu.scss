@@ -44,9 +44,10 @@ $menu-toggle-z: $menu-z + 1;
 }
 
 .mobile-menu__nav-item {
+  position: relative;
   padding: 8px 0;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -58,11 +59,26 @@ $menu-toggle-z: $menu-z + 1;
     @include m.interact() {
       background-color: m.t(base2);
     }
-  }
 
-  &[data-active='true'] {
+  
+
     &:after {
-      content: 'active';
+      transition-duration: 200ms;
+      opacity: 0;
+      content: '';
+      width: 10px;
+      height: 10px;
+      @include m.circle;
+      background-color: m.t(accent);
+      position: absolute;
+      transform: translateX(-100%);
+      left: -10px;
+    }
+
+    &[data-is-current='true'] {
+      &:after {
+        opacity: 1;
+      }
     }
   }
 }

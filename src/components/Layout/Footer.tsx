@@ -1,4 +1,5 @@
 import SageLogo from '@/public/branding/sage-full-logo.svg';
+import MottoSVG from '@/public/branding/motto.svg';
 import Socials from '@/components/Socials';
 import Image from 'next/image';
 export default function Footer() {
@@ -34,9 +35,7 @@ export default function Footer() {
       <div className='footer__bottom'>
         <h4 className='footer__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h4>
       </div>
-      <div className='footer__destroying-fakes'>
-        <Image draggable={false} src='/branding/destroying-fakes.svg' width={12} height={194} />
-      </div>
+      <MottoSVG className='footer__motto' />
     </div>
   );
 }

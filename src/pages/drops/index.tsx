@@ -3,7 +3,7 @@ import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import useDropDown from '@/hooks/useDropDown';
 import Logotype from '@/components/Logotype';
 import { BaseMedia } from '@/components/Media';
-import {  Lottery_include_Nft } from '@/prisma/types';
+import { Lottery_include_Nft } from '@/prisma/types';
 import prisma from '@/prisma/client';
 import Image from 'next/image';
 import Countdown from '@/components/Countdown';
@@ -73,7 +73,9 @@ function drops({ drops }: Props) {
                 <h1 className='drops-page__drop-header-title'>
                   {d.name} by {d.NftContract.Artist.displayName}
                 </h1>
-                <div className='drops-page__drop-header-countdown'>{counterDisplay}</div>
+                <div className='drops-page__drop-header-countdown' data-status={status}>
+                  {counterDisplay}
+                </div>
               </div>
               <Image
                 src={d.bannerImageS3Path}

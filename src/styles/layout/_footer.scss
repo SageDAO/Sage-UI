@@ -61,11 +61,16 @@
   text-transform: uppercase;
 }
 
-.footer__destroying-fakes {
+.footer__motto {
   position: absolute;
-  left: 3%;
+  left: clamp(14px, 1.5vw, 56px);
   top: 50%;
   transform: translateY(-50%);
+  @include m.theme() {
+    color: m.t(contrast);
+    width: 20px;
+    height: clamp(120px, 5vw, 200px);
+  }
 }
 
 .footer__middle-item-content-link {
