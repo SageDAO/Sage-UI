@@ -3,7 +3,7 @@ import LotterySVG from '@/public/icons/systems/lotteries.svg';
 import AuctionsSVG from '@/public/icons/systems/auctions.svg';
 import DrawingsSVG from '@/public/icons/systems/drawings.svg';
 
-export type SystemTypes = 'drawings' | 'auctions' | 'lotteries';
+export type SystemTypes = 'drawings' | 'auctions' | 'lotteries' | 'listings';
 
 type Games = {
   lotteries?: Lottery[];

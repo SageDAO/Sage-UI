@@ -5,6 +5,29 @@ import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import LotteryThumbnail from './LotteryThumbnail';
+import shortenAddress from '@/utilities/shortenAddress';
+import { useSigner } from 'wagmi';
+import { useBuySingleNftMutation } from '@/store/nftsReducer';
+import { toast } from 'react-toastify';
+
+function getGameDisplayInfo(systemType: Props['systemType']) {
+  let focusText: string = '';
+  let Modal: typeof GetTicketModal | typeof PlaceBidModal | null = null;
+
+  if (systemType === 'lotteries') {
+    focusText = 'enter lottery';
+    Modal = GetTicketModal;
+  }
+  if (systemType === 'drawings') {
+    focusText = 'enter drawing';
+    Modal = GetTicketModal;
+  }
+  if (systemType === 'auctions') {
+    focusText = 'place bid';
+    Modal = PlaceBidModal;
+  }
+  return { focusText, Modal };
+}
 
 interface Props {
   imgSrc: string;
@@ -15,28 +38,6 @@ interface Props {
   id: number;
   lottery?: Lottery_include_Nft;
   auction?: Auction_include_Nft;
-}
-
-function getGameDisplayInfo(systemType: Props['systemType']) {
-  let focusText: string = '';
-  let Modal: typeof GetTicketModal | typeof PlaceBidModal | null = null;
-
-  if (systemType === 'lotteries') {
-    focusText = 'enter lottery';
-    Modal = GetTicketModal;
-  }
-
-  if (systemType === 'drawings') {
-    focusText = 'enter drawing';
-    Modal = GetTicketModal;
-  }
-
-  if (systemType === 'auctions') {
-    focusText = 'place bid';
-    Modal = PlaceBidModal;
-  }
-
-  return { focusText, Modal };
 }
 
 export default function Tile({
@@ -56,12 +57,12 @@ export default function Tile({
   if (systemType === 'drawings' && lottery) {
     gameName = lottery.Nfts[0].name;
   }
-
   if (systemType === 'auctions' && auction) {
     gameName = auction.Nft.name;
   }
-  const { isOpen, openModal, closeModal } = useModal();
   const { focusText, Modal } = getGameDisplayInfo(systemType);
+  const { isOpen, openModal, closeModal } = useModal();
+
   return (
     <div className='drop-page__grid-item' onClick={openModal}>
       {Modal && (

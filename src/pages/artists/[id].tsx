@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import { Nft_include_NftContract } from '@/prisma/types';
 import { PfpImage } from '@/components/Media';
 import Image from 'next/image';
+import Tile from '@/components/Pages/DropIndividual/Tile';
+import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
 
 interface Props {
   artist: User;
@@ -17,16 +19,6 @@ interface Props {
 
 export default function artist({ artist }: Props) {
   const { data: nfts } = useGetArtistNftsQuery(artist.walletAddress);
-  const [buySingleNft] = useBuySingleNftMutation();
-  const { data: signer } = useSigner();
-  const handleBuyClick = async (artistContractAddress: string, nftId: number, price: number) => {
-    if (!signer) {
-      toast.info('Please Sign In before placing orders.');
-      return;
-    }
-    await buySingleNft({ artistContractAddress, nftId, price, signer });
-  };
-
   const artistSocials = [artist.mediumUsername, artist.twitterUsername, artist.instagramUsername];
 
   return (
@@ -59,29 +51,13 @@ export default function artist({ artist }: Props) {
         <button className='artist-page__connect'>connect</button>
       </div>
       <p className='artist-page__bio'>{artist.bio}</p>
-      {nfts &&
-        nfts.map((nft: Nft_include_NftContract, i: number) => (
-          <div style={{ textAlign: 'center' }} key={i}>
-            <img src={nft.s3Path} width={200} />
-            <br />"{nft.name}"<br />
-            {nft.ownerAddress && `owned by ${shortenAddress(nft.ownerAddress)}`}
-            {!nft.ownerAddress && (
-              <>
-                price: ${nft.price} ASH
-                <br />
-                <button
-                  onClick={() =>
-                    handleBuyClick(nft.NftContract?.contractAddress!, nft.id, nft.price!)
-                  }
-                >
-                  buy now
-                </button>
-              </>
-            )}
-            <br />
-            <br />
-          </div>
-        ))}
+
+      <section className='drop-page__content'>
+        <div className='drop-page__grid'>
+          {nfts &&
+            nfts.map((nft: Nft_include_NftContract, i: number) => <ListingTile key={i} nft={nft} artist={artist} />)}
+        </div>
+      </section>
     </div>
   );
 }

@@ -132,7 +132,7 @@ export const nftsApi = createApi({
           await approveERC20Transfer(
             tokenAddress,
             marketplaceContract.address,
-            BigNumber.from(price),
+            BigNumber.from(ethers.utils.parseEther(price.toString())),
             signer
           );
         } catch (e) {

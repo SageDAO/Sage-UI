@@ -64,7 +64,7 @@ export const auctionsApi = createApi({
           await approveERC20Transfer(
             tokenAddress,
             auctionContract.address,
-            BigNumber.from(amount),
+            weiValue,
             signer
           );
         } catch (e) {
