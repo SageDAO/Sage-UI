@@ -11,6 +11,8 @@ import System, { computeDropSystems } from '@/components/Icons/System';
 import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
 import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
+import variants from '@/animations/index';
+import { motion } from 'framer-motion';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -29,15 +31,15 @@ function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
 }
 
 function unique(array: any[], propertyName: string) {
-  return array.filter(
-    (e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i
-  );
+  return array.filter((e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i);
 }
 
 function computeEditionSize(nfts: Nft[]) {
   let editionSize = 0;
   const uniqueImages = unique(nfts, 's3Path');
-  uniqueImages.forEach((nft) => { editionSize += nft.numberOfEditions });
+  uniqueImages.forEach((nft) => {
+    editionSize += nft.numberOfEditions;
+  });
   return editionSize;
 }
 
@@ -68,7 +70,13 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
       <div className='drop-page__parallax-base'>
         <img src={drop.bannerImageS3Path} className='drop-page__parallax-img' />
       </div>
-      <div className='page drop-page'>
+      <motion.div
+        initial={'pageInitial'}
+        animate={'pageAnimate'}
+				exit={'pageExit'}
+        variants={variants}
+        className='page drop-page'
+      >
         <header className='drop-page__header'>
           <div className='drop-page__header-logotype'>
             <Logotype />
@@ -146,7 +154,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
             })}
           </div>
         </section>
-      </div>
+      </motion.div>
     </>
   );
 }

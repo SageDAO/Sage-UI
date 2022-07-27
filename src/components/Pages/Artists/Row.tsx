@@ -16,18 +16,19 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
   useEffect(() => {
     if (shouldStartAsymmetric) {
       if (asymmetricStarterElement.current) {
-        asymmetricStarterElement.current.scrollIntoView({ inline: 'center' });
+        // asymmetricStarterElement.current.scrollIntoView({ inline: 'center', block: 'end' });
+        asymmetricStarterElement.current.scroll({
+          left: asymmetricStarterElement.current.scrollWidth / 2,
+        });
       }
     }
   }, []);
-  return (
-    <section className='artists-page__row'>
-      {artists.map((a, i: number) => {
-        const ref = i === 3 ? asymmetricStarterElement : null;
 
+  return (
+    <section ref={asymmetricStarterElement} className='artists-page__row'>
+      {artists.map((a, i: number) => {
         return (
           <div
-            ref={ref}
             className='artists-page__item'
             onClick={async () => {
               await router.push(`/artists/${a.walletAddress}`);

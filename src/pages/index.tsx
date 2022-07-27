@@ -1,4 +1,5 @@
 import prisma from '@/prisma/client';
+import { motion } from 'framer-motion';
 import React from 'react';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
@@ -8,6 +9,7 @@ import Countdown from '@/components/Countdown';
 import { computeDropStatus } from '@/utilities/status';
 import { getHomePageData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
+import variants from '@/animations/index';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -18,7 +20,13 @@ function home({ featuredDrop, upcomingDrops }: Props) {
   const router = useRouter();
 
   return (
-    <div className='home-page page' data-cy='home-page'>
+    <motion.div
+      className='home-page'
+      initial={'pageInitial'}
+      animate={'pageAnimate'}
+      variants={variants}
+      data-cy='home-page'
+    >
       <div className='home-page__main'>
         {featuredDrop && (
           <>
@@ -95,7 +103,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
         </div>
       </div>
       <EventSlider />
-    </div>
+    </motion.div>
   );
 }
 

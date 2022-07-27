@@ -4,18 +4,17 @@ import prisma from '@/prisma/client';
 import Hero from '@/components/Hero';
 import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
 import { useBuySingleNftMutation, useGetArtistNftsQuery } from '@/store/nftsReducer';
-import shortenAddress from '@/utilities/shortenAddress';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Nft_include_NftContract } from '@/prisma/types';
 import { PfpImage } from '@/components/Media';
-import Image from 'next/image';
-import Tile from '@/components/Pages/DropIndividual/Tile';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
 import TwitterSVG from '@/public/socials/twitter.svg';
 import MediumSVG from '@/public/socials/medium.svg';
 import InstagramSVG from '@/public/socials/insta.svg';
 import WebSVG from '@/public/socials/web.svg';
+import variants from '@/animations/index';
+import { motion } from 'framer-motion';
 
 interface Props {
   artist: User;
@@ -34,7 +33,13 @@ export default function artist({ artist }: Props) {
   };
 
   return (
-    <div className='artist-page' data-cy='artist-page'>
+    <motion.div
+      className='artist-page'
+      initial={'pageInitial'}
+      animate={'pageAnimate'}
+      variants={variants}
+      data-cy='artist-page'
+    >
       <Hero imgSrc={artist.profilePicture || '/'} />
       <h1 className='artist-page__banner-label'>part of this month active drop</h1>
       <div className='artist-page__artist-section'>
@@ -67,10 +72,12 @@ export default function artist({ artist }: Props) {
       <section className='drop-page__content'>
         <div className='drop-page__grid'>
           {nfts &&
-            nfts.map((nft: Nft_include_NftContract, i: number) => <ListingTile key={i} nft={nft} artist={artist} />)}
+            nfts.map((nft: Nft_include_NftContract, i: number) => (
+              <ListingTile key={i} nft={nft} artist={artist} />
+            ))}
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }
 

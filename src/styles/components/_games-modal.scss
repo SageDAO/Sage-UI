@@ -24,19 +24,24 @@
   height: 100vh;
   align-items: center;
 
-
-
-	& > :first-child {
-		margin-top: 160px;
-	}
-	& > :last-child {
-		margin-bottom: 160px;
-	}
+  & > :first-child {
+    margin-top: 160px;
+  }
+  & > :last-child {
+    margin-bottom: 160px;
+  }
 
   @include b.min-width('medium') {
     width: 996px;
     padding: 0;
     height: auto;
+
+    & > :first-child {
+      margin-top: 0;
+    }
+    & > :last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -336,14 +341,14 @@
 .games-modal__bid-history-section {
   padding: 20px 0;
   align-items: center;
-	width: 90%;
+  width: 90%;
 }
 
 .games-modal__bid-history-table {
   transition-duration: 200ms;
   display: flex;
   height: 0px;
-	flex: 1;
+  flex: 1;
 
   &[data-active='true'] {
     height: auto;
@@ -354,7 +359,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-	flex: 1;
+  flex: 1;
 }
 
 .games-modal__bid-history-row {
@@ -362,13 +367,13 @@
   // grid-template-columns: repeat(3, 200px);
   gap: 20px;
   text-align: left;
-	flex: 1;
+  flex: 1;
 }
 
 .games-modal__bid-history-cell {
   &:last-child {
     flex: 1;
-		text-align:right;
+    text-align: right;
   }
 }
 

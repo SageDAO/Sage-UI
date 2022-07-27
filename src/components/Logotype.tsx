@@ -7,7 +7,7 @@ export default function Logotype() {
   return (
     <div onClick={toggleTheme} className='sage-logotype'>
       <Motto  />
-      <LogotypeSVG className='sage-logotype__svg' currentColor='red' />
+      <LogotypeSVG className='sage-logotype__svg'  />
     </div>
   );
 }

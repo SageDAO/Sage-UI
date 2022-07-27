@@ -73,7 +73,11 @@ export default function Layout({ children, router }: Props) {
         pauseOnHover
         data-cy='toast-container'
       />
-      <motion.div ref={layoutEl} key={router.route} className='layout'>
+      <motion.div
+        ref={layoutEl}
+        key={router.route}
+        className='layout'
+      >
         <HiddenMenu />
         <Nav />
         {children}

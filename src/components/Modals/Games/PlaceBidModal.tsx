@@ -10,9 +10,10 @@ import Status from '@/components/Status';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
 import { BaseMedia } from '@/components/Media';
-import Image from 'next/image';
 import System from '@/components/Icons/System';
 import BidHistoryTable from '@/components/Games/BidHistoryTable';
+import { motion } from 'framer-motion';
+import variants from '@/animations/index';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -96,7 +97,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
-      <div className='games-modal'>
+      <motion.div
+        className='games-modal'
+      >
         <section className='games-modal__header'>
           <SageFullLogo className='games-modal__sage-logo' />
           <CloseSVG onClick={closeModal} className='games-modal__close-button' />
@@ -158,7 +161,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
             auctionId={auction.id}
           ></BidHistoryTable>
         </section>
-      </div>
+      </motion.div>
     </Modal>
   );
 }

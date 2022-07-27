@@ -1,5 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import { BaseMedia } from '@/components/Media';
+import { motion } from 'framer-motion';
+import variants from '@/animations/index';
 
 export interface Props {
   isOpen: boolean;
@@ -11,14 +13,17 @@ export interface Props {
 function index({ closeModal, children, isOpen, title }: Props) {
   return (
     <Dialog open={isOpen} onClose={closeModal} as='div' className='modal'>
-      {/* The backdrop, rendered as a fixed sibling to the panel container */}
       <div className='modal__backdrop' aria-hidden='true' />
-      {/* {container: covers entire screen, is always transparent, centers panel} */}
-      <div className='modal__container'>
+      <motion.div
+        initial={'modalInitial'}
+        animate={'modalAnimate'}
+        variants={variants}
+        className='modal__container'
+      >
         <Dialog.Panel className='modal__panel' as='div'>
           {children}
         </Dialog.Panel>
-      </div>
+      </motion.div>
     </Dialog>
   );
 }

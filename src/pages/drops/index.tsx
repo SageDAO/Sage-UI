@@ -12,6 +12,8 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { getDropsPageData } from '@/prisma/functions';
 import System, { computeDropSystems } from '@/components/Icons/System';
+import variants from '@/animations/index';
+import {  motion } from 'framer-motion';
 
 interface Props {
   drops: Awaited<ReturnType<typeof getDropsPageData>>;
@@ -28,94 +30,101 @@ function drops({ drops }: Props) {
   const { currentOption, setCurrentOption } = useDropDown(['Most Recent']);
   const router = useRouter();
   return (
-    <div className='drops-page page'>
-      <section className='drops-page__header'>
-        <Logotype />
-        <div className='drops-page__subheader'>
-          <div className='drops-page__subheader-top'>
-            <div className='drops-page__subheader-sage-icon'>
-              <BaseMedia src='/icons/sage.svg' />
-            </div>
-            <div className='drops-page__subheader-content'>
-              <div className='drops-page__subheader-label'>
-                sage curated live and upcoming drops.
+      <motion.div
+        initial={'pageInitial'}
+        animate={'pageAnimate'}
+        variants={variants}
+        className='drops-page'
+      >
+        <section className='drops-page__header'>
+          <Logotype />
+          <div className='drops-page__subheader'>
+            <div className='drops-page__subheader-top'>
+              <div className='drops-page__subheader-sage-icon'>
+                <BaseMedia src='/icons/sage.svg' />
               </div>
-              <p className='drops-page__subheader-info'>
-                SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL <br />{' '}
-                STANDARDS AND NEW STRUCTURES IN NFT ASSETS. A VISION IN THE CRYPTO SPACE.
-              </p>
+              <div className='drops-page__subheader-content'>
+                <div className='drops-page__subheader-label'>
+                  sage curated live and upcoming drops.
+                </div>
+                <p className='drops-page__subheader-info'>
+                  SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL <br />{' '}
+                  STANDARDS AND NEW STRUCTURES IN NFT ASSETS. A VISION IN THE CRYPTO SPACE.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-      <section className='drops-page__drops-section'>
-        {drops.map((d) => {
-          const { status, startTime } = computeDropStatus(d);
-          const counterDisplay = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
-          const buttonDisplay = status === 'Upcoming' ? 'get notifications' : 'view drop artworks';
-          const { drawings, lotteries } = filterLotteries(d.Lotteries);
-          const systems = computeDropSystems({
-            lotteries,
-            auctions: d.Auctions,
-            drawings,
-          });
-          async function buttonHandler() {
-            if (status === 'Upcoming') {
-              //TODO: handle notifications
-              toast.warning('not implemented!');
-              return;
+        </section>
+        <section className='drops-page__drops-section'>
+          {drops.map((d) => {
+            const { status, startTime } = computeDropStatus(d);
+            const counterDisplay =
+              status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
+            const buttonDisplay =
+              status === 'Upcoming' ? 'get notifications' : 'view drop artworks';
+            const { drawings, lotteries } = filterLotteries(d.Lotteries);
+            const systems = computeDropSystems({
+              lotteries,
+              auctions: d.Auctions,
+              drawings,
+            });
+            async function buttonHandler() {
+              if (status === 'Upcoming') {
+                //TODO: handle notifications
+                toast.warning('not implemented!');
+                return;
+              }
+              await router.push(`/drops/${d.id}`);
             }
-            await router.push(`/drops/${d.id}`);
-          }
-          return (
-            <div key={d.id} className='drops-page__drop'>
-              <div className='drops-page__drop-header'>
-                <h1 className='drops-page__drop-header-title'>
-                  {d.name} by {d.NftContract.Artist.displayName}
-                </h1>
-                <div className='drops-page__drop-header-countdown' data-status={status}>
-                  {counterDisplay}
+            return (
+              <div key={d.id} className='drops-page__drop'>
+                <div className='drops-page__drop-header'>
+                  <h1 className='drops-page__drop-header-title'>
+                    {d.name} by {d.NftContract.Artist.displayName}
+                  </h1>
+                  <div className='drops-page__drop-header-countdown' data-status={status}>
+                    {counterDisplay}
+                  </div>
                 </div>
-              </div>
-              <Image
-                src={d.bannerImageS3Path}
-                objectFit={'cover'}
-                className='drops-page__drop-backdrop'
-                layout='fill'
-                draggable={false}
-              />
-              <div className='drops-page__drop-focus'>
                 <Image
-                  draggable={false}
                   src={d.bannerImageS3Path}
                   objectFit={'cover'}
+                  className='drops-page__drop-backdrop'
                   layout='fill'
+                  draggable={false}
                 />
-              </div>
-              <div className='drops-page__drop-content'>
-                <div
-                  onClick={buttonHandler}
-                  className='drops-page__drop-content-btn'
-                  data-status={status}
-                >
-                  {buttonDisplay}
+                <div className='drops-page__drop-focus'>
+                  <Image
+                    draggable={false}
+                    src={d.bannerImageS3Path}
+                    objectFit={'cover'}
+                    layout='fill'
+                  />
                 </div>
-                <div className='drops-page__drop-content-systems'>
-                  {systems.map((type) => {
-                    return (
-                      <div className='drops-page__drop-content-systems-icon'>
-                        <System type={type} />
-                      </div>
-                    );
-                  })}
+                <div className='drops-page__drop-content'>
+                  <div
+                    onClick={buttonHandler}
+                    className='drops-page__drop-content-btn'
+                    data-status={status}
+                  >
+                    {buttonDisplay}
+                  </div>
+                  <div className='drops-page__drop-content-systems'>
+                    {systems.map((type) => {
+                      return (
+                        <div key={type} className='drops-page__drop-content-systems-icon'>
+                          <System type={type} />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className='drops-page__drop-content-description'>{d.description}</p>
                 </div>
-                <p className='drops-page__drop-content-description'>{d.description}</p>
               </div>
-            </div>
-          );
-        })}
-      </section>
-    </div>
+            );
+          })}
+        </section>
+      </motion.div>
   );
 }
 
