@@ -1,0 +1,126 @@
+@use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/breakpoints' as b;
+.submissions-page {
+  @include m.page;
+  width: min(1440px, 100vw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.submissions-page__logotype-container {
+  width: 80%;
+}
+
+.submissions-page__header {
+  margin-top: clamp(24px, 10vw, 111px);
+  font-weight: 400;
+  font-size: clamp(20px, 1.2vw, 50px);
+  width: 80%;
+  line-height: clamp(24px, 1em, 60px);
+  @include m.theme() {
+    color: m.t(contrast);
+  }
+
+  text-align: left;
+  @include b.min-width('medium') {
+    text-align: center;
+  }
+}
+
+.submissions-page__guidelines-group {
+  width: min(1000px, 80%);
+  gap: 5px;
+  margin-top: clamp(24px, 5vh, 79px);
+  display: flex;
+  flex-direction: column;
+}
+
+.submissions-page__guidelines-header {
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(16px, 1vw, 20px);
+  line-height: 130%;
+  text-transform: uppercase;
+}
+
+.submissions-page__guidelines-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(8px, 0.8vw, 16px);
+  line-height: 130%;
+  /* or 21px */
+
+  color: #f5f5f5;
+  @include m.theme() {
+    color: m.t(contrast2);
+  }
+}
+
+.submissions-page__aspect-ratios-section {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  display: flex;
+  gap: clamp(20px, 5vw, 55px);
+  justify-content: center;
+}
+
+.submissions-page__aspect-ratios-group {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+@mixin aspect-ratio-examples {
+  @include m.theme() {
+    background-color: m.t(contrast2);
+  }
+}
+
+.submissions-page__aspect-ratios-example {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.submissions-page__aspect-ratios-1-1 {
+  aspect-ratio: 1/1;
+  height: clamp(40px, 15vw, 122px);
+  @include aspect-ratio-examples;
+}
+
+.submissions-page__aspect-ratios-16-9 {
+  aspect-ratio: 16/9;
+  height: clamp(40px, 15vw, 122px);
+  @include aspect-ratio-examples;
+}
+
+.submissions-page__aspect-ratios-9-16 {
+  aspect-ratio: 9/16;
+  width: clamp(40px, 15vw, 122px);
+  @include aspect-ratio-examples;
+}
+
+.submissions-page__aspect-ratios-label {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  font-weight: 400;
+  font-size: clamp(8px, 0.8vw, 12px);
+  line-height: 130%;
+}
+
+.submissions-page__design-icons {
+  display: flex;
+  gap: 27px;
+  margin: 50px 0 0;
+  align-items: center;
+}
+.submissions-page__design-icons-svg {
+  width: 37px;
+  height: 37px;
+}
+.submissions-page__ {
+}
+.submissions-page__ {
+}
