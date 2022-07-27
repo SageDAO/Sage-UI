@@ -185,10 +185,10 @@ export default function CreationsPanel() {
 
       {/*
       <div className='creations-panel__manage'>
-        <h1 className='creations-panel__manage-header'>
+        <div className='creations-panel__manage-header'>
           manage creations
           <h1 className='creations-panel__manage-subheader'>group, send, burn your creations</h1>
-        </h1>
+        </div>
       </div>
       */}
     </div>

@@ -39,14 +39,14 @@ export default function CollectionPanel() {
           myNfts?.map((item: GamePrize) => {
             if (!item?.s3Path) return;
             return (
-              <div className='collection-panel__tile'>
+              <div key={item.nftId} className='collection-panel__tile'>
                 <div className='collection-panel__img-container'>
                   <BaseMedia src={item.s3Path} isVideo={item.isVideo}></BaseMedia>
                 </div>
-                <h1 className='collection-panel__tile-header'>
+                <div className='collection-panel__tile-header'>
                   {item.dropId} by {item.artistDisplayName || item}
                   <h1 className='collection-panel__tile-name'>it is getting late</h1>
-                </h1>
+                </div>
               </div>
             );
           })}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 import { PfpImage } from '@/components/Media';
 import { useSession } from 'next-auth/react';
 import LoaderDots from '@/components/LoaderDots';
@@ -10,6 +9,10 @@ import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
 import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
 import Balances from '@/components/Pages/Profile/Balances';
 import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
+import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
+import { motion } from 'framer-motion';
+import variants from '@/animations/index';
+import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 
 type TabItem = {
   name: string;
@@ -55,13 +58,14 @@ function profile() {
 
   return (
     <Tab.Group as='div' className='profile-page' vertical selectedIndex={selectedTabIndex}>
-      <section className='profile-page__menu'>
+      <motion.div
+        initial={'pageInitial'}
+        animate={'pageAnimate'}
+        variants={variants}
+        className='profile-page__menu'
+      >
         <div className='profile-page__sage-logo-container'>
-          <Image
-            src='/branding/sage-full-logo.svg'
-            layout='fill'
-            className='profile-page__sage-logo-img'
-          ></Image>
+          <SageFullLogoSVG />
         </div>
         <div className='profile-page__pfp-container'>
           <PfpImage src={userData?.profilePicture}></PfpImage>
@@ -86,8 +90,13 @@ function profile() {
             log out
           </button>
         </Tab.List>
-      </section>
-      <section className='profile-page__main'>
+      </motion.div>
+      <motion.div
+        initial={'pageInitial'}
+        animate={'pageAnimate'}
+        variants={variants}
+        className='profile-page__main'
+      >
         <Balances />
         <Tab.Panels as='div' className='profile-page__tabs-panels'>
           {tabItems.map((item) => {
@@ -102,7 +111,7 @@ function profile() {
             );
           })}
         </Tab.Panels>
-      </section>
+      </motion.div>
     </Tab.Group>
   );
 }
