@@ -152,14 +152,12 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
             </button>
           </div>
         </section>
-        {state.shouldShowBidHistory && (
-          <section className='games-modal__bid-history-section'>
-            <BidHistoryTable
-              isActive={state.shouldShowBidHistory}
-              auctionId={auction.id}
-            ></BidHistoryTable>
-          </section>
-        )}
+        <section className='games-modal__bid-history-section'>
+          <BidHistoryTable
+            isActive={state.shouldShowBidHistory}
+            auctionId={auction.id}
+          ></BidHistoryTable>
+        </section>
       </div>
     </Modal>
   );

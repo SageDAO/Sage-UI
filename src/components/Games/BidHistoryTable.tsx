@@ -39,6 +39,8 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
   const sortedBids = sortBidHistory(graphData.auction.bids);
   startPolling(500);
 
+  if (!isActive) return null;
+
   return (
     <table className='games-modal__bid-history-table' data-active={isActive}>
       <tbody className='games-modal__bid-history-data'>
@@ -53,6 +55,9 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
               key={amountFormatted}
               data-animate-first={animateFirst}
             >
+              <th data-col='time' className='games-modal__bid-history-cell'>
+                {dateTime}
+              </th>
               <th data-col='bidder' className='games-modal__bid-history-cell'>
                 {shortenAddress(bidder)}
               </th>
