@@ -1,12 +1,12 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
-import { User } from '@prisma/client';
+import { Offer, User } from '@prisma/client';
 import prisma from '@/prisma/client';
 import Hero from '@/components/Hero';
 import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
 import { useBuySingleNftMutation, useGetArtistNftsQuery } from '@/store/nftsReducer';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
-import { Nft_include_NftContract } from '@/prisma/types';
+import { Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { PfpImage } from '@/components/Media';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
 import TwitterSVG from '@/public/socials/twitter.svg';
@@ -22,15 +22,6 @@ interface Props {
 
 export default function artist({ artist }: Props) {
   const { data: nfts } = useGetArtistNftsQuery(artist.walletAddress);
-  const [buySingleNft] = useBuySingleNftMutation();
-  const { data: signer } = useSigner();
-  const handleBuyClick = async (artistContractAddress: string, nftId: number, price: number) => {
-    if (!signer) {
-      toast.info('Please Sign In before placing orders.');
-      return;
-    }
-    await buySingleNft({ artistContractAddress, nftId, price, signer });
-  };
 
   return (
     <motion.div
@@ -72,7 +63,7 @@ export default function artist({ artist }: Props) {
       <section className='drop-page__content'>
         <div className='drop-page__grid'>
           {nfts &&
-            nfts.map((nft: Nft_include_NftContract, i: number) => (
+            nfts.map((nft: Nft_include_NftContractAndOffers, i: number) => (
               <ListingTile key={i} nft={nft} artist={artist} />
             ))}
         </div>

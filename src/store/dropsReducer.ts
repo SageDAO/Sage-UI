@@ -4,13 +4,12 @@ import {
   DropFull,
   DropWithArtist,
   Drop_include_GamesAndArtist,
-  Nft,
   Splitter_include_Entries,
 } from '@/prisma/types';
 import { toast } from 'react-toastify';
-import { getAuctionContract, getLotteryContract, getNFTContract } from '@/utilities/contracts';
+import { getAuctionContract, getLotteryContract } from '@/utilities/contracts';
 import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
-import { nftsApi, _fetchOrCreateNftContract } from './nftsReducer';
+import { _fetchOrCreateNftContract } from './nftsReducer';
 
 export const dropsApi = createApi({
   reducerPath: 'dropsApi',
@@ -52,7 +51,7 @@ async function deployDrop(dropId: number, signer: Signer, dispatch: any, fetchWi
     signer,
     fetchWithBQ
   );
-  if (artistNftContractAddress == '0x0000000000000000000000000000000000000000') {
+  if (artistNftContractAddress == ethers.constants.AddressZero) {
     throw new Error('Unable to deploy a new artist NFT contract');
   }
   await createAuctions(drop, artistNftContractAddress, signer, fetchWithBQ);

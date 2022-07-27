@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/prisma/client';
+import { OfferState } from '@prisma/client';
+import { getNFTContract } from '@/utilities/contracts';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -10,7 +12,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
       await getArtistNfts(request.query.address as string, response);
       break;
     case 'UpdateOwner':
-      await updateOwner(Number(request.body.id), request.body.address as string, response);
+      await updateOwner(Number(request.query.id), response);
       break;
     default:
       response.status(500);
@@ -23,7 +25,10 @@ async function getArtistNfts(artistAddress: string, response: NextApiResponse) {
   try {
     const result = await prisma.nft.findMany({
       where: { artistAddress },
-      include: { NftContract: true },
+      include: {
+        NftContract: true,
+        Offers: true,
+      },
     });
     response.json(result);
   } catch (e) {
@@ -32,14 +37,28 @@ async function getArtistNfts(artistAddress: string, response: NextApiResponse) {
   }
 }
 
-async function updateOwner(id: number, ownerAddress: string, response: NextApiResponse) {
-  console.log(`updateOwner(${id}, ${ownerAddress})`);
+async function updateOwner(id: number, response: NextApiResponse) {
+  console.log(`updateOwner(${id})`);
   try {
-    const result = await prisma.nft.update({
+    const offer = await prisma.offer.findUnique({
       where: { id },
+      include: { Nft: { include: { NftContract: true } } },
+    });
+    if (!offer || offer.state != OfferState.ACTIVE) {
+      throw new Error('Offer does not exist or is not active');
+    }
+    const nftContract = await getNFTContract(offer.nftContractAddress);
+    const ownerAddress = await nftContract.ownerOf(offer.nftId);
+    console.log(`updateOwner() :: Owner of token ${offer.nftId} on contract ${offer.nftContractAddress} is ${ownerAddress}`);
+    await prisma.offer.update({
+      where: { id },
+      data: { state: OfferState.USED },
+    });
+    await prisma.nft.update({
+      where: { id: offer.nftId },
       data: { ownerAddress },
     });
-    response.json(result);
+    response.json(ownerAddress);
   } catch (e) {
     console.log({ e });
     response.status(500);

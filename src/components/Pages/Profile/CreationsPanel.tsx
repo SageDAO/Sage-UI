@@ -1,6 +1,6 @@
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { BaseMedia } from '@/components/Media';
-import { useMintSingleNftMutation } from '@/store/nftsReducer';
+import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
 import { Signer } from 'ethers';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -63,6 +63,10 @@ export default function CreationsPanel() {
   }
 
   async function handleMintButtonClick() {
+    if (!signer) {
+      toast.warn('Please Sign In With Ethereum before submitting your artwork');
+      return;
+    }
     if (!state.file) {
       toast.warn('Please select a valid file for uploading your artwork');
       return;
@@ -76,6 +80,7 @@ export default function CreationsPanel() {
       toast.warn('Please type a valid price for your artwork');
       return;
     }
+    toast.info('Please sit back, this will take a couple of minutes!');
     const result = await mintSingleNft({
       name: state.title,
       description: state.description,
@@ -83,7 +88,7 @@ export default function CreationsPanel() {
       price: parseFloat(state.price),
       file: state.file,
       signer: signer as Signer,
-    });
+    } as MintRequest);
     const nftId = (result as any).data;
     if (!nftId || nftId == 0) {
       toast.error('Failure minting NFT');
@@ -174,15 +179,18 @@ export default function CreationsPanel() {
           type='button'
           onClick={handleMintButtonClick}
         >
-          {isMinting ? <LoaderSpinner/> : `mint artwork`}
+          {isMinting ? <LoaderSpinner /> : `mint artwork`}
         </button>
       </form>
+
+      {/*
       <div className='creations-panel__manage'>
         <h1 className='creations-panel__manage-header'>
           manage creations
           <h1 className='creations-panel__manage-subheader'>group, send, burn your creations</h1>
         </h1>
       </div>
+      */}
     </div>
   );
 }

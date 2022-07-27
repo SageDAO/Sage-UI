@@ -8,16 +8,27 @@ import {
 } from '@/utilities/contracts';
 import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3';
 import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave';
-import { Nft_include_NftContract } from '@/prisma/types';
+import { Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
+import { keccak256 } from 'ethers/lib/utils';
+import { Offer } from '@prisma/client';
+
+export interface MintRequest {
+  name: string;
+  description: string;
+  tags: string;
+  price: number;
+  file: File;
+  signer: Signer;
+}
 
 export const nftsApi = createApi({
   reducerPath: 'nftsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: ['NftContract', 'Nfts'],
   endpoints: (builder) => ({
-    getArtistNfts: builder.query<Nft_include_NftContract[], string>({
+    getArtistNfts: builder.query<Nft_include_NftContractAndOffers[], string>({
       query: (artistAddress: string) => `nfts?action=GetArtistNfts&address=${artistAddress}`,
       providesTags: ['Nfts'],
     }),
@@ -37,73 +48,38 @@ export const nftsApi = createApi({
       },
       providesTags: ['NftContract'],
     }),
-    mintSingleNft: builder.mutation<
-      number,
-      { name: string; description: string; tags: string; price: number; file: File; signer: Signer }
-    >({
-      queryFn: async (
-        { name, description, tags, price, file, signer },
-        { dispatch },
-        _,
-        fetchWithBQ
-      ) => {
+    mintSingleNft: builder.mutation<number, MintRequest>({
+      queryFn: async (mintRequest, { dispatch }, _, fetchWithBQ) => {
         var nftId = 0;
         try {
-          const numberOfEditions = 1;
-          const artistAddress = await signer.getAddress();
+          const endpoint = '/api/dropUploadEndpoint/';
+          const artistAddress = await mintRequest.signer.getAddress();
           const nftContractAddress = await _fetchOrCreateNftContract(
             artistAddress,
-            signer,
+            mintRequest.signer,
             fetchWithBQ
           );
-          const endpoint = '/api/dropUploadEndpoint/';
-          console.log(`mintSingleNft() :: Uploading media to AWS S3...`);
-          const s3Path = await uploadFileToS3Bucket(endpoint, createBucketName(), file.name, file);
-          console.log(`mintSingleNft() :: Uploading media to Arweave...`);
-          const ipfsPath = await copyFromS3toArweave(endpoint, s3Path);
-          console.log(`mintSingleNft() :: Uploading metadata to Arweave...`);
-          const metadataPath = await createNftMetadataOnArweave(
-            endpoint,
-            name,
-            description,
-            ipfsPath,
-            file.name.toLowerCase().endsWith('mp4')
-          );
-          console.log(`mintSingleNft() :: Creating database record...`);
-          const { data: dbRecord } = await fetchWithBQ({
-            url: `dropUploadEndpoint?action=InsertNft`,
-            method: 'POST',
-            body: {
-              artistAddress,
-              name,
-              description,
-              tags,
-              price,
-              s3Path,
-              metadataPath,
-              numberOfEditions,
-            },
-          });
-          nftId = (dbRecord as any).nftId;
-          if (!nftId || nftId == 0) {
-            throw new Error('Failed inserting NFT into database');
-          }
-          console.log(`mintSingleNft() :: Database NFT ID = ${nftId}`);
-          const nftContract = await getNFTContract(nftContractAddress, signer);
-          console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
-          const mintTx = await nftContract.creatorMint(artistAddress, nftId, metadataPath);
-          await mintTx.wait();
-          const marketplaceContract = await getMarketplaceContract(signer);
-          const weiPrice = ethers.utils.parseEther(price.toString());
-          console.log(
-            `mintSingleNft() :: Putting up for sale for ${price} (${weiPrice}) on Marketplace Contract...`
-          );
-          const putUpForSaleTx = await marketplaceContract.createSellOffer(
+          const { s3Path, metadataPath } = await uploadToAwsAndArweave(mintRequest, endpoint);
+          nftId = await dbInsertNft(mintRequest, artistAddress, s3Path, metadataPath, fetchWithBQ);
+          const weiPrice = ethers.utils.parseEther(mintRequest.price.toString());
+          const { signedOffer, expiresAt } = await createSignedSellOffer(
             nftContractAddress,
             nftId,
-            weiPrice
+            weiPrice,
+            mintRequest.signer
           );
-          await putUpForSaleTx.wait();
+          console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
+          const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
+          const mintTx = await nftContract.creatorMint(artistAddress, nftId, metadataPath);
+          await mintTx.wait();
+          await dbInsertSellOffer(
+            mintRequest,
+            nftId,
+            nftContractAddress,
+            expiresAt,
+            signedOffer,
+            fetchWithBQ
+          );
           return { data: nftId };
         } catch (e) {
           console.log(e);
@@ -116,25 +92,13 @@ export const nftsApi = createApi({
       },
       invalidatesTags: ['Nfts'],
     }),
-    buySingleNft: builder.mutation<
-      boolean,
-      { artistContractAddress: string; nftId: number; price: number; signer: Signer }
-    >({
-      queryFn: async (
-        { artistContractAddress, nftId, price, signer },
-        { dispatch },
-        _,
-        fetchWithBQ
-      ) => {
+    buySingleNft: builder.mutation<boolean, { sellOffer: Offer; signer: Signer }>({
+      queryFn: async ({ sellOffer, signer }, { dispatch }, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
+        const weiPrice = ethers.utils.parseEther(sellOffer.price.toString());
         try {
           const tokenAddress = await marketplaceContract.token();
-          await approveERC20Transfer(
-            tokenAddress,
-            marketplaceContract.address,
-            BigNumber.from(ethers.utils.parseEther(price.toString())),
-            signer
-          );
+          await approveERC20Transfer(tokenAddress, marketplaceContract.address, weiPrice, signer);
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
@@ -142,22 +106,23 @@ export const nftsApi = createApi({
           return { data: false };
         }
         try {
-          console.log(`buySingleNft() :: takeSellOffer(${artistContractAddress}, ${nftId})`);
-          const tx = await marketplaceContract.takeSellOffer(artistContractAddress, nftId);
+          console.log(sellOffer);
+          console.log(`WEI PRICE = ${weiPrice}`);
+          const tx = await marketplaceContract.buyFromSellOffer(
+            sellOffer.signer,
+            sellOffer.nftContractAddress,
+            weiPrice,
+            sellOffer.nftId,
+            sellOffer.expiresAt,
+            sellOffer.signedOffer
+          );
           toast.promise(tx.wait(), {
             pending: 'Request submitted to the blockchain, awaiting confirmation...',
             success: `Success! You've bought an NFT!`,
             error: 'Failure! Unable to complete request.',
           });
-          await tx.wait();
-          await fetchWithBQ({
-            url: `nfts?action=UpdateOwner`,
-            method: 'POST',
-            body: {
-              id: nftId,
-              address: await signer.getAddress(),
-            },
-          });
+          await tx.wait(1);
+          await fetchWithBQ(`nfts?action=UpdateOwner&id=${sellOffer.id}`);
           playTxSuccessSound();
           return { data: true };
         } catch (e) {
@@ -170,6 +135,117 @@ export const nftsApi = createApi({
     }),
   }),
 });
+
+async function uploadToAwsAndArweave(mintRequest: MintRequest, endpoint: string) {
+  console.log(`uploadToAwsAndArweave() :: Uploading media to AWS S3...`);
+  const s3Path = await uploadFileToS3Bucket(
+    endpoint,
+    createBucketName(),
+    mintRequest.file.name,
+    mintRequest.file
+  );
+  console.log(`uploadToAwsAndArweave() :: Uploading media to Arweave...`);
+  const ipfsPath = await copyFromS3toArweave(endpoint, s3Path);
+  console.log(`uploadToAwsAndArweave() :: Uploading metadata to Arweave...`);
+  const metadataPath = await createNftMetadataOnArweave(
+    endpoint,
+    mintRequest.name,
+    mintRequest.description,
+    ipfsPath,
+    mintRequest.file.name.toLowerCase().endsWith('mp4')
+  );
+  return { s3Path, metadataPath };
+}
+
+async function dbInsertNft(
+  mintRequest: MintRequest,
+  artistAddress: string,
+  s3Path: string,
+  metadataPath: string,
+  fetchWithBQ: any
+) {
+  console.log(`dbInsertNft() :: Creating database record...`);
+  const { data } = await fetchWithBQ({
+    url: `dropUploadEndpoint?action=InsertNft`,
+    method: 'POST',
+    body: {
+      artistAddress,
+      name: mintRequest.name,
+      description: mintRequest.description,
+      tags: mintRequest.tags,
+      price: mintRequest.price,
+      s3Path,
+      metadataPath,
+      numberOfEditions: 1,
+    },
+  });
+  const nftId = (data as any).nftId;
+  if (!nftId || nftId == 0) {
+    throw new Error('Failed inserting NFT into database');
+  }
+  console.log(`dbInsertNft() :: Database NFT ID = ${nftId}`);
+  return nftId;
+}
+
+async function dbInsertSellOffer(
+  mintRequest: MintRequest,
+  nftId: number,
+  nftContractAddress: string,
+  expiresAt: number,
+  signedOffer: string,
+  fetchWithBQ: any
+) {
+  console.log(`dbInsertSellOffer() :: Creating database record...`);
+  const { data } = await fetchWithBQ({
+    url: `dropUploadEndpoint?action=InsertSellOffer`,
+    method: 'POST',
+    body: {
+      signer: await mintRequest.signer.getAddress(),
+      nftContractAddress,
+      price: mintRequest.price,
+      nftId,
+      expiresAt,
+      signedOffer,
+    },
+  });
+  const id = parseInt((data as any).id);
+  if (isNaN(id)) {
+    throw new Error('Failed inserting NFT into database');
+  }
+  console.log(`dbInsertSellOffer() :: Database Offer ID = ${id}`);
+  return id;
+}
+
+async function createSignedSellOffer(
+  nftContractAddress: string,
+  nftId: number,
+  weiPrice: BigNumber,
+  signer: Signer
+): Promise<{ signedOffer: string; expiresAt: number }> {
+  const oneYearFromNow = new Date();
+  oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+  const expiresAt = Math.floor(oneYearFromNow.getTime() / 1000);
+  const artistAddress = await signer.getAddress();
+  console.log(
+    `createSignedSellOffer(${artistAddress}, ${nftContractAddress}, ${weiPrice}, ${nftId}, ${expiresAt})`
+  );
+  const signedOffer = await signer.signMessage(
+    keccak256(
+      ethers.utils.defaultAbiCoder.encode(
+        ['address', 'address', 'uint256', 'uint256', 'uint256', 'bool'],
+        [
+          artistAddress,
+          nftContractAddress,
+          weiPrice,
+          nftId,
+          expiresAt,
+          true, //isSellOrder
+        ]
+      )
+    )
+  );
+  return { signedOffer, expiresAt };
+}
 
 export async function _fetchOrCreateNftContract(
   artistAddress: string,
