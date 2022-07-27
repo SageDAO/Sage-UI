@@ -53,16 +53,22 @@
 
 .artist-page__socials-item {
   position: relative;
-  border-radius: 100%;
-  width: 22px;
-  height: 22px;
-  overflow: visible;
+  width: clamp(22px, 2vw, 34px);
+  height: clamp(22px, 2vw, 34px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @include m.theme() {
     background-color: m.t(accent);
   }
-  img {
-    width: 10px;
-    height: 10px;
+  overflow: hidden;
+  border-radius: 100%;
+}
+
+.artist-page__socials-svg {
+  @include m.theme() {
+    // background-color: m.t(accent);
+    color: m.t(base);
   }
 }
 

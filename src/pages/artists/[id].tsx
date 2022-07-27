@@ -41,16 +41,16 @@ export default function artist({ artist }: Props) {
           <div>
             <h1 className='artist-page__name'>{artist.displayName}</h1>
             <ul className='artist-page__socials'>
-              <div className='socials-item'>
+              <div className='artist-page__socials-item'>
                 <TwitterSVG className='artist-page__socials-svg' />
               </div>
-              <div className='socials-item'>
+              <div className='artist-page__socials-item'>
                 <MediumSVG className='artist-page__socials-svg' />
               </div>
-              <div className='socials-item'>
+              <div className='artist-page__socials-item'>
                 <InstagramSVG className='artist-page__socials-svg' />
               </div>
-              <div className='socials-item'>
+              <div className='artist-page__socials-item'>
                 <WebSVG className='artist-page__socials-svg' />
               </div>
             </ul>
