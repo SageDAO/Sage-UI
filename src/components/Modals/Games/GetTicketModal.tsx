@@ -125,11 +125,13 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
                 refunded.
               </h1>
             </div>
-            <h1 className='games-modal__ticket-cost-label'>ticket cost</h1>
-            <h1 className='games-modal__ticket-cost-value'>
-              {lottery.costPerTicketTokens * desiredTicketAmount} ASH +
-              {lottery.costPerTicketTokens * desiredTicketAmount} PIXELS
-            </h1>
+            <div>
+              <h1 className='games-modal__ticket-cost-label'>ticket cost</h1>
+              <h1 className='games-modal__ticket-cost-value'>
+                {lottery.costPerTicketTokens * desiredTicketAmount} ASH +
+                {lottery.costPerTicketTokens * desiredTicketAmount} PIXELS
+              </h1>
+            </div>
             <div className='games-modal__tickets-controls'>
               <MinusSVG onClick={handleTicketSubClick} className='games-modal__tickets-sub' />
               <input

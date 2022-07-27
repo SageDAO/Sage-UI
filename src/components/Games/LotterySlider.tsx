@@ -1,5 +1,5 @@
 import { Nft } from '@/prisma/types';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction,  useLayoutEffect } from 'react';
 import { BaseMedia } from '@/components/Media';
 import Image from 'next/image';
 
@@ -9,14 +9,12 @@ interface Props {
   setSelectedNftIndex: Dispatch<SetStateAction<number>>;
 }
 
+function unique(array: any[], propertyName: string) {
+  return array.filter((e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i);
+}
+
 // src/styles/components/_lottery-slider.scss
 export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIndex }: Props) {
-
-  function unique(array: any[], propertyName: string) {
-    return array.filter(
-      (e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i
-    );
-  }
   const uniqueImages = unique(nfts, 's3Path');
 
   const refs = uniqueImages.reduce((acc, value) => {
@@ -34,8 +32,7 @@ export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIn
     setSelectedNftIndex((prev) => prev - 1);
   };
 
-  useEffect(() => {
-    console.log('useEffect()');
+  useLayoutEffect(() => {
     const nftId = uniqueImages[selectedNftIndex].id;
     refs[nftId].current.scrollIntoView({ behavior: 'smooth', alignToTop: false });
   }, [handleRightArrowClick, handleLeftArrowClick]);

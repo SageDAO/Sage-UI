@@ -53,9 +53,12 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
               key={amountFormatted}
               data-animate-first={animateFirst}
             >
-              <th data-col='time'>{dateTime}</th>
-              <th data-col='bidder'>{shortenAddress(bidder)}</th>
-              <th data-col='amount'>{amountFormattedShortened} ASH</th>
+              <th data-col='bidder' className='games-modal__bid-history-cell'>
+                {shortenAddress(bidder)}
+              </th>
+              <th data-col='amount' className='games-modal__bid-history-cell'>
+                {amountFormattedShortened} ASH
+              </th>
             </tr>
           );
         })}

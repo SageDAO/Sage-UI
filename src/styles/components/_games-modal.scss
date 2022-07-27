@@ -20,9 +20,18 @@
   flex-direction: column;
   gap: 20px;
   width: 100vw;
-  align-items: center;
   overflow-y: auto;
   height: 100vh;
+  align-items: center;
+
+
+
+	& > :first-child {
+		margin-top: 160px;
+	}
+	& > :last-child {
+		margin-bottom: 160px;
+	}
 
   @include b.min-width('medium') {
     width: 996px;
@@ -33,7 +42,6 @@
 
 .games-modal__header {
   display: flex;
-  padding-top: 160px;
   width: max-content;
   align-items: center;
   width: 90%;
@@ -71,14 +79,11 @@
   min-width: 90%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: clamp(17px, 2vw, 40px);
-  padding-bottom: 160px;
 
   @include b.min-width('medium') {
     flex-direction: row;
     align-items: stretch;
-    padding-bottom: 60px;
   }
 }
 
@@ -96,14 +101,17 @@
 }
 
 .games-modal__main-content {
-  gap: clamp(10px, 1vw, 30px);
-  width: 90%;
+  // gap: clamp(10px, 1.3vw, 20px);
+	gap: 10px;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: space-between;
   justify-content: flex-start;
   // padding-bottom: 160px;
   @include b.min-width('medium') {
     width: auto;
+    flex: 1;
   }
 }
 
@@ -160,7 +168,7 @@
   font-size: 12px;
   line-height: 130%;
   text-transform: uppercase;
-  max-width: 300px;
+  max-width: 90vw;
 
   @include m.theme() {
     color: m.t(contrast);
@@ -208,7 +216,8 @@
 .games-modal__bid-info-group {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 30px;
 
   @include b.min-width('medium') {
   }
@@ -256,10 +265,9 @@
 @mixin game-interact-button {
   margin-top: clamp(28px, 4vw, 67px);
   width: 100%;
-	margin-right: auto;
-	margin-left: auto;
+  margin-right: auto;
+  margin-left: auto;
   aspect-ratio: 397/65;
-  max-width: 397px;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -278,7 +286,7 @@
 }
 
 .games-modal__bid-input {
-  margin-top: clamp(10px, 2vw, 40px);
+  // margin-top: clamp(10px, 2vw, 40px);
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -326,16 +334,16 @@
 }
 
 .games-modal__bid-history-section {
-  display: flex;
   padding: 20px 0;
-  flex-direction: column;
   align-items: center;
-  width: 100%;
+	width: 90%;
 }
 
 .games-modal__bid-history-table {
   transition-duration: 200ms;
+  display: flex;
   height: 0px;
+	flex: 1;
 
   &[data-active='true'] {
     height: auto;
@@ -343,16 +351,29 @@
 }
 
 .games-modal__bid-history-data {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+	flex: 1;
 }
 
 .games-modal__bid-history-row {
   display: flex;
+  // grid-template-columns: repeat(3, 200px);
   gap: 20px;
+  text-align: left;
+	flex: 1;
+}
+
+.games-modal__bid-history-cell {
+  &:last-child {
+    flex: 1;
+		text-align:right;
+  }
 }
 
 .games-modal__tickets-controls {
   display: flex;
-  max-width: 397px;
   gap: 11px;
 }
 
@@ -370,11 +391,8 @@
   font-weight: 400;
   font-size: 24px;
   line-height: 169%;
-  /* or 41px */
-	flex: 1;
-
+  flex: 1;
   text-align: center;
-  text-transform: uppercase;
 
   background: transparent;
   width: 101px;
