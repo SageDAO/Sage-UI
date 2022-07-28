@@ -34,6 +34,9 @@ export const lotteriesApi = createApi({
     getLottery: builder.query<LotteryWithNftsAndArtist, number>({
       query: (lotteryId: number) => `lotteries?action=GetLottery&lotteryId=${lotteryId}`,
     }),
+    getLotteryWinners: builder.query<string[], number>({
+      query: (lotteryId: number) => `lotteries?action=GetLotteryWinners&lotteryId=${lotteryId}`,
+    }),
     getTicketCounts: builder.query<LotteryTickets, { lotteryId: number; walletAddress: string }>({
       queryFn: async ({ lotteryId, walletAddress }, { dispatch }) => {
         console.log(`getTicketCounts(${lotteryId}, ${walletAddress})`);
@@ -180,4 +183,4 @@ export async function setupTicketSoldListener(lotteryId: number, countUpdateCall
   }
 }
 
-export const { useGetLotteryQuery, useGetTicketCountsQuery, useBuyTicketsMutation } = lotteriesApi;
+export const { useGetLotteryQuery, useGetLotteryWinnersQuery, useGetTicketCountsQuery, useBuyTicketsMutation } = lotteriesApi;

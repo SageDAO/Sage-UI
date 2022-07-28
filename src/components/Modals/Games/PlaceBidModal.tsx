@@ -42,7 +42,6 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
   const now = new Date().getTime();
   const isOpenForBids =
     auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
-  console.log(auctionState);
 
   function toggleBidHistory() {
     setState((prevState) => {

@@ -1,21 +1,25 @@
 import { useState } from 'react';
-import SageFullLogo from '@/public/branding/sage-full-logo.svg';
-import CloseSVG from '@/public/interactive/close.svg';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
-import { User } from '@prisma/client';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
+import { User } from '@prisma/client';
 import { Lottery_include_Nft } from '@/prisma/types';
-import { BuyTicketRequest, useBuyTicketsMutation } from '@/store/lotteriesReducer';
+import {
+  BuyTicketRequest,
+  useBuyTicketsMutation,
+  useGetLotteryWinnersQuery,
+} from '@/store/lotteriesReducer';
 import { useGetEarnedPointsQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
-import Image from 'next/image';
 import { BaseMedia } from '@/components/Media';
 import System, { SystemTypes } from '@/components/Icons/System';
 import LotterySlider from '@/components/Games/LotterySlider';
 import PlusSVG from '@/public/icons/plus.svg';
 import MinusSVG from '@/public/icons/minus.svg';
+import SageFullLogo from '@/public/branding/sage-full-logo.svg';
+import CloseSVG from '@/public/interactive/close.svg';
+import shortenAddress from '@/utilities/shortenAddress';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -25,14 +29,18 @@ interface Props extends ModalProps {
 
 //@scss : '@/styles/components/_games-modal.scss'
 function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props) {
-  const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const { data: sessionData } = useSession();
-  const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0);
-  const [buyTickets, { isLoading: isBuyTicketsLoading }] = useBuyTicketsMutation();
-  const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, {
-    skip: !sessionData,
-  });
   const { data: signer } = useSigner();
+  const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
+  const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0);
+  const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, { skip: !sessionData });
+  const [buyTickets, { isLoading: isBuyTicketsLoading }] = useBuyTicketsMutation();
+
+  const now = new Date().getTime();
+  const isStarted = lottery.startTime.getTime() < now;
+  const isEnded = lottery.endTime.getTime() < now;
+  const { data: winners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
+
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   //ui event handlers
   function handleTicketSubClick() {
@@ -125,31 +133,48 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
                 refunded.
               </h1>
             </div>
-            <div>
-              <h1 className='games-modal__ticket-cost-label'>ticket cost</h1>
-              <h1 className='games-modal__ticket-cost-value'>
-                {lottery.costPerTicketTokens * desiredTicketAmount} ASH +
-                {lottery.costPerTicketTokens * desiredTicketAmount} PIXELS
-              </h1>
-            </div>
-            <div className='games-modal__tickets-controls'>
-              <MinusSVG onClick={handleTicketSubClick} className='games-modal__tickets-sub' />
-              <input
-                type='number'
-                onChange={handleTicketInputChange}
-                min={1}
-                className='games-modal__tickets-input'
-                value={desiredTicketAmount}
-              />
-              <PlusSVG onClick={handleTicketAddClick} className='games-modal__tickets-add' />
-            </div>
-            <button
-              disabled={isBuyTicketsLoading}
-              onClick={handleBuyTicketClick}
-              className='games-modal__buy-tickets-button'
-            >
-              Buy Tickets
-            </button>
+
+            {isStarted && !isEnded && (
+              <>
+                <div>
+                  <h1 className='games-modal__ticket-cost-label'>ticket cost</h1>
+                  <h1 className='games-modal__ticket-cost-value'>
+                    {lottery.costPerTicketTokens * desiredTicketAmount} ASH
+                    {lottery.costPerTicketPoints > 0 &&
+                      ` + ${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`}
+                  </h1>
+                </div>
+                <div className='games-modal__tickets-controls'>
+                  <MinusSVG onClick={handleTicketSubClick} className='games-modal__tickets-sub' />
+                  <input
+                    type='number'
+                    onChange={handleTicketInputChange}
+                    min={1}
+                    className='games-modal__tickets-input'
+                    value={desiredTicketAmount}
+                  />
+                  <PlusSVG onClick={handleTicketAddClick} className='games-modal__tickets-add' />
+                </div>
+                <button
+                  disabled={isBuyTicketsLoading}
+                  onClick={handleBuyTicketClick}
+                  className='games-modal__buy-tickets-button'
+                >
+                  Buy Tickets
+                </button>
+              </>
+            )}
+
+            {winners && winners.length > 0 && (
+              <>
+                <h1 className='games-modal__winners-label'>winners</h1>
+                <div className='games-modal__winners-list'>
+                  {winners.map((winnerAddress) => (
+                    <div key={winnerAddress}>{shortenAddress(winnerAddress)}</div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </section>
       </div>

@@ -207,6 +207,15 @@
   @include game-info-label;
 }
 
+.games-modal__winners-label {
+  @include game-info-label;
+}
+
+.games-modal__winners-list {
+  overflow: auto;
+  height: 200px;
+}
+
 @mixin game-info-value {
   font-style: normal;
   font-weight: 400;

@@ -9,6 +9,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'GetLottery':
       await getLottery(Number(request.query.lotteryId), response);
       break;
+    case 'GetLotteryWinners':
+      await getLotteryWinners(Number(request.query.lotteryId), response);
+      break;
     default:
       response.status(500);
   }
@@ -29,6 +32,25 @@ async function getLottery(lotteryId: number, response: NextApiResponse) {
         },
       });
       response.json(lottery);
+    } catch (e) {
+      console.log({ e });
+      response.status(500);
+    }
+  }
+}
+
+async function getLotteryWinners(lotteryId: number, response: NextApiResponse) {
+  console.log(`getLotteryWinners(${lotteryId})`);
+  if (isNaN(lotteryId)) {
+    response.status(500);
+  } else {
+    try {
+      const winners = new Set<string>();
+      const result = await prisma.prizeProof.findMany({ where: { lotteryId } });
+      for (const w of result) {
+        winners.add(w.winnerAddress);
+      }
+      response.json(Array.from(winners));
     } catch (e) {
       console.log({ e });
       response.status(500);
