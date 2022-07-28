@@ -32,7 +32,7 @@ export default function ListingTile({ nft, artist }: Props) {
       return; // can't buy an NFT that is already owned or doesn't have a sell offer
     }
     if (!signer) {
-      toast.info('Please Sign In before placing orders.');
+      toast.info('Please Sign In With Ethereum before placing orders.');
     } else if (isLoading) {
       toast.info('Please wait for transaction to complete.');
     } else {

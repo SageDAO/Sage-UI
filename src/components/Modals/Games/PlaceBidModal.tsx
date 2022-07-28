@@ -14,6 +14,7 @@ import System from '@/components/Icons/System';
 import BidHistoryTable from '@/components/Games/BidHistoryTable';
 import { motion } from 'framer-motion';
 import variants from '@/animations/index';
+import { toast } from 'react-toastify';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -49,7 +50,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
   }
 
   function handlePlaceBidClick() {
-    placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
+    if (signer) {
+      placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
+    } else {
+      toast.info('Please Sign In With Ethereum before placing bids.');
+    }
   }
 
   function handleMinButtonClick() {
