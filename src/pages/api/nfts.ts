@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/prisma/client';
 import { OfferState } from '@prisma/client';
 import { getNFTContract } from '@/utilities/contracts';
+import { ethers } from 'ethers';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -50,6 +51,9 @@ async function updateOwner(id: number, response: NextApiResponse) {
     const nftContract = await getNFTContract(offer.nftContractAddress);
     const ownerAddress = await nftContract.ownerOf(offer.nftId);
     console.log(`updateOwner() :: Owner of token ${offer.nftId} on contract ${offer.nftContractAddress} is ${ownerAddress}`);
+    if (ownerAddress == ethers.constants.AddressZero) {
+      throw new Error('Token has no owner or was not found in contract');
+    }
     await prisma.offer.update({
       where: { id },
       data: { state: OfferState.USED },
