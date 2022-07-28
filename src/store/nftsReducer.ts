@@ -11,7 +11,6 @@ import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arw
 import { Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
-import { keccak256 } from 'ethers/lib/utils';
 import { Offer } from '@prisma/client';
 
 export interface MintRequest {
@@ -106,8 +105,9 @@ export const nftsApi = createApi({
           return { data: false };
         }
         try {
-          console.log(sellOffer);
-          console.log(`WEI PRICE = ${weiPrice}`);
+          console.log(
+            `buyFromSellOffer(${sellOffer.signer}, ${sellOffer.nftContractAddress}, ${weiPrice}, ${sellOffer.nftId}, ${sellOffer.expiresAt}, ${sellOffer.signedOffer}`
+          );
           const tx = await marketplaceContract.buyFromSellOffer(
             sellOffer.signer,
             sellOffer.nftContractAddress,
@@ -226,23 +226,14 @@ async function createSignedSellOffer(
   oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
   const expiresAt = Math.floor(oneYearFromNow.getTime() / 1000);
   const artistAddress = await signer.getAddress();
-  console.log(
-    `createSignedSellOffer(${artistAddress}, ${nftContractAddress}, ${weiPrice}, ${nftId}, ${expiresAt})`
+  const message = ethers.utils.defaultAbiCoder.encode(
+    ['address', 'address', 'uint256', 'uint256', 'uint256', 'bool'],
+    [artistAddress, nftContractAddress, weiPrice, nftId, expiresAt, true]
   );
-  const signedOffer = await signer.signMessage(
-    keccak256(
-      ethers.utils.defaultAbiCoder.encode(
-        ['address', 'address', 'uint256', 'uint256', 'uint256', 'bool'],
-        [
-          artistAddress,
-          nftContractAddress,
-          weiPrice,
-          nftId,
-          expiresAt,
-          true, //isSellOrder
-        ]
-      )
-    )
+  const encodedMessage = ethers.utils.keccak256(message);
+  const signedOffer = await signer.signMessage(ethers.utils.arrayify(encodedMessage));
+  console.log(
+    `createSignedSellOffer(${artistAddress}, ${nftContractAddress}, ${weiPrice}, ${nftId}, ${expiresAt}, ${true}) :: ${signedOffer}`
   );
   return { signedOffer, expiresAt };
 }
