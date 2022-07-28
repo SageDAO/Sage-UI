@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
-import { useGetAuctionStateQuery, usePlaceBidMutation } from '@/store/auctionsReducer';
-import Modal, { Props as ModalProps } from '@/components/Modals';
+import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
-import GamesModalHeader from './GamesModalHeader';
-import Status from '@/components/Status';
+import { useGetAuctionStateQuery, usePlaceBidMutation } from '@/store/auctionsReducer';
+import Modal, { Props as ModalProps } from '@/components/Modals';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
 import { BaseMedia } from '@/components/Media';
 import System from '@/components/Icons/System';
 import BidHistoryTable from '@/components/Games/BidHistoryTable';
-import { motion } from 'framer-motion';
-import variants from '@/animations/index';
-import { toast } from 'react-toastify';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -42,6 +39,10 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
+  const now = new Date().getTime();
+  const isOpenForBids =
+    auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
+  console.log(auctionState);
 
   function toggleBidHistory() {
     setState((prevState) => {
@@ -102,9 +103,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
-      <motion.div
-        className='games-modal'
-      >
+      <motion.div className='games-modal'>
         <section className='games-modal__header'>
           <SageFullLogo className='games-modal__sage-logo' />
           <CloseSVG onClick={closeModal} className='games-modal__close-button' />
@@ -129,7 +128,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
             </div>
             <div className='games-modal__bid-info-group'>
               <div>
-                <h1 className='games-modal__highest-bid-label'>current highest bid</h1>
+                <h1 className='games-modal__highest-bid-label'>
+                  {auction.winnerAddress
+                    ? 'winning bid'
+                    : `${isOpenForBids && `current `}highest bid`}
+                </h1>
                 <h1 className='games-modal__highest-bid-value'>
                   {auctionState?.highestBidNumber} ASH
                 </h1>
@@ -141,23 +144,28 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                 >
                   <BaseMedia src={'/icons/expandable.svg'}></BaseMedia>
                 </div>
-                see active bids
+                bid history
               </div>
             </div>
-            <input
-              onChange={handleBidInputChange}
-              type='number'
-              className='games-modal__bid-input'
-              min={auctionState?.nextMinBid}
-              value={state.desiredBidValue}
-            />
-            <button
-              disabled={isPlaceBidLoading}
-              className='games-modal__place-bid-button'
-              onClick={handlePlaceBidClick}
-            >
-              place bid
-            </button>
+
+            {isOpenForBids && (
+              <>
+                <input
+                  onChange={handleBidInputChange}
+                  type='number'
+                  className='games-modal__bid-input'
+                  min={auctionState?.nextMinBid}
+                  value={state.desiredBidValue}
+                />
+                <button
+                  disabled={isPlaceBidLoading}
+                  className='games-modal__place-bid-button'
+                  onClick={handlePlaceBidClick}
+                >
+                  place bid
+                </button>
+              </>
+            )}
           </div>
         </section>
         <section className='games-modal__bid-history-section'>
