@@ -26,13 +26,11 @@ export default function artists({ artistGroups }: Props) {
           shouldStartAsymmetric = true;
         }
         return (
-          <>
-            <ArtistsRow
-              key={i}
-              shouldStartAsymmetric={shouldStartAsymmetric}
-              artists={artists}
-            ></ArtistsRow>
-          </>
+          <ArtistsRow
+            key={i}
+            shouldStartAsymmetric={shouldStartAsymmetric}
+            artists={artists}
+          ></ArtistsRow>
         );
       })}
     </motion.div>

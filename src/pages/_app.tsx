@@ -1,4 +1,5 @@
 import '@/styles/index.scss';
+import useTheme from '@/hooks/useTheme';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import 'react-medium-image-zoom/dist/styles.css';
 import { Provider as ReduxProvider } from 'react-redux';
@@ -45,8 +46,9 @@ const apolloClient = new ApolloClient({
 
 function App({ Component, pageProps, router }: AppProps) {
   if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <MaintenancePage />;
+  useTheme();
   return (
-    <AnimatePresence >
+    <AnimatePresence>
       <ReduxProvider store={store}>
         <WagmiProvider client={wagmiClient}>
           <SessionProvider session={pageProps.session} refetchInterval={0}>
