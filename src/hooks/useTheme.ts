@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
 const KEY = 'theme';
 const DARK_THEME = 'dark';
 const LIGHT_THEME = 'light';
 type Theme = typeof DARK_THEME | typeof LIGHT_THEME;
 const DEFAULT_THEME: Theme = 'dark';
-
 
 export default function useTheme() {
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
@@ -22,21 +21,17 @@ export default function useTheme() {
     }
   }
 
-
   useEffect(() => {
-    const savedTheme = localStorage.getItem(KEY);
-    if (savedTheme) {
-      document.body.classList.add(savedTheme);
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme(DARK_THEME);
+    } else {
+      setTheme(LIGHT_THEME);
     }
   }, []);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem(KEY);
-    if (!savedTheme) {
-      localStorage.setItem(KEY, DEFAULT_THEME);
-    }
-    setTheme(savedTheme as Theme);
-  }, []);
+    document.body.classList.add(theme);
+  }, [theme]);
 
   return { toggleTheme, theme };
 }
