@@ -1,11 +1,13 @@
+import React from 'react';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { toast } from 'react-toastify';
+import { useSigner } from 'wagmi';
+import { Signer } from 'ethers';
+import ReactTags from 'react-tag-autocomplete';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { BaseMedia } from '@/components/Media';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
-import { Signer } from 'ethers';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useSigner } from 'wagmi';
 
 interface State {
   file: File | null;
@@ -29,32 +31,33 @@ export default function CreationsPanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [mintSingleNft, { isLoading: isMinting }] = useMintSingleNftMutation();
   const { data: signer } = useSigner();
+  const reactTags = React.createRef();
 
-  function handleTitleInput(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleTitleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
       return { ...prevState, title: e.target.value };
     });
   }
 
-  function handlePriceInput(e: React.ChangeEvent<HTMLInputElement>) {
+  function handlePriceInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
       return { ...prevState, price: e.target.value };
     });
   }
 
-  function handleTagsInput(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleTagsInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
       return { ...prevState, tags: e.target.value };
     });
   }
 
-  function handleDescriptionInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
+  function handleDescriptionInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setState((prevState) => {
       return { ...prevState, description: e.target.value };
     });
   }
 
-  function handleFilesInput(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleFilesInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const validTypes = ['image/png', 'image/gif', 'image/jpeg', 'video/mpeg'];
     const newFile = e.target.files![0];
     setState((prevState) => {
@@ -62,9 +65,20 @@ export default function CreationsPanel() {
     });
   }
 
+  // function onTagDelete (i) {
+  //   const tags = this.state.tags.slice(0)
+  //   tags.splice(i, 1)
+  //   this.setState({ tags })
+  // }
+
+  // function onTagAddition (tag) {
+  //   const tags = [].concat(this.state.tags, tag)
+  //   this.setState({ tags })
+  // }
+
   async function handleMintButtonClick() {
     if (!signer) {
-      toast.warn('Please Sign In With Ethereum before submitting your artwork');
+      toast.info('Please Sign In With Ethereum before submitting your artwork');
       return;
     }
     if (!state.file) {
@@ -89,8 +103,8 @@ export default function CreationsPanel() {
       file: state.file,
       signer: signer as Signer,
     } as MintRequest);
-    const nftId = (result as any).data;
-    if (!nftId || nftId == 0) {
+    const nftId = parseInt((result as any).data);
+    if (isNaN(nftId) || nftId == 0) {
       toast.error('Failure minting NFT');
     } else {
       toast.success(`Success! NFT minted!`);
@@ -119,7 +133,7 @@ export default function CreationsPanel() {
         <div className='creations-panel__file-upload-group'>
           <div className='creations-panel__file-upload-field-wrapper'>
             <input
-              onChange={handleFilesInput}
+              onChange={handleFilesInputChange}
               type='file'
               className='creations-panel__file-upload-field'
               accept='image/png, image/gif, image/jpeg, video/mp4'
@@ -144,7 +158,7 @@ export default function CreationsPanel() {
           <h1 className='creations-panel__file-title-label'>artwork title *</h1>
           <input
             value={state.title}
-            onChange={handleTitleInput}
+            onChange={handleTitleInputChange}
             className='creations-panel__file-title-field'
           />
         </div>
@@ -152,7 +166,7 @@ export default function CreationsPanel() {
           <h1 className='creations-panel__file-desc-label'>artwork description</h1>
           <textarea
             value={state.description}
-            onChange={handleDescriptionInput}
+            onChange={handleDescriptionInputChange}
             className='creations-panel__file-desc-field'
           />
         </div>
@@ -160,7 +174,7 @@ export default function CreationsPanel() {
           <h1 className='creations-panel__file-title-label'>tags</h1>
           <input
             value={state.tags}
-            onChange={handleTagsInput}
+            onChange={handleTagsInputChange}
             className='creations-panel__file-title-field'
           />
         </div>
@@ -169,7 +183,7 @@ export default function CreationsPanel() {
           <input
             type='number'
             value={state.price}
-            onChange={handlePriceInput}
+            onChange={handlePriceInputChange}
             className='creations-panel__file-title-field'
           />
         </div>
