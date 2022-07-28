@@ -65,9 +65,7 @@ function profile() {
         variants={variants}
         className='profile-page__menu'
       >
-        <div className='profile-page__sage-logo-container'>
-          <SageFullLogoSVG />
-        </div>
+          <SageFullLogoSVG className='profile-page__sage-logo-svg' />
         <div className='profile-page__pfp-container'>
           <PfpImage src={userData?.profilePicture}></PfpImage>
         </div>

@@ -105,6 +105,10 @@
   width: 300px;
   height: 100px;
 }
+.profile-page__sage-logo-svg {
+  width: 300px;
+  height: 100px;
+}
 
 .profile-page__menu {
   @include group;
@@ -197,7 +201,7 @@
   flex: 1;
   flex-direction: column;
   gap: 45px;
-	max-width: 851px;
+  max-width: 851px;
   // background-color: brown;
 }
 
@@ -406,6 +410,11 @@
 .creations-panel__file-upload-plus-icon {
   position: absolute;
   z-index: 1;
+	width: 40px;
+	height: 40px;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
 }
 
 .creations-panel__file-upload-label {
