@@ -1,11 +1,11 @@
 import { PfpImage } from '@/components/Media';
 import { useGetUserQuery } from '@/store/usersReducer';
 import { useState, useEffect } from 'react';
-
 import { useUpdateUserMutation } from '@/store/usersReducer';
 import type { SafeUserUpdate } from '@/prisma/types';
 import useModal from '@/hooks/useModal';
 import ProfilePictureModal from '@/components/Modals/ProfilePictureModal';
+import { useSession } from 'next-auth/react';
 
 interface State extends SafeUserUpdate {}
 
@@ -20,9 +20,10 @@ const INITIAL_STATE: State = {
 };
 
 export default function ProfilePanel() {
+  const { data: sessionData } = useSession();
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [updateUser, { isLoading }] = useUpdateUserMutation();
-  const { data } = useGetUserQuery();
+  const { data } = useGetUserQuery(undefined, { skip: !sessionData });
   const {
     isOpen: isProfilePicModalOpen,
     closeModal: closeProfilePicModal,
@@ -45,6 +46,7 @@ export default function ProfilePanel() {
       return { ...data };
     });
   }, [data]);
+
   return (
     <form onSubmit={handleFormSubmit} className='profile-panel'>
       <ProfilePictureModal

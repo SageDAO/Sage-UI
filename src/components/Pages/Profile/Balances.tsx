@@ -5,7 +5,9 @@ import { useBalance } from 'wagmi';
 
 export default function Balances() {
   const { data: userData } = useGetUserQuery();
-  const { data: pointsData } = useGetPointsBalanceQuery();
+  const { data: pointsData } = useGetPointsBalanceQuery(undefined, {
+    skip: !userData,
+  });
   const { data: walletBalance } = useBalance({
     token: parameters.ASHTOKEN_ADDRESS,
     addressOrName: userData?.walletAddress,

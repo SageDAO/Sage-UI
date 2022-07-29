@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import type { Router } from 'next/router';
-import variants from '@/animations/index';
 import { motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +12,9 @@ import HiddenMenu from './HiddenMenu';
 import MobileMenu from '@/components/Mobile/MobileMenu';
 import MenuToggle from '@/components/Mobile/MenuToggle';
 import useModal from '@/hooks/useModal';
+import { useSession } from 'next-auth/react';
+import { useAccount, useDisconnect } from 'wagmi';
+import { useSignOutMutation } from '@/store/usersReducer';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -29,6 +31,19 @@ export default function Layout({ children, router }: Props) {
 
   const cursorEl = useRef<HTMLDivElement>(null);
   const layoutEl = useRef<HTMLDivElement>(null);
+
+  const { data: sessionData } = useSession();
+  const { data: wagmiData } = useAccount();
+  const [signOut] = useSignOutMutation();
+  const { disconnect } = useDisconnect();
+
+  useEffect(() => {
+    if (sessionData && wagmiData && sessionData.address != wagmiData.address) {
+      signOut();
+      disconnect();
+      router.push('/');
+    }
+  }, [sessionData, wagmiData]);
 
   const {
     closeModal: closeMobileMenu,

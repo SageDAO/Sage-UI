@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react';
 import LoaderDots from '@/components/LoaderDots';
 import { Tab } from '@headlessui/react';
 import useTabs from '@/hooks/useTabs';
-import Image from 'next/image';
 import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
 import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
 import Balances from '@/components/Pages/Profile/Balances';
@@ -23,7 +22,9 @@ type TabItem = {
 
 function profile() {
   const { data: sessionData } = useSession();
-  const { data: userData, isFetching: isFetchingUser } = useGetUserQuery();
+  const { data: userData, isFetching: isFetchingUser } = useGetUserQuery(undefined, {
+    skip: !sessionData,
+  });
   const [signOut] = useSignOutMutation();
 
   const { handleTabsClick, selectedTabIndex } = useTabs();
@@ -86,7 +87,7 @@ function profile() {
               </Tab>
             );
           })}
-          <button onClick={() => signOut(null)} className='profile-page__tabs-tab'>
+          <button onClick={() => signOut()} className='profile-page__tabs-tab'>
             log out
           </button>
         </Tab.List>

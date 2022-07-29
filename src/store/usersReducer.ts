@@ -37,7 +37,7 @@ export const usersApi = createApi({
       },
       invalidatesTags: ['User'],
     }),
-    signOut: builder.mutation<null, null>({
+    signOut: builder.mutation<null, void>({
       queryFn: async () => {
         signOut({ redirect: false });
         return { data: null };

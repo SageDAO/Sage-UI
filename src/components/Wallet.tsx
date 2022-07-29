@@ -1,4 +1,4 @@
-import { BaseMedia, PfpImage } from './Media';
+import { PfpImage } from './Media';
 import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
 import {
   useConnect,
@@ -10,10 +10,7 @@ import {
   useBalance,
 } from 'wagmi';
 import { SiweMessage } from 'siwe';
-import Modal, { Props as ModalProps } from '@/components/Modals';
-import type { Dispatch, SetStateAction } from 'react';
-import Loader from 'react-loader-spinner';
-import shortenAddress from '@/utilities/shortenAddress';
+import { Props as ModalProps } from '@/components/Modals';
 import { getCsrfToken, useSession } from 'next-auth/react';
 import { useGetUserQuery, useSignInMutation, useSignOutMutation } from '@/store/usersReducer';
 import Image from 'next/image';
@@ -28,14 +25,18 @@ interface Props {
 export default function Wallet({ closeModal }: Props) {
   const { data: accountData } = useAccount();
   const { disconnect } = useDisconnect();
-  const { data: userData } = useGetUserQuery();
   const { data: sessionData, status: sessionStatus } = useSession();
+  const { data: userData } = useGetUserQuery(undefined, {
+    skip: !sessionData,
+  });
   const { connectors, connectAsync, activeConnector, isConnecting, isConnected } = useConnect();
   const { data: balanceData } = useBalance({
     token: parameters.ASHTOKEN_ADDRESS,
     addressOrName: sessionData?.address as string,
   });
-  const { data: pointsData } = useGetPointsBalanceQuery();
+  const { data: pointsData } = useGetPointsBalanceQuery(undefined, {
+    skip: !sessionData,
+  });
 
   const [signIn] = useSignInMutation();
   const [signOut] = useSignOutMutation();
@@ -81,7 +82,7 @@ export default function Wallet({ closeModal }: Props) {
   }
 
   async function handleSignOutClick() {
-    signOut(null);
+    signOut();
     disconnect();
   }
 

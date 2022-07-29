@@ -6,15 +6,22 @@ import { useGetClaimedPrizesQuery, useGetUnclaimedPrizesQuery } from '@/store/pr
 import { GamePrize } from '@/prisma/types';
 import LoaderDots from '@/components/LoaderDots';
 import { BaseMedia } from '@/components/Media';
+import { useSession } from 'next-auth/react';
 
 export default function CollectionPanel() {
-  const { data: claimedPrizes, isFetching: fetchingClaimedPrizes } = useGetClaimedPrizesQuery();
-  const { data: unclaimedPrizes, isFetching: fetchingUnclaimedPrizes } =
-    useGetUnclaimedPrizesQuery();
+  const { data: sessionData } = useSession();
+  const { data: claimedPrizes, isFetching: fetchingClaimedPrizes } = useGetClaimedPrizesQuery(
+    undefined,
+    { skip: !sessionData }
+  );
+  const { data: unclaimedPrizes, isFetching: fetchingUnclaimedPrizes } = useGetUnclaimedPrizesQuery(
+    undefined,
+    { skip: !sessionData }
+  );
   const { data: claimedAuctionNfts, isFetching: fetchingClaimedAuctionNfts } =
-    useGetClaimedAuctionNftsQuery();
+    useGetClaimedAuctionNftsQuery(undefined, { skip: !sessionData });
   const { data: unclaimedAuctionNfts, isFetching: fetchingUnclaimedAuctionNfts } =
-    useGetUnclaimedAuctionNftsQuery();
+    useGetUnclaimedAuctionNftsQuery(undefined, { skip: !sessionData });
   const myNfts = new Array().concat(
     unclaimedAuctionNfts,
     unclaimedPrizes,

@@ -31,7 +31,14 @@ async function getEarnedPoints(walletAddress: string, response: NextApiResponse)
     },
   });
   if (!dbPoints) {
-    response.status(400).end('No data found');
+    response
+      .status(200)
+      .json({
+        address: walletAddress,
+        totalPointsEarned: BigInt(0).valueOf(),
+        signedMessage: '',
+        updatedAt: new Date(),
+      } as EarnedPoints);
     return;
   }
 

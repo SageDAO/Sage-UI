@@ -5,7 +5,9 @@ import { useEnsName } from 'wagmi';
 
 export default function UserHandle() {
   const { data: sessionData, status: sessionStatus } = useSession();
-  const { data: userData } = useGetUserQuery();
+  const { data: userData } = useGetUserQuery(undefined, {
+    skip: !sessionData,
+  });
   const { data: ensData } = useEnsName({ address: sessionData?.address as string });
 
   /*

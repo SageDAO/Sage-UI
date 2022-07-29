@@ -1,9 +1,9 @@
 import { useGetUserQuery } from '@/store/usersReducer';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useAccount, useEnsName } from 'wagmi';
+import { useEnsName } from 'wagmi';
 import { PfpImage } from '../Media';
 import PersonalizedMessage from '../PersonalizedMessage';
-import UserHandle from '../UserHandle';
 
 interface NavLink {
   name: string;
@@ -31,8 +31,12 @@ const navLinks: NavLink[] = [
 
 export default function Nav() {
   const router = useRouter();
-  const { data: userData } = useGetUserQuery();
+  const { data: sessionData } = useSession();
+  const { data: userData } = useGetUserQuery(undefined, {
+    skip: !sessionData,
+  });
   const { data: ensData } = useEnsName({ address: userData?.walletAddress });
+
   return (
     <div className='nav' data-cy='nav'>
       <div className='nav__personal'>
