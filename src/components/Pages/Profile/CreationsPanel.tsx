@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
 import { Signer } from 'ethers';
-import ReactTags from 'react-tag-autocomplete';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { BaseMedia } from '@/components/Media';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
