@@ -28,14 +28,6 @@ export default function CollectionPanel() {
     { skip: !sessionData }
   );
 
-  const myNfts = new Array().concat(
-    unclaimedAuctionNfts,
-    unclaimedPrizes,
-    claimedAuctionNfts,
-    claimedPrizes,
-    listingNfts
-  );
-
   if (
     fetchingClaimedPrizes ||
     fetchingUnclaimedPrizes ||
@@ -45,6 +37,14 @@ export default function CollectionPanel() {
   ) {
     return <LoaderDots />;
   }
+
+  const myNfts = new Array().concat(
+    unclaimedAuctionNfts,
+    unclaimedPrizes,
+    claimedAuctionNfts,
+    claimedPrizes,
+    listingNfts
+  );
 
   return (
     <div className='collection-panel'>
@@ -56,7 +56,7 @@ export default function CollectionPanel() {
             return (
               <div key={nft.nftId} className='collection-panel__tile'>
                 <div className='collection-panel__img-container'>
-                  <BaseMedia src={nft.s3Path} isVideo={nft.isVideo}></BaseMedia>
+                  <BaseMedia src={nft.s3Path} isVideo={nft.isVideo} isZoomable={true}></BaseMedia>
                 </div>
                 <div className='collection-panel__tile-header'>
                   by {nft.artistDisplayName || nft.artistUsername}
