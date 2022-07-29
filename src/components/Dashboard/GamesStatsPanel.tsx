@@ -21,10 +21,6 @@ const GAMES_QUERY = gql`
         id
         txnHash
       }
-      refunds {
-        id
-        txnHash
-      }
     }
     auctions {
       id
