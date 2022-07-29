@@ -29,6 +29,8 @@ export type AuctionNftWithArtist = Prisma.AuctionGetPayload<{
   };
 }>;
 
+export type CollectedListingNft = Omit<GamePrize, 'dropId' | 'createdAt'>;
+
 export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   include: {
     Lotteries: true;

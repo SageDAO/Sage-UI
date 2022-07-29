@@ -3,10 +3,11 @@ import {
   useGetUnclaimedAuctionNftsQuery,
 } from '@/store/auctionsReducer';
 import { useGetClaimedPrizesQuery, useGetUnclaimedPrizesQuery } from '@/store/prizesReducer';
-import { GamePrize } from '@/prisma/types';
+import { CollectedListingNft, GamePrize } from '@/prisma/types';
 import LoaderDots from '@/components/LoaderDots';
 import { BaseMedia } from '@/components/Media';
 import { useSession } from 'next-auth/react';
+import { useGetListingNftsByOwnerQuery } from '@/store/nftsReducer';
 
 export default function CollectionPanel() {
   const { data: sessionData } = useSession();
@@ -22,18 +23,25 @@ export default function CollectionPanel() {
     useGetClaimedAuctionNftsQuery(undefined, { skip: !sessionData });
   const { data: unclaimedAuctionNfts, isFetching: fetchingUnclaimedAuctionNfts } =
     useGetUnclaimedAuctionNftsQuery(undefined, { skip: !sessionData });
+  const { data: listingNfts, isFetching: fetchingListingNfts } = useGetListingNftsByOwnerQuery(
+    undefined,
+    { skip: !sessionData }
+  );
+
   const myNfts = new Array().concat(
     unclaimedAuctionNfts,
     unclaimedPrizes,
     claimedAuctionNfts,
-    claimedPrizes
+    claimedPrizes,
+    listingNfts
   );
 
   if (
     fetchingClaimedPrizes ||
     fetchingUnclaimedPrizes ||
     fetchingClaimedAuctionNfts ||
-    fetchingUnclaimedAuctionNfts
+    fetchingUnclaimedAuctionNfts ||
+    fetchingListingNfts
   ) {
     return <LoaderDots />;
   }
@@ -43,16 +51,16 @@ export default function CollectionPanel() {
       <div className='collection-panel__grid'>
         {!myNfts.length && 'a little bit empty...'}
         {myNfts &&
-          myNfts?.map((item: GamePrize) => {
-            if (!item?.s3Path) return;
+          myNfts?.map((nft: GamePrize | CollectedListingNft) => {
+            if (!nft?.s3Path) return;
             return (
-              <div key={item.nftId} className='collection-panel__tile'>
+              <div key={nft.nftId} className='collection-panel__tile'>
                 <div className='collection-panel__img-container'>
-                  <BaseMedia src={item.s3Path} isVideo={item.isVideo}></BaseMedia>
+                  <BaseMedia src={nft.s3Path} isVideo={nft.isVideo}></BaseMedia>
                 </div>
                 <div className='collection-panel__tile-header'>
-                  {item.dropId} by {item.artistDisplayName || item}
-                  <h1 className='collection-panel__tile-name'>it is getting late</h1>
+                  by {nft.artistDisplayName || nft.artistUsername}
+                  <h1 className='collection-panel__tile-name'>{nft.nftName}</h1>
                 </div>
               </div>
             );

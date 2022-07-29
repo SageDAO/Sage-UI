@@ -1,11 +1,9 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
-import { Offer, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import prisma from '@/prisma/client';
 import Hero from '@/components/Hero';
 import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
-import { useBuySingleNftMutation, useGetArtistNftsQuery } from '@/store/nftsReducer';
-import { useSigner } from 'wagmi';
-import { toast } from 'react-toastify';
+import { useGetListingNftsByArtistQuery } from '@/store/nftsReducer';
 import { Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { PfpImage } from '@/components/Media';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
@@ -21,7 +19,7 @@ interface Props {
 }
 
 export default function artist({ artist }: Props) {
-  const { data: nfts } = useGetArtistNftsQuery(artist.walletAddress);
+  const { data: nfts } = useGetListingNftsByArtistQuery(artist.walletAddress);
 
   return (
     <motion.div
@@ -56,7 +54,7 @@ export default function artist({ artist }: Props) {
             </ul>
           </div>
         </div>
-        <button className='artist-page__connect'>connect</button>
+        <button className='artist-page__connect'>follow</button>
       </div>
       <p className='artist-page__bio'>{artist.bio}</p>
 

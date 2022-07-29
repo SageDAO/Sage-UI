@@ -8,7 +8,7 @@ import {
 } from '@/utilities/contracts';
 import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3';
 import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave';
-import { Nft_include_NftContractAndOffers } from '@/prisma/types';
+import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { Offer } from '@prisma/client';
@@ -25,10 +25,15 @@ export interface MintRequest {
 export const nftsApi = createApi({
   reducerPath: 'nftsApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  tagTypes: ['NftContract', 'Nfts'],
+  tagTypes: ['Nfts'],
   endpoints: (builder) => ({
-    getArtistNfts: builder.query<Nft_include_NftContractAndOffers[], string>({
-      query: (artistAddress: string) => `nfts?action=GetArtistNfts&address=${artistAddress}`,
+    getListingNftsByArtist: builder.query<Nft_include_NftContractAndOffers[], string>({
+      query: (artistAddress: string) =>
+        `nfts?action=GetListingNftsByArtist&address=${artistAddress}`,
+      providesTags: ['Nfts'],
+    }),
+    getListingNftsByOwner: builder.query<CollectedListingNft[], void>({
+      query: () => `nfts?action=GetListingNftsByOwner`,
       providesTags: ['Nfts'],
     }),
     fetchOrCreateNftContract: builder.query<string, { artistAddress: string; signer: Signer }>({
@@ -45,7 +50,6 @@ export const nftsApi = createApi({
           return { data: 'false' };
         }
       },
-      providesTags: ['NftContract'],
     }),
     mintSingleNft: builder.mutation<number, MintRequest>({
       queryFn: async (mintRequest, { dispatch }, _, fetchWithBQ) => {
@@ -270,7 +274,8 @@ export async function _fetchOrCreateNftContract(
 }
 
 export const {
-  useGetArtistNftsQuery,
+  useGetListingNftsByArtistQuery,
+  useGetListingNftsByOwnerQuery,
   useFetchOrCreateNftContractQuery,
   useMintSingleNftMutation,
   useBuySingleNftMutation,
