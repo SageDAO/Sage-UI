@@ -30,7 +30,7 @@ async function getListingNftsByArtist(artistAddress: string, response: NextApiRe
   console.log(`getListingNftsByArtist(${artistAddress})`);
   try {
     const result = await prisma.nft.findMany({
-      where: { artistAddress },
+      where: { artistAddress, isHidden: false },
       include: {
         NftContract: true,
         Offers: true,
@@ -53,7 +53,7 @@ async function getListingNftsByOwner(request: NextApiRequest, response: NextApiR
   try {
     const nfts = new Array<CollectedListingNft>();
     const result = await prisma.nft.findMany({ 
-      where: { ownerAddress },
+      where: { ownerAddress, isHidden: false },
       include: { NftContract: { include: { Artist: true } } }
     });
     result.forEach(item => nfts.push(flatten(item, item.NftContract?.Artist!)));
