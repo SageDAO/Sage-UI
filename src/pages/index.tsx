@@ -10,6 +10,7 @@ import { computeDropStatus } from '@/utilities/status';
 import { getHomePageData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import variants from '@/animations/index';
+import SageIconSVG from '@/public/icons/sage.svg';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -37,9 +38,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
               className='home-page__featured-drop-tag'
               onClick={() => router.push(`/drops/${featuredDrop.id}`)}
             >
-              <div className='home-page__featured-drop-tag-sage-logo'>
-                <BaseMedia src='/icons/sage.svg' isVideo={false} />
-              </div>
+              <SageIconSVG className='home-page__featured-drop-tag-sage-logo'></SageIconSVG>
               <div className='home-page__featured-drop-tag-label'>
                 This month active drop <br />
                 artist | {featuredDrop.NftContract.Artist.displayName}

@@ -24,10 +24,10 @@
 }
 
 .home-page__featured-drop-tag-sage-logo {
-  img {
-    fill: red;
-  }
   position: relative;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
   height: clamp(20px, 2vw, 40px);
   aspect-ratio: 44.48/48;
 }
@@ -252,7 +252,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   height: 21px;
   text-transform: uppercase;
   @include m.pill;
-	@include m.interact;
+  @include m.interact;
   @include m.theme() {
     color: m.t(base2);
     background-color: m.t(contrast2);
