@@ -67,15 +67,15 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
 
   return (
     <>
-      <div className='drop-page__parallax-base'>
-        <img src={drop.bannerImageS3Path} className='drop-page__parallax-img' />
+      <div className='drop-page__banner-base'>
+        <BaseMedia src={drop.bannerImageS3Path} className=''></BaseMedia>
       </div>
       <motion.div
         initial={'pageInitial'}
         animate={'pageAnimate'}
 				exit={'pageExit'}
         variants={variants}
-        className='page drop-page'
+        className='drop-page'
       >
         <header className='drop-page__header'>
           <div className='drop-page__header-logotype'>
