@@ -12,8 +12,6 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { getDropsPageData } from '@/prisma/functions';
 import System, { computeDropSystems } from '@/components/Icons/System';
-import variants from '@/animations/index';
-import {  motion } from 'framer-motion';
 
 interface Props {
   drops: Awaited<ReturnType<typeof getDropsPageData>>;
@@ -30,10 +28,7 @@ function drops({ drops }: Props) {
   const { currentOption, setCurrentOption } = useDropDown(['Most Recent']);
   const router = useRouter();
   return (
-      <motion.div
-        initial={'pageInitial'}
-        animate={'pageAnimate'}
-        variants={variants}
+      <div
         className='drops-page'
       >
         <section className='drops-page__header'>
@@ -124,7 +119,7 @@ function drops({ drops }: Props) {
             );
           })}
         </section>
-      </motion.div>
+      </div>
   );
 }
 

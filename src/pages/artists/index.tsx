@@ -2,8 +2,6 @@ import Logotype from '@/components/Logotype';
 import ArtistsRow from '@/components/Pages/Artists/Row';
 import prisma from '@/prisma/client';
 import { getArtistsPageData } from '@/prisma/functions';
-import variants from '@/animations/index';
-import { motion } from 'framer-motion';
 
 export interface Props {
   artistGroups: Awaited<ReturnType<typeof getArtistsPageData>>[];
@@ -11,10 +9,7 @@ export interface Props {
 
 export default function artists({ artistGroups }: Props) {
   return (
-    <motion.div
-      initial={'pageInitial'}
-      animate={'pageAnimate'}
-      variants={variants}
+    <div
       className='artists-page'
     >
       <div className='artists-page__logotype'>
@@ -33,7 +28,7 @@ export default function artists({ artistGroups }: Props) {
           ></ArtistsRow>
         );
       })}
-    </motion.div>
+    </div>
   );
 }
 

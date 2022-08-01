@@ -11,8 +11,7 @@ import System, { computeDropSystems } from '@/components/Icons/System';
 import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
 import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
-import variants from '@/animations/index';
-import { motion } from 'framer-motion';
+import SageLogoSVG from '@/public/icons/sage.svg';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -68,13 +67,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   return (
     <>
       <div className='drop-page__banner-base'>
-        <BaseMedia src={drop.bannerImageS3Path} className=''></BaseMedia>
+        <BaseMedia src={drop.bannerImageS3Path}></BaseMedia>
       </div>
-      <motion.div
-        initial={'pageInitial'}
-        animate={'pageAnimate'}
-				exit={'pageExit'}
-        variants={variants}
+      <div
         className='drop-page'
       >
         <header className='drop-page__header'>
@@ -83,9 +78,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           </div>
           <section className='drop-page__header-drop-info'>
             <div className='drop-page__header-logo-column'>
-              <div className='drop-page__header-logo-container'>
-                <BaseMedia src='/icons/sage.svg'></BaseMedia>
-              </div>
+              <SageLogoSVG className='drop-page__header-logo' />
             </div>
             <div className='drop-page__header-main-column'>
               <h1 className='drop-page__header-drop-name'>
@@ -154,7 +147,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
             })}
           </div>
         </section>
-      </motion.div>
+      </div>
     </>
   );
 }

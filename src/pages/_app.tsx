@@ -7,7 +7,6 @@ import { SessionProvider } from 'next-auth/react';
 import store from '@/store/store';
 import type { AppProps } from 'next/app';
 import MaintenancePage from '@/components/MaintenancePage';
-import { AnimatePresence } from 'framer-motion';
 import Layout from '@/components/Layout/Layout';
 import { createClient, Provider as WagmiProvider, chain } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -48,19 +47,17 @@ function App({ Component, pageProps, router }: AppProps) {
   if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <MaintenancePage />;
   useTheme();
   return (
-    <AnimatePresence>
-      <ReduxProvider store={store}>
-        <WagmiProvider client={wagmiClient}>
-          <SessionProvider session={pageProps.session} refetchInterval={0}>
-            <ApolloProvider client={apolloClient}>
-              <Layout router={router}>
-                <Component {...pageProps} key={router.pathname} />
-              </Layout>
-            </ApolloProvider>
-          </SessionProvider>
-        </WagmiProvider>
-      </ReduxProvider>
-    </AnimatePresence>
+    <ReduxProvider store={store}>
+      <WagmiProvider client={wagmiClient}>
+        <SessionProvider session={pageProps.session} refetchInterval={0}>
+          <ApolloProvider client={apolloClient}>
+            <Layout router={router}>
+              <Component {...pageProps} key={router.pathname} />
+            </Layout>
+          </ApolloProvider>
+        </SessionProvider>
+      </WagmiProvider>
+    </ReduxProvider>
   );
 }
 

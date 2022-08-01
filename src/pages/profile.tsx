@@ -9,8 +9,6 @@ import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
 import Balances from '@/components/Pages/Profile/Balances';
 import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
 import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
-import { motion } from 'framer-motion';
-import variants from '@/animations/index';
 import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 
 type TabItem = {
@@ -59,13 +57,8 @@ function profile() {
 
   return (
     <Tab.Group as='div' className='profile-page' vertical selectedIndex={selectedTabIndex}>
-      <motion.div
-        initial={'pageInitial'}
-        animate={'pageAnimate'}
-        variants={variants}
-        className='profile-page__menu'
-      >
-          <SageFullLogoSVG className='profile-page__sage-logo-svg' />
+      <div>
+        <SageFullLogoSVG className='profile-page__sage-logo-svg' />
         <div className='profile-page__pfp-container'>
           <PfpImage src={userData?.profilePicture}></PfpImage>
         </div>
@@ -89,13 +82,8 @@ function profile() {
             log out
           </button>
         </Tab.List>
-      </motion.div>
-      <motion.div
-        initial={'pageInitial'}
-        animate={'pageAnimate'}
-        variants={variants}
-        className='profile-page__main'
-      >
+      </div>
+      <div className='profile-page__main'>
         <Balances />
         <Tab.Panels as='div' className='profile-page__tabs-panels'>
           {tabItems.map((item) => {
@@ -110,7 +98,7 @@ function profile() {
             );
           })}
         </Tab.Panels>
-      </motion.div>
+      </div>
     </Tab.Group>
   );
 }
