@@ -7,6 +7,7 @@ import AuctionJson from '@/constants/abis/Auction/Auction.sol/Auction.json';
 import SageNFTJson from '@/constants/abis/NFT/SageNFT.sol/SageNFT.json';
 import NFTFactoryJson from '@/constants/abis/NFT/NFTFactory.sol/NFTFactory.json';
 import MarketplaceJson from '@/constants/abis/Market/Marketplace.sol/Marketplace.json';
+import StorageJson from '@/constants/abis/Utils/SageStorage.sol/SageStorage.json';
 import ERC20StandardJson from '@/constants/abis/ERC-20/ERC20Standard.json';
 import {
   Lottery as LotteryContract,
@@ -16,6 +17,7 @@ import {
   SageNFT as NftContract,
   NFTFactory as NftFactoryContract,
   Marketplace as MarketplaceContract,
+  SageStorage as StorageContract
 } from '@/types/contracts';
 
 const {
@@ -25,6 +27,7 @@ const {
   AUCTION_ADDRESS,
   NFTFACTORY_ADDRESS,
   MARKETPLACE_ADDRESS,
+  STORAGE_ADDRESS,
   NETWORK_NAME,
   CHAIN_ID,
 } = parameters;
@@ -81,6 +84,10 @@ export async function getERC20Contract(signer?: Signer): Promise<ERC20Contract> 
 
 export async function getNftFactoryContract(signer?: Signer): Promise<NftFactoryContract> {
   return (await getContract(NFTFACTORY_ADDRESS, NFTFactoryJson.abi, signer)) as NftFactoryContract;
+}
+
+export async function getStorageContract(signer?: Signer): Promise<StorageContract> {
+  return (await getContract(STORAGE_ADDRESS, StorageJson.abi, signer)) as StorageContract;
 }
 
 export async function getMarketplaceContract(signer?: Signer): Promise<MarketplaceContract> {

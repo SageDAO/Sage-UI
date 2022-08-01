@@ -98,6 +98,9 @@ function UsersTable({ users }: UsersTableProps) {
       {
         Header: 'role',
         accessor: 'role',
+        Cell: (cell: any) => (
+          <span style={{ color: cell.value == 'ADMIN' ? 'red' : cell.value == 'ARTIST' ? 'blue' : '' }}>{cell.value}</span>
+        ),
       },
     ],
     []

@@ -15,7 +15,7 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
 
   return (
     <Modal title='User Details' isOpen={isOpen} closeModal={closeModal}>
-      <div>
+      <div className='dashboard__user-details-modal'>
         {isFetchingPoints ? (
           <LoaderDots />
         ) : (

@@ -125,9 +125,13 @@ export function GamesStatsPanel() {
     <>
       {drops?.map((drop: Drop_include_GamesAndArtist, i) => (
         <div key={i} className='dashboard-game-stats__container'>
-          <div className='dashboard-game-stats__item nft-tile' style={{ textAlign: 'center' }}>
+          <div
+            className='dashboard-game-stats__item nft-tile dashboard-game-stats__tile'
+            style={{ textAlign: 'center' }}
+          >
             <img src={drop.bannerImageS3Path} width={180} height={180} />
-            drop <span className='dashboard-game-stats__id'>{drop.id}</span>
+            drop{' '}
+            <span className='dashboard-game-stats__id dashboard-game-stats__tile'>{drop.id}</span>
           </div>
           <div className='dashboard-game-stats__item' style={{ minWidth: '400px' }}>
             <table>
@@ -137,7 +141,7 @@ export function GamesStatsPanel() {
                   return (
                     <tr key={i}>
                       <td>
-                        lottery <span className='dashboard-game-stats__id'>{lottery.id}</span>{' '}
+                        lottery <span className='dashboard-game-stats__id'>{lottery.id}</span>
                         <br />
                         status: {stats.status} <br />
                         {stats.status === 'Created' &&
@@ -149,21 +153,7 @@ export function GamesStatsPanel() {
                         ) : (
                           `end: ${new Date(lottery.endTime).toLocaleString()}`
                         )}
-                        {stats.tickets?.length > 0 && (
-                          <>
-                            <br />
-                            <a
-                              onClick={() => downloadTickets(lottery.id)}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <img
-                                src='/icons/download.svg'
-                                width={20}
-                                className='dashboard-white-icon'
-                              />
-                            </a>
-                          </>
-                        )}
+                        {stats.tickets?.length > 0 && downloadIcon(() => downloadTickets(lottery.id))}
                       </td>
                       <td>
                         tickets sold: {stats.tickets?.length || 0} <br />
@@ -192,7 +182,7 @@ export function GamesStatsPanel() {
                   }
                   return (
                     <tr key={i}>
-                      <td>
+                      <td style={{}}>
                         auction <span className='dashboard-game-stats__id'>{auction.id}</span>{' '}
                         <br />
                         status: {stats.status}
@@ -202,21 +192,7 @@ export function GamesStatsPanel() {
                         ) : (
                           `end: ${new Date(endTime * 1000).toLocaleString()}`
                         )}
-                        {stats.bids?.length > 0 && (
-                          <>
-                            <br />
-                            <a
-                              onClick={() => downloadBids(auction.id)}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <img
-                                src='/icons/download.svg'
-                                width={20}
-                                className='dashboard-white-icon'
-                              />
-                            </a>
-                          </>
-                        )}
+                        {stats.bids?.length > 0 && downloadIcon(() => downloadBids(auction.id))}
                       </td>
                       <td>
                         bids: {stats.bids?.length || 0} <br />
@@ -233,6 +209,27 @@ export function GamesStatsPanel() {
         </div>
       ))}
     </>
+  );
+}
+
+function downloadIcon(callback: any) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div
+        style={{
+          backgroundColor: '#161619',
+          width: '20px',
+          padding: '3px',
+          borderRadius: '3px',
+          marginTop: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        <a onClick={callback}>
+          <img src='/icons/download.svg' width={20} className='dashboard-white-icon' />
+        </a>
+      </div>
+    </div>
   );
 }
 

@@ -22,10 +22,10 @@
     border-radius: 15px 15px 0 0;
 
     &--selected {
-      background: #fff;
-      border-color: #aaa;
-      color: black;
-      border-radius: 15px 15px 0 0;
+      @include m.theme() {
+        background: m.t(base2);
+      }
+      font-weight: bold;
     }
   }
 
@@ -55,8 +55,8 @@
   &__profile-img {
     overflow: hidden;
     position: relative;
-    width: 2rem;
-    height: 2rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: 7px;
     border: 1px solid c.$text-gray-2;
     margin-top: 5px;
@@ -152,7 +152,7 @@
   }
 
   &__item {
-    padding: 15px 15px 15px 15px;
+    padding: 15px 15px 10px 15px;
 
     table {
       margin-left: auto;
@@ -167,7 +167,15 @@
   &__id {
     font-weight: bolder;
     font-size: 18px;
-    color: white;
+    @include m.theme() {
+      color: m.t(contrast);
+    }
+  }
+
+  &__tile {
+    @include m.theme() {
+      color: m.t(base);
+    }
   }
 }
 

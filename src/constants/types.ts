@@ -12,6 +12,7 @@ export interface Parameters {
   ASHTOKEN_ADDRESS: string;
   NFTFACTORY_ADDRESS: string;
   MARKETPLACE_ADDRESS: string;
+  STORAGE_ADDRESS: string;
 }
 
 export interface Configuration {
