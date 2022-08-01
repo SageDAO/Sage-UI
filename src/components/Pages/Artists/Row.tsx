@@ -31,7 +31,7 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
           <div
             className='artists-page__item'
             onClick={async () => {
-              await router.push(`/artists/${a.walletAddress}`);
+              await router.push(`/artists/${a.username}`);
             }}
             key={i}
           >

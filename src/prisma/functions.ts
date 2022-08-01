@@ -105,15 +105,15 @@ export async function getIndividualArtistsPagePaths(prisma: PrismaClient) {
   });
 
   const paths = artists.map((artist) => ({
-    params: { id: String(artist.walletAddress) },
+    params: { id: String(artist.username) },
   }));
 
   return paths;
 }
 
-export async function getIndividualArtistsPageData(prisma: PrismaClient, walletAddress: string) {
-  const artist = await prisma.user.findUnique({
-    where: { walletAddress },
+export async function getIndividualArtistsPageData(prisma: PrismaClient, username: string) {
+  const artist = await prisma.user.findFirst({
+    where: { username },
   });
   return artist;
 }

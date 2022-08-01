@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BigNumber, ethers, Signer } from 'ethers';
+import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import {
   approveERC20Transfer,
   getMarketplaceContract,
@@ -73,7 +73,7 @@ export const nftsApi = createApi({
           );
           console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
           const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
-          const mintTx = await nftContract.creatorMint(artistAddress, nftId, metadataPath);
+          const mintTx = await nftContract.artistMint(artistAddress, nftId, metadataPath);
           await mintTx.wait();
           await dbInsertSellOffer(
             mintRequest,
@@ -259,7 +259,12 @@ export async function _fetchOrCreateNftContract(
   var artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
   if (!artistContractAddress || artistContractAddress == ethers.constants.AddressZero) {
     console.log(`_fetchOrCreateNftContract() :: Creating new NFT contract...`);
-    var tx = await nftFactoryContract.createNFTContract(artistAddress, 'Sage', 'SAGE');
+    var tx: ContractTransaction;
+    if (artistAddress == await signer.getAddress()) {
+      tx = await nftFactoryContract.deployByArtist('Sage', 'SAGE');
+    } else {
+      tx = await nftFactoryContract.deployByAdmin(artistAddress, 'Sage', 'SAGE');
+    }    
     await tx.wait(1);
     artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
     if (artistContractAddress == ethers.constants.AddressZero) {
