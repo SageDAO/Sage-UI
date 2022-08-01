@@ -137,3 +137,9 @@ export type Splitter_include_Entries = Prisma.SplitterGetPayload<{
     SplitterEntries: true;
   };
 }>;
+
+export type User_include_EarnedPoints = Prisma.UserGetPayload<{
+  include: {
+    EarnedPoints: true;
+  };
+}>;

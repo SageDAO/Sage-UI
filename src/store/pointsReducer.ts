@@ -27,6 +27,18 @@ export const pointsApi = createApi({
       },
       providesTags: ['UserPoints'],
     }),
+    getPointsBalanceByUser: builder.query<string, string>({
+      queryFn: async (walletAddress, { dispatch }, _extraOptions, fetchWithBQ) => {
+        const { data } = await fetchWithBQ(`points?address=${walletAddress}`);
+        const pointsEarned = BigInt((data as any).totalPointsEarned);
+        const userAddress = (data as EarnedPoints).address;
+        const pointsUsed = await getTotalPointsUsed(userAddress);
+        let pointsBalance = pointsEarned - pointsUsed;
+        console.log(`getPointsBalanceByUser() :: ${pointsEarned} - ${pointsUsed} = ${pointsBalance}`);
+        return { data: Number(pointsBalance).toFixed(2) };
+      },
+      providesTags: ['UserPoints'],
+    }),
     withholdEscrowPoints: builder.mutation<null, number>({
       queryFn: async (numPoints: number) => {
         escrowPoints = numPoints;
@@ -66,6 +78,7 @@ export const {
   useGetEarnedPointsQuery,
   useGetEscrowPointsQuery,
   useGetPointsBalanceQuery,
+  useGetPointsBalanceByUserQuery,
   useReleaseEscrowPointsMutation,
   useWithholdEscrowPointsMutation,
 } = pointsApi;

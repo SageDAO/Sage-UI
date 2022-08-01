@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/prisma/client';
 import { getSession } from 'next-auth/react';
 import { UserDisplayInfo } from '@/store/usersReducer';
+import { Role } from '@prisma/client';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -18,6 +19,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case 'GET':
       if (req.query.action == 'GetAllUsersAndEarnedPoints') {
         await getAllUsersAndEarnedPoints(res);
+      } else if (req.query.action == 'PromoteToArtist') {
+        await promoteToArtist(req.query.address as string, res);
       } else if (req.query.wallet) {
         await getUserDisplayInfo(req.query.wallet as string, res);
       } else {
@@ -106,6 +109,24 @@ async function updateUser(user: SafeUserUpdate, walletAddress: string, res: Next
       data: user,
     });
     res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).end();
+  }
+}
+
+async function promoteToArtist(walletAddress: string, res: NextApiResponse) {
+  console.log(`promoteToArtist(${walletAddress})`)
+  try {
+    const updatedUser = await prisma.user.update({
+      where: {
+        walletAddress,
+      },
+      data: {
+        role: Role.ARTIST,
+      },
+    });
+    res.status(200).json({ success: !!updatedUser });
   } catch (error) {
     console.error(error);
     res.status(500).end();

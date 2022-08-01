@@ -9,11 +9,15 @@ const handler = async (req: NextApiRequest, response: NextApiResponse) => {
     response.status(401).end('Not Authenticated');
     return;
   }
-  const { address: walletAddress } = session!;
   const { method } = req;
   switch (method) {
     case 'GET':
-      await getEarnedPoints(walletAddress as string, response);
+      if (req.query.address) {
+        await getEarnedPoints(req.query.address as string, response);
+      } else {
+        const { address: walletAddress } = session!;
+        await getEarnedPoints(walletAddress as string, response);
+      }
       return;
     default:
       response.status(500).end();
@@ -25,20 +29,19 @@ export interface GetEarnedPointsResponse extends Omit<EarnedPoints, 'totalPoints
 }
 
 async function getEarnedPoints(walletAddress: string, response: NextApiResponse) {
+  console.log(`getEarnedPoints(${walletAddress})`)
   const dbPoints: EarnedPoints | null = await prisma.earnedPoints.findUnique({
     where: {
       address: walletAddress,
     },
   });
   if (!dbPoints) {
-    response
-      .status(200)
-      .json({
-        address: walletAddress,
-        totalPointsEarned: BigInt(0).valueOf(),
-        signedMessage: '',
-        updatedAt: new Date(),
-      } as EarnedPoints);
+    response.status(200).json({
+      address: walletAddress,
+      totalPointsEarned: BigInt(0).valueOf(),
+      signedMessage: '',
+      updatedAt: new Date(),
+    } as EarnedPoints);
     return;
   }
 

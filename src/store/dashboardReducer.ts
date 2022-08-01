@@ -1,7 +1,9 @@
 import { User } from '@prisma/client';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Lottery as LotteryContract } from '@/types/contracts';
-import { getLotteryContract } from '@/utilities/contracts';
+import { getLotteryContract, getStorageContract } from '@/utilities/contracts';
+import { User_include_EarnedPoints } from '@/prisma/types';
+import { ethers, Signer } from 'ethers';
 
 export interface LotteryParticipant {
   walletAddress: string;
@@ -27,9 +29,24 @@ export const dashboardApi = createApi({
   reducerPath: 'dashboardApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   refetchOnMountOrArgChange: 300, // refetch queries every 5 minutes
+  tagTypes: ['Users'],
   endpoints: (builder) => ({
-    getAllUsersAndEarnedPoints: builder.query<User[], void>({
+    getAllUsersAndEarnedPoints: builder.query<User_include_EarnedPoints[], void>({
       query: () => 'user?action=GetAllUsersAndEarnedPoints',
+      providesTags: ['Users'],
+    }),
+    promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
+      queryFn: async ({ walletAddress, signer }, { dispatch }, extraOptions, fetchWithBQ) => {
+        const contract = await getStorageContract(signer);
+        const tx = await contract.setBool(
+          ethers.utils.solidityKeccak256(['string', 'address'], ['role.artist', walletAddress]),
+          true
+        );
+        await tx.wait();
+        await fetchWithBQ(`user?action=PromoteToArtist&address=${walletAddress}`);
+        return { data: true };
+      },
+      invalidatesTags: ['Users'],
     }),
     getLotteriesStats: builder.query<LotteryStats[], void>({
       queryFn: async () => {
@@ -114,4 +131,8 @@ async function getLotteryStats(
   return lottoStats;
 }
 
-export const { useGetAllUsersAndEarnedPointsQuery, useGetLotteriesStatsQuery } = dashboardApi;
+export const {
+  useGetAllUsersAndEarnedPointsQuery,
+  useGetLotteriesStatsQuery,
+  usePromoteUserToArtistMutation,
+} = dashboardApi;
