@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import type { Router } from 'next/router';
-import { motion } from 'framer-motion';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Nav from '@/components/Layout/Nav';
@@ -88,16 +87,12 @@ export default function Layout({ children, router }: Props) {
         pauseOnHover
         data-cy='toast-container'
       />
-      <motion.div
-        ref={layoutEl}
-        key={router.route}
-        className='layout'
-      >
+      <div ref={layoutEl} key={router.route} className='layout'>
         <HiddenMenu />
         <Nav />
         {children}
         <Footer></Footer>
-      </motion.div>
+      </div>
     </React.Fragment>
   );
 }

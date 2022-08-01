@@ -1,5 +1,4 @@
 import prisma from '@/prisma/client';
-import { motion } from 'framer-motion';
 import React from 'react';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media';
@@ -9,7 +8,6 @@ import Countdown from '@/components/Countdown';
 import { computeDropStatus } from '@/utilities/status';
 import { getHomePageData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
-import variants from '@/animations/index';
 import SageIconSVG from '@/public/icons/sage.svg';
 
 interface Props {
@@ -21,11 +19,8 @@ function home({ featuredDrop, upcomingDrops }: Props) {
   const router = useRouter();
 
   return (
-    <motion.div
+    <div
       className='home-page'
-      initial={'pageInitial'}
-      animate={'pageAnimate'}
-      variants={variants}
       data-cy='home-page'
     >
       <div className='home-page__main'>
@@ -102,7 +97,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
         </div>
       </div>
       <EventSlider />
-    </motion.div>
+    </div>
   );
 }
 

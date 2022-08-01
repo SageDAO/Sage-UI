@@ -11,8 +11,6 @@ import TwitterSVG from '@/public/socials/twitter.svg';
 import MediumSVG from '@/public/socials/medium.svg';
 import InstagramSVG from '@/public/socials/insta.svg';
 import WebSVG from '@/public/socials/web.svg';
-import variants from '@/animations/index';
-import { motion } from 'framer-motion';
 
 interface Props {
   artist: User;
@@ -22,11 +20,8 @@ export default function artist({ artist }: Props) {
   const { data: nfts } = useGetListingNftsByArtistQuery(artist.walletAddress);
 
   return (
-    <motion.div
+    <div
       className='artist-page'
-      initial={'pageInitial'}
-      animate={'pageAnimate'}
-      variants={variants}
       data-cy='artist-page'
     >
       <Hero imgSrc={artist.profilePicture || '/'} />
@@ -66,7 +61,7 @@ export default function artist({ artist }: Props) {
             ))}
         </div>
       </section>
-    </motion.div>
+    </div>
   );
 }
 

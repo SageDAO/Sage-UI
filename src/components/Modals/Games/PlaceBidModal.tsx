@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
-import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
@@ -102,7 +101,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
-      <motion.div className='games-modal'>
+      <div className='games-modal'>
         <section className='games-modal__header'>
           <SageFullLogo className='games-modal__sage-logo' />
           <CloseSVG onClick={closeModal} className='games-modal__close-button' />
@@ -173,7 +172,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
             auctionId={auction.id}
           ></BidHistoryTable>
         </section>
-      </motion.div>
+      </div>
     </Modal>
   );
 }

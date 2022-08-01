@@ -11,7 +11,6 @@
       "@/store/*": ["./src/store/*"],
       "@/utilities/*": ["./src/utilities/*"],
       "@/types/*": ["./types/*"],
-      "@/animations/*": ["./src/animations/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/api/*": ["./src/pages/api/*"],
       "@/public/*": ["./public/*"]
