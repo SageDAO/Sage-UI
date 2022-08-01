@@ -74,7 +74,6 @@ export interface GamePrize {
   lotteryProof?: string;
   nftName: string;
   artistUsername: string;
-  artistDisplayName: string;
   artistProfilePicture: string;
   s3Path: string;
   isVideo: boolean;
@@ -121,7 +120,7 @@ export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{
 export type SafeUserUpdate = Partial<
   Pick<
     User,
-    | 'displayName'
+    | 'username'
     | 'email'
     | 'bio'
     | 'profilePicture'

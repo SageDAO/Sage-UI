@@ -32,7 +32,7 @@ export default function LotteryTile({ artist, dropName, imgSrc, editionSize, lot
       </div>
       <div className='drop-page__grid-item-info'>
         <h1 className='drop-page__grid-item-info-drop-name'>
-          {dropName} by {artist.displayName}
+          {dropName} by {artist.username}
         </h1>
         <h1 className='drop-page__grid-item-info-game-name'>{'lottery'}</h1>
       </div>

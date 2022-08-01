@@ -117,7 +117,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
           </div>
           <div className='games-modal__main-content'>
             <h1 className='games-modal__drop-name'>
-              {dropName} by {artist.displayName}
+              {dropName} by {artist.username}
             </h1>
             <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
             <p className='games-modal__game-description'>

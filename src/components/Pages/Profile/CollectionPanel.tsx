@@ -59,7 +59,7 @@ export default function CollectionPanel() {
                   <BaseMedia src={nft.s3Path} isVideo={nft.isVideo} isZoomable={true}></BaseMedia>
                 </div>
                 <div className='collection-panel__tile-header'>
-                  by {nft.artistDisplayName || nft.artistUsername}
+                  by {nft.artistUsername}
                   <h1 className='collection-panel__tile-name'>{nft.nftName}</h1>
                 </div>
               </div>

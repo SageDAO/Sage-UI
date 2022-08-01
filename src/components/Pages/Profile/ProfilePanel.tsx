@@ -10,7 +10,8 @@ import { useSession } from 'next-auth/react';
 interface State extends SafeUserUpdate {}
 
 const INITIAL_STATE: State = {
-  displayName: '',
+  username: '',
+  email: '',
   profilePicture: '',
   bio: '',
   webpage: '',
@@ -63,13 +64,26 @@ export default function ProfilePanel() {
         <h2 className='profile-panel__pfp-label'>add a profile picture</h2>
       </div>
       <div className='profile-panel__personal-group'>
-        <h2 className='profile-panel__personal-label'>sage display name</h2>
+        <h2 className='profile-panel__personal-label'>sage username</h2>
         <input
           type='text'
-          value={state?.displayName ?? ''}
+          value={state?.username ?? ''}
           onChange={(e) => {
             setState((prevState) => {
-              return { ...prevState, displayName: e.target.value };
+              return { ...prevState, username: e.target.value };
+            });
+          }}
+          className='profile-panel__personal-field'
+        />
+      </div>
+      <div className='profile-panel__personal-group'>
+        <h2 className='profile-panel__personal-label'>e-mail</h2>
+        <input
+          type='text'
+          value={state?.email ?? ''}
+          onChange={(e) => {
+            setState((prevState) => {
+              return { ...prevState, email: e.target.value };
             });
           }}
           className='profile-panel__personal-field'

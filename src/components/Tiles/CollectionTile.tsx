@@ -43,7 +43,7 @@ export default function CollectionTile({ item }: Props) {
           </div>
           <div className='collection__tile-artist-info'>
             <div className='collection__tile-nft-name'>{item.nftName}</div>
-            <div className='collection__tile-artist-name'>by {item.artistDisplayName}</div>
+            <div className='collection__tile-artist-name'>by {item.artistUsername}</div>
           </div>
         </div>
         {!item.claimedAt && (

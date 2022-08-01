@@ -55,7 +55,7 @@ describe('Prisma data fetching', async () => {
     describe('Drops include required display info', async () => {
       it('Artist', async () => {
         drops.forEach((d) => {
-          assert.isNotNull(d.Artist);
+          assert.isNotNull(d.NftContract.Artist);
         });
       });
       it('Drop name', async () => {
@@ -149,8 +149,8 @@ describe('Prisma data fetching', async () => {
       drops.forEach((d) => {
         assert.isNotNull(d.name);
         assert.isNotNull(d.bannerImageS3Path);
-        assert.isNotNull(d.Artist);
-        assert.isNotNull(d.Artist.displayName);
+        assert.isNotNull(d.NftContract.Artist);
+        assert.isNotNull(d.NftContract.Artist.username);
         assert.isNotNull(d.Lotteries);
         assert.isNotNull(d.Auctions);
       });
@@ -204,8 +204,8 @@ describe('Prisma data fetching', async () => {
         assert.isNotNull(drop?.bannerImageS3Path);
       });
       it('artist', () => {
-        assert.isNotNull(drop?.Artist);
-        assert.isNotNull(drop?.Artist.displayName);
+        assert.isNotNull(drop?.NftContract?.Artist);
+        assert.isNotNull(drop?.NftContract?.Artist.username);
       });
       it('games', () => {
         assert.isNotNull(drop?.Lotteries);
@@ -245,8 +245,8 @@ describe('Prisma data fetching', async () => {
         });
       });
       it('display name', () => {
-        artists.forEach(({ displayName }) => {
-          assert.isNotNull(displayName);
+        artists.forEach(({ username }) => {
+          assert.isNotNull(username);
         });
       });
       it('walletaddress ', () => {
@@ -279,8 +279,8 @@ describe('Prisma data fetching', async () => {
       it('bio', () => {
         assert.isNotNull(artist?.bio);
       });
-      it('display name', () => {
-        assert.isNotNull(artist?.displayName);
+      it('username', () => {
+        assert.isNotNull(artist?.username);
       });
     });
   });

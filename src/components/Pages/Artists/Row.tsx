@@ -38,12 +38,12 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
             <div className='artists-page__item-img'>
               <PfpImage src={a.profilePicture} />
               <h1 className='artists-page__item-img-text'>
-                drop by {a.displayName || a.username || shortenAddress(a.walletAddress)} <br />
+                drop by {a.username || shortenAddress(a.walletAddress)} <br />
                 Sage Curated
               </h1>
             </div>
             <div className='artists-page__item-content'>
-              <h1 className='artists-page__item-content-header'>{a.displayName}</h1>
+              <h1 className='artists-page__item-content-header'>{a.username}</h1>
               <p className='artists-page__item-content-description'>{a.bio}</p>
             </div>
           </div>

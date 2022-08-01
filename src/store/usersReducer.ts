@@ -10,7 +10,7 @@ import { SiweMessage } from 'siwe';
 //   playWalletConnectedSound,
 // } from '../../utilities/sounds';
 
-export type UserDisplayInfo = Pick<User, 'username' | 'displayName' | 'profilePicture'>;
+export type UserDisplayInfo = Pick<User, 'username' | 'profilePicture'>;
 
 // export async function isOnCorrectNetwork(): Promise<boolean> {
 //   try {
@@ -61,28 +61,29 @@ export const usersApi = createApi({
         };
       },
     }),
-    updateUser: builder.mutation<boolean, SafeUserUpdate>({
-      queryFn: async (user, _api, _extraoptions, baseQuery) => {
+    updateUser: builder.mutation<null, SafeUserUpdate>({
+      queryFn: async (user, { dispatch }, extraOptions, fetchWithBQ) => {
         try {
-          await baseQuery({
+          const result = await fetchWithBQ({
             url: 'user',
             method: 'PATCH',
             body: { user },
           });
-          return {
-            data: true,
-            status: 200,
-          };
+          const { data } = result;
+          if ((data as any).error) {
+            if ('Unique constraint violation' == (data as any).error) {
+              toast.error(`Update failed: username '${user.username}' is already in use, please pick another one!`);
+            } else {
+              console.log(data);
+              toast.error('Error updating profile.')
+            }
+          } else {
+            toast.success('Successfully updated profile.');
+          }
         } catch (e) {
-          return { data: false, status: 500 };
+          toast.error('Error updating profile.')
         }
-      },
-      onQueryStarted: async (_user, { queryFulfilled }) => {
-        toast.promise(queryFulfilled, {
-          pending: 'Updating Profile',
-          success: 'Successfully updated profile.',
-          error: 'Error Updating Profile',
-        });
+        return { data: null };
       },
       invalidatesTags: ['User'],
     }),

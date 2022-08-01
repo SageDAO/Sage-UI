@@ -32,7 +32,7 @@ export default function artist({ artist }: Props) {
             <PfpImage src={artist.profilePicture}></PfpImage>
           </div>
           <div>
-            <h1 className='artist-page__name'>{artist.displayName}</h1>
+            <h1 className='artist-page__name'>{artist.username}</h1>
             <ul className='artist-page__socials'>
               <div className='artist-page__socials-item'>
                 <TwitterSVG className='artist-page__socials-svg' />

@@ -113,7 +113,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
           <div className='games-modal__main-content'>
             <div>
               <h1 className='games-modal__drop-name'>
-                {dropName} by {artist.displayName}
+                {dropName} by {artist.username}
               </h1>
               <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
             </div>

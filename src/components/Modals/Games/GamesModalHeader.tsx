@@ -22,7 +22,7 @@ export default function GamesModalHeader({ src, isVideo, artist, nftEditions, nf
             <PfpImage src={artist.profilePicture} />
           </div>
           <div className='games-modal__header-artist-name'>
-            {artist.displayName || 'displayname'}
+            {artist.username || 'username'}
           </div>
         </div>
         <div className='games-modal__header-nft-name'>{nftName}</div>

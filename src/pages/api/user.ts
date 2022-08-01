@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '@/prisma/client';
 import { getSession } from 'next-auth/react';
 import { UserDisplayInfo } from '@/store/usersReducer';
-import { Role } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -61,7 +61,6 @@ async function getUserDisplayInfo(walletAddress: string, res: NextApiResponse) {
     if (user) {
       res.json(<UserDisplayInfo>{
         username: user.username,
-        displayName: user.displayName,
         profilePicture: user.profilePicture,
       });
     }
@@ -109,14 +108,18 @@ async function updateUser(user: SafeUserUpdate, walletAddress: string, res: Next
       data: user,
     });
     res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error(error);
-    res.status(500).end();
+  } catch (e) {
+    console.error(e);
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+      res.status(200).json({ error: 'Unique constraint violation' });
+    } else {
+      res.status(200).json({ error: e });
+    }
   }
 }
 
 async function promoteToArtist(walletAddress: string, res: NextApiResponse) {
-  console.log(`promoteToArtist(${walletAddress})`)
+  console.log(`promoteToArtist(${walletAddress})`);
   try {
     const updatedUser = await prisma.user.update({
       where: {

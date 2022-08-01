@@ -61,7 +61,7 @@ export default function ListingTile({ nft, artist }: Props) {
         </div>
       </div>
       <div className='drop-page__grid-item-info'>
-        <h1 className='drop-page__grid-item-info-drop-name'>by {artist.displayName}</h1>
+        <h1 className='drop-page__grid-item-info-drop-name'>by {artist.username}</h1>
         <h1 className='drop-page__grid-item-info-game-name'>{nft.name}</h1>
       </div>
     </div>

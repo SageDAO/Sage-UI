@@ -17,7 +17,6 @@ function flatten({ auction, drop, artist }: FlattenArgs): GamePrize {
     dropId: drop.id,
     nftName: auction.Nft.name,
     artistUsername: artist.username!,
-    artistDisplayName: artist.displayName!,
     artistProfilePicture: artist.profilePicture!,
     s3Path: auction.Nft.s3Path,
     isVideo: auction.Nft.isVideo,
@@ -72,7 +71,6 @@ async function getAuction(auctionId: number, response: NextApiResponse) {
                   Artist: {
                     select: {
                       username: true,
-                      displayName: true,
                       profilePicture: true,
                     },
                   },

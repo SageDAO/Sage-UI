@@ -36,7 +36,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
               <SageIconSVG className='home-page__featured-drop-tag-sage-logo'></SageIconSVG>
               <div className='home-page__featured-drop-tag-label'>
                 This month active drop <br />
-                artist | {featuredDrop.NftContract.Artist.displayName}
+                artist | {featuredDrop.NftContract.Artist.username}
               </div>
             </div>
           </>
@@ -71,7 +71,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
             async function onClick() {
               await router.push(`/drops/${d.id}`);
             }
-            const text = `${d.name} by ${d.NftContract.Artist.displayName}`;
+            const text = `${d.name} by ${d.NftContract.Artist.username}`;
             const { startTime, status } = computeDropStatus(d);
             const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
             return (

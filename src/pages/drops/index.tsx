@@ -75,7 +75,7 @@ function drops({ drops }: Props) {
               <div key={d.id} className='drops-page__drop'>
                 <div className='drops-page__drop-header'>
                   <h1 className='drops-page__drop-header-title'>
-                    {d.name} by {d.NftContract.Artist.displayName}
+                    {d.name} by {d.NftContract.Artist.username}
                   </h1>
                   <div className='drops-page__drop-header-countdown' data-status={status}>
                     {counterDisplay}

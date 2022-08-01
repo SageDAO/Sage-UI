@@ -100,7 +100,6 @@ function flatten(nft: Nft, artist: User): CollectedListingNft {
     nftId: nft.id,
     nftName: nft.name,
     artistUsername: artist.username!,
-    artistDisplayName: artist.displayName!,
     artistProfilePicture: artist.profilePicture!,
     s3Path: nft.s3Path,
     isVideo: nft.isVideo,

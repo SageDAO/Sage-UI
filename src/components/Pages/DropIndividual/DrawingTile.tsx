@@ -31,7 +31,7 @@ export default function DrawingTile({ artist, dropName, imgSrc, editionSize, dra
       </div>
       <div className='drop-page__grid-item-info'>
         <h1 className='drop-page__grid-item-info-drop-name'>
-          {dropName} by {artist.displayName}
+          {dropName} by {artist.username}
         </h1>
         <h1 className='drop-page__grid-item-info-game-name'>{drawing.Nfts[0].name}</h1>
       </div>
