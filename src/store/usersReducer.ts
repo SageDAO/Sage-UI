@@ -1,9 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User } from '@prisma/client';
 import { toast } from 'react-toastify';
 import type { SafeUserUpdate } from '@/prisma/types';
 import { signIn, signOut } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
+import { baseApi } from './baseReducer';
 // import {
 //   playLikeDropSound,
 //   playUnlikeDropSound,
@@ -21,10 +21,7 @@ export type UserDisplayInfo = Pick<User, 'username' | 'profilePicture'>;
 //     return false;
 //   }
 // }
-export const usersApi = createApi({
-  reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  tagTypes: ['User', 'Wallet'],
+export const usersApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     signIn: builder.mutation<null, { message: SiweMessage; signature: string }>({
       queryFn: async ({ message, signature }) => {
@@ -38,11 +35,19 @@ export const usersApi = createApi({
       invalidatesTags: ['User'],
     }),
     signOut: builder.mutation<null, void>({
-      queryFn: async () => {
-        signOut({ redirect: false });
+      queryFn: () => {
+        signOut({ redirect: true });
         return { data: null };
       },
-      invalidatesTags: ['User'],
+      invalidatesTags: [
+        'EscrowPoints',
+        'Nfts',
+        'Prizes',
+        'TicketCount',
+        'User',
+        'UserPoints',
+        'Wallet',
+      ],
     }),
     getUser: builder.query<User, void>({
       query: () => {

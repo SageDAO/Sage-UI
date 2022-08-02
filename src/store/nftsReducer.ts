@@ -1,4 +1,3 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import {
   approveERC20Transfer,
@@ -12,6 +11,7 @@ import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/
 import { toast } from 'react-toastify';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { Offer } from '@prisma/client';
+import { baseApi } from './baseReducer';
 
 export interface MintRequest {
   name: string;
@@ -22,10 +22,7 @@ export interface MintRequest {
   signer: Signer;
 }
 
-export const nftsApi = createApi({
-  reducerPath: 'nftsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  tagTypes: ['Nfts'],
+export const nftsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getListingNftsByArtist: builder.query<Nft_include_NftContractAndOffers[], string>({
       query: (artistAddress: string) =>

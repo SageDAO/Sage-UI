@@ -6,10 +6,10 @@ import {
   getLotteryContract,
 } from '@/utilities/contracts';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { pointsApi } from './pointsReducer';
+import { baseApi } from './baseReducer';
 
 export interface BuyTicketRequest {
   lotteryId: number;
@@ -25,11 +25,7 @@ export type LotteryTickets = {
   totalTickets: number;
 };
 
-export const lotteriesApi = createApi({
-  reducerPath: 'lotteriesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  refetchOnMountOrArgChange: 60,
-  tagTypes: ['TicketCount'],
+export const lotteriesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getLottery: builder.query<LotteryWithNftsAndArtist, number>({
       query: (lotteryId: number) => `lotteries?action=GetLottery&lotteryId=${lotteryId}`,

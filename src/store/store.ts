@@ -9,29 +9,20 @@ import { dropsApi } from './dropsReducer';
 import { nftsApi } from './nftsReducer';
 
 const rootReducer = combineReducers({
-  [usersApi.reducerPath]: usersApi.reducer,
-  [prizesApi.reducerPath]: prizesApi.reducer,
   [auctionsApi.reducerPath]: auctionsApi.reducer,
-  [lotteriesApi.reducerPath]: lotteriesApi.reducer,
-  [pointsApi.reducerPath]: pointsApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [dropsApi.reducerPath]: dropsApi.reducer,
+  [lotteriesApi.reducerPath]: lotteriesApi.reducer,
   [nftsApi.reducerPath]: nftsApi.reducer,
+  [pointsApi.reducerPath]: pointsApi.reducer,
+  [prizesApi.reducerPath]: prizesApi.reducer,
+  [usersApi.reducerPath]: usersApi.reducer,
 });
 
 const store = configureStore({
   reducer: rootReducer,
   devTools: true,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(usersApi.middleware)
-      .concat(prizesApi.middleware)
-      .concat(auctionsApi.middleware)
-      .concat(lotteriesApi.middleware)
-      .concat(pointsApi.middleware)
-      .concat(dashboardApi.middleware)
-      .concat(dropsApi.middleware)
-      .concat(nftsApi.middleware)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

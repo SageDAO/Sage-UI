@@ -1,9 +1,9 @@
-import { User } from '@prisma/client';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Lottery as LotteryContract } from '@/types/contracts';
 import { getLotteryContract, getStorageContract } from '@/utilities/contracts';
 import { User_include_EarnedPoints } from '@/prisma/types';
 import { ethers, Signer } from 'ethers';
+import { baseApi } from './baseReducer';
 
 export interface LotteryParticipant {
   walletAddress: string;
@@ -25,15 +25,11 @@ export interface LotteryStats {
   prizesClaimed?: number;
 }
 
-export const dashboardApi = createApi({
-  reducerPath: 'dashboardApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  refetchOnMountOrArgChange: 300, // refetch queries every 5 minutes
-  tagTypes: ['Users'],
+export const dashboardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUsersAndEarnedPoints: builder.query<User_include_EarnedPoints[], void>({
       query: () => 'user?action=GetAllUsersAndEarnedPoints',
-      providesTags: ['Users'],
+      providesTags: ['AllUsers'],
     }),
     promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
       queryFn: async ({ walletAddress, signer }, { dispatch }, extraOptions, fetchWithBQ) => {
@@ -46,7 +42,7 @@ export const dashboardApi = createApi({
         await fetchWithBQ(`user?action=PromoteToArtist&address=${walletAddress}`);
         return { data: true };
       },
-      invalidatesTags: ['Users'],
+      invalidatesTags: ['AllUsers'],
     }),
     getLotteriesStats: builder.query<LotteryStats[], void>({
       queryFn: async () => {

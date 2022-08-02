@@ -1,14 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getRewardsContract } from '@/utilities/contracts';
 import { EarnedPoints } from '@prisma/client';
 import type { GetEarnedPointsResponse } from '@/api/points';
+import { baseApi } from './baseReducer';
 
 var escrowPoints: number = 0;
 
-export const pointsApi = createApi({
-  reducerPath: 'pointsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  tagTypes: ['UserPoints', 'EscrowPoints'],
+export const pointsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getEarnedPoints: builder.query<GetEarnedPointsResponse, void>({
       query: () => `points`,

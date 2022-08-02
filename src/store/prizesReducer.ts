@@ -1,9 +1,9 @@
 import { Signer } from 'ethers';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { GamePrize } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { extractErrorMessage, getLotteryContract } from '../utilities/contracts';
 import { playErrorSound, playPrizeClaimedSound } from '../utilities/sounds';
+import { baseApi } from './baseReducer';
 
 export interface ClaimPrizeRequest {
   lotteryId: number;
@@ -13,11 +13,7 @@ export interface ClaimPrizeRequest {
   signer: Signer;
 }
 
-export const prizesApi = createApi({
-  reducerPath: 'prizesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  refetchOnMountOrArgChange: 60,
-  tagTypes: ['Prizes'],
+export const prizesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     isLotteryDrawn: builder.query<boolean, number>({
       query: (lotteryId: number) => `prizes?action=IsLotteryDrawn&lotteryId=${lotteryId}`,

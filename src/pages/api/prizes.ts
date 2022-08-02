@@ -78,7 +78,7 @@ async function getClaimedPrizes(walletAddress: string, response: NextApiResponse
       console.log(e);
     }
   }
-  console.log(`getClaimedPrizes() :: ${prizeNfts.length}`);
+  console.log(`getClaimedPrizes(${walletAddress}) :: ${prizeNfts.length}`);
   response.status(200).json(prizeNfts);
 }
 
@@ -106,7 +106,7 @@ async function getUnclaimedPrizes(walletAddress: string, response: NextApiRespon
       console.log(e);
     }
   }
-  console.log(`getUnclaimedPrizes() :: ${prizeNfts.length}`);
+  console.log(`getUnclaimedPrizes(${walletAddress}) :: ${prizeNfts.length}`);
   response.status(200).json(prizeNfts);
 }
 

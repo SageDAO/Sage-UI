@@ -38,7 +38,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             return null;
           }
 
-          await siwe.validate(credentials?.signature || '');
+          await siwe.verify({ signature: credentials?.signature || '' }, {});
           return {
             id: siwe.address,
           };

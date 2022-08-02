@@ -29,7 +29,6 @@ export interface GetEarnedPointsResponse extends Omit<EarnedPoints, 'totalPoints
 }
 
 async function getEarnedPoints(walletAddress: string, response: NextApiResponse) {
-  console.log(`getEarnedPoints(${walletAddress})`)
   const dbPoints: EarnedPoints | null = await prisma.earnedPoints.findUnique({
     where: {
       address: walletAddress,
@@ -42,17 +41,18 @@ async function getEarnedPoints(walletAddress: string, response: NextApiResponse)
       signedMessage: '',
       updatedAt: new Date(),
     } as EarnedPoints);
-    return;
+    console.log(`getEarnedPoints(${walletAddress}) :: No data found`);
+  } else {
+    const res: GetEarnedPointsResponse = {
+      address: dbPoints.address,
+      totalPointsEarned: dbPoints.totalPointsEarned.toString(),
+      signedMessage: dbPoints.signedMessage,
+      updatedAt: dbPoints.updatedAt,
+    };
+    response.status(200).json(res);
+    response.end();
+    console.log(`getEarnedPoints(${walletAddress}) :: ${dbPoints.totalPointsEarned}`);
   }
-
-  const res: GetEarnedPointsResponse = {
-    address: dbPoints?.address,
-    totalPointsEarned: dbPoints?.totalPointsEarned.toString(),
-    signedMessage: dbPoints.signedMessage,
-    updatedAt: dbPoints.updatedAt,
-  };
-  response.status(200).json(res);
-  response.end();
 }
 
 export default handler;

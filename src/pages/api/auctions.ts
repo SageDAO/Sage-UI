@@ -116,7 +116,7 @@ async function getClaimedAuctionNfts(walletAddress: string, response: NextApiRes
       claimedAuctions.forEach((a) =>
         claimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
       );
-      console.log(`getClaimedAuctionNfts() :: ${claimedNfts.length}`);
+      console.log(`getClaimedAuctionNfts(${walletAddress}) :: ${claimedNfts.length}`);
       response.json(claimedNfts);
     } catch (e) {
       console.log(e);
@@ -153,7 +153,7 @@ async function getUnclaimedAuctionNfts(walletAddress: string, response: NextApiR
       unclaimedAuctions.forEach((a) =>
         unclaimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
       );
-      console.log(`getUnclaimedAuctionNfts() :: ${unclaimedNfts.length}`);
+      console.log(`getUnclaimedAuctionNfts(${walletAddress}) :: ${unclaimedNfts.length}`);
       response.json(unclaimedNfts);
     } catch (e) {
       console.log(e);

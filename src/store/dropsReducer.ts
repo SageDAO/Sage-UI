@@ -1,4 +1,3 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ethers, Signer } from 'ethers';
 import {
   DropFull,
@@ -10,12 +9,9 @@ import { toast } from 'react-toastify';
 import { getAuctionContract, getLotteryContract } from '@/utilities/contracts';
 import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
 import { _fetchOrCreateNftContract } from './nftsReducer';
+import { baseApi } from './baseReducer';
 
-export const dropsApi = createApi({
-  reducerPath: 'dropsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  refetchOnMountOrArgChange: 120, // refetch every 2 minutes
-  tagTypes: ['PendingDrops'],
+export const dropsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetApprovedDrops`,

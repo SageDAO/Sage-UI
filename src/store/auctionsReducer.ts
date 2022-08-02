@@ -5,10 +5,10 @@ import {
   getAuctionContract,
 } from '@/utilities/contracts';
 import { playErrorSound, playPrizeClaimedSound, playTxSuccessSound } from '@/utilities/sounds';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import { BigNumber, ethers, Signer, utils } from 'ethers';
+import { baseApi } from './baseReducer';
 
 export interface AuctionState {
   highestBidder: string; // wallet address
@@ -21,11 +21,7 @@ export interface AuctionState {
 }
 
 // TODO improve tags/cache handling
-export const auctionsApi = createApi({
-  reducerPath: 'auctionsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
-  refetchOnMountOrArgChange: 60,
-  tagTypes: ['Auction', 'AuctionState'],
+export const auctionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAuction: builder.query<Auction_include_Nft, number>({
       query: (auctionId: number) => `auctions?action=GetAuction&auctionId=${auctionId}`,

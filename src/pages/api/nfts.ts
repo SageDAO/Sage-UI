@@ -49,7 +49,6 @@ async function getListingNftsByOwner(request: NextApiRequest, response: NextApiR
   if (!session || !ownerAddress) {
     return;
   }
-  console.log(`getListingNftsByOwner(${ownerAddress})`);
   try {
     const nfts = new Array<CollectedListingNft>();
     const result = await prisma.nft.findMany({ 
@@ -58,6 +57,7 @@ async function getListingNftsByOwner(request: NextApiRequest, response: NextApiR
     });
     result.forEach(item => nfts.push(flatten(item, item.NftContract?.Artist!)));
     response.json(nfts);
+    console.log(`getListingNftsByOwner(${ownerAddress}) :: ${nfts.length}`);
   } catch (e) {
     console.log({ e });
     response.status(500);
