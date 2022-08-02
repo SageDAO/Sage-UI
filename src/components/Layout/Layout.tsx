@@ -14,6 +14,7 @@ import useModal from '@/hooks/useModal';
 import { useSession } from 'next-auth/react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { useSignOutMutation } from '@/store/usersReducer';
+import { animated, useTransition, config } from 'react-spring';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -35,6 +36,13 @@ export default function Layout({ children, router }: Props) {
   const { data: wagmiData } = useAccount();
   const [signOut] = useSignOutMutation();
   const { disconnect } = useDisconnect();
+
+  const transitions = useTransition(router.pathname, {
+    from: { translateY: 100 },
+    enter: { translateY: 0 },
+    config: config.default,
+    exitBeforeEnter: true,
+  });
 
   useEffect(() => {
     if (sessionData && wagmiData && sessionData.address != wagmiData.address) {
@@ -61,38 +69,43 @@ export default function Layout({ children, router }: Props) {
     // });
   }, []);
 
-  return (
-    <React.Fragment>
-      <Head>
-        <title>Sage Marketplace</title>
-        <link rel='icon' href='/icons/sage.svg' />
-      </Head>
-      <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
-      <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
-      <WrongNetworkModal
-        isOpen={isNetworkModalOpen}
-        closeModal={closeNetworkModal}
-        switchToCorrectNetwork={switchToCorrectNetwork}
-        isLoading={isChangingNetwork}
-      />
-      <ToastContainer
-        position='bottom-center'
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        data-cy='toast-container'
-      />
-      <div ref={layoutEl} key={router.route} className='layout'>
-        <HiddenMenu />
-        <Nav />
-        {children}
-        <Footer></Footer>
-      </div>
-    </React.Fragment>
-  );
+  return transitions((props, item) => {
+    console.log(item);
+    return (
+      <React.Fragment>
+        <Head>
+          <title>Sage Marketplace</title>
+          <link rel='icon' href='/icons/sage.svg' />
+        </Head>
+        <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
+        <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
+        <WrongNetworkModal
+          isOpen={isNetworkModalOpen}
+          closeModal={closeNetworkModal}
+          switchToCorrectNetwork={switchToCorrectNetwork}
+          isLoading={isChangingNetwork}
+        />
+        <ToastContainer
+          position='bottom-center'
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          data-cy='toast-container'
+        />
+        <div ref={layoutEl} key={router.route} className='layout'>
+          <HiddenMenu />
+          <Nav />
+          <animated.div style={props} className='layout__main'>
+            {children}
+          </animated.div>
+          <Footer></Footer>
+        </div>
+      </React.Fragment>
+    );
+  });
 }
