@@ -12,6 +12,18 @@ import MediumSVG from '@/public/socials/medium.svg';
 import InstagramSVG from '@/public/socials/insta.svg';
 import WebSVG from '@/public/socials/web.svg';
 
+type LNft = Nft_include_NftContractAndOffers;
+
+/**
+ * Display unsold items first; then newest on top.
+ */
+function sort(a: LNft, b: LNft) {
+  if (!a.ownerAddress) {
+    return b.ownerAddress ? -1 : b.id - a.id;
+  }
+  return b.ownerAddress ? b.id - a.id : 1;
+}
+
 interface Props {
   artist: User;
 }
@@ -20,10 +32,7 @@ export default function artist({ artist }: Props) {
   const { data: nfts } = useGetListingNftsByArtistQuery(artist.walletAddress);
 
   return (
-    <div
-      className='artist-page'
-      data-cy='artist-page'
-    >
+    <div className='artist-page' data-cy='artist-page'>
       <Hero imgSrc={artist.profilePicture || '/'} />
       <h1 className='artist-page__banner-label'>part of this month active drop</h1>
       <div className='artist-page__artist-section'>
@@ -56,9 +65,9 @@ export default function artist({ artist }: Props) {
       <section className='drop-page__content'>
         <div className='drop-page__grid'>
           {nfts &&
-            nfts.map((nft: Nft_include_NftContractAndOffers, i: number) => (
-              <ListingTile key={i} nft={nft} artist={artist} />
-            ))}
+            [...nfts]
+              .sort(sort)
+              .map((nft: LNft, i: number) => <ListingTile key={i} nft={nft} artist={artist} />)}
         </div>
       </section>
     </div>
