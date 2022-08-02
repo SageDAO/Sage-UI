@@ -4,7 +4,7 @@ import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
-import { useGetAuctionStateQuery, usePlaceBidMutation } from '@/store/auctionsReducer';
+import { AuctionState, usePlaceBidMutation } from '@/store/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
@@ -15,6 +15,7 @@ import Countdown from '@/components/Countdown';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
+  auctionState: AuctionState;
   artist: User;
   dropName: string;
 }
@@ -33,15 +34,16 @@ const initialState: State = {
   shouldShowBidHistory: false,
 };
 
+export function isOpenForBids(auction: Auction_include_Nft, auctionState: AuctionState): boolean {
+  const now = new Date().getTime();
+  return auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
+}
+
 //@scss : '@/styles/components/_games-modal.scss'
-function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props) {
-  const { data: auctionState } = useGetAuctionStateQuery(auction.id);
+function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, dropName }: Props) {
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
-  const now = new Date().getTime();
-  const isOpenForBids =
-    auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
 
   function toggleBidHistory() {
     setState((prevState) => {
@@ -110,7 +112,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
             <BaseMedia src={auction.Nft.s3Path} />
-            {isOpenForBids && (
+            {isOpenForBids(auction, auctionState) && (
               <Countdown
                 endTime={auctionState?.endTime}
                 className='games-modal__countdown'
@@ -138,7 +140,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                 <h1 className='games-modal__highest-bid-label'>
                   {auction.winnerAddress
                     ? 'winning bid'
-                    : `${isOpenForBids && `current `}highest bid`}
+                    : `${isOpenForBids(auction, auctionState) && `current `}highest bid`}
                 </h1>
                 <h1 className='games-modal__highest-bid-value'>
                   {auctionState?.highestBidNumber} ASH
@@ -155,7 +157,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
               </div>
             </div>
 
-            {isOpenForBids && (
+            {isOpenForBids(auction, auctionState) && (
               <>
                 <input
                   onChange={handleBidInputChange}
