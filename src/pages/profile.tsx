@@ -1,11 +1,11 @@
 import React from 'react';
-import { PfpImage } from '@/components/Media';
 import { useSession } from 'next-auth/react';
 import LoaderDots from '@/components/LoaderDots';
 import { Tab } from '@headlessui/react';
 import useTabs from '@/hooks/useTabs';
 import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
 import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
+import NotificationsPanel from '@/components/Pages/Profile/NotificationsPanel';
 import Balances from '@/components/Pages/Profile/Balances';
 import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
 import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
@@ -33,7 +33,11 @@ function profile() {
       panel: ProfilePanel(),
       subheader: 'complete or update your profile on sage',
     },
-    { name: 'notifications', panel: null, disabled: true },
+    {
+      name: 'notifications',
+      panel: NotificationsPanel(),
+      subheader: 'your personal control panel',
+    },
     {
       name: 'collection',
       panel: CollectionPanel(),
@@ -59,9 +63,6 @@ function profile() {
     <Tab.Group as='div' className='profile-page' vertical selectedIndex={selectedTabIndex}>
       <div>
         <SageFullLogoSVG className='profile-page__sage-logo-svg' />
-        <div className='profile-page__pfp-container'>
-          <PfpImage src={userData?.profilePicture}></PfpImage>
-        </div>
         <Tab.List className='profile-page__tabs'>
           {tabItems.map((t, i: number) => {
             const isActive: boolean = i === selectedTabIndex;
