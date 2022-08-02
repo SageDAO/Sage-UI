@@ -1,4 +1,5 @@
 import { Dialog } from '@headlessui/react';
+import { animated, useTransition } from 'react-spring';
 
 export interface Props {
   isOpen: boolean;
@@ -8,18 +9,20 @@ export interface Props {
 }
 
 function index({ closeModal, children, isOpen, title }: Props) {
-  return (
+  const transition = useTransition(isOpen, {
+    from: { translateY: 100 },
+    enter: { translateY: 0 },
+  });
+  return transition((props) => (
     <Dialog open={isOpen} onClose={closeModal} as='div' className='modal'>
       <div className='modal__backdrop' aria-hidden='true' />
-      <div
-        className='modal__container'
-      >
+      <animated.div style={props} className='modal__container'>
         <Dialog.Panel className='modal__panel' as='div'>
           {children}
         </Dialog.Panel>
-      </div>
+      </animated.div>
     </Dialog>
-  );
+  ));
 }
 
 export default index;

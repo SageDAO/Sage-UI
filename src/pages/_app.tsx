@@ -14,6 +14,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { parameters } from '@/constants/config';
+import { animated, useTransition } from 'react-spring';
 
 // set up connectors
 const connectors = [
@@ -44,8 +45,10 @@ const apolloClient = new ApolloClient({
 });
 
 function App({ Component, pageProps, router }: AppProps) {
-  if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <MaintenancePage />;
   useTheme();
+  
+
+  if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <MaintenancePage />;
   return (
     <ReduxProvider store={store}>
       <WagmiProvider client={wagmiClient}>

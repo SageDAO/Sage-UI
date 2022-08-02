@@ -4,29 +4,32 @@
 @use '@/styles/abstracts/breakpoints' as b;
 
 .drop-page {
-  @include m.page;
+  // @include m.page;
 }
 
 .drop-page__banner-base {
-  background-color: blue;
-  height: 100px;
-  width: 100px;
-  z-index: -1;
+  height: 200px;
 }
 
 .drop-page__banner-img {
-  min-width: 100vw;
-  width: 1000px;
-  height: 1000px;
-  position: absolute;
+  display: none;
 }
 
 .drop-page__header {
   display: flex;
   flex-direction: column;
-  width: min(1440px, 80vw);
+  // width: min(1440px, 80vw);
+  width: 80vw;
+  padding-top: 97px;
+  padding-left: 10vw;
+  padding-right: 10vw;
   padding-bottom: 80px;
   gap: 50px;
+  position: relative;
+
+  @include b.min-width('medium') {
+    padding-top: 80px;
+  }
 }
 
 .drop-page__header-logotype {
@@ -39,6 +42,7 @@
   width: 100%;
   flex: 1;
   color: c.$white;
+  z-index: 99;
   gap: 40px;
 }
 
@@ -111,6 +115,7 @@
   @include m.theme() {
     background-color: m.t(base2);
   }
+  z-index: 999;
   width: 100vw;
   padding: 110px 0;
 }

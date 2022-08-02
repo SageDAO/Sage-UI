@@ -12,6 +12,7 @@ import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
 import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
 import SageLogoSVG from '@/public/icons/sage.svg';
+import Image from 'next/image';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -66,13 +67,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
 
   return (
     <>
-      <div className='drop-page__banner-base'>
-        <BaseMedia src={drop.bannerImageS3Path}></BaseMedia>
-      </div>
-      <div
-        className='drop-page'
-      >
+      <div className='drop-page'>
         <header className='drop-page__header'>
+          <Image src={drop.bannerImageS3Path} layout='fill' objectFit='cover' />
           <div className='drop-page__header-logotype'>
             <Logotype />
           </div>

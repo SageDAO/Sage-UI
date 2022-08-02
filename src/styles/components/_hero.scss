@@ -8,7 +8,7 @@
   justify-content: space-between;
   aspect-ratio: 322/380;
   @include b.min-width('medium') {
-    aspect-ratio: 1/1;
+    aspect-ratio: 1196/1140;
   }
 }
 
@@ -31,6 +31,6 @@
   width: 100%;
   aspect-ratio: 322/311;
   @include b.min-width('medium') {
-    aspect-ratio: 1196/928;
+    aspect-ratio: 1196/872;
   }
 }
