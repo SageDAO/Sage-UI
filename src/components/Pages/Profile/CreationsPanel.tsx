@@ -64,17 +64,6 @@ export default function CreationsPanel() {
     });
   }
 
-  // function onTagDelete (i) {
-  //   const tags = this.state.tags.slice(0)
-  //   tags.splice(i, 1)
-  //   this.setState({ tags })
-  // }
-
-  // function onTagAddition (tag) {
-  //   const tags = [].concat(this.state.tags, tag)
-  //   this.setState({ tags })
-  // }
-
   async function handleMintButtonClick() {
     if (!signer) {
       toast.info('Please Sign In With Ethereum before submitting your artwork');
