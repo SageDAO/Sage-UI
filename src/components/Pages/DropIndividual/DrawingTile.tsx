@@ -23,7 +23,7 @@ export default function DrawingTile({ artist, dropName, imgSrc, editionSize, dra
         isOpen={isOpen}
         closeModal={closeModal}
       ></GetTicketModal>
-      <TileHeader editionSize={editionSize} systemType='auctions'></TileHeader>
+      <TileHeader editionSize={editionSize} systemType='drawings'></TileHeader>
       <div className='drop-page__grid-item-img'>
         <BaseMedia src={imgSrc}></BaseMedia>
         <div className='drop-page__grid-item-focus'>{drawing.endTime.getTime() > new Date().getTime() ? 'enter drawing' : 'view results'}</div>
