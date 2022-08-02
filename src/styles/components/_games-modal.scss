@@ -184,6 +184,22 @@
   }
 }
 
+.games-modal__countdown {
+  position: absolute;
+  z-index: 999;
+  margin: 10px;
+  bottom: 0;
+  right: 0;
+  @include m.theme() {
+		background-color: m.t(base);
+    color: m.t(accent);
+    // border: 1px solid m.t(accent);
+    flex: none;
+    width: max-content;
+    padding: 10px 20px;
+  }
+}
+
 @mixin game-info-label {
   font-style: normal;
   font-weight: 400;

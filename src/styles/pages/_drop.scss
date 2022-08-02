@@ -136,20 +136,15 @@
 }
 
 .drop-page__grid-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  transition-duration: 200ms;
-  border: 2px solid transparent;
-  // width: clamp(151px, 35vw, 345px);
-  // height: clamp(240px, 50vw, 487px);
-
-  transition-duration: 200ms;
-
   @include m.theme() {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition-duration: 200ms;
+    border: 2px solid transparent;
+    transition-duration: 200ms;
     background-color: m.t(base2);
     color: m.t(contrast);
-
     @include m.interact {
       background-color: m.t(contrast2);
       color: m.t(base2);

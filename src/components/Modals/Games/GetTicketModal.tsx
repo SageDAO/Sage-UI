@@ -20,6 +20,7 @@ import MinusSVG from '@/public/icons/minus.svg';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
 import shortenAddress from '@/utilities/shortenAddress';
+import Countdown from '@/components/Countdown';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -39,6 +40,8 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
   const now = new Date().getTime();
   const isStarted = lottery.startTime.getTime() < now;
   const isEnded = lottery.endTime.getTime() < now;
+  const isActive = isStarted && !isEnded;
+
   const { data: winners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
 
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
@@ -113,6 +116,9 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
               ></LotterySlider>
             ) : (
               <BaseMedia src={lottery.Nfts[selectedNftIndex].s3Path} />
+            )}
+            {isActive && (
+              <Countdown endTime={lottery.endTime} className='games-modal__countdown'></Countdown>
             )}
           </div>
           <div className='games-modal__main-content'>

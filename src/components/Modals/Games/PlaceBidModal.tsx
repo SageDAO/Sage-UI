@@ -11,6 +11,7 @@ import CloseSVG from '@/public/interactive/close.svg';
 import { BaseMedia } from '@/components/Media';
 import System from '@/components/Icons/System';
 import BidHistoryTable from '@/components/Games/BidHistoryTable';
+import Countdown from '@/components/Countdown';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -109,6 +110,12 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
             <BaseMedia src={auction.Nft.s3Path} />
+            {isOpenForBids && (
+              <Countdown
+                endTime={auctionState?.endTime}
+                className='games-modal__countdown'
+              ></Countdown>
+            )}
           </div>
           <div className='games-modal__main-content'>
             <div>
@@ -117,7 +124,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
               </h1>
               <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
             </div>
-            <p className='games-modal__game-description'>{auction.Nft.description}</p>
+            <p className='games-modal__game-description'>
+              {auction.Nft.description || 'this artwork has no description provided.'}
+            </p>
             <div className='games-modal__system'>
               <div className='games-modal__system-icon-container'>
                 <System type='auctions'></System>

@@ -70,7 +70,6 @@ export default function Layout({ children, router }: Props) {
   }, []);
 
   return transitions((props, item) => {
-    console.log(item);
     return (
       <React.Fragment>
         <Head>
