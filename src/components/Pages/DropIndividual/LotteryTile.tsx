@@ -14,7 +14,6 @@ interface Props {
   lottery: Lottery_include_Nft;
 }
 export default function LotteryTile({ artist, dropName, imgSrc, editionSize, lottery }: Props) {
-  const focusText = 'enter drawing';
   const { isOpen, closeModal, openModal } = useModal();
   return (
     <div className='drop-page__grid-item' onClick={openModal}>
@@ -28,7 +27,7 @@ export default function LotteryTile({ artist, dropName, imgSrc, editionSize, lot
       <TileHeader systemType={'lotteries'} editionSize={editionSize}></TileHeader>
       <div className='drop-page__grid-item-img'>
         <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
-        <div className='drop-page__grid-item-focus'>{focusText}</div>
+        <div className='drop-page__grid-item-focus'>{lottery.endTime.getTime() > new Date().getTime() ? 'enter lottery' : 'view results'}</div>
       </div>
       <div className='drop-page__grid-item-info'>
         <h1 className='drop-page__grid-item-info-drop-name'>

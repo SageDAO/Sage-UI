@@ -13,7 +13,6 @@ interface Props {
   drawing: Lottery_include_Nft;
 }
 export default function DrawingTile({ artist, dropName, imgSrc, editionSize, drawing }: Props) {
-  const focusText = 'enter drawing';
   const { isOpen, closeModal, openModal } = useModal();
   return (
     <div onClick={openModal} className='drop-page__grid-item'>
@@ -27,7 +26,7 @@ export default function DrawingTile({ artist, dropName, imgSrc, editionSize, dra
       <TileHeader editionSize={editionSize} systemType='auctions'></TileHeader>
       <div className='drop-page__grid-item-img'>
         <BaseMedia src={imgSrc}></BaseMedia>
-        <div className='drop-page__grid-item-focus'>{focusText}</div>
+        <div className='drop-page__grid-item-focus'>{drawing.endTime.getTime() > new Date().getTime() ? 'enter drawing' : 'view results'}</div>
       </div>
       <div className='drop-page__grid-item-info'>
         <h1 className='drop-page__grid-item-info-drop-name'>

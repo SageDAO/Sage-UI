@@ -13,7 +13,6 @@ interface Props {
   auction: Auction_include_Nft;
 }
 export default function AuctionTile({ artist, dropName, imgSrc, editionSize, auction }: Props) {
-  const focusText = 'place bid';
   const { isOpen, closeModal, openModal } = useModal();
   return (
     <div onClick={openModal} className='drop-page__grid-item'>
@@ -27,7 +26,7 @@ export default function AuctionTile({ artist, dropName, imgSrc, editionSize, auc
       <TileHeader editionSize={editionSize} systemType='auctions' />
       <div className='drop-page__grid-item-img'>
         <BaseMedia src={imgSrc} />
-        <div className='drop-page__grid-item-focus'>{focusText}</div>
+        <div className='drop-page__grid-item-focus'>{auction.endTime.getTime() > new Date().getTime() ? 'place bid' : 'view results'}</div>
       </div>
       <div className='drop-page__grid-item-info'>
         <h1 className='drop-page__grid-item-info-drop-name'>
