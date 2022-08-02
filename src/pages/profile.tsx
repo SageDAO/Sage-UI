@@ -39,7 +39,7 @@ function profile() {
       panel: CollectionPanel(),
       subheader: 'your collection of artwork on sage',
     },
-    { name: 'bids and purchases', panel: null, subheader: 'your bids and purchases' },
+    // { name: 'bids and purchases', panel: null, subheader: 'your bids and purchases' },
     {
       name: 'creations / mint',
       panel: CreationsPanel(),
