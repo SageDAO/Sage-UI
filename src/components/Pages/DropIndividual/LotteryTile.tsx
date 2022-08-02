@@ -12,8 +12,16 @@ interface Props {
   artist: User;
   editionSize: number;
   lottery: Lottery_include_Nft;
+  tickets: number;
 }
-export default function LotteryTile({ artist, dropName, imgSrc, editionSize, lottery }: Props) {
+export default function LotteryTile({
+  artist,
+  dropName,
+  imgSrc,
+  editionSize,
+  lottery,
+  tickets,
+}: Props) {
   const { isOpen, closeModal, openModal } = useModal();
   return (
     <div className='drop-page__grid-item' onClick={openModal}>
@@ -27,13 +35,20 @@ export default function LotteryTile({ artist, dropName, imgSrc, editionSize, lot
       <TileHeader systemType={'lotteries'} editionSize={editionSize}></TileHeader>
       <div className='drop-page__grid-item-img'>
         <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
-        <div className='drop-page__grid-item-focus'>{lottery.endTime.getTime() > new Date().getTime() ? 'enter lottery' : 'view results'}</div>
+        <div className='drop-page__grid-item-focus'>
+          {lottery.endTime.getTime() > new Date().getTime() ? 'enter lottery' : 'view results'}
+        </div>
       </div>
       <div className='drop-page__grid-item-info'>
         <h1 className='drop-page__grid-item-info-drop-name'>
           {dropName} by {artist.username}
         </h1>
         <h1 className='drop-page__grid-item-info-game-name'>{'lottery'}</h1>
+        {tickets > 0 && (
+          <h1 className='drop-page__grid-item-info-tickets'>
+            you have {tickets} ticket{tickets > 1 ? 's' : ''}
+          </h1>
+        )}
       </div>
     </div>
   );

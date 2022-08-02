@@ -11,8 +11,9 @@ interface Props {
   artist: User;
   editionSize: number;
   drawing: Lottery_include_Nft;
+  tickets: number;
 }
-export default function DrawingTile({ artist, dropName, imgSrc, editionSize, drawing }: Props) {
+export default function DrawingTile({ artist, dropName, imgSrc, editionSize, drawing, tickets }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
   return (
     <div onClick={openModal} className='drop-page__grid-item'>
@@ -33,6 +34,11 @@ export default function DrawingTile({ artist, dropName, imgSrc, editionSize, dra
           {dropName} by {artist.username}
         </h1>
         <h1 className='drop-page__grid-item-info-game-name'>{drawing.Nfts[0].name}</h1>
+        {tickets > 0 && (
+          <h1 className='drop-page__grid-item-info-tickets'>
+            you have {tickets} ticket{tickets > 1 ? 's' : ''}
+          </h1>
+        )}
       </div>
     </div>
   );

@@ -244,6 +244,16 @@
   line-height: 130%;
 }
 
+.drop-page__grid-item-info-tickets {
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(6px, 0.6vw, 10px);
+  line-height: 130%;
+  @include m.theme() {
+    color: m.t(accent);
+  }
+}
+
 .drop-page__systems-icon {
   @include m.theme() {
     background-color: m.t(accent);

@@ -13,6 +13,7 @@ import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
 import SageLogoSVG from '@/public/icons/sage.svg';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -64,6 +65,11 @@ function computeDropEditionSize({
 export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
   const systems = computeDropSystems({ lotteries, auctions, drawings });
   const editionSize = computeDropEditionSize({ lotteries, auctions, drawings });
+  const { data: sessionData } = useSession();
+  const ticketCountMap = useTicketCount(
+    new Array().concat(drawings, lotteries),
+    sessionData?.address as string
+  );
 
   return (
     <>
@@ -115,6 +121,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                   artist={artist}
                   editionSize={computeEditionSize(l.Nfts)}
                   lottery={l}
+                  tickets={ticketCountMap ? ticketCountMap[l.id] : 0}
                 />
               );
             })}
@@ -127,6 +134,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                   artist={artist}
                   editionSize={d.Nfts[0].numberOfEditions}
                   drawing={d}
+                  tickets={ticketCountMap ? ticketCountMap[d.id] : 0}
                 />
               );
             })}
