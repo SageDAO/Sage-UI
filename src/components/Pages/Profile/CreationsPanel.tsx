@@ -110,13 +110,27 @@ export default function CreationsPanel() {
     }
   }
 
+  async function setAspectRatio(imgData: string) {
+    const div = document.getElementById('file-upload-preview-container');
+    if (div) {
+      let img = document.createElement('img');
+      img.src = imgData;
+      while (img.width == 0) {
+        await new Promise(r => setTimeout(r, 500));
+      }
+      div.style.aspectRatio = `${img.width}/${img.height}`;
+    }
+  }
+
   useEffect(() => {
     if (state.file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        const preview: string = reader.result as string;
         setState((prevState) => {
-          return { ...prevState, preview: reader.result as string };
+          return { ...prevState, preview };
         });
+        setAspectRatio(preview);
       };
       reader.readAsDataURL(state.file);
     } else {
@@ -130,7 +144,7 @@ export default function CreationsPanel() {
     <div className='creations-panel'>
       <form className='creations-panel__form'>
         <div className='creations-panel__file-upload-group'>
-          <div className='creations-panel__file-upload-field-wrapper'>
+          <div id='file-upload-preview-container' className='creations-panel__file-upload-field-wrapper'>
             <input
               onChange={handleFilesInputChange}
               type='file'
@@ -138,7 +152,7 @@ export default function CreationsPanel() {
               accept='image/png, image/gif, image/jpeg, video/mp4'
             ></input>
             <Image
-              className='creations-panel__file-upload-plus-icon '
+              className='creations-panel__file-upload-plus-icon'
               src='/icons/plus.svg'
               width={40}
               height={40}
