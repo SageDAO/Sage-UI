@@ -7,6 +7,7 @@ import { Signer } from 'ethers';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { BaseMedia } from '@/components/Media';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
+import { User } from '@prisma/client';
 
 interface State {
   file: File | null;

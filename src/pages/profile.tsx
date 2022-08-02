@@ -44,14 +44,9 @@ function profile() {
       name: 'creations / mint',
       panel: CreationsPanel(),
       subheader: 'upload a new artwork to your profile',
-      disabled: !(userData && 'ARTIST' == userData.role),
     },
     { name: 'settings', panel: null, disabled: true },
   ];
-
-  if (userData && userData.role == 'ARTIST') {
-    tabItems.push();
-  }
 
   if (!sessionData) {
     return <div className='profile-page'>sign in to view profile</div>;
@@ -69,10 +64,10 @@ function profile() {
         </div>
         <Tab.List className='profile-page__tabs'>
           {tabItems.map((t, i: number) => {
-            if (t.disabled) {
+            const isActive: boolean = i === selectedTabIndex;
+            if (t.name == 'creations / mint' && userData?.role != 'ARTIST') {
               return null;
             }
-            const isActive: boolean = i === selectedTabIndex;
             return (
               <Tab
                 as='button'
@@ -94,14 +89,17 @@ function profile() {
       <div className='profile-page__main'>
         <Balances />
         <Tab.Panels as='div' className='profile-page__tabs-panels'>
-          {tabItems.map((item) => {
+          {tabItems.map((t) => {
+            if (t.name == 'creations / mint' && userData?.role != 'ARTIST') {
+              return null;
+            }
             return (
-              <Tab.Panel as='div' key={item.name} className='profile-page__tabs-panel'>
+              <Tab.Panel as='div' key={t.name} className='profile-page__tabs-panel'>
                 <h1 className='profile-page__tabs-panel-header'>
-                  {item.name}
-                  <span className='profile-page__tabs-panel-subheader'>{item.subheader}</span>
+                  {t.name}
+                  <span className='profile-page__tabs-panel-subheader'>{t.subheader}</span>
                 </h1>
-                {item.panel}
+                {t.panel}
               </Tab.Panel>
             );
           })}
