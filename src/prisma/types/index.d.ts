@@ -69,6 +69,7 @@ export type Game = Auction_include_Nft | Lottery_include_Nft;
 export interface GamePrize {
   nftId: number;
   dropId: number;
+  uri: string;
   auctionId?: number;
   lotteryId?: number;
   lotteryProof?: string;

@@ -7,6 +7,7 @@ import { baseApi } from './baseReducer';
 
 export interface ClaimPrizeRequest {
   lotteryId: number;
+  uri: string;
   nftId: number;
   proof: string;
   walletAddress: string;
@@ -35,20 +36,15 @@ export const prizesApi = baseApi.injectEndpoints({
       providesTags: ['Prizes'],
     }),
     claimLotteryPrize: builder.mutation<Date, ClaimPrizeRequest>({
-      queryFn: async (
-        { lotteryId, nftId, proof, walletAddress, signer },
-        {},
-        _extraOptions,
-        _fetchWithBQ
-      ) => {
+      queryFn: async (args, {}, _extraOptions, _fetchWithBQ) => {
         try {
-          const contract = await getLotteryContract(signer);
+          const contract = await getLotteryContract(args.signer);
           var tx = await contract.claimPrize(
-            lotteryId,
-            walletAddress,
-            nftId,
-            '', // TODO nft URL
-            toByteArray(proof)
+            args.lotteryId,
+            args.walletAddress,
+            args.nftId,
+            args.uri, // TODO nft URL
+            toByteArray(args.proof)
           );
           toast.promise(tx.wait(), {
             pending: 'Request submitted to the blockchain, awaiting confirmation...',
@@ -58,9 +54,9 @@ export const prizesApi = baseApi.injectEndpoints({
           await tx.wait();
           var claimedAt = await updateDbPrizeClaimedDate(
             _fetchWithBQ,
-            lotteryId,
-            walletAddress,
-            nftId
+            args.lotteryId,
+            args.walletAddress,
+            args.nftId
           );
         } catch (e) {
           console.log(e);
@@ -69,9 +65,9 @@ export const prizesApi = baseApi.injectEndpoints({
             // database is out-of-sync with contract, update claimedAt field
             var claimedAt = await updateDbPrizeClaimedDate(
               _fetchWithBQ,
-              lotteryId,
-              walletAddress,
-              nftId
+              args.lotteryId,
+              args.walletAddress,
+              args.nftId
             );
           } else {
             toast.error(`Failure! ${errMsg}`);

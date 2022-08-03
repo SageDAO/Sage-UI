@@ -9,6 +9,7 @@ function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
     nftId: dbPrize.nftId,
     dropId: dbPrize.Nft.Lottery?.Drop.id!,
     lotteryId: dbPrize.Nft.Lottery?.id!,
+    uri: dbPrize.Nft.metadataPath,
     lotteryProof: dbPrize.proof,
     nftName: dbPrize.Nft.name,
     artistUsername: dbPrize.Nft.Lottery?.Drop.NftContract.Artist.username!,
