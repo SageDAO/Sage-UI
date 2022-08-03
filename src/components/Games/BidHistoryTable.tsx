@@ -37,7 +37,7 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
   });
   if (!graphData || !graphData.auction || !graphData.auction.bids) return null;
   const sortedBids = sortBidHistory(graphData.auction.bids);
-  startPolling(500);
+  startPolling(1000);
 
   if (!isActive) return null;
 
