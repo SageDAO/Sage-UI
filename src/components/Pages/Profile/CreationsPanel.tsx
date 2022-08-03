@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
@@ -7,7 +7,8 @@ import { Signer } from 'ethers';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { BaseMedia } from '@/components/Media';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
-import { User } from '@prisma/client';
+import { animated, Spring } from 'react-spring';
+import { useSession } from 'next-auth/react';
 
 interface State {
   file: File | null;
@@ -31,6 +32,7 @@ export default function CreationsPanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [mintSingleNft, { isLoading: isMinting }] = useMintSingleNftMutation();
   const { data: signer } = useSigner();
+  const { data: sessionData } = useSession();
   const reactTags = React.createRef();
 
   function handleTitleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -106,7 +108,7 @@ export default function CreationsPanel() {
       let img = document.createElement('img');
       img.src = imgData;
       while (img.width == 0) {
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise((r) => setTimeout(r, 500));
       }
       div.style.aspectRatio = `${img.width}/${img.height}`;
     }
@@ -130,77 +132,98 @@ export default function CreationsPanel() {
     }
   }, [state.file]);
 
-  return (
-    <div className='creations-panel'>
-      <form className='creations-panel__form'>
-        <div className='creations-panel__file-upload-group'>
-          <div id='file-upload-preview-container' className='creations-panel__file-upload-field-wrapper'>
-            <input
-              onChange={handleFilesInputChange}
-              type='file'
-              className='creations-panel__file-upload-field'
-              accept='image/png, image/gif, image/jpeg, video/mp4'
-            ></input>
-            <Image
-              className='creations-panel__file-upload-plus-icon'
-              src='/icons/plus.svg'
-              width={40}
-              height={40}
-            ></Image>
-            <BaseMedia
-              type={state.file?.type}
-              src={state.preview}
-              isVideo={state.file?.type.includes('video')}
-            ></BaseMedia>
-          </div>
-          <h1 className='creations-panel__file-upload-label'>
-            ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF and MP4 )
-          </h1>
-        </div>
-        <div className='creations-panel__file-title-group'>
-          <h1 className='creations-panel__file-title-label'>artwork title *</h1>
-          <input
-            value={state.title}
-            onChange={handleTitleInputChange}
-            className='creations-panel__file-title-field'
-          />
-        </div>
-        <div className='creations-panel__file-desc-group'>
-          <h1 className='creations-panel__file-desc-label'>artwork description</h1>
-          <textarea
-            value={state.description}
-            onChange={handleDescriptionInputChange}
-            className='creations-panel__file-desc-field'
-          />
-        </div>
-        <div className='creations-panel__file-title-group'>
-          <h1 className='creations-panel__file-title-label'>tags</h1>
-          <input
-            value={state.tags}
-            onChange={handleTagsInputChange}
-            className='creations-panel__file-title-field'
-          />
-        </div>
-        <div className='creations-panel__file-title-group'>
-          <h1 className='creations-panel__file-title-label'>artwork price (ash) *</h1>
-          <input
-            type='number'
-            value={state.price}
-            onChange={handlePriceInputChange}
-            className='creations-panel__file-title-field'
-          />
-        </div>
-        <button
-          disabled={isMinting}
-          className='creations-panel__submit-button'
-          type='button'
-          onClick={handleMintButtonClick}
-        >
-          {isMinting ? <LoaderSpinner /> : `mint artwork`}
-        </button>
-      </form>
+  if (!sessionData) {
+    return null;
+  }
 
-      {/*
+  return (
+    <Fragment>
+      <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
+        {(styles) => {
+          return (
+            <animated.h1 style={styles} className='profile-page__tabs-panel-header'>
+              creations panel
+              <span className='profile-page__tabs-panel-subheader'>edit your sage profile</span>
+            </animated.h1>
+          );
+        }}
+      </Spring>
+      <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
+        {(styles) => {
+          return (
+            <animated.div style={styles} className='creations-panel'>
+              <form className='creations-panel__form'>
+                <div className='creations-panel__file-upload-group'>
+                  <div
+                    id='file-upload-preview-container'
+                    className='creations-panel__file-upload-field-wrapper'
+                  >
+                    <input
+                      onChange={handleFilesInputChange}
+                      type='file'
+                      className='creations-panel__file-upload-field'
+                      accept='image/png, image/gif, image/jpeg, video/mp4'
+                    ></input>
+                    <Image
+                      className='creations-panel__file-upload-plus-icon'
+                      src='/icons/plus.svg'
+                      width={40}
+                      height={40}
+                    ></Image>
+                    <BaseMedia
+                      type={state.file?.type}
+                      src={state.preview}
+                      isVideo={state.file?.type.includes('video')}
+                    ></BaseMedia>
+                  </div>
+                  <h1 className='creations-panel__file-upload-label'>
+                    ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF and MP4 )
+                  </h1>
+                </div>
+                <div className='creations-panel__file-title-group'>
+                  <h1 className='creations-panel__file-title-label'>artwork title *</h1>
+                  <input
+                    value={state.title}
+                    onChange={handleTitleInputChange}
+                    className='creations-panel__file-title-field'
+                  />
+                </div>
+                <div className='creations-panel__file-desc-group'>
+                  <h1 className='creations-panel__file-desc-label'>artwork description</h1>
+                  <textarea
+                    value={state.description}
+                    onChange={handleDescriptionInputChange}
+                    className='creations-panel__file-desc-field'
+                  />
+                </div>
+                <div className='creations-panel__file-title-group'>
+                  <h1 className='creations-panel__file-title-label'>tags</h1>
+                  <input
+                    value={state.tags}
+                    onChange={handleTagsInputChange}
+                    className='creations-panel__file-title-field'
+                  />
+                </div>
+                <div className='creations-panel__file-title-group'>
+                  <h1 className='creations-panel__file-title-label'>artwork price (ash) *</h1>
+                  <input
+                    type='number'
+                    value={state.price}
+                    onChange={handlePriceInputChange}
+                    className='creations-panel__file-title-field'
+                  />
+                </div>
+                <button
+                  disabled={isMinting}
+                  className='creations-panel__submit-button'
+                  type='button'
+                  onClick={handleMintButtonClick}
+                >
+                  {isMinting ? <LoaderSpinner /> : `mint artwork`}
+                </button>
+              </form>
+
+              {/*
       <div className='creations-panel__manage'>
         <div className='creations-panel__manage-header'>
           manage creations
@@ -208,6 +231,10 @@ export default function CreationsPanel() {
         </div>
       </div>
       */}
-    </div>
+            </animated.div>
+          );
+        }}
+      </Spring>
+    </Fragment>
   );
 }

@@ -10,13 +10,7 @@ import Balances from '@/components/Pages/Profile/Balances';
 import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
 import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
 import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
-
-type TabItem = {
-  name: string;
-  subheader?: string;
-  panel?: any;
-  disabled?: boolean;
-};
+import { animated, Transition, Spring } from 'react-spring';
 
 function profile() {
   const { data: sessionData } = useSession();
@@ -24,87 +18,86 @@ function profile() {
     skip: !sessionData,
   });
   const [signOut] = useSignOutMutation();
-
-  const { handleTabsClick, selectedTabIndex } = useTabs();
-
-  const tabItems: TabItem[] = [
-    {
-      name: 'profile',
-      panel: ProfilePanel(),
-      subheader: 'complete or update your profile on sage',
-    },
-    {
-      name: 'notifications',
-      panel: NotificationsPanel(),
-      subheader: 'your personal control panel',
-    },
-    {
-      name: 'collection',
-      panel: CollectionPanel(),
-      subheader: 'your collection of artwork on sage',
-    },
-    // { name: 'bids and purchases', panel: null, subheader: 'your bids and purchases' },
-    {
-      name: 'creations / mint',
-      panel: CreationsPanel(),
-      subheader: 'upload a new artwork to your profile',
-    },
-    { name: 'settings', panel: null, disabled: true },
-  ];
+  const { selectedTabIndex, setSelectedTabIndex } = useTabs();
 
   if (!sessionData) {
     return <div className='profile-page'>sign in to view profile</div>;
   }
+
   if (!userData && isFetchingUser) {
     return <LoaderDots />;
   }
 
+  const isArtist: boolean = userData?.role === 'ARTIST';
+
   return (
-    <Tab.Group as='div' className='profile-page' vertical selectedIndex={selectedTabIndex}>
-      <div>
-        <SageFullLogoSVG className='profile-page__sage-logo-svg' />
-        <Tab.List className='profile-page__tabs'>
-          {tabItems.map((t, i: number) => {
-            const isActive: boolean = i === selectedTabIndex;
-            if (t.name == 'creations / mint' && userData?.role != 'ARTIST') {
-              return null;
-            }
-            return (
-              <Tab
-                as='button'
-                disabled={t.disabled}
-                data-active={isActive}
-                onClick={() => handleTabsClick(i)}
-                key={t.name}
-                className='profile-page__tabs-tab'
-              >
-                {t.name}
-              </Tab>
-            );
-          })}
-          <button onClick={() => signOut()} className='profile-page__tabs-tab'>
-            log out
-          </button>
-        </Tab.List>
-      </div>
-      <div className='profile-page__main'>
-        <Balances />
-        <Tab.Panels as='div' className='profile-page__tabs-panels'>
-          {tabItems.map((t) => {
-            if (t.name == 'creations / mint' && userData?.role != 'ARTIST') {
-              return null;
-            }
-            return (
-              <Tab.Panel as='div' key={t.name} className='profile-page__tabs-panel'>
-                <h1 className='profile-page__tabs-panel-header'>
-                  {t.name}
-                  <span className='profile-page__tabs-panel-subheader'>{t.subheader}</span>
-                </h1>
-                {t.panel}
-              </Tab.Panel>
-            );
-          })}
-        </Tab.Panels>
+    <Tab.Group selectedIndex={selectedTabIndex} onChange={setSelectedTabIndex} vertical>
+      <div className='profile-page'>
+        <div>
+          <SageFullLogoSVG className='profile-page__sage-logo-svg' />
+          <Tab.List className='profile-page__tabs'>
+            <Tab as={React.Fragment}>
+              {({ selected }) => {
+                return (
+                  <button data-active={selected} className='profile-page__tabs-tab'>
+                    profile
+                  </button>
+                );
+              }}
+            </Tab>
+            <Tab as={React.Fragment}>
+              {({ selected }) => {
+                return (
+                  <button data-active={selected} className='profile-page__tabs-tab'>
+                    collection
+                  </button>
+                );
+              }}
+            </Tab>
+            <Tab as={React.Fragment}>
+              {({ selected }) => {
+                return (
+                  <button data-active={selected} className='profile-page__tabs-tab'>
+                    notifications
+                  </button>
+                );
+              }}
+            </Tab>
+            <Tab as={React.Fragment}>
+              {({ selected }) => {
+                return (
+                  <button
+                    disabled={!isArtist}
+                    data-active={selected}
+                    className='profile-page__tabs-tab'
+                  >
+                    creations / mint
+                  </button>
+                );
+              }}
+            </Tab>
+            <button onClick={() => signOut()} className='profile-page__tabs-tab'>
+              log out
+            </button>
+          </Tab.List>
+        </div>
+        <div className='profile-page__main'>
+          <Balances />
+          <Tab.Panels>
+            <Tab.Panel as='div' className='profile-page__tabs-panel'>
+              <ProfilePanel />
+            </Tab.Panel>
+            <Tab.Panel as='div' className='profile-page__tabs-panel'>
+              <CollectionPanel />
+            </Tab.Panel>
+            <Tab.Panel as='div' className='profile-page__tabs-panel'>
+              <NotificationsPanel />
+            </Tab.Panel>
+            <Tab.Panel as='div' className='profile-page__tabs-panel'>
+              <CreationsPanel />
+            </Tab.Panel>
+          </Tab.Panels>
+        </div>
       </div>
     </Tab.Group>
   );
