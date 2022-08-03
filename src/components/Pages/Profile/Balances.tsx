@@ -12,6 +12,7 @@ export default function Balances() {
     token: parameters.ASHTOKEN_ADDRESS,
     addressOrName: userData?.walletAddress,
   });
+
   return (
     <div className='profile-page__balances'>
       <div className='profile-page__balances-points'>

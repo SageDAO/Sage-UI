@@ -11,7 +11,7 @@ interface State {
   scale: number;
 }
 
-export default function ProfilePictureModal({ isOpen, closeModal, title }: ModalProps) {
+export default function ProfilePictureModal({ isOpen, closeModal }: ModalProps) {
   const initialState = {
     image: DEFAULT_PROFILE_PICTURE,
     scale: 1,
@@ -24,7 +24,7 @@ export default function ProfilePictureModal({ isOpen, closeModal, title }: Modal
   const [updateUser] = useUpdateUserMutation();
 
   var editor: any;
-  
+
   const setEditorRef = (_editor: any) => {
     if (_editor) {
       editor = _editor;

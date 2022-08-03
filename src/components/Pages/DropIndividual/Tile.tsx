@@ -65,16 +65,6 @@ export default function Tile({
 
   return (
     <div className='drop-page__grid-item' onClick={openModal}>
-      {Modal && (
-        <Modal
-          dropName={dropName}
-          artist={artist}
-          auction={auction as Auction_include_Nft}
-          lottery={lottery as Lottery_include_Nft}
-          isOpen={isOpen}
-          closeModal={closeModal}
-        ></Modal>
-      )}
       <div className='drop-page__grid-item-header'>
         <h1 className='drop-page__grid-item-header-left'>edition size: {editionSize}</h1>
         <div className='drop-page__grid-item-header-right'>

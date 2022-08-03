@@ -36,7 +36,7 @@ export const usersApi = baseApi.injectEndpoints({
     }),
     signOut: builder.mutation<null, void>({
       queryFn: () => {
-        signOut({ redirect: true });
+        signOut({ redirect: false });
         return { data: null };
       },
       invalidatesTags: [
@@ -77,16 +77,18 @@ export const usersApi = baseApi.injectEndpoints({
           const { data } = result;
           if ((data as any).error) {
             if ('Unique constraint violation' == (data as any).error) {
-              toast.error(`Update failed: username '${user.username}' is already in use, please pick another one!`);
+              toast.error(
+                `Update failed: username '${user.username}' is already in use, please pick another one!`
+              );
             } else {
               console.log(data);
-              toast.error('Error updating profile.')
+              toast.error('Error updating profile.');
             }
           } else {
             toast.success('Successfully updated profile.');
           }
         } catch (e) {
-          toast.error('Error updating profile.')
+          toast.error('Error updating profile.');
         }
         return { data: null };
       },

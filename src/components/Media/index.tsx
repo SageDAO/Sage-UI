@@ -12,9 +12,10 @@ interface BaseMediaProps {
   onClickHandler?: React.MouseEventHandler<HTMLImageElement>;
   isZoomable?: boolean;
   type?: string;
+  className?: string;
 }
 
-function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type }: BaseMediaProps) {
+function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
   if (!isVideo) {
     isVideo = false;
   }
@@ -41,11 +42,18 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type }: BaseMedia
               height: '100%',
               objectFit: 'cover',
             }}
+            className={className}
           >
             <source src={src} type={type} />
           </video>
         ) : isZoomable ? (
-          <Image draggable={false} src={src} layout='fill' objectFit='cover' />
+          <Image
+            draggable={false}
+            className={className}
+            src={src}
+            layout='fill'
+            objectFit='cover'
+          />
         ) : (
           <Image
             src={src}
@@ -53,6 +61,7 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type }: BaseMedia
             objectFit='cover'
             draggable={false}
             onClick={onClickHandler}
+            className={className}
             style={onClickHandler ? { cursor: 'pointer' } : {}}
           />
         )}

@@ -19,8 +19,8 @@
 @mixin balance-value {
   font-style: normal;
   font-weight: 400;
-  font-size: 64px;
-  line-height: 78px;
+  font-size: clamp(32px, 4vw, 64px);
+  line-height: clamp(32px, 1em, 78px);
 
   @include m.theme() {
     color: m.t(contrast2);
@@ -410,8 +410,8 @@
 .creations-panel__file-upload-plus-icon {
   position: absolute;
   z-index: 1;
-	width: 40px;
-	height: 40px;
+  width: 40px;
+  height: 40px;
   @include m.theme() {
     color: m.t(contrast);
   }
@@ -474,4 +474,131 @@
 
 .creations-panel__manage-subheader {
   @include panel-subheader;
+}
+
+// ------------------------ notificattions panel ----------------------------------
+
+.notifications-panel {
+}
+
+.notifications-panel__tab-list {
+  @include m.theme() {
+    display: flex;
+    gap: 111px;
+    padding: 4px 0;
+    color: m.t(contrast);
+    border-bottom: 2px solid c.$grey;
+  }
+}
+
+.notifications-panel__tab-item {
+  @include m.theme() {
+    color: m.t(contrast);
+  }
+  font-style: normal;
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+}
+
+.notifications-panel__panels {
+  margin-top: 18px;
+  min-height: 1000px;
+}
+
+.notifications-panel__table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 18px;
+  min-height: 800px;
+}
+
+@mixin claim-prizes-divisions {
+  width: 100%;
+  display: flex;
+
+  th:first-child,
+  td:first-child {
+    width: 50%;
+  }
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 25%;
+  }
+  th:last-child,
+  td:last-child {
+    width: 25%;
+  }
+}
+
+.notifications-panel__th-row {
+  @include claim-prizes-divisions;
+  @include m.theme() {
+    color: m.t(contrast2);
+  }
+  padding: 4px 0;
+}
+
+.notifications-panel__th {
+  @include m.theme() {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    color: m.t(cotrast2);
+    text-align: left;
+  }
+}
+
+.notifications-panel__data-list {
+  padding: 0 10px;
+  flex: 1;
+
+  @include m.theme() {
+    background-color: m.t(contrast2);
+    tr {
+      border-bottom: 1px solid black;
+    }
+  }
+}
+
+.notifications-panel__data-row {
+  @include m.theme() {
+    @include claim-prizes-divisions;
+    align-items: center;
+    padding: 5px 0;
+    color: m.t(base2);
+  }
+}
+
+@mixin td {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.notifications-panel__td--creation {
+  @include td;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.notifications-panel__interact-button {
+  @include m.theme() {
+    background-color: m.t(base);
+    color: m.t(contrast);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 136.6%;
+    text-align: center;
+    letter-spacing: 0.2em;
+		padding: 10px;
+		@include m.interact;
+  }
 }

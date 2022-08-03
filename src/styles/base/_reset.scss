@@ -9,6 +9,7 @@
 html,
 button {
   text-transform: uppercase;
+  font-family: 'Marine';
 }
 
 //element highlights in accented color
@@ -26,7 +27,6 @@ input[type='file'] {
 input[type='file']::file-selector-button {
   display: none;
 }
-
 
 //hide arrows for number inputs
 input::-webkit-outer-spin-button,

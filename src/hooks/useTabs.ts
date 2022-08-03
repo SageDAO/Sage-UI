@@ -7,5 +7,5 @@ export default function useTabs() {
     setSelectedTabIndex(index);
   };
 
-  return { handleTabsClick, selectedTabIndex };
+  return { handleTabsClick, selectedTabIndex, setSelectedTabIndex };
 }
