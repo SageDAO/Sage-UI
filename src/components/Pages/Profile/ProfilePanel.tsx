@@ -102,10 +102,8 @@ export default function ProfilePanel() {
                 title='Profile Picture'
               />
               <div className='profile-panel__pfp-group'>
-                <div className='profile-panel__pfp-container'>
-                  <a onClick={openProfilePicModal}>
-                    <PfpImage src={state?.profilePicture}></PfpImage>
-                  </a>
+                <div onClick={openProfilePicModal} className='profile-panel__pfp-container'>
+                  <PfpImage src={state?.profilePicture}></PfpImage>
                 </div>
                 <h2 className='profile-panel__pfp-label'>add a profile picture</h2>
               </div>
