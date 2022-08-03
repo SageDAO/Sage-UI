@@ -19,8 +19,8 @@
 @mixin balance-value {
   font-style: normal;
   font-weight: 400;
-  font-size: 64px;
-  line-height: 78px;
+  font-size: clamp(32px, 4vw, 64px);
+  line-height: clamp(32px, 1em, 78px);
 
   @include m.theme() {
     color: m.t(contrast2);
