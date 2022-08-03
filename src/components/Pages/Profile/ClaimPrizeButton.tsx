@@ -19,20 +19,31 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
   const { data: signer } = useSigner();
   async function handleInteractButtonClick() {
     if (lotteryId) {
-      claimLotteryPrize({
-        lotteryId: lotteryId,
-        proof: lotteryProof as string,
-        walletAddress: userData?.walletAddress as string,
-        uri: uri,
-        signer: signer as Signer,
-        nftId: nftId,
-      });
-    } else {
-      claimAuctionPrize({ id: auctionId as number, signer: signer as Signer });
+      if (!signer) return;
+      if (!userData) return;
+      if (!lotteryProof) return;
+      try {
+        claimLotteryPrize({
+          lotteryId: lotteryId,
+          proof: lotteryProof,
+          walletAddress: userData?.walletAddress,
+          uri: uri,
+          signer: signer,
+          nftId: nftId,
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    } else if (auctionId) {
+      claimAuctionPrize({ id: auctionId, signer: signer as Signer });
     }
   }
   return (
-    <button disabled={isClaimAuctionPrizeLoading || isClaimLotteryPrizeLoading} onClick={handleInteractButtonClick} className='notifications-panel__interact-button'>
+    <button
+      disabled={isClaimAuctionPrizeLoading || isClaimLotteryPrizeLoading}
+      onClick={handleInteractButtonClick}
+      className='notifications-panel__interact-button'
+    >
       mint/claim
     </button>
   );

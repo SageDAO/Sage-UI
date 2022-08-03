@@ -1,4 +1,4 @@
-import { Prisma, Drop, User, Nft } from '@prisma/client';
+import { Prisma, Drop, User, Nft, Auction, Lottery, PrizeProof } from '@prisma/client';
 import type { DropWhereInput } from '@prisma/client';
 
 export type { User, Drop, Nft };
@@ -29,7 +29,7 @@ export type AuctionNftWithArtist = Prisma.AuctionGetPayload<{
   };
 }>;
 
-export type CollectedListingNft = Omit<GamePrize, 'dropId' | 'createdAt'>;
+export type CollectedListingNft = Omit<GamePrize, 'dropId' | 'createdAt', 'uri'>;
 
 export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   include: {
@@ -66,20 +66,20 @@ export type DropFull = Prisma.DropGetPayload<{
 
 export type Game = Auction_include_Nft | Lottery_include_Nft;
 
-export interface GamePrize {
-  nftId: number;
-  dropId: number;
-  uri: string;
-  auctionId?: number;
-  lotteryId?: number;
-  lotteryProof?: string;
-  nftName: string;
-  artistUsername: string;
-  artistProfilePicture: string;
-  s3Path: string;
-  isVideo: boolean;
-  claimedAt?: Date;
-}
+export type GamePrize = {
+  nftId: Nft['id'];
+  dropId: Drop['id'];
+  uri: Nft['metadataPath'];
+  auctionId?: Auction['id'];
+  lotteryId?: Lottery['id'];
+  lotteryProof?: PrizeProof['proof'];
+  nftName: Nft['name'];
+  artistUsername: User['username'];
+  artistProfilePicture: User['profilePicture'];
+  s3Path: Nft['s3Path'];
+  isVideo: Nft['isVideo'];
+  claimedAt?: PrizeProof['claimedAt'];
+};
 
 export type Lottery_include_Nft = Prisma.LotteryGetPayload<{
   include: { Nfts: true };

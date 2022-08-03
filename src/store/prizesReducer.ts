@@ -1,23 +1,24 @@
 import { Signer } from 'ethers';
 import { GamePrize } from '@/prisma/types';
+import { Lottery, Nft, User, PrizeProof } from '@prisma/client';
 import { toast } from 'react-toastify';
 import { extractErrorMessage, getLotteryContract } from '../utilities/contracts';
 import { playErrorSound, playPrizeClaimedSound } from '../utilities/sounds';
 import { baseApi } from './baseReducer';
 
 export interface ClaimPrizeRequest {
-  lotteryId: number;
-  uri: string;
-  nftId: number;
-  proof: string;
-  walletAddress: string;
+  lotteryId: Lottery['id'];
+  uri: Nft['metadataPath'];
+  nftId: Nft['id'];
+  proof: PrizeProof['proof'];
+  walletAddress: User['walletAddress'];
   signer: Signer;
 }
 
 export const prizesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    isLotteryDrawn: builder.query<boolean, number>({
-      query: (lotteryId: number) => `prizes?action=IsLotteryDrawn&lotteryId=${lotteryId}`,
+    isLotteryDrawn: builder.query<boolean, Lottery['id']>({
+      query: (lotteryId) => `prizes?action=IsLotteryDrawn&lotteryId=${lotteryId}`,
     }),
     getClaimedPrizes: builder.query<GamePrize[], void>({
       query: () => `prizes?action=GetClaimedPrizes`,
@@ -29,7 +30,7 @@ export const prizesApi = baseApi.injectEndpoints({
     }),
     getPrizesByUserAndLottery: builder.query<
       GamePrize[],
-      { walletAddress: string; lotteryId: number }
+      { walletAddress: User['walletAddress']; lotteryId: Lottery['id'] }
     >({
       query: ({ walletAddress, lotteryId }) =>
         `prizes?action=GetPrizesByUserAndLottery&lotteryId=${lotteryId}&walletAddress=${walletAddress}`,
@@ -43,7 +44,7 @@ export const prizesApi = baseApi.injectEndpoints({
             args.lotteryId,
             args.walletAddress,
             args.nftId,
-            args.uri, // TODO nft URL
+            args.uri, 
             toByteArray(args.proof)
           );
           toast.promise(tx.wait(), {
@@ -85,9 +86,9 @@ export const prizesApi = baseApi.injectEndpoints({
 
 async function updateDbPrizeClaimedDate(
   fetchWithBQ: any,
-  lotteryId: number,
-  winnerAddress: string,
-  nftId: number
+  lotteryId: Lottery['id'],
+  winnerAddress: User['walletAddress'],
+  nftId: Nft['id']
 ): Promise<Date> {
   const { data } = await fetchWithBQ({
     url: `prizes?action=UpdatePrizeClaimedDate&lotteryId=${lotteryId}`,
