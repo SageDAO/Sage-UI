@@ -42,6 +42,8 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
   const isEnded = lottery.endTime.getTime() < now;
   const isActive = isStarted && !isEnded;
 
+	// const personalAvailableTickets = 
+
   const { data: winners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
 
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;

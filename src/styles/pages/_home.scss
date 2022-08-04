@@ -19,6 +19,7 @@
 }
 
 .home-page__featured-drop-tag {
+  width: min(1440px, 80vw);
   @include m.interact;
   transition-duration: 300ms;
   display: flex;
@@ -30,8 +31,8 @@
   @include m.theme() {
     color: m.t(contrast);
   }
-  height: clamp(20px, 4vw, 40px);
-  aspect-ratio: 44.48/48;
+  height: clamp(20px, 5vw, 45px);
+  width: clamp(20px, 5vw, 45px);
 }
 
 .home-page__featured-drop-tag-label {
