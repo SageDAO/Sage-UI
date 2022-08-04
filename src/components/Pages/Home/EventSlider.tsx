@@ -12,7 +12,7 @@ interface State {
 const INITIAL_STATE: State = { image: '/', title: '', link: '', items: [], description: '' };
 
 const mediumURL =
-  'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@dontbuymeme';
+  'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@niharikasodhi';
 
 const fetchMediumPosts = async (callback: (data: any) => void) => {
   const response = await fetch(mediumURL);
@@ -31,7 +31,7 @@ export default function EventSlider() {
             image: data.feed.image,
             title: data.feed.title,
             link: data.feed.link,
-            items: data.feed.items,
+            items: data.items,
             description: data.feed.description,
           };
         });
@@ -39,33 +39,35 @@ export default function EventSlider() {
     });
   }, []);
 
-  if (state.title == '') {
-    return null;
-  }
+  if (!state.items) return null;
 
   return (
     <div className='home-page__events'>
-      <a target='__blank' className='home-page__event-slide' href={state.link}>
-        <h1 className='home-page__event-slide-header'>
-          news 
-        </h1>
-        <Image
-          src={state.image}
-          layout='fill'
-          objectFit='cover'
-          loader={({ src, width, quality }) => {
-            return `${src}?w=${width}&q=${quality || 75}`;
-          }}
-        />
-        <div className='home-page__event-slide-focus' />
-        <div className='home-page__event-slide-content'>
-          <h1 className='home-page__event-slide-content-title'>{state.title}</h1>
-          <div className='home-page__event-slide-content-group'>
-            <p className='home-page__event-slide-content-description'>{state.description}</p>
-            <button className='home-page__event-slide-content-read-more-button'>read more</button>
-          </div>
-        </div>
-      </a>
+      {state.items.map((item, i: number) => {
+        return (
+          <a target='__blank' key={i} className='home-page__event-slide' href={item.link}>
+            <h1 className='home-page__event-slide-header'>news</h1>
+            <Image
+              src={item.thumbnail}
+              layout='fill'
+              objectFit='cover'
+              loader={({ src, width, quality }) => {
+                return `${src}?w=${width}&q=${quality || 75}`;
+              }}
+            />
+            <div className='home-page__event-slide-focus' />
+            <div className='home-page__event-slide-content'>
+              <h1 className='home-page__event-slide-content-title'>{item.title}</h1>
+              <div className='home-page__event-slide-content-group'>
+                <p className='home-page__event-slide-content-description'>{item.pubDate}</p>
+                <button className='home-page__event-slide-content-read-more-button'>
+                  read more
+                </button>
+              </div>
+            </div>
+          </a>
+        );
+      })}
     </div>
   );
 }

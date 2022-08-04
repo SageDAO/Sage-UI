@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-	width: 100%;
+  width: min(1440px, 80vw);
   justify-content: space-between;
   aspect-ratio: 322/380;
   @include b.min-width('medium') {

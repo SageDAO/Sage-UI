@@ -98,8 +98,8 @@ function home({ featuredDrop, upcomingDrops }: Props) {
             );
           })}
         </div>
+        <EventSlider />
       </animated.div>
-      <EventSlider />
     </div>
   );
 }
