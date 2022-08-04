@@ -12,12 +12,12 @@ import MediumSVG from '@/public/socials/medium.svg';
 import InstagramSVG from '@/public/socials/insta.svg';
 import WebSVG from '@/public/socials/web.svg';
 
-type LNft = Nft_include_NftContractAndOffers;
+type ListingNft = Nft_include_NftContractAndOffers;
 
 /**
  * Display unsold items first; then newest on top.
  */
-function sort(a: LNft, b: LNft) {
+function sort(a: ListingNft, b: ListingNft) {
   if (!a.ownerAddress) {
     return b.ownerAddress ? -1 : b.id - a.id;
   }
@@ -43,18 +43,34 @@ export default function artist({ artist }: Props) {
           <div>
             <h1 className='artist-page__name'>{artist.username}</h1>
             <ul className='artist-page__socials'>
-              <div className='artist-page__socials-item'>
-                <TwitterSVG className='artist-page__socials-svg' />
-              </div>
-              <div className='artist-page__socials-item'>
-                <MediumSVG className='artist-page__socials-svg' />
-              </div>
-              <div className='artist-page__socials-item'>
-                <InstagramSVG className='artist-page__socials-svg' />
-              </div>
-              <div className='artist-page__socials-item'>
-                <WebSVG className='artist-page__socials-svg' />
-              </div>
+              {!!artist.twitterUsername && (
+                <div className='artist-page__socials-item'>
+                  <a target='_blank' href={`https://twitter.com/${artist.twitterUsername}`}>
+                    <TwitterSVG className='artist-page__socials-svg' />
+                  </a>
+                </div>
+              )}
+              {!!artist.mediumUsername && (
+                <div className='artist-page__socials-item'>
+                  <a target='_blank' href={`https://medium.com/@${artist.mediumUsername}`}>
+                    <MediumSVG className='artist-page__socials-svg' />
+                  </a>
+                </div>
+              )}
+              {!!artist.instagramUsername && (
+                <div className='artist-page__socials-item'>
+                  <a target='_blank' href={`https://instagram.com/${artist.instagramUsername}`}>
+                    <InstagramSVG className='artist-page__socials-svg' />
+                  </a>
+                </div>
+              )}
+              {!!artist.webpage && (
+                <div className='artist-page__socials-item'>
+                  <a target='_blank' href={artist.webpage.startsWith('http') ? artist.webpage : `https://${artist.webpage}`}>
+                    <WebSVG className='artist-page__socials-svg' />
+                  </a>
+                </div>
+              )}
             </ul>
           </div>
         </div>
@@ -67,7 +83,9 @@ export default function artist({ artist }: Props) {
           {nfts &&
             [...nfts]
               .sort(sort)
-              .map((nft: LNft, i: number) => <ListingTile key={i} nft={nft} artist={artist} />)}
+              .map((nft: ListingNft, i: number) => (
+                <ListingTile key={i} nft={nft} artist={artist} />
+              ))}
         </div>
       </section>
     </div>

@@ -128,7 +128,7 @@ export default function ProfilePanel() {
                   value={state?.email ?? ''}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setState((prevState) => {
-                      return { ...prevState, email: e.target.value };
+                      return { ...prevState, email: e.target.value.trim() };
                     });
                   }}
                   maxLength={40}
@@ -144,7 +144,7 @@ export default function ProfilePanel() {
                     className='profile-panel__socials-field'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setState((prevState) => {
-                        return { ...prevState, twitterUsername: e.target.value };
+                        return { ...prevState, twitterUsername: e.target.value.trim() };
                       });
                     }}
                     maxLength={40}
@@ -156,7 +156,7 @@ export default function ProfilePanel() {
                     className='profile-panel__socials-field'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setState((prevState) => {
-                        return { ...prevState, instagramUsername: e.target.value };
+                        return { ...prevState, instagramUsername: e.target.value.trim() };
                       });
                     }}
                     maxLength={40}
@@ -168,7 +168,7 @@ export default function ProfilePanel() {
                     className='profile-panel__socials-field'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setState((prevState) => {
-                        return { ...prevState, mediumUsername: e.target.value };
+                        return { ...prevState, mediumUsername: e.target.value.trim() };
                       });
                     }}
                     maxLength={40}
@@ -180,7 +180,7 @@ export default function ProfilePanel() {
                     className='profile-panel__socials-field'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setState((prevState) => {
-                        return { ...prevState, webpage: e.target.value };
+                        return { ...prevState, webpage: e.target.value.trim() };
                       });
                     }}
                     maxLength={50}
