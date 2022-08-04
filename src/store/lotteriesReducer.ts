@@ -14,8 +14,8 @@ import { baseApi } from './baseReducer';
 export interface BuyTicketRequest {
   lotteryId: number;
   numberOfTickets: number;
-  ticketCostCoins: bigint;
-  ticketCostPoints: bigint;
+  ticketCostCoins: string;
+  ticketCostPoints: string;
   signer: Signer;
   earnedPoints: GetEarnedPointsResponse;
 }
@@ -69,7 +69,7 @@ export const lotteriesApi = baseApi.injectEndpoints({
           playErrorSound();
           return { data: false };
         }
-        const usePoints = Boolean(buyRequest.ticketCostPoints > 0);
+        const usePoints = Boolean(Number(buyRequest.ticketCostPoints) > 0);
         try {
           if (usePoints) {
             const escrowPoints =
@@ -179,4 +179,9 @@ export async function setupTicketSoldListener(lotteryId: number, countUpdateCall
   }
 }
 
-export const { useGetLotteryQuery, useGetLotteryWinnersQuery, useGetTicketCountsQuery, useBuyTicketsMutation } = lotteriesApi;
+export const {
+  useGetLotteryQuery,
+  useGetLotteryWinnersQuery,
+  useGetTicketCountsQuery,
+  useBuyTicketsMutation,
+} = lotteriesApi;
