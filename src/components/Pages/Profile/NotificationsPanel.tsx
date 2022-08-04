@@ -1,11 +1,11 @@
 import { Tab } from '@headlessui/react';
-import { useGetUnclaimedPrizesQuery } from '@/store/prizesReducer';
+import { useGetPrizesByUserQuery } from '@/store/prizesReducer';
 import Image from 'next/image';
 import { animated, Spring } from 'react-spring';
 import ClaimPrizeButton from './ClaimPrizeButton';
 
 export default function Notifications() {
-  const { data: prizeData } = useGetUnclaimedPrizesQuery();
+  const { data: prizeData } = useGetPrizesByUserQuery();
   return (
     <>
       <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
@@ -41,7 +41,7 @@ export default function Notifications() {
                     </thead>
                     <tbody className='notifications-panel__data-list'>
                       {prizeData?.map((p) => {
-                        const dateDisplay = p.claimedAt?.toLocaleDateString().replace('/', '.');
+                        const dateDisplay = p.claimedAt ? p.claimedAt : 'unclaimed';
                         return (
                           <tr key={p.nftId} className='notifications-panel__data-row'>
                             <td className='notifications-panel__td--creation'>
@@ -55,7 +55,7 @@ export default function Notifications() {
                               {p.nftName}
                             </td>
                             <td className='notifications-panel__td'>{dateDisplay}</td>
-                            <td className='notifications-panel__td'>
+                            <td className='notifications-panel__td--interact'>
                               <ClaimPrizeButton gamePrize={p} />
                             </td>
                           </tr>

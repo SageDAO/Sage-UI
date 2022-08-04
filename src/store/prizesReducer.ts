@@ -28,6 +28,10 @@ export const prizesApi = baseApi.injectEndpoints({
       query: () => `prizes?action=GetUnclaimedPrizes`,
       providesTags: ['Prizes'],
     }),
+    getPrizesByUser: builder.query<GamePrize[], void>({
+      query: () => `prizes?action=GetPrizesByUser`,
+      providesTags: ['Prizes'],
+    }),
     getPrizesByUserAndLottery: builder.query<
       GamePrize[],
       { walletAddress: User['walletAddress']; lotteryId: Lottery['id'] }
@@ -44,7 +48,7 @@ export const prizesApi = baseApi.injectEndpoints({
             args.lotteryId,
             args.walletAddress,
             args.nftId,
-            args.uri, 
+            args.uri,
             toByteArray(args.proof)
           );
           toast.promise(tx.wait(), {
@@ -63,7 +67,6 @@ export const prizesApi = baseApi.injectEndpoints({
           console.log(e);
           const errMsg = extractErrorMessage(e);
           if (errMsg == 'Participant already claimed prize') {
-            // database is out-of-sync with contract, update claimedAt field
             var claimedAt = await updateDbPrizeClaimedDate(
               _fetchWithBQ,
               args.lotteryId,
@@ -111,4 +114,5 @@ export const {
   useGetPrizesByUserAndLotteryQuery,
   useClaimLotteryPrizeMutation,
   useIsLotteryDrawnQuery,
+  useGetPrizesByUserQuery,
 } = prizesApi;

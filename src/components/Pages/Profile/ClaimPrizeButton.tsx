@@ -19,16 +19,13 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
   const { data: signer } = useSigner();
   async function handleInteractButtonClick() {
     if (lotteryId) {
-      if (!signer) return;
-      if (!userData) return;
-      if (!lotteryProof) return;
       try {
         claimLotteryPrize({
           lotteryId: lotteryId,
-          proof: lotteryProof,
-          walletAddress: userData?.walletAddress,
+          proof: lotteryProof as string,
+          walletAddress: userData?.walletAddress as string,
           uri: uri,
-          signer: signer,
+          signer: signer as Signer,
           nftId: nftId,
         });
       } catch (e) {
@@ -37,6 +34,14 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
     } else if (auctionId) {
       claimAuctionPrize({ id: auctionId, signer: signer as Signer });
     }
+  }
+
+  if (gamePrize.claimedAt) {
+    return (
+      <button disabled={true} className='notifications-panel__interact-button'>
+        created
+      </button>
+    );
   }
   return (
     <button

@@ -530,6 +530,7 @@
   }
   th:last-child,
   td:last-child {
+		text-align: right;
     width: 25%;
   }
 }
@@ -578,14 +579,20 @@
   display: flex;
   align-items: center;
   gap: 20px;
-}
-
-.notifications-panel__td--creation {
-  @include td;
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
   line-height: 18px;
+}
+
+.notifications-panel__td--creation {
+  @include td;
+}
+
+
+.notifications-panel__td--interact {
+  @include td;
+	justify-content: end;
 }
 
 .notifications-panel__interact-button {

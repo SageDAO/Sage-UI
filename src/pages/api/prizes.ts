@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Prisma, PrizeProof } from '@prisma/client';
+import { Prisma, PrizeProof, User } from '@prisma/client';
 import { getSession } from 'next-auth/react';
 import prisma from '@/prisma/client';
 import { GamePrize, PrizeWithNftAndArtist } from '@/prisma/types';
@@ -36,6 +36,9 @@ export default async function (request: NextApiRequest, response: NextApiRespons
       break;
     case 'GetUnclaimedPrizes':
       await getUnclaimedPrizes(walletAddress as string, response);
+      break;
+    case 'GetPrizesByUser':
+      await getPrizesByUser(walletAddress as string, response);
       break;
     case 'GetPrizesByUserAndLottery':
       await getPrizesByUserAndLottery(Number(lotteryId), walletAddress as string, response);
@@ -100,6 +103,36 @@ async function getUnclaimedPrizes(walletAddress: string, response: NextApiRespon
               },
             },
           },
+        },
+      });
+      prizes.forEach((prize) => prizeNfts.push(flatten(prize)));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  console.log(`getUnclaimedPrizes(${walletAddress}) :: ${prizeNfts.length}`);
+  response.status(200).json(prizeNfts);
+}
+
+async function getPrizesByUser(walletAddress: User['walletAddress'], response: NextApiResponse) {
+  let prizeNfts: GamePrize[] = [];
+  if (walletAddress && walletAddress != '') {
+    try {
+      const prizes: PrizeWithNftAndArtist[] = await prisma.prizeProof.findMany({
+        where: {
+          winnerAddress: walletAddress,
+        },
+        include: {
+          Nft: {
+            include: {
+              Lottery: {
+                include: { Drop: { include: { NftContract: { include: { Artist: true } } } } },
+              },
+            },
+          },
+        },
+        orderBy: {
+          claimedAt: 'desc',
         },
       });
       prizes.forEach((prize) => prizeNfts.push(flatten(prize)));
