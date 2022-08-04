@@ -24,7 +24,7 @@ export default function EventSlider() {
 
   useEffect(() => {
     fetchMediumPosts((data) => {
-      if (data) {
+      if (data && data.feed) {
         setState((prevState) => {
           return {
             ...prevState,
@@ -38,6 +38,10 @@ export default function EventSlider() {
       }
     });
   }, []);
+
+  if (state.title == '') {
+    return null;
+  }
 
   return (
     <div className='home-page__events'>
