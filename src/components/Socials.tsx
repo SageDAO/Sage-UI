@@ -15,12 +15,12 @@ interface SocialLink {
 export default function Socials() {
   return (
     <div className='socials'>
-      <Discord className='socials__icon' />
-      <Twitter className='socials__icon' />
-      <Medium className='socials__icon' />
-      <Uniswap className='socials__icon' />
-      <Opensea className='socials__icon' />
-      <CMU className='socials__icon' />
+      <a target='_blank' href='https://discord.com'><Discord className='socials__icon' /></a>
+      <a target='_blank' href='https://twitter.com'><Twitter className='socials__icon' /></a>
+      <a target='_blank' href='https://medium.com/@SAGE_ART'><Medium className='socials__icon' /></a>
+      <a target='_blank' href='https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0x64d91f12ece7362f91a6f8e7940cd55f05060b92&chain=mainnet'><Uniswap className='socials__icon' /></a>
+      {/* <a target='_blank' href=''><Opensea className='socials__icon' /></a> */}
+      <a target='_blank' href='https://coinmarketcap.com/currencies/ash/'><CMU className='socials__icon' /></a>
     </div>
   );
 }
