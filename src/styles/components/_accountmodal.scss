@@ -59,7 +59,7 @@
   flex-direction: column;
   &:disabled {
     pointer-events: none;
-    filter: brightness(0.3);
+    filter: brightness(0.6);
   }
 }
 
