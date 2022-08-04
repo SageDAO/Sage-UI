@@ -26,8 +26,8 @@ interface Props {
 
 function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
   return {
-    drawings: array.filter((l: Lottery_include_Nft) => l.Nfts.length == 1),
-    lotteries: array.filter((l: Lottery_include_Nft) => l.Nfts.length > 1),
+    drawings: array.filter((l: Lottery_include_Nft) => unique(l.Nfts, 's3Path').length == 1),
+    lotteries: array.filter((l: Lottery_include_Nft) => unique(l.Nfts, 's3Path').length > 1),
   };
 }
 
