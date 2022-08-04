@@ -11,6 +11,7 @@ import TwitterSVG from '@/public/socials/twitter.svg';
 import MediumSVG from '@/public/socials/medium.svg';
 import InstagramSVG from '@/public/socials/insta.svg';
 import WebSVG from '@/public/socials/web.svg';
+import FollowButton from '@/components/Pages/Artists/FollowButton';
 
 type ListingNft = Nft_include_NftContractAndOffers;
 
@@ -74,7 +75,7 @@ export default function artist({ artist }: Props) {
             </ul>
           </div>
         </div>
-        <button className='artist-page__connect'>follow</button>
+        <FollowButton artistAddress={artist.walletAddress} />
       </div>
       <p className='artist-page__bio'>{artist.bio}</p>
 

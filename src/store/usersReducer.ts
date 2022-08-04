@@ -41,6 +41,7 @@ export const usersApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [
         'EscrowPoints',
+        'Following',
         'Nfts',
         'Prizes',
         'TicketCount',
@@ -94,6 +95,18 @@ export const usersApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['User'],
     }),
+    getFollowing: builder.query<string[], void>({
+      query: () => 'user?action=GetFollowing', 
+      providesTags: ['Following']
+    }),
+    follow: builder.mutation<null, string>({
+      query: (address) => `user?action=Follow&address=${address}`, 
+      invalidatesTags: ['Following']
+    }),
+    unfollow: builder.mutation<null, string>({
+      query: (address) => `user?action=Unfollow&address=${address}`, 
+      invalidatesTags: ['Following']
+    }),
     getSearchResults: builder.query<any, { term: string; category: string }>({
       query: ({ category, term }) => {
         return {
@@ -114,6 +127,9 @@ export const {
   useGetUserQuery,
   useGetUserDisplayInfoQuery,
   useUpdateUserMutation,
+  useGetFollowingQuery,
+  useFollowMutation,
+  useUnfollowMutation,
   useSignInMutation,
   useSignOutMutation,
 } = usersApi;

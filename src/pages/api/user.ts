@@ -1,9 +1,9 @@
-import type { SafeUserUpdate } from '@/prisma/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/prisma/client';
 import { getSession } from 'next-auth/react';
-import { UserDisplayInfo } from '@/store/usersReducer';
+import prisma from '@/prisma/client';
 import { Prisma, Role } from '@prisma/client';
+import type { SafeUserUpdate } from '@/prisma/types';
+import { UserDisplayInfo } from '@/store/usersReducer';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -16,22 +16,30 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { address: walletAddress } = session!;
 
   switch (method) {
-    case 'GET':
-      if (req.query.action == 'GetAllUsersAndEarnedPoints') {
-        await getAllUsersAndEarnedPoints(res);
-      } else if (req.query.action == 'PromoteToArtist') {
-        await promoteToArtist(req.query.address as string, res);
-      } else if (req.query.wallet) {
-        await getUserDisplayInfo(req.query.wallet as string, res);
-      } else {
-        await getUser(walletAddress as string, res);
-      }
-      return;
     case 'POST':
-      await createUser(walletAddress as string, res);
+      await createUser(String(walletAddress), res);
       return;
     case 'PATCH':
-      await updateUser(user, walletAddress as string, res);
+      await updateUser(user, String(walletAddress), res);
+      return;
+    case 'GET':
+      const { action } = req.query;
+      if (action == 'GetAllUsersAndEarnedPoints') {
+        await getAllUsersAndEarnedPoints(res);
+      } else if (action == 'PromoteToArtist') {
+        await promoteToArtist(String(req.query.address), res);
+      } else if (action == 'GetFollowing') {
+        await getFollowing(String(walletAddress), res);
+      } else if (action == 'Follow') {
+        await follow(String(walletAddress), String(req.query.address), res);
+      } else if (action == 'Unfollow') {
+        await unfollow(String(walletAddress), String(req.query.address), res);
+      } else if (req.query.wallet) {
+        await getUserDisplayInfo(String(req.query.wallet), res);
+      } else {
+        await getUser(String(walletAddress), res);
+      }
+      res.end();
       return;
     default:
       res.status(501).end();
@@ -66,8 +74,8 @@ async function getUserDisplayInfo(walletAddress: string, res: NextApiResponse) {
     }
   } catch (e) {
     console.log(e);
+    res.status(500).end;
   }
-  res.status(500).end;
 }
 
 async function getAllUsersAndEarnedPoints(res: NextApiResponse) {
@@ -133,5 +141,47 @@ async function promoteToArtist(walletAddress: string, res: NextApiResponse) {
   } catch (error) {
     console.error(error);
     res.status(500).end();
+  }
+}
+
+async function getFollowing(walletAddress: string, res: NextApiResponse) {
+  try {
+    const following: string[] = [];
+    const result = await prisma.follow.findMany({
+      where: { walletAddress },
+      select: { followedAddress: true }
+    });
+    result.forEach(row => following.push(row.followedAddress));
+    console.log(`getFollowing(${walletAddress}) :: ${result.length}`);
+    res.status(200).json(following);
+  } catch (e) {
+    console.log(e);
+    res.status(500).end;
+  }
+}
+
+async function follow(walletAddress: string, followedAddress: string, res: NextApiResponse) {
+  console.log(`follow(${walletAddress}, ${followedAddress})`);
+  try {
+    const user = await prisma.follow.create({
+      data: { walletAddress, followedAddress }
+    });
+    res.status(200).end();
+  } catch (e) {
+    console.log(e);
+    res.status(500).end;
+  }
+}
+
+async function unfollow(walletAddress: string, followedAddress: string, res: NextApiResponse) {
+  console.log(`unfollow(${walletAddress}, ${followedAddress})`);
+  try {
+    const user = await prisma.follow.delete({
+      where: { walletAddress_followedAddress: { walletAddress, followedAddress } },
+    });
+    res.status(200).end();
+  } catch (e) {
+    console.log(e);
+    res.status(500).end;
   }
 }
