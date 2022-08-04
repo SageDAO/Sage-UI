@@ -88,15 +88,19 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
       return;
     }
 
-    const request: BuyTicketRequest = {
-      lotteryId: lottery.id,
-      numberOfTickets: desiredTicketAmount,
-      ticketCostPoints: pricePoints,
-      ticketCostCoins: getPriceCoins(),
-      signer: signer as Signer,
-      earnedPoints: earnedPoints,
-    };
-    await buyTickets(request);
+    try {
+      const request: BuyTicketRequest = {
+        lotteryId: lottery.id,
+        numberOfTickets: desiredTicketAmount,
+        ticketCostPoints: pricePoints.toString(),
+        ticketCostCoins: getPriceCoins().toString(),
+        signer: signer as Signer,
+        earnedPoints: earnedPoints,
+      };
+      await buyTickets(request);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const systemType: SystemTypes = lottery.Nfts.length > 1 ? 'lotteries' : 'drawings';
