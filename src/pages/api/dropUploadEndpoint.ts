@@ -200,7 +200,6 @@ async function insertDrop(data: any, response: NextApiResponse) {
         name: data.name,
         description: data.description || '',
         createdAt: new Date(),
-        tags: data.tags || '',
         bannerImageS3Path: data.bannerImageS3Path,
         NftContract: { connect: { artistAddress: data.artistWallet } },
       },
