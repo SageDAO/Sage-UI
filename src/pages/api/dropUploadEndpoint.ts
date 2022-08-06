@@ -186,12 +186,14 @@ async function insertDrop(data: any, response: NextApiResponse) {
       },
     });
     // Create nft contract record if it doesn't exist
+    const defaultRoyalty = 10;
+    const royalty = parseFloat(data.rltyPercent);
     await prisma.nftContract.upsert({
       where: { artistAddress: data.artistWallet },
       update: {},
       create: {
         artistAddress: data.artistWallet,
-        royaltyPercentage: parseFloat(data.rltyPercent),
+        royaltyPercentage: isNaN(royalty) ? defaultRoyalty : royalty,
       },
     });
     // Create drop
