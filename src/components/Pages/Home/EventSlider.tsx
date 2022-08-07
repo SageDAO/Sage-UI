@@ -11,8 +11,7 @@ interface State {
 
 const INITIAL_STATE: State = { image: '/', title: '', link: '', items: [], description: '' };
 
-const mediumURL =
-  'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@dontbuymeme';
+const mediumURL = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@SAGE_ART';
 
 const fetchMediumPosts = async (callback: (data: any) => void) => {
   const response = await fetch(mediumURL);
