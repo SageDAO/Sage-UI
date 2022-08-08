@@ -77,13 +77,15 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
 
   function handleNewAuctionState() {
     if (!auctionState) return;
-    setState((prevState) => {
-      return {
-        ...prevState,
-        desiredBidValue: auctionState.nextMinBid,
-        minBid: auctionState.nextMinBid,
-      };
-    });
+    if (auctionState.nextMinBid != 0) {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          desiredBidValue: auctionState.nextMinBid,
+          minBid: auctionState.nextMinBid,
+        };
+      });
+    }
   }
 
   function handleStartingBid() {
@@ -149,7 +151,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
               <div>
                 <h1 className='games-modal__highest-bid-label'>{statusLabel}</h1>
                 <h1 className='games-modal__highest-bid-value'>
-                  {auctionState?.highestBidNumber} ASH
+                  {auctionState?.highestBidNumber == 0 ? 'no bids yet' : `${auctionState?.highestBidNumber} ASH`}
                 </h1>
               </div>
               <div onClick={toggleBidHistory} className='games-modal__see-more-bids'>
