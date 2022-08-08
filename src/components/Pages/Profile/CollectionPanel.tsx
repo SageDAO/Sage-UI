@@ -1,8 +1,5 @@
-import {
-  useGetClaimedAuctionNftsQuery,
-  useGetUnclaimedAuctionNftsQuery,
-} from '@/store/auctionsReducer';
-import { useGetClaimedPrizesQuery, useGetUnclaimedPrizesQuery } from '@/store/prizesReducer';
+import { useGetClaimedAuctionNftsQuery } from '@/store/auctionsReducer';
+import { useGetClaimedPrizesQuery } from '@/store/prizesReducer';
 import { CollectedListingNft, GamePrize } from '@/prisma/types';
 import LoaderDots from '@/components/LoaderDots';
 import { BaseMedia } from '@/components/Media';
@@ -16,36 +13,18 @@ export default function CollectionPanel() {
     undefined,
     { skip: !sessionData }
   );
-  const { data: unclaimedPrizes, isFetching: fetchingUnclaimedPrizes } = useGetUnclaimedPrizesQuery(
-    undefined,
-    { skip: !sessionData }
-  );
   const { data: claimedAuctionNfts, isFetching: fetchingClaimedAuctionNfts } =
     useGetClaimedAuctionNftsQuery(undefined, { skip: !sessionData });
-  const { data: unclaimedAuctionNfts, isFetching: fetchingUnclaimedAuctionNfts } =
-    useGetUnclaimedAuctionNftsQuery(undefined, { skip: !sessionData });
   const { data: listingNfts, isFetching: fetchingListingNfts } = useGetListingNftsByOwnerQuery(
     undefined,
     { skip: !sessionData }
   );
 
-  if (
-    fetchingClaimedPrizes ||
-    fetchingUnclaimedPrizes ||
-    fetchingClaimedAuctionNfts ||
-    fetchingUnclaimedAuctionNfts ||
-    fetchingListingNfts
-  ) {
+  if (fetchingClaimedPrizes || fetchingClaimedAuctionNfts || fetchingListingNfts) {
     return <LoaderDots />;
   }
 
-  const myNfts = new Array().concat(
-    unclaimedAuctionNfts,
-    unclaimedPrizes,
-    claimedAuctionNfts,
-    claimedPrizes,
-    listingNfts
-  );
+  const myNfts = new Array().concat(claimedAuctionNfts, claimedPrizes, listingNfts);
 
   return (
     <>
