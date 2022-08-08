@@ -4,9 +4,38 @@ import Image from 'next/image';
 import { animated, Spring } from 'react-spring';
 import ClaimPrizeButton from './ClaimPrizeButton';
 import { reformatDate } from '@/utilities/strings';
+import {
+  useGetClaimedAuctionNftsQuery,
+  useGetUnclaimedAuctionNftsQuery,
+} from '@/store/auctionsReducer';
+import { GamePrize } from '@/prisma/types';
 
 export default function Notifications() {
-  const { data: prizeData } = useGetPrizesByUserQuery();
+  const { data: lotteryNfts, isFetching: fetchingLotteryNfts } = useGetPrizesByUserQuery();
+  const { data: claimedAuctionNfts, isFetching: fetchingClaimedAuctionNfts } =
+    useGetClaimedAuctionNftsQuery();
+  const { data: unclaimedAuctionNfts, isFetching: fetchingUnclaimedAuctionNfts } =
+    useGetUnclaimedAuctionNftsQuery();
+
+  const prizeSorting = (a: GamePrize, b: GamePrize) => {
+    if (a.claimedAt) {
+      return b.claimedAt ? new Date(b.claimedAt).getTime() - new Date(a.claimedAt).getTime() : 1;
+    }
+    if (b.claimedAt) {
+      return -1;
+    }
+    return b.nftId - a.nftId;
+  };
+
+  const isLoading =
+    fetchingLotteryNfts || fetchingClaimedAuctionNfts || fetchingUnclaimedAuctionNfts;
+
+  const prizeNfts: GamePrize[] = new Array().concat(
+    lotteryNfts,
+    claimedAuctionNfts,
+    unclaimedAuctionNfts
+  );
+
   return (
     <>
       <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
@@ -28,7 +57,7 @@ export default function Notifications() {
               <Tab.Group>
                 <Tab.List as='div' className='notifications-panel__tab-list'>
                   <Tab className='notifications-panel__tab-item' as='button'>
-                    claim prizes
+                    claim prizes &amp; auctions winnings
                   </Tab>
                 </Tab.List>
                 <Tab.Panels as='div' className='notifications-panel__panels'>
@@ -41,27 +70,30 @@ export default function Notifications() {
                       </tr>
                     </thead>
                     <tbody className='notifications-panel__data-list'>
-                      {prizeData?.map((p) => {
-                        const dateDisplay = p.claimedAt ? reformatDate(p.claimedAt) : 'unclaimed';
-                        return (
-                          <tr key={p.nftId} className='notifications-panel__data-row'>
-                            <td className='notifications-panel__td--creation'>
-                              <Image
-                                width={50}
-                                height={50}
-                                src={p.s3Path}
-                                objectFit='cover'
-                                className=''
-                              ></Image>
-                              {p.nftName}
-                            </td>
-                            <td className='notifications-panel__td'>{dateDisplay}</td>
-                            <td className='notifications-panel__td--interact'>
-                              <ClaimPrizeButton gamePrize={p} />
-                            </td>
-                          </tr>
-                        );
-                      })}
+                      {!isLoading &&
+                        prizeNfts.sort(prizeSorting).map((nft: GamePrize) => {
+                          const dateDisplay = nft.claimedAt
+                            ? reformatDate(nft.claimedAt)
+                            : 'unclaimed';
+                          return (
+                            <tr key={nft.nftId} className='notifications-panel__data-row'>
+                              <td className='notifications-panel__td--creation'>
+                                <Image
+                                  width={50}
+                                  height={50}
+                                  src={nft.s3Path}
+                                  objectFit='cover'
+                                  className=''
+                                ></Image>
+                                {nft.nftName}
+                              </td>
+                              <td className='notifications-panel__td'>{dateDisplay}</td>
+                              <td className='notifications-panel__td--interact'>
+                                <ClaimPrizeButton gamePrize={nft} />
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </Tab.Panel>
                 </Tab.Panels>
