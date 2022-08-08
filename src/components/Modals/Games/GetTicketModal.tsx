@@ -42,7 +42,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
   const isEnded = lottery.endTime.getTime() < now;
   const isActive = isStarted && !isEnded;
 
-	// const personalAvailableTickets = 
+  // const personalAvailableTickets =
 
   const { data: winners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
 
@@ -140,10 +140,16 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
                 <System type={systemType}></System>
               </div>
               <h1 className='games-modal__system-info'>
-                This is a fair drop mechanic. Buy purchasing one or more tickets, you
-                have the opportunity to be selected to mint this NFT.
+                This is a fair drop mechanic. Buy purchasing one or more tickets, you have the
+                opportunity to be selected to mint this NFT.
               </h1>
             </div>
+
+            {!isStarted && !isEnded && (
+              <div>
+                <h1 className='games-modal__countdown-label'>starts in </h1><Countdown endTime={lottery.startTime} className='games-modal__countdown'></Countdown>
+              </div>
+            )}
 
             {isStarted && !isEnded && (
               <>
