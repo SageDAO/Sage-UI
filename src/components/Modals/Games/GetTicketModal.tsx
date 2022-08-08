@@ -141,8 +141,7 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
               </div>
               <h1 className='games-modal__system-info'>
                 This is a fair drop mechanic. Buy purchasing one or more tickets for this drop, you
-                have the opportunity to be selected to buy this NFT. Losing tickets will be
-                refunded.
+                have the opportunity to be selected to mint this NFT.
               </h1>
             </div>
 
