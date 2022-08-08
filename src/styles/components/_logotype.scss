@@ -20,7 +20,7 @@
   transform: translateX(-100%);
   height: 110%;
   @include m.theme() {
-    color: m.t(contrast);
+    color: m.t(contrast2);
   }
 }
 
@@ -35,7 +35,7 @@
 .sage-logotype__sage-icon {
   width: clamp(10px, 1vw, 30px);
   @include m.theme() {
-    color: m.t(contrast);
+    color: m.t(contrast2);
   }
 }
 
@@ -43,6 +43,6 @@
   flex: 1;
   height: 100%;
   @include m.theme() {
-    color: m.t(contrast);
+    color: m.t(contrast2);
   }
 }

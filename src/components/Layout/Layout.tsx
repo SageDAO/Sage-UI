@@ -99,9 +99,7 @@ export default function Layout({ children, router }: Props) {
         <div ref={layoutEl} key={router.route} className='layout'>
           <HiddenMenu />
           <Nav />
-          <animated.div style={props} className='layout__main'>
-            {children}
-          </animated.div>
+          {children}
           <Footer></Footer>
         </div>
       </React.Fragment>

@@ -73,9 +73,11 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
 
   return (
     <>
+      <div className='drop-page__banner-base'>
+        <Image src={drop.bannerImageS3Path} layout='fill' objectFit='cover' />
+      </div>
       <div className='drop-page'>
         <header className='drop-page__header'>
-          <Image src={drop.bannerImageS3Path} layout='fill' objectFit='cover' />
           <div className='drop-page__header-logotype'>
             <Logotype />
           </div>
