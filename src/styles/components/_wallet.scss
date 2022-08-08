@@ -132,6 +132,9 @@
 .wallet__auth-ethereum-icon {
   width: 20px;
   height: 30px;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
 }
 
 @mixin auth-button {
