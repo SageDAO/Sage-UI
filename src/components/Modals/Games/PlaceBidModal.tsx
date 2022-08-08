@@ -106,6 +106,12 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
     handleNewAuctionState();
   }, [auctionState]);
 
+  const statusLabel = auction.winnerAddress
+    ? 'winning bid'
+    : isOpenForBids(auction, auctionState)
+    ? 'current highest bid'
+    : 'highest bid';
+
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
@@ -141,11 +147,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
             </div>
             <div className='games-modal__bid-info-group'>
               <div>
-                <h1 className='games-modal__highest-bid-label'>
-                  {auction.winnerAddress
-                    ? 'winning bid'
-                    : `${isOpenForBids(auction, auctionState) && `current `}highest bid`}
-                </h1>
+                <h1 className='games-modal__highest-bid-label'>{statusLabel}</h1>
                 <h1 className='games-modal__highest-bid-value'>
                   {auctionState?.highestBidNumber} ASH
                 </h1>
