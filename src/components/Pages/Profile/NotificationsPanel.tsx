@@ -3,6 +3,7 @@ import { useGetPrizesByUserQuery } from '@/store/prizesReducer';
 import Image from 'next/image';
 import { animated, Spring } from 'react-spring';
 import ClaimPrizeButton from './ClaimPrizeButton';
+import { reformatDate } from '@/utilities/strings';
 
 export default function Notifications() {
   const { data: prizeData } = useGetPrizesByUserQuery();
@@ -35,13 +36,13 @@ export default function Notifications() {
                     <thead>
                       <tr className='notifications-panel__th-row'>
                         <th className='notifications-panel__th'>creation</th>
-                        <th className='notifications-panel__th'>date</th>
+                        <th className='notifications-panel__th'>claim date</th>
                         <th className='notifications-panel__th'>interact</th>
                       </tr>
                     </thead>
                     <tbody className='notifications-panel__data-list'>
                       {prizeData?.map((p) => {
-                        const dateDisplay = p.claimedAt ? p.claimedAt : 'unclaimed';
+                        const dateDisplay = p.claimedAt ? reformatDate(p.claimedAt) : 'unclaimed';
                         return (
                           <tr key={p.nftId} className='notifications-panel__data-row'>
                             <td className='notifications-panel__td--creation'>

@@ -14,6 +14,7 @@ import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
 import SageLogoSVG from '@/public/icons/sage.svg';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import { reformatDate } from '@/utilities/strings';
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -96,7 +97,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                 </h1>
                 <h1 className='drop-page__header-drop-details-item'>edition size: {editionSize}</h1>
                 <h1 className='drop-page__header-drop-details-item'>
-                  creation date: {drop.createdAt.toLocaleDateString().replaceAll('/', '.')}
+                  creation date: {reformatDate(drop.createdAt)}
                 </h1>
               </div>
               <div className='drop-page__header-drop-details-systems'>
