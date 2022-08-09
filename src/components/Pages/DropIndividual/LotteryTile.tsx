@@ -30,7 +30,9 @@ export default function LotteryTile({
         dropName={dropName}
         artist={artist}
         isOpen={isOpen}
+        ticketCount={tickets}
         closeModal={closeModal}
+        systemType={'lotteries'}
       ></GetTicketModal>
       <TileHeader systemType={'lotteries'} editionSize={editionSize}></TileHeader>
       <div className='drop-page__grid-item-img'>

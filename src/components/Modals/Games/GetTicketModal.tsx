@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Signer } from 'ethers';
+import { errors, Signer } from 'ethers';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { User } from '@prisma/client';
@@ -26,14 +26,37 @@ interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
   artist: User;
   dropName: string;
+  ticketCount: number;
+  systemType: SystemTypes;
 }
 
+interface ErrorState {
+  message: string;
+  isError: boolean;
+}
+
+const INITIAL_ERROR_STATE: ErrorState = {
+  message: '',
+  isError: false,
+};
+
+const DEFAULT_MAX_TICKETS = 300;
+
 //@scss : '@/styles/components/_games-modal.scss'
-function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props) {
+function GetTicketModal({
+  isOpen,
+  dropName,
+  closeModal,
+  lottery,
+  artist,
+  ticketCount,
+  systemType,
+}: Props) {
   const { data: sessionData } = useSession();
   const { data: signer } = useSigner();
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0);
+  const [errorState, setErrorState] = useState<ErrorState>(INITIAL_ERROR_STATE);
   const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, { skip: !sessionData });
   const [buyTickets, { isLoading: isBuyTicketsLoading }] = useBuyTicketsMutation();
 
@@ -42,21 +65,39 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
   const isEnded = lottery.endTime.getTime() < now;
   const isActive = isStarted && !isEnded;
 
-  // const personalAvailableTickets =
-
   const { data: winners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
 
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   //ui event handlers
   function handleTicketSubClick() {
-    if (desiredTicketAmount - 1 < 1) {
-      return;
-    }
     setDesiredTicketAmount((prevState) => prevState - 1);
   }
 
+  function validateDesiredTicketAmount() {
+    if (desiredTicketAmount == 0) {
+      setErrorState({ message: 'cannot buy zero tickets', isError: true });
+      return;
+    }
+    if (desiredTicketAmount < 1) {
+      setErrorState({ message: 'cannot buy negative tickets', isError: true });
+      return;
+    }
+    if (desiredTicketAmount > lottery.maxTicketsPerUser - ticketCount) {
+      setErrorState({ message: 'max tickets per user reached', isError: true });
+      return;
+    }
+
+    if (desiredTicketAmount > lottery.maxTickets) {
+      setErrorState({ message: 'max tickets reached', isError: true });
+      return;
+    }
+
+    setErrorState(INITIAL_ERROR_STATE);
+  }
+
   function handleTicketAddClick() {
-    if (hasMaxTicketsPerUser && Boolean(desiredTicketAmount + 1 > lottery.maxTicketsPerUser)) {
+    if (Boolean(desiredTicketAmount + 1 > (lottery.maxTickets || DEFAULT_MAX_TICKETS))) {
+      setDesiredTicketAmount(lottery.maxTickets || DEFAULT_MAX_TICKETS);
       return;
     }
     setDesiredTicketAmount((prevState) => prevState + 1);
@@ -64,16 +105,15 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
 
   function handleTicketInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = +e.target.value;
-    if (val > lottery.maxTicketsPerUser && lottery.maxTicketsPerUser !== 0) {
-      e.currentTarget.value = String(lottery.maxTicketsPerUser);
-      setDesiredTicketAmount(lottery.maxTicketsPerUser);
+    if (val > DEFAULT_MAX_TICKETS && lottery.maxTicketsPerUser !== 0) {
+      e.currentTarget.value = String(lottery.maxTickets || DEFAULT_MAX_TICKETS);
+      setDesiredTicketAmount(lottery.maxTickets || DEFAULT_MAX_TICKETS);
     }
 
     setDesiredTicketAmount(+e.target.value);
   }
 
   const handleBuyTicketClick = async () => {
-    //TODO: pull ash token decimals to handle this
     const getPriceCoins = (): bigint => {
       return BigInt(lottery.costPerTicketTokens * 1000) * BigInt(10 ** 15);
     };
@@ -103,7 +143,9 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
     }
   };
 
-  const systemType: SystemTypes = lottery.Nfts.length > 1 ? 'lotteries' : 'drawings';
+  useEffect(() => {
+    validateDesiredTicketAmount();
+  }, [desiredTicketAmount, ticketCount]);
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -133,7 +175,8 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
             </h1>
             <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
             <p className='games-modal__game-description'>
-              {lottery.Nfts[selectedNftIndex].description}
+              {lottery.Nfts[selectedNftIndex].description ||
+                'this artwork has no description provided.'}
             </p>
             <div className='games-modal__system'>
               <div className='games-modal__system-icon-container'>
@@ -167,17 +210,18 @@ function GetTicketModal({ isOpen, dropName, closeModal, lottery, artist }: Props
                     type='number'
                     onChange={handleTicketInputChange}
                     min={1}
+                    max={DEFAULT_MAX_TICKETS}
                     className='games-modal__tickets-input'
                     value={desiredTicketAmount}
                   />
                   <PlusSVG onClick={handleTicketAddClick} className='games-modal__tickets-add' />
                 </div>
                 <button
-                  disabled={isBuyTicketsLoading}
+                  disabled={isBuyTicketsLoading || errorState.isError}
                   onClick={handleBuyTicketClick}
                   className='games-modal__buy-tickets-button'
                 >
-                  Buy Tickets
+                  {errorState.isError ? errorState.message : 'Buy Tickets'}
                 </button>
               </>
             )}
