@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import LoaderDots from '@/components/LoaderDots';
 import { Tab } from '@headlessui/react';
@@ -11,6 +11,7 @@ import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
 import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
 import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 import { animated, Transition, Spring } from 'react-spring';
+import { useRouter } from 'next/router';
 
 function profile() {
   const { data: sessionData } = useSession();
@@ -19,6 +20,13 @@ function profile() {
   });
   const [signOut] = useSignOutMutation();
   const { selectedTabIndex, setSelectedTabIndex } = useTabs();
+  const { asPath } = useRouter();
+
+  useEffect(() => {
+    if (asPath.indexOf('notifications')) {
+      setSelectedTabIndex(2);
+    }
+  }, []);
 
   if (!sessionData) {
     return <div className='profile-page'>sign in to view profile</div>;
