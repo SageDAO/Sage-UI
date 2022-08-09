@@ -81,8 +81,8 @@ export const lotteriesApi = baseApi.injectEndpoints({
           }
           toast.promise(tx.wait(), {
             pending: 'Request submitted to the blockchain, awaiting confirmation...',
-            success: `Success! You obtained ${buyRequest.numberOfTickets} ticket${
-              buyRequest.numberOfTickets > 1 ? 's' : ''
+            success: `Success! You obtained ${buyRequest.numberOfTickets} ${
+              buyRequest.numberOfTickets > 1 ? 'entries' : 'entry'
             }!`,
             error: 'Failure! Unable to complete request.',
           });

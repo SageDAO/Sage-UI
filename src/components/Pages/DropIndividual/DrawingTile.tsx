@@ -47,7 +47,7 @@ export default function DrawingTile({
         <h1 className='drop-page__grid-item-info-game-name'>{drawing.Nfts[0].name}</h1>
         {tickets > 0 && (
           <h1 className='drop-page__grid-item-info-tickets'>
-            you have {tickets} ticket{tickets > 1 ? 's' : ''}
+            you have {tickets} {tickets > 1 ? 'entries' : 'entry'}
           </h1>
         )}
       </div>

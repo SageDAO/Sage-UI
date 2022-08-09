@@ -75,20 +75,20 @@ function GetTicketModal({
 
   function validateDesiredTicketAmount() {
     if (desiredTicketAmount == 0) {
-      setErrorState({ message: 'cannot buy zero tickets', isError: true });
+      setErrorState({ message: 'cannot buy zero entries', isError: true });
       return;
     }
     if (desiredTicketAmount < 1) {
-      setErrorState({ message: 'cannot buy negative tickets', isError: true });
+      setErrorState({ message: 'cannot buy negative entries', isError: true });
       return;
     }
     if (desiredTicketAmount > lottery.maxTicketsPerUser - ticketCount) {
-      setErrorState({ message: 'max tickets per user reached', isError: true });
+      setErrorState({ message: 'max entries per user reached', isError: true });
       return;
     }
 
     if (desiredTicketAmount > lottery.maxTickets) {
-      setErrorState({ message: 'max tickets reached', isError: true });
+      setErrorState({ message: 'max entries reached', isError: true });
       return;
     }
 
@@ -183,7 +183,7 @@ function GetTicketModal({
                 <System type={systemType}></System>
               </div>
               <h1 className='games-modal__system-info'>
-                This is a fair drop mechanic. Buy purchasing one or more tickets, you have the
+                This is a fair drop mechanic. Buy purchasing one or more entries, you have the
                 opportunity to be selected to mint this NFT.
               </h1>
             </div>
@@ -197,7 +197,7 @@ function GetTicketModal({
             {isStarted && !isEnded && (
               <>
                 <div>
-                  <h1 className='games-modal__ticket-cost-label'>ticket cost</h1>
+                  <h1 className='games-modal__ticket-cost-label'>entry cost</h1>
                   <h1 className='games-modal__ticket-cost-value'>
                     {lottery.costPerTicketTokens * desiredTicketAmount} ASH
                     {lottery.costPerTicketPoints > 0 &&
@@ -221,7 +221,7 @@ function GetTicketModal({
                   onClick={handleBuyTicketClick}
                   className='games-modal__buy-tickets-button'
                 >
-                  {errorState.isError ? errorState.message : 'Buy Tickets'}
+                  {errorState.isError ? errorState.message : 'Buy Entries'}
                 </button>
               </>
             )}
