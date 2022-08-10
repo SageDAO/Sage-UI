@@ -83,9 +83,6 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
             <Logotype />
           </div>
           <section className='drop-page__header-drop-info'>
-            <div className='drop-page__header-logo-column'>
-              <SageLogoSVG className='drop-page__header-logo' />
-            </div>
             <div className='drop-page__header-main-column'>
               <h1 className='drop-page__header-drop-name'>
                 {drop.name} by {artist.username}

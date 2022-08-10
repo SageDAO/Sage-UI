@@ -4,6 +4,7 @@ import React from 'react';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
 import TileHeader from './TileHeader';
+import Countdown from '@/components/Countdown';
 
 interface Props {
   imgSrc: string;
@@ -22,6 +23,10 @@ export default function DrawingTile({
   tickets,
 }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
+  const now = new Date();
+  const isStarted = new Date(drawing.startTime) < now;
+  const isEnded = new Date(drawing.endTime) < now;
+  const isLive = isStarted && !isEnded;
   return (
     <div onClick={openModal} className='drop-page__grid-item'>
       <GetTicketModal
@@ -41,15 +46,31 @@ export default function DrawingTile({
         </div>
       </div>
       <div className='drop-page__grid-item-info'>
-        <h1 className='drop-page__grid-item-info-drop-name'>
-          {dropName} by {artist.username}
-        </h1>
-        <h1 className='drop-page__grid-item-info-game-name'>{drawing.Nfts[0].name}</h1>
-        {tickets > 0 && (
-          <h1 className='drop-page__grid-item-info-tickets'>
-            you have {tickets} {tickets > 1 ? 'entries' : 'entry'}
+        <div className='drop-page__grid-item-info-left'>
+          <h1 className='drop-page__grid-item-info-drop-name'>
+            {dropName} by {artist.username}
           </h1>
-        )}
+          <h1 className='drop-page__grid-item-info-game-name'>{drawing.Nfts[0].name}</h1>
+          {tickets > 0 && (
+            <h1 className='drop-page__grid-item-info-tickets'>
+              you have {tickets} ticket{tickets > 1 ? 's' : ''}
+            </h1>
+          )}
+        </div>
+        <div className='drop-page__grid-item-info-right'>
+          {isStarted && (
+            <Countdown
+              endTime={drawing.endTime}
+              className='drop-page__grid-item-info-countdown'
+            ></Countdown>
+          )}
+          {!isStarted && (
+            <Countdown
+              endTime={drawing.startTime}
+              className='drop-page__grid-item-info-countdown'
+            ></Countdown>
+          )}
+        </div>
       </div>
     </div>
   );

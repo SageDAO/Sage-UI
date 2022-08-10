@@ -1,5 +1,6 @@
+import Countdown from '@/components/Countdown';
 import { BaseMedia } from '@/components/Media';
-import PlaceBidModal, { isOpenForBids } from '@/components/Modals/Games/PlaceBidModal';
+import PlaceBidModal, { getIsOpenForBids } from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import { Auction_include_Nft, User } from '@/prisma/types';
 import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
@@ -17,6 +18,12 @@ interface Props {
 export default function AuctionTile({ artist, dropName, imgSrc, editionSize, auction }: Props) {
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
   const { isOpen, closeModal, openModal } = useModal();
+  const now = new Date();
+  const isStarted = auction.startTime < now;
+  const isEnded = isStarted ? new Date(auctionState?.endTime || auction.endTime) < now : false;
+  const isLive = isStarted && !isEnded;
+
+  const isOpenForBids = getIsOpenForBids(auction, auctionState!);
 
   return (
     <div onClick={openModal} className='drop-page__grid-item'>
@@ -31,13 +38,31 @@ export default function AuctionTile({ artist, dropName, imgSrc, editionSize, auc
       <TileHeader editionSize={editionSize} systemType='auctions' />
       <div className='drop-page__grid-item-img'>
         <BaseMedia src={imgSrc} />
-        <div className='drop-page__grid-item-focus'>{isOpenForBids(auction, auctionState!) ? 'place bid' : 'view results'}</div>
+        <div className='drop-page__grid-item-focus'>
+          {isOpenForBids ? 'place bid' : 'view results'}
+        </div>
       </div>
       <div className='drop-page__grid-item-info'>
-        <h1 className='drop-page__grid-item-info-drop-name'>
-          {dropName} by {artist.username}
-        </h1>
-        <h1 className='drop-page__grid-item-info-game-name'>{auction.Nft.name}</h1>
+        <div className='drop-page__grid-item-info-left'>
+          <h1 className='drop-page__grid-item-info-drop-name'>
+            {dropName} by {artist.username}
+          </h1>
+          <h1 className='drop-page__grid-item-info-game-name'>{auction.Nft.name}</h1>
+        </div>
+        <div className='drop-page__grid-item-info-right'>
+          {!isStarted && (
+            <Countdown
+              endTime={auction.startTime}
+              className='drop-page__grid-item-info-countdown'
+            ></Countdown>
+          )}
+          {isLive && (
+            <Countdown
+              endTime={auctionState?.endTime || auction.endTime}
+              className='drop-page__grid-item-info-countdown'
+            ></Countdown>
+          )}
+        </div>
       </div>
     </div>
   );

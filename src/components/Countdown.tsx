@@ -16,7 +16,6 @@ export default function Countdown({ endTime, color, className }: Props) {
     setDisplayValue(`${days * 24 + hours}h ${minutes}m ${seconds}s`);
   }, [total]);
   if (total < 0) {
-    return null;
   }
   return (
     <div className={className} data-color={color} style={{ flexWrap: 'nowrap' }}>

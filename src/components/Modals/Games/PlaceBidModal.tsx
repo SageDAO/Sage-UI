@@ -34,7 +34,10 @@ const initialState: State = {
   shouldShowBidHistory: false,
 };
 
-export function isOpenForBids(auction: Auction_include_Nft, auctionState: AuctionState): boolean {
+export function getIsOpenForBids(
+  auction: Auction_include_Nft,
+  auctionState: AuctionState
+): boolean {
   const now = new Date().getTime();
   return auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
 }
@@ -62,6 +65,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
       toast.info('Please Sign In With Ethereum before placing bids.');
     }
   }
+
+  const isOpenForBids = getIsOpenForBids(auction, auctionState);
 
   function handleMinButtonClick() {
     setState((prevState) => {
@@ -110,7 +115,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
 
   const statusLabel = auction.winnerAddress
     ? 'winning bid'
-    : isOpenForBids(auction, auctionState)
+    : getIsOpenForBids(auction, auctionState)
     ? 'current highest bid'
     : 'highest bid';
 
@@ -124,7 +129,10 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
             <BaseMedia src={auction.Nft.s3Path} />
-            {isOpenForBids(auction, auctionState) && (
+            {!isOpenForBids && (
+              <Countdown endTime={auction.startTime} className='games-modal__countdown'></Countdown>
+            )}
+            {isOpenForBids && (
               <Countdown
                 endTime={auctionState?.endTime}
                 className='games-modal__countdown'
@@ -147,25 +155,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
               </div>
               <h1 className='games-modal__system-info'>This is an auction</h1>
             </div>
-            <div className='games-modal__bid-info-group'>
-              <div>
-                <h1 className='games-modal__highest-bid-label'>{statusLabel}</h1>
-                <h1 className='games-modal__highest-bid-value'>
-                  {auctionState?.highestBidNumber == 0 ? 'no bids yet' : `${auctionState?.highestBidNumber} ASH`}
-                </h1>
-              </div>
-              <div onClick={toggleBidHistory} className='games-modal__see-more-bids'>
-                <div
-                  data-active={state.shouldShowBidHistory}
-                  className='games-modal__see-more-bids-icon'
-                >
-                  <BaseMedia src={'/icons/expandable.svg'}></BaseMedia>
-                </div>
-                bid history
-              </div>
-            </div>
 
-            {isOpenForBids(auction, auctionState) && (
+            {!isOpenForBids && (
+              <div className='games-modal__not-yet-open'>Auction not yet open</div>
+            )}
+            {isOpenForBids && (
               <>
                 <input
                   onChange={handleBidInputChange}

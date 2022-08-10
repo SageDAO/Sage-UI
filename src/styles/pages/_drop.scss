@@ -8,7 +8,7 @@
 }
 
 .drop-page__banner-base {
-	z-index: -1;
+  z-index: -1;
 }
 
 .drop-page__banner-img {
@@ -227,6 +227,37 @@
 
 .drop-page__grid-item-info {
   padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.drop-page__grid-item-info-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.drop-page__grid-item-info-right {
+  flex-direction: column;
+  display: flex;
+  justify-content: end;
+}
+
+.drop-page__grid-item-info-countdown-label {
+}
+
+.drop-page__grid-item-info-countdown {
+  @include m.theme() {
+    color: m.t(accent);
+    border: 1px solid m.t(accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(8px, 0.6vw, 12px);
+    padding: clamp(3px, 0.6em, 6px);
+    height: max-content;
+  }
 }
 
 .drop-page__grid-item-info-drop-name {

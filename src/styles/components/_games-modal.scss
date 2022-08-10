@@ -191,7 +191,7 @@
   bottom: 0;
   right: 0;
   @include m.theme() {
-		background-color: m.t(base);
+    background-color: m.t(base);
     color: m.t(accent);
     // border: 1px solid m.t(accent);
     flex: none;
@@ -208,7 +208,7 @@
   bottom: 0;
   right: 0;
   @include m.theme() {
-		//background-color: m.t(base);
+    //background-color: m.t(base);
     color: m.t(accent);
     flex: none;
     width: max-content;
@@ -253,6 +253,8 @@
   font-weight: 400;
   font-size: clamp(20px, 1vw, 36px);
   line-height: 130%;
+  max-width: 90vw;
+  height: 2.6em;
 
   @include m.theme() {
     color: m.t(contrast2);
@@ -316,7 +318,7 @@
   aspect-ratio: 397/65;
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: clamp(12px, 1vw, 16px);
   line-height: 130%;
   text-align: center;
   letter-spacing: 0.2em;
@@ -448,6 +450,7 @@
     color: m.t(contrast2);
   }
 }
+
 
 .games-modal__tickets-add {
   @include tickets-controls-button;
