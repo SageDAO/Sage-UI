@@ -49,7 +49,7 @@ export async function getDropsPageData(prisma: PrismaClient) {
       ...FilterDropContractValidation,
       ...FilterDropApprovedOnly,
     },
-    take: 3,
+    take: 10,
   });
 
   return drops;
