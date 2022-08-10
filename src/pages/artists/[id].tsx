@@ -67,7 +67,14 @@ export default function artist({ artist }: Props) {
               )}
               {!!artist.webpage && (
                 <div className='artist-page__socials-item'>
-                  <a target='_blank' href={artist.webpage.startsWith('http') ? artist.webpage : `https://${artist.webpage}`}>
+                  <a
+                    target='_blank'
+                    href={
+                      artist.webpage.startsWith('http')
+                        ? artist.webpage
+                        : `https://${artist.webpage}`
+                    }
+                  >
                     <WebSVG className='artist-page__socials-svg' />
                   </a>
                 </div>

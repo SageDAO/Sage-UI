@@ -95,17 +95,14 @@ export const usersApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['User'],
     }),
-    getFollowing: builder.query<string[], void>({
-      query: () => 'user?action=GetFollowing', 
-      providesTags: ['Following']
+    getIsFollowing: builder.query<string[], void>({
+      query: () => 'user?action=GetIsFollowing',
+      providesTags: ['Following'],
     }),
-    follow: builder.mutation<null, string>({
-      query: (address) => `user?action=Follow&address=${address}`, 
-      invalidatesTags: ['Following']
-    }),
-    unfollow: builder.mutation<null, string>({
-      query: (address) => `user?action=Unfollow&address=${address}`, 
-      invalidatesTags: ['Following']
+    setIsFollowing: builder.mutation<null, { address: string; isFollowing: boolean }>({
+      query: ({ address, isFollowing }) =>
+        `user?action=SetIsFollowing&address=${address}&isFollowing=${isFollowing.toString()}`,
+      invalidatesTags: ['Following'],
     }),
     getSearchResults: builder.query<any, { term: string; category: string }>({
       query: ({ category, term }) => {
@@ -127,9 +124,8 @@ export const {
   useGetUserQuery,
   useGetUserDisplayInfoQuery,
   useUpdateUserMutation,
-  useGetFollowingQuery,
-  useFollowMutation,
-  useUnfollowMutation,
+  useGetIsFollowingQuery,
+  useSetIsFollowingMutation,
   useSignInMutation,
   useSignOutMutation,
 } = usersApi;

@@ -24,20 +24,30 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     case 'GET':
       const { action } = req.query;
-      if (action == 'GetAllUsersAndEarnedPoints') {
-        await getAllUsersAndEarnedPoints(res);
-      } else if (action == 'PromoteToArtist') {
-        await promoteToArtist(String(req.query.address), res);
-      } else if (action == 'GetFollowing') {
-        await getFollowing(String(walletAddress), res);
-      } else if (action == 'Follow') {
-        await follow(String(walletAddress), String(req.query.address), res);
-      } else if (action == 'Unfollow') {
-        await unfollow(String(walletAddress), String(req.query.address), res);
-      } else if (req.query.wallet) {
-        await getUserDisplayInfo(String(req.query.wallet), res);
-      } else {
-        await getUser(String(walletAddress), res);
+      switch (action) {
+        case 'GetAllUsersAndEarnedPoints':
+          await getAllUsersAndEarnedPoints(res);
+          break;
+        case 'PromoteToArtist':
+          await promoteToArtist(String(req.query.address), res);
+          break;
+        case 'GetIsFollowing':
+          await getIsFollowing(String(walletAddress), res);
+          break;
+        case 'SetIsFollowing':
+          await setIsFollowing(
+            String(walletAddress),
+            String(req.query.address),
+            'true' == req.query.isFollowing,
+            res
+          );
+          break;
+        default:
+          if (req.query.wallet) {
+            await getUserDisplayInfo(String(req.query.wallet), res);
+          } else {
+            await getUser(String(walletAddress), res);
+          }
       }
       res.end();
       return;
@@ -144,14 +154,14 @@ async function promoteToArtist(walletAddress: string, res: NextApiResponse) {
   }
 }
 
-async function getFollowing(walletAddress: string, res: NextApiResponse) {
+async function getIsFollowing(walletAddress: string, res: NextApiResponse) {
   try {
     const following: string[] = [];
     const result = await prisma.follow.findMany({
       where: { walletAddress },
-      select: { followedAddress: true }
+      select: { followedAddress: true },
     });
-    result.forEach(row => following.push(row.followedAddress));
+    result.forEach((row) => following.push(row.followedAddress));
     console.log(`getFollowing(${walletAddress}) :: ${result.length}`);
     res.status(200).json(following);
   } catch (e) {
@@ -160,25 +170,23 @@ async function getFollowing(walletAddress: string, res: NextApiResponse) {
   }
 }
 
-async function follow(walletAddress: string, followedAddress: string, res: NextApiResponse) {
-  console.log(`follow(${walletAddress}, ${followedAddress})`);
+async function setIsFollowing(
+  walletAddress: string,
+  followedAddress: string,
+  isFollowing: boolean,
+  res: NextApiResponse
+) {
+  console.log(`setIsFollowing(${walletAddress}, ${followedAddress}, ${isFollowing})`);
   try {
-    const user = await prisma.follow.create({
-      data: { walletAddress, followedAddress }
-    });
-    res.status(200).end();
-  } catch (e) {
-    console.log(e);
-    res.status(500).end;
-  }
-}
-
-async function unfollow(walletAddress: string, followedAddress: string, res: NextApiResponse) {
-  console.log(`unfollow(${walletAddress}, ${followedAddress})`);
-  try {
-    const user = await prisma.follow.delete({
-      where: { walletAddress_followedAddress: { walletAddress, followedAddress } },
-    });
+    if (isFollowing) {
+      await prisma.follow.create({
+        data: { walletAddress, followedAddress },
+      });
+    } else {
+      await prisma.follow.delete({
+        where: { walletAddress_followedAddress: { walletAddress, followedAddress } },
+      });
+    }
     res.status(200).end();
   } catch (e) {
     console.log(e);

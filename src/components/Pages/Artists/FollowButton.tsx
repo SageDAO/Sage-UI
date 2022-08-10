@@ -1,16 +1,16 @@
 import LoaderSpinner from '@/components/LoaderSpinner';
-import { useFollowMutation, useGetFollowingQuery, useUnfollowMutation } from '@/store/usersReducer';
+import { useGetIsFollowingQuery, useSetIsFollowingMutation } from '@/store/usersReducer';
 import { useSession } from 'next-auth/react';
 
 export default function FollowButton({ artistAddress }) {
   const { data: sessionData } = useSession();
-  const { data: following, isFetching: isFetchingFollowing } = useGetFollowingQuery(undefined, {
+  const { data: following, isFetching: isFetchingFollowing } = useGetIsFollowingQuery(undefined, {
     skip: !sessionData,
   });
-  const [follow, {isLoading: isRunningFollow}] = useFollowMutation();
-  const [unfollow, {isLoading: isRunningUnfollow}] = useUnfollowMutation();
+  const [setIsFollowing, { isLoading: isSettingFollowing }] = useSetIsFollowingMutation();
+  const isOwner = () => sessionData?.address == artistAddress;
 
-  if (!sessionData) {
+  if (!sessionData || isOwner()) {
     return null;
   }
 
@@ -19,14 +19,10 @@ export default function FollowButton({ artistAddress }) {
   }
 
   function handleButtonClick() {
-    if (isFollowing()) {
-      unfollow(artistAddress);
-    } else {
-      follow(artistAddress);
-    }
+    setIsFollowing({ address: artistAddress, isFollowing: !isFollowing() });
   }
 
-  const loading = isFetchingFollowing || isRunningFollow || isRunningUnfollow;
+  const loading = isFetchingFollowing || isSettingFollowing;
 
   return (
     <button onClick={handleButtonClick} disabled={loading} className='artist-page__connect'>
