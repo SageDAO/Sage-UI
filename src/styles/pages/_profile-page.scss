@@ -320,12 +320,12 @@
 }
 
 .collection-panel__tile {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  transition-duration: 200ms;
-
   @include m.theme() {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition-duration: 200ms;
+
     background-color: m.t(base2);
     color: m.t(contrast2);
     border: 1px solid transparent;
@@ -344,7 +344,7 @@
 .collection-panel__img-container {
   overflow: hidden;
   position: relative;
-  width: 345px;
+  width: min(80vw, 345px);
   aspect-ratio: 1/1;
 }
 
@@ -493,14 +493,15 @@
 
 .notifications-panel__tab-item {
   @include m.theme() {
+    text-align: left;
     color: m.t(contrast);
+    font-style: normal;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
   }
-  font-style: normal;
-  font-size: 20px;
-  line-height: 26px;
-  font-weight: 600;
-  cursor: pointer;
-  background: transparent;
 }
 
 .notifications-panel__panels {
@@ -526,12 +527,19 @@
   }
   th:nth-child(2),
   td:nth-child(2) {
-    width: 25%;
+    display: none;
+    @include b.min-width('small') {
+      display: flex;
+      width: 25%;
+    }
   }
   th:last-child,
   td:last-child {
-		text-align: right;
-    width: 25%;
+    text-align: right;
+    width: 50%;
+    @include b.min-width('small') {
+      width: 25%;
+    }
   }
 }
 
@@ -581,7 +589,7 @@
   gap: 20px;
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: clamp(8px, 1vw, 14px);
   line-height: 18px;
 }
 
@@ -589,10 +597,9 @@
   @include td;
 }
 
-
 .notifications-panel__td--interact {
   @include td;
-	justify-content: end;
+  justify-content: end;
 }
 
 .notifications-panel__interact-button {
@@ -601,11 +608,11 @@
     color: m.t(contrast);
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: clamp(8px, 1vw, 12px);
     line-height: 136.6%;
     text-align: center;
     letter-spacing: 0.2em;
-		padding: 10px;
-		@include m.interact;
+    padding: 10px;
+    @include m.interact;
   }
 }
