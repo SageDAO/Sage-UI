@@ -133,13 +133,13 @@ export function GamesStatsPanel() {
             drop{' '}
             <span className='dashboard-game-stats__id dashboard-game-stats__tile'>{drop.id}</span>
           </div>
-          <div className='dashboard-game-stats__item' style={{ minWidth: '400px' }}>
-            <table>
+          <div className='dashboard-game-stats__item'>
+            <table width='500'>
               <tbody>
                 {drop.Lotteries.map((lottery, i) => {
                   const stats = getLotteryGameStats(lottery.id);
                   return (
-                    <tr key={i}>
+                    <tr key={i} style={{ border: '1px solid gray', height: '140px' }}>
                       <td>
                         lottery <span className='dashboard-game-stats__id'>{lottery.id}</span>
                         <br />
@@ -171,7 +171,7 @@ export function GamesStatsPanel() {
             </table>
           </div>
           <div className='dashboard-game-stats__item' style={{ minWidth: '400px' }}>
-            <table>
+            <table width='500'>
               <tbody>
                 {drop.Auctions.map((auction, i) => {
                   const stats = getAuctionGameStats(auction.id);
@@ -181,7 +181,7 @@ export function GamesStatsPanel() {
                     var endTime = Number(stats.endTime);
                   }
                   return (
-                    <tr key={i}>
+                    <tr key={i} style={{ border: '1px solid gray', height: '140px' }}>
                       <td style={{}}>
                         auction <span className='dashboard-game-stats__id'>{auction.id}</span>{' '}
                         <br />
