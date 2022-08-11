@@ -5,6 +5,7 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   tagTypes: [
     'AllUsers',
+    'ArtistBalance',
     'Auction',
     'AuctionState',
     'EscrowPoints',

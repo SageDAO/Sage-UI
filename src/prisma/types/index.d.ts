@@ -143,3 +143,9 @@ export type User_include_EarnedPoints = Prisma.UserGetPayload<{
     EarnedPoints: true;
   };
 }>;
+
+export type User_include_NftContract = Prisma.UserGetPayload<{
+  include: {
+    NftContract: true;
+  };
+}>;

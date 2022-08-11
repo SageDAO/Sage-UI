@@ -1,10 +1,9 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
-import { User } from '@prisma/client';
 import prisma from '@/prisma/client';
 import Hero from '@/components/Hero';
 import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
 import { useGetListingNftsByArtistQuery } from '@/store/nftsReducer';
-import { Nft_include_NftContractAndOffers } from '@/prisma/types';
+import { Nft_include_NftContractAndOffers, User_include_NftContract } from '@/prisma/types';
 import { PfpImage } from '@/components/Media';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
 import TwitterSVG from '@/public/socials/twitter.svg';
@@ -12,6 +11,8 @@ import MediumSVG from '@/public/socials/medium.svg';
 import InstagramSVG from '@/public/socials/insta.svg';
 import WebSVG from '@/public/socials/web.svg';
 import FollowButton from '@/components/Pages/Artists/FollowButton';
+import ArtistBalancePanel from '@/components/Pages/Artists/ArtistBalancePanel';
+import { useSession } from 'next-auth/react';
 
 type ListingNft = Nft_include_NftContractAndOffers;
 
@@ -26,11 +27,13 @@ function sort(a: ListingNft, b: ListingNft) {
 }
 
 interface Props {
-  artist: User;
+  artist: User_include_NftContract;
 }
 
 export default function artist({ artist }: Props) {
+  const { data: sessionData } = useSession();
   const { data: nfts } = useGetListingNftsByArtistQuery(artist.walletAddress);
+  const isOwner = () => sessionData?.address == artist.walletAddress;
 
   return (
     <div className='artist-page' data-cy='artist-page'>
@@ -81,6 +84,11 @@ export default function artist({ artist }: Props) {
               )}
             </ul>
           </div>
+          {false && isOwner() && (
+            <div style={{ width: '100%' }}>
+              <ArtistBalancePanel artistContractAddress={artist.NftContract?.contractAddress}/>
+            </div>
+          )}
         </div>
         <FollowButton artistAddress={artist.walletAddress} />
       </div>
