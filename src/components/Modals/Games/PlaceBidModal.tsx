@@ -48,6 +48,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
+  const isOpenForBids = getIsOpenForBids(auction, auctionState);
 
   function toggleBidHistory() {
     setState((prevState) => {
@@ -56,18 +57,16 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
   }
 
   function handlePlaceBidClick() {
-    if (signer) {
-      if (state.desiredBidValue < state.minBid) {
-        toast.info(`Current minimum bid is ${state.minBid}`);
-        return;
-      }
-      placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
-    } else {
+    if (!signer) {
       toast.info('Please Sign In With Ethereum before placing bids.');
+      return;
     }
+    if (state.desiredBidValue < state.minBid) {
+      toast.info(`Current minimum bid is ${state.minBid}`);
+      return;
+    }
+    placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
   }
-
-  const isOpenForBids = getIsOpenForBids(auction, auctionState);
 
   function handleMinButtonClick() {
     setState((prevState) => {
@@ -84,11 +83,12 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
   function handleNewAuctionState() {
     if (!auctionState) return;
     if (auctionState.nextMinBid != 0) {
+      const nextMinBid = roundNextMinBid(auctionState.nextMinBid);
       setState((prevState) => {
         return {
           ...prevState,
-          desiredBidValue: auctionState.nextMinBid,
-          minBid: auctionState.nextMinBid,
+          desiredBidValue: nextMinBid,
+          minBid: nextMinBid,
         };
       });
     }
@@ -212,6 +212,10 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
       </div>
     </Modal>
   );
+}
+
+function roundNextMinBid(val: number): number {
+  return Math.ceil(val * 100)/100;
 }
 
 export default PlaceBidModal;
