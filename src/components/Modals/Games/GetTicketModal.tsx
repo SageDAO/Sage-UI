@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { errors, Signer } from 'ethers';
+import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { User } from '@prisma/client';
@@ -70,6 +70,9 @@ function GetTicketModal({
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   //ui event handlers
   function handleTicketSubClick() {
+    if (desiredTicketAmount == 1) {
+      return;
+    }
     setDesiredTicketAmount((prevState) => prevState - 1);
   }
 
