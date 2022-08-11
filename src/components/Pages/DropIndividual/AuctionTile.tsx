@@ -39,7 +39,7 @@ export default function AuctionTile({ artist, dropName, imgSrc, editionSize, auc
       <div className='drop-page__grid-item-img'>
         <BaseMedia src={imgSrc} />
         <div className='drop-page__grid-item-focus'>
-          {isOpenForBids ? 'place bid' : 'view results'}
+          {isOpenForBids ? 'place bid' : isEnded ? 'view results' : 'starting soon'}
         </div>
       </div>
       <div className='drop-page__grid-item-info'>
