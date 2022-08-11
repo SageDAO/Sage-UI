@@ -1,7 +1,7 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Lottery as LotteryContract } from '@/types/contracts';
 import { getLotteryContract, getStorageContract } from '@/utilities/contracts';
-import { User_include_EarnedPoints } from '@/prisma/types';
+import { User_include_EarnedPoints, User_include_EarnedPointsAndNftContracts } from '@/prisma/types';
 import { ethers, Signer } from 'ethers';
 import { baseApi } from './baseReducer';
 
@@ -27,7 +27,7 @@ export interface LotteryStats {
 
 export const dashboardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUsersAndEarnedPoints: builder.query<User_include_EarnedPoints[], void>({
+    getAllUsersAndEarnedPoints: builder.query<User_include_EarnedPointsAndNftContracts[], void>({
       query: () => 'user?action=GetAllUsersAndEarnedPoints',
       providesTags: ['AllUsers'],
     }),

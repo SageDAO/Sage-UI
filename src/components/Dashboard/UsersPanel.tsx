@@ -10,6 +10,7 @@ import { User } from '@prisma/client';
 import useModal from '@/hooks/useModal';
 import { PfpImage } from '@/components/Media';
 import LoaderDots from '../LoaderDots';
+import NftContractBalance from './NftContractBalance';
 
 export function UsersPanel() {
   const { data: users, isFetching: isFetchingUsers } = useGetAllUsersAndEarnedPointsQuery();
@@ -99,7 +100,15 @@ function UsersTable({ users }: UsersTableProps) {
         Header: 'role',
         accessor: 'role',
         Cell: (cell: any) => (
-          <span style={{ color: cell.value == 'ADMIN' ? 'red' : cell.value == 'ARTIST' ? 'blue' : '' }}>{cell.value}</span>
+          <span style={{ color: cell.value == 'ADMIN' ? '#22b573' : cell.value == 'ARTIST' ? '#792e9c' : '' }}>{cell.value}</span>
+        ),
+      },
+      {
+        Header: 'contract balance',
+        Cell: (cell: any) => (
+          <div>
+            <NftContractBalance user={cell.row.original} />
+          </div>
         ),
       },
     ],

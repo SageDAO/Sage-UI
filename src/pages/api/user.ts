@@ -91,7 +91,7 @@ async function getUserDisplayInfo(walletAddress: string, res: NextApiResponse) {
 async function getAllUsersAndEarnedPoints(res: NextApiResponse) {
   try {
     const users = await prisma.user.findMany({
-      include: { EarnedPoints: true },
+      include: { EarnedPoints: true, NftContract: true },
     });
     const json = JSON.stringify(users, (_, value) =>
       typeof value === 'bigint' ? value.toString() : value

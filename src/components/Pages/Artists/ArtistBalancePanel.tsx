@@ -14,12 +14,12 @@ export default function ArtistBalancePanel({ artistContractAddress }) {
 
   return (
     <div style={{ float: 'right', textAlign: 'center', border: '1px solid #ddd', padding: '15px' }}>
-      artist balance: <span style={{ fontWeight: 'bolder' }}>{balance}</span> ASH
+      artist balance: <span style={{ fontWeight: 'bolder' }}>{balance?.artistSplit}</span> ASH
       <button
         style={{ marginTop: '15px' }}
         onClick={handleWithdrawClick}
         className='games-modal__buy-tickets-button'
-        disabled={'0.0' == balance || isWithdrawing}
+        disabled={'0.0' == balance?.artistSplit || isWithdrawing}
       >
         {isWithdrawing ? <LoaderSpinner /> : 'withdraw'}
       </button>
