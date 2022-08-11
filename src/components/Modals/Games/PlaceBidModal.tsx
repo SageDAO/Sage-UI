@@ -12,6 +12,7 @@ import { BaseMedia } from '@/components/Media';
 import System from '@/components/Icons/System';
 import BidHistoryTable from '@/components/Games/BidHistoryTable';
 import Countdown from '@/components/Countdown';
+import ArrowRightSVG from '@/public/interactive/arrow-right.svg';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -155,6 +156,29 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
               </div>
               <h1 className='games-modal__system-info'>This is an auction</h1>
             </div>
+            {isOpenForBids && (
+              <div>
+                <div className='games-modal__bid-info-group'>
+                  <div className='games-modal__highest-bid'>
+                    <h1 className='games-modal__highest-bid-label'>Highest Bid</h1>
+                    <h1 className='games-modal__highest-bid-value'>
+                      {auctionState.highestBidNumber}
+                    </h1>
+                  </div>
+
+                  <button
+                    onClick={toggleBidHistory}
+                    className='games-modal__see-bid-history-button'
+                  >
+                    <ArrowRightSVG
+                      data-is-open={state.shouldShowBidHistory}
+                      className='games-modal__see-bid-history-icon'
+                    ></ArrowRightSVG>
+                    See Bid History
+                  </button>
+                </div>
+              </div>
+            )}
 
             {!isOpenForBids && (
               <div className='games-modal__not-yet-open'>Auction not yet open</div>

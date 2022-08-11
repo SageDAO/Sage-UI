@@ -222,6 +222,7 @@
   font-size: clamp(6px, 1vw, 16px);
   line-height: 130%;
   letter-spacing: 0.1em;
+  width: max-content;
 
   @include b.min-width('medium') {
     margin-top: auto;
@@ -254,7 +255,6 @@
   font-size: clamp(20px, 1vw, 36px);
   line-height: 130%;
   max-width: 90vw;
-  height: 2.6em;
 
   @include m.theme() {
     color: m.t(contrast2);
@@ -264,11 +264,16 @@
 .games-modal__bid-info-group {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
   gap: 30px;
 
   @include b.min-width('medium') {
   }
+  align-items: flex-end;
+}
+
+.games-modal__highest-bid {
+  height: max-content;
+  flex: 0;
 }
 
 .games-modal__highest-bid-value {
@@ -367,17 +372,28 @@
   font-size: 16px;
   line-height: 130%;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-transform: uppercase;
+  gap: 5px;
 
-  color: #161619;
-
-  border: 1px solid #161619;
   @include m.theme() {
     color: m.t(contrast2);
-    border: 1px solid m.t(contrast2);
   }
 
   @include m.interact() {
+  }
+}
+
+.games-modal__see-bid-history-icon {
+  overflow: visible;
+  transition-duration: 200ms;
+  @include m.theme() {
+    color: m.t(contrast);
+    &[data-is-open='true'] {
+      transform: rotate(90deg);
+    }
   }
 }
 
@@ -450,7 +466,6 @@
     color: m.t(contrast2);
   }
 }
-
 
 .games-modal__tickets-add {
   @include tickets-controls-button;
