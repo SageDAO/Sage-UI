@@ -20,7 +20,7 @@ export const pointsApi = baseApi.injectEndpoints({
         // as the balance is fresh from contract and database, release any escrow on hold
         dispatch(pointsApi.endpoints.releaseEscrowPoints.initiate());
         console.log(`getPointsBalance() :: ${pointsEarned} - ${pointsUsed} = ${pointsBalance}`);
-        return { data: Number(pointsBalance).toFixed(2) };
+        return { data: Number(pointsBalance).toFixed(0) };
       },
       providesTags: ['UserPoints'],
     }),
