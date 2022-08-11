@@ -1,8 +1,15 @@
 import SageLogo from '@/public/branding/sage-full-logo.svg';
 import MottoSVG from '@/public/branding/motto.svg';
 import Socials from '@/components/Socials';
-import Image from 'next/image';
+import { useRouter } from 'next/router';
+
 export default function Footer() {
+  const router = useRouter();
+  const handleHowToBuyAshClick = (e: any) => {
+    router.push('/howtobuyash');
+    e.preventDefault();
+  }
+
   return (
     <div className='footer' data-cy='footer'>
       <div className='footer__top'>
@@ -22,7 +29,7 @@ export default function Footer() {
         <ul className='footer__middle-item'>
           <div className='footer__middle-item-header'>token + lp</div>
           <div className='footer__middle-item-content'>
-            <div className='footer__middle-item-content-link'><a href='' target='_blank'>how to buy ash</a></div>
+            <div className='footer__middle-item-content-link'><a href='/howtobuyash' onClick={handleHowToBuyAshClick}>how to buy ash</a></div>
           </div>
         </ul>
         <ul className='footer__follow'>

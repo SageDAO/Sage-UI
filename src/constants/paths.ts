@@ -3,6 +3,7 @@ const basePathDrops = '/drops';
 const basePathArtists = '/artists';
 const basePathAbout = '/about';
 const basePathPress = '/press';
+const basePathHowToBuyAsh = '/howtobuyash';
 
 const basePathGames = '/games';
 const basePathAuctions = `${basePathGames}/auctions`;
@@ -21,4 +22,5 @@ export {
   basePathLotteries,
   basePathProfile,
   basePathPress,
+  basePathHowToBuyAsh,
 };
