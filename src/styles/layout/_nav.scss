@@ -33,6 +33,7 @@
   @include m.noselect;
   width: clamp(80px, 2vw, 102px);
   color: c.$white;
+  text-transform: uppercase;
   cursor: pointer;
 }
 
@@ -47,7 +48,7 @@
   gap: 10px;
   width: 240px;
   white-space: no-wrap;
-		line-height: 44px;
+  line-height: 44px;
 }
 
 .nav__personal-pfp-container {

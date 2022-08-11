@@ -19,12 +19,11 @@ $menu-toggle-z: $menu-z + 1;
   @include m.theme() {
     background-color: m.t(base);
   }
-
   transform: translateY(-100%);
-
   &[data-is-open='true'] {
     transform: translateY(0%);
   }
+  transition-duration: 200ms;
 }
 
 .mobile-menu__logotype {
@@ -51,6 +50,7 @@ $menu-toggle-z: $menu-z + 1;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
+  text-transform: uppercase;
   line-height: 30px;
   letter-spacing: 0.1em;
 
@@ -59,8 +59,6 @@ $menu-toggle-z: $menu-z + 1;
     @include m.interact() {
       background-color: m.t(base2);
     }
-
-  
 
     &:after {
       transition-duration: 200ms;
@@ -94,7 +92,7 @@ $menu-toggle-z: $menu-z + 1;
   right: 40px;
   top: 40px;
   @include m.interact;
-
+  transition-duration: 1000ms;
   z-index: $menu-toggle-z;
 }
 
@@ -108,7 +106,7 @@ $menu-toggle-z: $menu-z + 1;
 }
 
 @mixin toggle-line {
-  transition-duration: 200ms;
+  transition-duration: 300ms;
   transition-timing-function: ease-out;
   position: absolute;
   width: 20px;
@@ -120,7 +118,7 @@ $menu-toggle-z: $menu-z + 1;
 
 .mobile-menu__toggle-line1 {
   @include toggle-line;
-  transition-delay: 20ms;
+  transition-delay: 80ms;
   &[data-is-open='false'] {
     transform: rotate(90deg);
   }
@@ -128,7 +126,7 @@ $menu-toggle-z: $menu-z + 1;
 
 .mobile-menu__toggle-line2 {
   @include toggle-line;
-  transition-delay: 40ms;
+  transition-delay: 80ms;
   top: 0;
   &[data-is-open='false'] {
     top: initial;

@@ -9,7 +9,7 @@ import { computeDropStatus } from '@/utilities/status';
 import { getHomePageData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import SageIconSVG from '@/public/icons/sage.svg';
-import { useSpring, animated, config } from 'react-spring';
+import { animated } from 'react-spring';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -18,15 +18,10 @@ interface Props {
 
 function home({ featuredDrop, upcomingDrops }: Props) {
   const router = useRouter();
-  const styles = useSpring({
-    from: { translateY: 100, opacity: 0 },
-    to: { translateY: 0, opacity: 1 },
-    config: { duration: 200 },
-  });
 
   return (
     <div className='home-page' data-cy='home-page'>
-      <animated.div style={styles} className='home-page__main'>
+      <div className='home-page__main'>
         {featuredDrop && (
           <>
             <div onClick={() => router.push(`/drops/${featuredDrop.id}`)}>
@@ -99,7 +94,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
           })}
         </div>
         <EventSlider />
-      </animated.div>
+      </div>
     </div>
   );
 }

@@ -129,7 +129,6 @@ $theme-map: null;
     // use & for making the theme class ancestor of the class
     // from which you use @include theme() {...}
     .#{$theme} & {
-      transition-duration: 200ms;
       @content; // the content inside @include theme() {...}
     }
   }

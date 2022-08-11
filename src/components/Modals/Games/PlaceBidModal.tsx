@@ -67,6 +67,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
   }
 
   const isOpenForBids = getIsOpenForBids(auction, auctionState);
+  const isEnded: boolean = new Date(auctionState.endTime) < new Date();
 
   function handleMinButtonClick() {
     setState((prevState) => {
@@ -129,7 +130,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
             <BaseMedia src={auction.Nft.s3Path} />
-            {!isOpenForBids && (
+            {!isOpenForBids && !isEnded && (
               <Countdown endTime={auction.startTime} className='games-modal__countdown'></Countdown>
             )}
             {isOpenForBids && (

@@ -1,4 +1,5 @@
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/breakpoints' as b;
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/layout/layout' as l;
 .footer {
@@ -19,7 +20,10 @@
 
 .footer__top {
   @include footer-section;
-  min-height: 20vh;
+  min-height: 10vh;
+  @include b.min-width('large') {
+    min-height: 20vh;
+  }
 }
 
 .footer__logo {
@@ -98,7 +102,10 @@
 
 .footer__bottom {
   @include footer-section;
-  min-height: 20vh;
+  min-height: 10vh;
+  @include b.min-width('large') {
+    min-height: 20vh;
+  }
   justify-content: center;
 }
 

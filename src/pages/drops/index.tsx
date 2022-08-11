@@ -49,7 +49,7 @@ function drops({ drops }: Props) {
         {drops.map((d) => {
           const { status, startTime } = computeDropStatus(d);
           const counterDisplay = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
-          const buttonDisplay = status === 'Upcoming' ? 'get notifications' : 'view drop artworks';
+          const buttonDisplay = status === 'Upcoming' ? 'get notifications' : 'View Drop Artworks';
           const { drawings, lotteries } = filterLotteries(d.Lotteries);
           const systems = computeDropSystems({
             lotteries,
@@ -96,15 +96,6 @@ function drops({ drops }: Props) {
                   data-status={status}
                 >
                   {buttonDisplay}
-                </div>
-                <div className='drops-page__drop-content-systems'>
-                  {systems.map((type) => {
-                    return (
-                      <div key={type} className='drops-page__drop-content-systems-icon'>
-                        <System type={type} />
-                      </div>
-                    );
-                  })}
                 </div>
                 <p className='drops-page__drop-content-description'>{d.description}</p>
               </div>
