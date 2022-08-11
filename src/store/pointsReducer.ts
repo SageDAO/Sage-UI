@@ -32,7 +32,7 @@ export const pointsApi = baseApi.injectEndpoints({
         const pointsUsed = await getTotalPointsUsed(userAddress);
         let pointsBalance = pointsEarned - pointsUsed;
         console.log(`getPointsBalanceByUser() :: ${pointsEarned} - ${pointsUsed} = ${pointsBalance}`);
-        return { data: Number(pointsBalance).toFixed(2) };
+        return { data: Number(pointsBalance).toFixed(0) };
       },
       providesTags: ['UserPoints'],
     }),
