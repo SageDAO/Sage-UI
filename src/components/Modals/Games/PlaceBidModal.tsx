@@ -35,12 +35,16 @@ const initialState: State = {
   shouldShowBidHistory: false,
 };
 
-export function getIsOpenForBids(
-  auction: Auction_include_Nft,
-  auctionState: AuctionState
-): boolean {
+export function computeAuctionStatus(auction: Auction_include_Nft, auctionState: AuctionState) {
   const now = new Date().getTime();
-  return auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
+  const isOpenForBids =
+    auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
+  const isStarted = auction.startTime.getTime() < now;
+
+  const isEnded = auctionState
+    ? Boolean(auctionState.endTime !== undefined) && Boolean(auctionState.endTime < now)
+    : false;
+  return { isOpenForBids, isStarted, isEnded };
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
@@ -48,7 +52,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
-  const isOpenForBids = getIsOpenForBids(auction, auctionState);
+  const { isOpenForBids, isStarted, isEnded } = computeAuctionStatus(auction, auctionState);
 
   function toggleBidHistory() {
     setState((prevState) => {
@@ -116,7 +120,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
 
   const statusLabel = auction.winnerAddress
     ? 'winning bid'
-    : getIsOpenForBids(auction, auctionState)
+    : computeAuctionStatus(auction, auctionState)
     ? 'current highest bid'
     : 'highest bid';
 
@@ -156,7 +160,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
               </div>
               <h1 className='games-modal__system-info'>This is an auction</h1>
             </div>
-            {isOpenForBids && (
+            {isStarted && (
               <div>
                 <div className='games-modal__bid-info-group'>
                   <div className='games-modal__highest-bid'>
@@ -179,8 +183,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
                 </div>
               </div>
             )}
-
-            {!isOpenForBids && (
+            {!isOpenForBids && !isEnded && (
               <div className='games-modal__not-yet-open'>Auction not yet open</div>
             )}
             {isOpenForBids && (
@@ -215,7 +218,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
 }
 
 function roundNextMinBid(val: number): number {
-  return Math.ceil(val * 100)/100;
+  return Math.ceil(val * 100) / 100;
 }
 
 export default PlaceBidModal;
