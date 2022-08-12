@@ -48,6 +48,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'UpdateApprovedDateAndIsLiveFlags':
       await updateApprovedDateAndIsLiveFlags(Number(id), walletAddress as string, response);
       break;
+    case 'DeleteDrop':
+      await deleteDrop(Number(id), response);
+      break;
     default:
       response.status(500);
   }
@@ -249,6 +252,32 @@ async function updateApprovedDateAndIsLiveFlags(
     console.log(e);
     response.status(500);
   }
+}
+
+async function deleteDrop(id: number, response: NextApiResponse) {
+  console.log(`deleteDrop(${id})`);
+  const drop = await prisma.drop.findUnique({
+    where: { id },
+    include: {
+      Auctions: { include: { Nft: true } },
+      Lotteries: { include: { Nfts: true } }
+    },
+  });
+  if (drop?.approvedAt) {
+    response.status(500);
+    return;
+  }
+  for (const a of drop?.Auctions!) {
+    await prisma.auction.delete({ where: { id: a.id }});
+    await prisma.nft.delete({ where: { id: a.nftId }});
+  }
+  for (const l of drop?.Lotteries!) {
+    for (const n of l.Nfts) {
+      await prisma.nft.delete({ where: { id: n.id }});
+    }
+    await prisma.lottery.delete({ where: { id: l.id }});
+  }
+  await prisma.drop.delete({ where: { id }});
 }
 
 export default handler;

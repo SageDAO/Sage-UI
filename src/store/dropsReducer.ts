@@ -33,6 +33,13 @@ export const dropsApi = baseApi.injectEndpoints({
         }
       },
     }),
+    deleteDrop: builder.mutation<null, number>({
+      queryFn: async(dropId, { dispatch }, _, fetchWithBQ) => {
+        await fetchWithBQ(`drops?action=DeleteDrop&id=${dropId}`);
+        return { data: null };
+      },
+      invalidatesTags: ['PendingDrops']
+    }),
   }),
 });
 
@@ -62,7 +69,7 @@ function inspectDropGamesEndTimes(drop: DropFull) {
     const endTime = Math.floor(new Date(game.endTime).getTime() / 1000);
     if (endTime < now && !game.contractAddress) {
       const errMsg = 'One or more games have already ended; please fix dates and try again.';
-      toast.error(errMsg);
+      toast.warn(errMsg);
       throw new Error(errMsg);
     }
   }
@@ -254,4 +261,5 @@ export const {
   useGetApprovedDropsQuery,
   useGetDropsPendingApprovalQuery,
   useApproveAndDeployDropMutation,
+  useDeleteDropMutation,
 } = dropsApi;
