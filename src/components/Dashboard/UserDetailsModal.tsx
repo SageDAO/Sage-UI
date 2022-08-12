@@ -31,14 +31,14 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
           {isFetchingPoints ? (
             <LoaderDots />
           ) : (
-            <>
+            <div>
               <div className='dashboard__user-details-modal__pfp-container'>
                 <PfpImage src={userData?.profilePicture} />
               </div>
               <div style={{ fontWeight: 'bolder' }}>{userData?.username}</div>
-              <div>{userData?.email}</div>
-              <div style={{ fontStyle: 'italic' }}>{userData?.bio}</div>
-              <div>{userData?.walletAddress}</div>
+              <div style={{ marginTop: '20px' }}>{userData?.email}</div>
+              <div style={{ marginTop: '20px', fontStyle: 'italic', maxWidth: '300px', marginLeft: 'auto', marginRight: 'auto' }}>{userData?.bio}</div>
+              <div style={{ marginTop: '20px' }}>{userData?.walletAddress}</div>
               <div style={{ marginTop: '20px' }}>
                 {userData?.EarnedPoints?.totalPointsEarned} PIXEL earned
               </div>
@@ -56,7 +56,7 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
                   {isPromoting ? <LoaderSpinner /> : 'Promote to ARTIST'}
                 </button>
               )}
-            </>
+            </div>
           )}
         </div>
       </div>
