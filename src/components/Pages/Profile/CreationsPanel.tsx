@@ -17,6 +17,7 @@ interface State {
   tags: string;
   price: string;
   preview: string;
+  isFixedPrice: boolean;
 }
 
 const INITIAL_STATE: State = {
@@ -26,6 +27,7 @@ const INITIAL_STATE: State = {
   tags: '',
   price: '',
   preview: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+  isFixedPrice: true,
 };
 
 export default function CreationsPanel() {
@@ -44,6 +46,12 @@ export default function CreationsPanel() {
   function handlePriceInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
       return { ...prevState, price: e.target.value };
+    });
+  }
+
+  function handlePriceTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setState((prevState) => {
+      return { ...prevState, isFixedPrice: 'true' == e.target.value };
     });
   }
 
@@ -85,12 +93,13 @@ export default function CreationsPanel() {
       toast.warn('Please type a valid price for your artwork');
       return;
     }
-    toast.info('Please sit back, this will take a couple of minutes!');
+    toast.info('Please sit back, this might take a minute or so!');
     const result = await mintSingleNft({
       name: state.title,
       description: state.description,
       tags: state.tags,
       price: parseFloat(state.price),
+      isFixedPrice: state.isFixedPrice,
       file: state.file,
       signer: signer as Signer,
     } as MintRequest);
@@ -203,6 +212,16 @@ export default function CreationsPanel() {
                     onChange={handleTagsInputChange}
                     className='creations-panel__file-title-field'
                   />
+                </div>
+                <div className='creations-panel__file-title-group'>
+                  <h1 className='creations-panel__file-title-label'>pricing type *</h1>
+                  <select
+                    onChange={handlePriceTypeChange}
+                    className='creations-panel__file-title-field'
+                  >
+                    <option value='true'>fixed price</option>
+                    <option value='false'>minimum price</option>
+                  </select>
                 </div>
                 <div className='creations-panel__file-title-group'>
                   <h1 className='creations-panel__file-title-label'>artwork price (ash) *</h1>

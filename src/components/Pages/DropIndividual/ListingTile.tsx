@@ -6,13 +6,15 @@ import { BaseMedia } from '@/components/Media';
 import shortenAddress from '@/utilities/shortenAddress';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { Offer, OfferState } from '@prisma/client';
+import useModal from '@/hooks/useModal';
+import MakeOfferModal from '@/components/Modals/Games/MakeOfferModal';
 
 interface Props {
   nft: Nft_include_NftContractAndOffers;
   artist: User;
 }
 
-function filterSellOffers(offers: Offer[]): Offer | null {
+function findActiveSellOffer(offers: Offer[]): Offer | null {
   const now = Math.floor(new Date().getTime() / 1000);
   for (var o of offers) {
     if (o.expiresAt > now && o.isSellOffer && o.state == OfferState.ACTIVE) {
@@ -25,23 +27,32 @@ function filterSellOffers(offers: Offer[]): Offer | null {
 export default function ListingTile({ nft, artist }: Props) {
   const [buySingleNft, { isLoading }] = useBuySingleNftMutation();
   const { data: signer } = useSigner();
-  const sellOffer = filterSellOffers(nft.Offers!);
+  const { isOpen, closeModal, openModal } = useModal();
+  const sellOffer = findActiveSellOffer(nft.Offers!);
 
-  const handleBuyClick = async () => {
-    if (nft.ownerAddress || !sellOffer) {
-      return; // can't buy an NFT that is already owned or doesn't have a sell offer
+  const handleClick = async () => {
+    if (nft.ownerAddress) {
+      return; // can't buy an NFT that is already owned
     }
     if (!signer) {
-      toast.info('Please Sign In With Ethereum before placing orders.');
+      toast.info('Please Sign In With Ethereum.');
     } else if (isLoading) {
       toast.info('Please wait for transaction to complete.');
-    } else {
+    } else if (sellOffer) {
       await buySingleNft({ sellOffer, signer });
+    } else {
+      openModal();
     }
   };
 
   return (
-    <div className='drop-page__grid-item' onClick={handleBuyClick}>
+    <div className='drop-page__grid-item' onClick={handleClick}>
+      <MakeOfferModal
+        artist={artist}
+        nft={nft}
+        isOpen={isOpen}
+        closeModal={closeModal}
+      />
       <div className='drop-page__grid-item-header'>
         <h1 className='drop-page__grid-item-header-left'>edition size: {1}</h1>
         <div className='drop-page__grid-item-header-right'></div>
@@ -56,7 +67,7 @@ export default function ListingTile({ nft, artist }: Props) {
           ) : sellOffer ? (
             `buy now for ${nft.price} ASH`
           ) : (
-            `not for sale`
+            `make an offer`
           )}
         </div>
       </div>

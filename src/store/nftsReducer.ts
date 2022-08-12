@@ -18,6 +18,7 @@ export interface MintRequest {
   description: string;
   tags: string;
   price: number;
+  isFixedPrice: boolean;
   file: File;
   signer: Signer;
 }
@@ -61,25 +62,29 @@ export const nftsApi = baseApi.injectEndpoints({
           );
           const { s3Path, metadataPath } = await uploadToAwsAndArweave(mintRequest, endpoint);
           nftId = await dbInsertNft(mintRequest, artistAddress, s3Path, metadataPath, fetchWithBQ);
-          const weiPrice = ethers.utils.parseEther(mintRequest.price.toString());
-          const { signedOffer, expiresAt } = await createSignedSellOffer(
-            nftContractAddress,
-            nftId,
-            weiPrice,
-            mintRequest.signer
-          );
+          if (mintRequest.isFixedPrice) {
+            const weiPrice = ethers.utils.parseEther(mintRequest.price.toString());
+            var { signedOffer, expiresAt } = await createSignedSellOffer(
+              nftContractAddress,
+              nftId,
+              weiPrice,
+              mintRequest.signer
+            );
+          }
           console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
           const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
           const mintTx = await nftContract.artistMint(artistAddress, nftId, metadataPath);
           await mintTx.wait();
-          await dbInsertSellOffer(
-            mintRequest,
-            nftId,
-            nftContractAddress,
-            expiresAt,
-            signedOffer,
-            fetchWithBQ
-          );
+          if (mintRequest.isFixedPrice) {
+            await dbInsertSellOffer(
+              mintRequest,
+              nftId,
+              nftContractAddress,
+              expiresAt,
+              signedOffer,
+              fetchWithBQ
+            );
+          }
           return { data: nftId };
         } catch (e) {
           console.log(e);
@@ -257,11 +262,11 @@ export async function _fetchOrCreateNftContract(
   if (!artistContractAddress || artistContractAddress == ethers.constants.AddressZero) {
     console.log(`_fetchOrCreateNftContract() :: Creating new NFT contract...`);
     var tx: ContractTransaction;
-    if (artistAddress == await signer.getAddress()) {
+    if (artistAddress == (await signer.getAddress())) {
       tx = await nftFactoryContract.deployByArtist('Sage', 'SAGE');
     } else {
       tx = await nftFactoryContract.deployByAdmin(artistAddress, 'Sage', 'SAGE');
-    }    
+    }
     await tx.wait(1);
     artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
     if (artistContractAddress == ethers.constants.AddressZero) {
