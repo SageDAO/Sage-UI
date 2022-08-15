@@ -38,8 +38,8 @@ function drops({ drops }: Props) {
                 sage curated live and upcoming drops.
               </div>
               <p className='drops-page__subheader-info'>
-                SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL <br />{' '}
-                STANDARDS AND NEW STRUCTURES IN NFT ASSETS. A VISION IN THE CRYPTO SPACE.
+                sage upcoming drops are carefully curated to meet the standards and new structures
+                in nft assets. a vision in the crypto space.
               </p>
             </div>
           </div>

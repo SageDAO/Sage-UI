@@ -272,4 +272,5 @@
     border: 1px solid m.t(contrast);
   }
   @include m.interact;
+  text-transform: capitalize;
 }

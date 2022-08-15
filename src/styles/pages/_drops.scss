@@ -46,6 +46,7 @@
 }
 
 .drops-page__subheader-info {
+  text-transform: capitalize;
   font-style: normal;
   font-weight: 400;
   font-size: clamp(10px, 1.5vw, 16px);
