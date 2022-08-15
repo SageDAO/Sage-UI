@@ -310,7 +310,7 @@ async function signOffer(
   const signerAddress = await signer.getAddress();
   const message = ethers.utils.defaultAbiCoder.encode(
     ['address', 'address', 'uint256', 'uint256', 'uint256', 'bool'],
-    [signerAddress, nftContractAddress, weiPrice, nftId, expiresAt, true]
+    [signerAddress, nftContractAddress, weiPrice, nftId, expiresAt, isSellOffer]
   );
   const encodedMessage = ethers.utils.keccak256(message);
   const signedOffer = await signer.signMessage(ethers.utils.arrayify(encodedMessage));

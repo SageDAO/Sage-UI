@@ -13,7 +13,7 @@ export default function dashboard() {
     return <LoaderDots />;
   }
   if (!isAdmin(user)) {
-    return <div style={{ margin: '25px' }}>Please connect with an admin wallet</div>;
+    return <div style={{ margin: '100px', textAlign: 'center' }}>Please connect with an admin wallet</div>;
   }
   return <DashBoardPage />;
 }
