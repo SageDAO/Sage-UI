@@ -20,6 +20,9 @@ export default async function handler(request: NextApiRequest, response: NextApi
     case 'CreateOffer':
       await createOffer(request, response);
       break;
+    case 'DeleteOffer':
+      await deleteOffer(request, response);
+      break;
     case 'UpdateOwner':
       await updateOwner(Number(request.query.id), response);
       break;
@@ -88,6 +91,27 @@ async function createOffer(request: NextApiRequest, response: NextApiResponse) {
       },
     });
     response.json({ id: record.id });
+  } catch (e: any) {
+    console.log(e);
+    response.json({ error: e.message });
+  }
+}
+
+async function deleteOffer(request: NextApiRequest, response: NextApiResponse) {
+  const id = +request.query.id;
+  const session = await getSession({ req: request });
+  const address: string = session?.address as string;
+  const state = OfferState.ACTIVE;
+  if (!session || !address) {
+    return;
+  }
+  console.log(`deleteOffer(${id}, ${address})`);
+  try {
+    await prisma.offer.updateMany({
+      where: { id, signer: address, state },
+      data: { state: OfferState.CANCELLED }
+    });
+    response.status(200);
   } catch (e: any) {
     console.log(e);
     response.json({ error: e.message });

@@ -27,7 +27,7 @@ function findActiveSellOffer(offers: Offer[]): Offer | null {
 export default function ListingTile({ nft, artist }: Props) {
   const [buyFromSellOffer, { isLoading }] = useBuyFromSellOfferMutation();
   const { data: signer } = useSigner();
-  const { isOpen, closeModal, openModal } = useModal();
+  const { isOpen, closeModal, openModal: openMakeOfferModal } = useModal();
   const sellOffer = findActiveSellOffer(nft.Offers!);
 
   const handleClick = async () => {
@@ -41,18 +41,13 @@ export default function ListingTile({ nft, artist }: Props) {
     } else if (sellOffer) {
       await buyFromSellOffer({ sellOffer, signer });
     } else {
-      openModal();
+      openMakeOfferModal();
     }
   };
 
   return (
     <div className='drop-page__grid-item' onClick={handleClick}>
-      <MakeOfferModal
-        artist={artist}
-        nft={nft}
-        isOpen={isOpen}
-        closeModal={closeModal}
-      />
+      <MakeOfferModal artist={artist} nft={nft} isOpen={isOpen} closeModal={closeModal} />
       <div className='drop-page__grid-item-header'>
         <h1 className='drop-page__grid-item-header-left'>edition size: {1}</h1>
         <div className='drop-page__grid-item-header-right'></div>

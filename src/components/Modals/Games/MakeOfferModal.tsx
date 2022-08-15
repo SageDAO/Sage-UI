@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react';
 import { ethers, Signer } from 'ethers';
-import { useSigner } from 'wagmi';
+import { useBalance, useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { Offer, OfferState, User } from '@prisma/client';
-import { usePlaceBidMutation } from '@/store/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
 import { BaseMedia } from '@/components/Media';
 import shortenAddress from '@/utilities/shortenAddress';
-import { OfferRequest, useCreateBuyOfferMutation } from '@/store/nftsReducer';
+import {
+  OfferRequest,
+  useCreateBuyOfferMutation,
+  useDeleteBuyOfferMutation,
+  useSellFromBuyOfferMutation,
+} from '@/store/nftsReducer';
 import LoaderSpinner from '@/components/LoaderSpinner';
+import { useSession } from 'next-auth/react';
+import { parameters } from '@/constants/config';
 
 interface Props extends ModalProps {
   artist: User;
@@ -22,7 +28,26 @@ interface Props extends ModalProps {
 export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Props) {
   const [amount, setAmount] = useState(nft.price!);
   const [createBuyOffer, { isLoading: isCreatingBuyOffer }] = useCreateBuyOfferMutation();
+  const [sellFromBuyOffer, { isLoading: isSelling }] = useSellFromBuyOfferMutation();
+  const [deleteBuyOffer] = useDeleteBuyOfferMutation();
   const { data: signer } = useSigner();
+  const { data: sessionData } = useSession();
+  const { data: walletBalance } = useBalance({
+    token: parameters.ASHTOKEN_ADDRESS,
+    addressOrName: sessionData?.address as string,
+  });
+  const isOwner = () => sessionData?.address == artist.walletAddress;
+
+  async function handleDeleteClick(offerId: number) {
+    deleteBuyOffer(offerId);
+  }
+
+  async function handleAcceptClick(buyOffer: Offer) {
+    const result = await sellFromBuyOffer({ buyOffer, signer: signer as Signer });
+    if ((result as any).data) {
+      closeModal();
+    }
+  }
 
   async function handlePlaceBidClick() {
     if (!signer) {
@@ -31,6 +56,10 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
     }
     if (amount < nft.price!) {
       toast.info(`Minimum offer for this piece is ${nft.price}`);
+      return;
+    }
+    if (ethers.utils.parseEther(amount.toString()).gt(walletBalance?.value!)) {
+      toast.warn(`Insufficient balance for this offer amount`);
       return;
     }
     await createBuyOffer({
@@ -45,10 +74,13 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
     setAmount(+e.target.value);
   }
 
-  function sortByAmountDesc(offers: Offer[]) {
-    return offers.sort((a, b) => {
+  function sortAndFilterOffers(offers: Offer[]) {
+    const now = Math.floor(new Date().getTime() / 1000);
+    const filtered = [...offers].filter((o) => o.state == OfferState.ACTIVE && o.expiresAt > now);
+    const sorted = filtered.sort((a, b) => {
       return b.price - a.price;
-    })
+    });
+    return sorted.splice(0, 5);
   }
 
   useEffect(() => {
@@ -61,6 +93,8 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
     }
     setAmount(highestOffer);
   }, [nft]);
+
+  const buyOffers = sortAndFilterOffers(nft.Offers);
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -94,33 +128,67 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
             >
               {isCreatingBuyOffer ? <LoaderSpinner /> : 'make offer'}
             </button>
-          </div>
-        </section>
-        <section className='games-modal__bid-history-section'>
-          <table className='games-modal__bid-history-table'>
-            <tbody className='games-modal__bid-history-data'>
-              {nft.Offers.length > 0 && (
-                <span style={{ fontWeight: 'bolder' }}>active open offers</span>
-              )}
-              {sortByAmountDesc([...nft.Offers]).map(
-                ({ signer: offerSigner, state: offerState, price: offerPrice }, i: number) => {
-                  if (offerState != OfferState.ACTIVE) return null;
-                  return (
-                    <tr className='games-modal__bid-history-row' key={i} data-animate-first={true}>
-                      <th data-col='bidder' className='games-modal__bid-history-cell'>
-                        {shortenAddress(offerSigner)}
-                      </th>
-                      <th data-col='amount' className='games-modal__bid-history-cell'>
-                        {offerPrice} ASH
-                      </th>
+
+            <div>
+              {buyOffers.length > 0 && (
+                <table className='games-modal__offers-table'>
+                  <thead>
+                    <tr>
+                      <th>from</th>
+                      <th>expires</th>
+                      <th>amount</th>
+                      <th></th>
                     </tr>
-                  );
-                }
+                  </thead>
+                  <tbody>
+                    {buyOffers.map((o: Offer, i: number) => {
+                      return (
+                        <tr key={i} data-animate-first={true}>
+                          <td>{shortenAddress(o.signer)}</td>
+                          <td>{formatDate(o.expiresAt)}</td>
+                          <td>{o.price} ASH</td>
+                          <td>
+                            <div>
+                              {o.signer == sessionData?.address && (
+                                <div className='games-modal__trash-icon'>
+                                  <a onClick={() => handleDeleteClick(o.id)}>
+                                    <img src='/icons/trash.svg' width='15' />
+                                  </a>
+                                </div>
+                              )}
+                              {isOwner() && isSelling ? (
+                                <></>
+                              ) : (
+                                <div className='games-modal__trash-icon'>
+                                  <a onClick={() => handleAcceptClick(o)}>
+                                    <img src='/icons/check.svg' width='15' />
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               )}
-            </tbody>
-          </table>{' '}
+            </div>
+          </div>
         </section>
       </div>
     </Modal>
+  );
+}
+
+/**
+ * Formats a timestamp to a MM/dd HH:mm string
+ */
+function formatDate(ts: number) {
+  const padTo2Digits = (v: number) => v.toString().padStart(2, '0');
+  const d = new Date(ts * 1000);
+  return (
+    `${padTo2Digits(d.getMonth() + 1)}/${padTo2Digits(d.getDate())} ` +
+    `${padTo2Digits(d.getHours())}:${padTo2Digits(d.getMinutes())}`
   );
 }

@@ -436,6 +436,33 @@
   }
 }
 
+.games-modal__offers-table {
+  transition-duration: 200ms;
+  margin-top: 25px;
+  width: 100%;
+  text-align: center;
+
+  th {
+    padding-bottom: 10px;
+    font-weight: bold;
+  }
+  td {
+    padding: 5px;
+    div + div {
+      margin-left: 5px;
+    }
+  }
+}
+
+.games-modal__trash-icon {
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 4px 5px 2px 5px;
+  background-color: white;
+  cursor: pointer;
+  display: inline-block;
+}
+
 .games-modal__tickets-controls {
   display: flex;
   gap: 11px;

@@ -35,8 +35,7 @@ export interface OfferRequest {
 export const nftsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getListingNftsByArtist: builder.query<Nft_include_NftContractAndOffers[], string>({
-      query: (artistAddress: string) =>
-        `nfts?action=GetListingNftsByArtist&address=${artistAddress}`,
+      query: (artistAddress) => `nfts?action=GetListingNftsByArtist&address=${artistAddress}`,
       providesTags: ['Nfts'],
     }),
     getListingNftsByOwner: builder.query<CollectedListingNft[], void>({
@@ -112,7 +111,7 @@ export const nftsApi = baseApi.injectEndpoints({
         }
         try {
           console.log(
-            `buyFromSellOffer(${sellOffer.signer}, ${sellOffer.nftContractAddress}, ${weiPrice}, ${sellOffer.nftId}, ${sellOffer.expiresAt}, ${sellOffer.signedOffer}`
+            `buyFromSellOffer(${sellOffer.signer}, ${sellOffer.nftContractAddress}, ${weiPrice}, ${sellOffer.nftId}, ${sellOffer.expiresAt}, ${sellOffer.signedOffer})`
           );
           const tx = await marketplaceContract.buyFromSellOffer(
             sellOffer.signer,
@@ -139,6 +138,39 @@ export const nftsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Nfts'],
     }),
+    sellFromBuyOffer: builder.mutation<boolean, { buyOffer: Offer; signer: Signer }>({
+      queryFn: async ({ buyOffer, signer }, { dispatch }, _, fetchWithBQ) => {
+        const marketplaceContract = await getMarketplaceContract(signer);
+        const weiPrice = ethers.utils.parseEther(buyOffer.price.toString());
+        try {
+          console.log(
+            `sellFromBuyOffer(${buyOffer.signer}, ${buyOffer.nftContractAddress}, ${weiPrice}, ${buyOffer.nftId}, ${buyOffer.expiresAt}, ${buyOffer.signedOffer})`
+          );
+          const tx = await marketplaceContract.sellFromBuyOffer(
+            buyOffer.signer,
+            buyOffer.nftContractAddress,
+            weiPrice,
+            buyOffer.nftId,
+            buyOffer.expiresAt,
+            buyOffer.signedOffer
+          );
+          toast.promise(tx.wait(), {
+            pending: 'Request submitted to the blockchain, awaiting confirmation...',
+            success: `Success! You've sold an NFT!`,
+            error: 'Failure! Unable to complete request.',
+          });
+          await tx.wait(1);
+          await fetchWithBQ(`nfts?action=UpdateOwner&id=${buyOffer.id}`);
+          playTxSuccessSound();
+          return { data: true };
+        } catch (e) {
+          console.log(e);
+          toast.error('Error accepting offer');
+          return { data: false };
+        }
+      },
+      invalidatesTags: ['Nfts'],
+    }),
     createBuyOffer: builder.mutation<null, OfferRequest>({
       queryFn: async (offer, { dispatch }, _, fetchWithBQ) => {
         try {
@@ -151,7 +183,6 @@ export const nftsApi = baseApi.injectEndpoints({
             weiAmount,
             offer.signer
           );
-          // TODO verify if ASH balance covers the buy offer
           await createSignedOffer(
             offer.nftContractAddress,
             offer.nftId,
@@ -161,7 +192,7 @@ export const nftsApi = baseApi.injectEndpoints({
             fetchWithBQ
           );
           toast.success(
-            `Success! You've placed an offer of ${offer.amount} for this NFT. We'll let you know if the artist accepts it!`
+            `Success! You've placed an offer of ${offer.amount} ASH for this NFT. We'll let you know if the artist accepts it!`
           );
         } catch (e) {
           console.error(e);
@@ -170,6 +201,10 @@ export const nftsApi = baseApi.injectEndpoints({
         }
         return { data: null };
       },
+      invalidatesTags: ['Nfts'],
+    }),
+    deleteBuyOffer: builder.mutation<null, number>({
+      query: (offerId) => `nfts?action=DeleteOffer&id=${offerId}`,
       invalidatesTags: ['Nfts'],
     }),
   }),
@@ -269,9 +304,9 @@ async function signOffer(
   signer: Signer,
   isSellOffer: boolean
 ): Promise<{ signedOffer: string; expiresAt: number }> {
-  const oneYearFromNow = new Date();
-  oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
-  const expiresAt = Math.floor(oneYearFromNow.getTime() / 1000);
+  const oneWeekFromNow = new Date();
+  oneWeekFromNow.setDate(oneWeekFromNow.getDate() + 7);
+  const expiresAt = Math.floor(oneWeekFromNow.getTime() / 1000);
   const signerAddress = await signer.getAddress();
   const message = ethers.utils.defaultAbiCoder.encode(
     ['address', 'address', 'uint256', 'uint256', 'uint256', 'bool'],
@@ -327,5 +362,7 @@ export const {
   useFetchOrCreateNftContractQuery,
   useMintSingleNftMutation,
   useBuyFromSellOfferMutation,
+  useSellFromBuyOfferMutation,
   useCreateBuyOfferMutation,
+  useDeleteBuyOfferMutation,
 } = nftsApi;
