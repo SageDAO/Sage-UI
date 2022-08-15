@@ -17,6 +17,9 @@ export default async function handler(request: NextApiRequest, response: NextApi
     case 'GetListingNftsByOwner':
       await getListingNftsByOwner(request, response);
       break;
+    case 'CreateOffer':
+      await createOffer(request, response);
+      break;
     case 'UpdateOwner':
       await updateOwner(Number(request.query.id), response);
       break;
@@ -51,16 +54,43 @@ async function getListingNftsByOwner(request: NextApiRequest, response: NextApiR
   }
   try {
     const nfts = new Array<CollectedListingNft>();
-    const result = await prisma.nft.findMany({ 
+    const result = await prisma.nft.findMany({
       where: { ownerAddress, isHidden: false },
-      include: { NftContract: { include: { Artist: true } } }
+      include: { NftContract: { include: { Artist: true } } },
     });
-    result.forEach(item => nfts.push(flatten(item, item.NftContract?.Artist!)));
+    result.forEach((item) => nfts.push(flatten(item, item.NftContract?.Artist!)));
     response.json(nfts);
     console.log(`getListingNftsByOwner(${ownerAddress}) :: ${nfts.length}`);
   } catch (e) {
     console.log({ e });
     response.status(500);
+  }
+}
+
+async function createOffer(request: NextApiRequest, response: NextApiResponse) {
+  console.log('createOffer()');
+  const session = await getSession({ req: request });
+  const address: string = session?.address as string;
+  if (!session || !address) {
+    return;
+  }
+  try {
+    const { price, expiresAt, isSellOffer, signedOffer, nftContractAddress, nftId } = request.body;
+    var record = await prisma.offer.create({
+      data: {
+        signer: address,
+        price: +price,
+        expiresAt: +expiresAt,
+        isSellOffer: 'true' == isSellOffer,
+        signedOffer,
+        nftContractAddress,
+        Nft: { connect: { id: +nftId } },
+      },
+    });
+    response.json({ id: record.id });
+  } catch (e: any) {
+    console.log(e);
+    response.json({ error: e.message });
   }
 }
 
@@ -76,7 +106,9 @@ async function updateOwner(id: number, response: NextApiResponse) {
     }
     const nftContract = await getNFTContract(offer.nftContractAddress);
     const ownerAddress = await nftContract.ownerOf(offer.nftId);
-    console.log(`updateOwner() :: Owner of token ${offer.nftId} on contract ${offer.nftContractAddress} is ${ownerAddress}`);
+    console.log(
+      `updateOwner() :: Owner of token ${offer.nftId} on contract ${offer.nftContractAddress} is ${ownerAddress}`
+    );
     if (ownerAddress == ethers.constants.AddressZero) {
       throw new Error('Token has no owner or was not found in contract');
     }

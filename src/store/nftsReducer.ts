@@ -23,6 +23,15 @@ export interface MintRequest {
   signer: Signer;
 }
 
+export interface OfferRequest {
+  nftId: number;
+  nftContractAddress: string;
+  amount: number;
+  signer: Signer;
+  signedOffer?: string;
+  expiresAt?: Date;
+}
+
 export const nftsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getListingNftsByArtist: builder.query<Nft_include_NftContractAndOffers[], string>({
@@ -62,26 +71,17 @@ export const nftsApi = baseApi.injectEndpoints({
           );
           const { s3Path, metadataPath } = await uploadToAwsAndArweave(mintRequest, endpoint);
           nftId = await dbInsertNft(mintRequest, artistAddress, s3Path, metadataPath, fetchWithBQ);
-          if (mintRequest.isFixedPrice) {
-            const weiPrice = ethers.utils.parseEther(mintRequest.price.toString());
-            var { signedOffer, expiresAt } = await createSignedSellOffer(
-              nftContractAddress,
-              nftId,
-              weiPrice,
-              mintRequest.signer
-            );
-          }
           console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
           const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
           const mintTx = await nftContract.artistMint(artistAddress, nftId, metadataPath);
           await mintTx.wait();
           if (mintRequest.isFixedPrice) {
-            await dbInsertSellOffer(
-              mintRequest,
-              nftId,
+            await createSignedOffer(
               nftContractAddress,
-              expiresAt,
-              signedOffer,
+              nftId,
+              mintRequest.price,
+              mintRequest.signer,
+              true,
               fetchWithBQ
             );
           }
@@ -97,7 +97,7 @@ export const nftsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Nfts'],
     }),
-    buySingleNft: builder.mutation<boolean, { sellOffer: Offer; signer: Signer }>({
+    buyFromSellOffer: builder.mutation<boolean, { sellOffer: Offer; signer: Signer }>({
       queryFn: async ({ sellOffer, signer }, { dispatch }, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
         const weiPrice = ethers.utils.parseEther(sellOffer.price.toString());
@@ -136,6 +136,39 @@ export const nftsApi = baseApi.injectEndpoints({
           toast.error('Error buying NFT');
           return { data: false };
         }
+      },
+      invalidatesTags: ['Nfts'],
+    }),
+    createBuyOffer: builder.mutation<null, OfferRequest>({
+      queryFn: async (offer, { dispatch }, _, fetchWithBQ) => {
+        try {
+          const weiAmount = ethers.utils.parseEther(offer.amount.toString());
+          const marketplaceContract = await getMarketplaceContract(offer.signer);
+          const tokenAddress = await marketplaceContract.token();
+          await approveERC20Transfer(
+            tokenAddress,
+            marketplaceContract.address,
+            weiAmount,
+            offer.signer
+          );
+          // TODO verify if ASH balance covers the buy offer
+          await createSignedOffer(
+            offer.nftContractAddress,
+            offer.nftId,
+            offer.amount,
+            offer.signer,
+            false,
+            fetchWithBQ
+          );
+          toast.success(
+            `Success! You've placed an offer of ${offer.amount} for this NFT. We'll let you know if the artist accepts it!`
+          );
+        } catch (e) {
+          console.error(e);
+          toast.error(`Error placing offer`);
+          playErrorSound();
+        }
+        return { data: null };
       },
       invalidatesTags: ['Nfts'],
     }),
@@ -193,53 +226,61 @@ async function dbInsertNft(
   return nftId;
 }
 
-async function dbInsertSellOffer(
-  mintRequest: MintRequest,
-  nftId: number,
+async function createSignedOffer(
   nftContractAddress: string,
-  expiresAt: number,
-  signedOffer: string,
+  nftId: number,
+  amount: number,
+  signer: Signer,
+  isSellOffer: boolean,
   fetchWithBQ: any
 ) {
-  console.log(`dbInsertSellOffer() :: Creating database record...`);
+  const weiAmount = ethers.utils.parseEther(amount.toString());
+  var { signedOffer, expiresAt } = await signOffer(
+    nftContractAddress,
+    nftId,
+    weiAmount,
+    signer,
+    isSellOffer
+  );
   const { data } = await fetchWithBQ({
-    url: `dropUploadEndpoint?action=InsertSellOffer`,
+    url: `nfts?action=CreateOffer`,
     method: 'POST',
     body: {
-      signer: await mintRequest.signer.getAddress(),
+      signer: await signer.getAddress(),
       nftContractAddress,
-      price: mintRequest.price,
+      price: amount,
       nftId,
       expiresAt,
       signedOffer,
+      isSellOffer,
     },
   });
   const id = parseInt((data as any).id);
   if (isNaN(id)) {
-    throw new Error('Failed inserting NFT into database');
+    throw new Error('Failed inserting offer into database');
   }
-  console.log(`dbInsertSellOffer() :: Database Offer ID = ${id}`);
-  return id;
+  console.log(`createSignedOffer() :: Database Offer ID = ${id}`);
 }
 
-async function createSignedSellOffer(
+async function signOffer(
   nftContractAddress: string,
   nftId: number,
   weiPrice: BigNumber,
-  signer: Signer
+  signer: Signer,
+  isSellOffer: boolean
 ): Promise<{ signedOffer: string; expiresAt: number }> {
   const oneYearFromNow = new Date();
   oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
   const expiresAt = Math.floor(oneYearFromNow.getTime() / 1000);
-  const artistAddress = await signer.getAddress();
+  const signerAddress = await signer.getAddress();
   const message = ethers.utils.defaultAbiCoder.encode(
     ['address', 'address', 'uint256', 'uint256', 'uint256', 'bool'],
-    [artistAddress, nftContractAddress, weiPrice, nftId, expiresAt, true]
+    [signerAddress, nftContractAddress, weiPrice, nftId, expiresAt, true]
   );
   const encodedMessage = ethers.utils.keccak256(message);
   const signedOffer = await signer.signMessage(ethers.utils.arrayify(encodedMessage));
   console.log(
-    `createSignedSellOffer(${artistAddress}, ${nftContractAddress}, ${weiPrice}, ${nftId}, ${expiresAt}, ${true}) :: ${signedOffer}`
+    `signOffer(${signerAddress}, ${nftContractAddress}, ${weiPrice}, ${nftId}, ${expiresAt}, ${isSellOffer}) :: ${signedOffer}`
   );
   return { signedOffer, expiresAt };
 }
@@ -285,5 +326,6 @@ export const {
   useGetListingNftsByOwnerQuery,
   useFetchOrCreateNftContractQuery,
   useMintSingleNftMutation,
-  useBuySingleNftMutation,
+  useBuyFromSellOfferMutation,
+  useCreateBuyOfferMutation,
 } = nftsApi;

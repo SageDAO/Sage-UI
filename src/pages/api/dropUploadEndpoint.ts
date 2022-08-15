@@ -55,10 +55,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'DeleteNft':
       await deleteNft(Number(request.query.id), request, response);
       break;
-    case 'InsertSellOffer':
-        await insertSellOffer(request.body, response);
-        break;
-      default:
+    default:
       response.status(400).json('Bad Request');
   }
   response.end();
@@ -309,28 +306,6 @@ async function insertDrawing(data: any, response: NextApiResponse) {
       },
     });
     response.json({ drawingId: record.id });
-  } catch (e: any) {
-    console.log(e);
-    response.json({ error: e.message });
-  }
-}
-
-async function insertSellOffer(data: any, response: NextApiResponse) {
-  console.log('insertSellOffer()');
-  try {
-    var record = await prisma.offer.create({
-      data: {
-        signer: data.signer,
-        price: Number(data.price),
-        expiresAt: Number(data.expiresAt),
-        isSellOffer: true,
-        signedOffer: data.signedOffer,
-        state: OfferState.ACTIVE,
-        nftContractAddress: data.nftContractAddress,
-        Nft: { connect: { id: Number(data.nftId) } }
-      },
-    });
-    response.json({ id: record.id });
   } catch (e: any) {
     console.log(e);
     response.json({ error: e.message });

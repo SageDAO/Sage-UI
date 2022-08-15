@@ -1,7 +1,7 @@
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Nft_include_NftContractAndOffers, User } from '@/prisma/types';
-import { useBuySingleNftMutation } from '@/store/nftsReducer';
+import { useBuyFromSellOfferMutation } from '@/store/nftsReducer';
 import { BaseMedia } from '@/components/Media';
 import shortenAddress from '@/utilities/shortenAddress';
 import LoaderSpinner from '@/components/LoaderSpinner';
@@ -25,7 +25,7 @@ function findActiveSellOffer(offers: Offer[]): Offer | null {
 }
 
 export default function ListingTile({ nft, artist }: Props) {
-  const [buySingleNft, { isLoading }] = useBuySingleNftMutation();
+  const [buyFromSellOffer, { isLoading }] = useBuyFromSellOfferMutation();
   const { data: signer } = useSigner();
   const { isOpen, closeModal, openModal } = useModal();
   const sellOffer = findActiveSellOffer(nft.Offers!);
@@ -39,7 +39,7 @@ export default function ListingTile({ nft, artist }: Props) {
     } else if (isLoading) {
       toast.info('Please wait for transaction to complete.');
     } else if (sellOffer) {
-      await buySingleNft({ sellOffer, signer });
+      await buyFromSellOffer({ sellOffer, signer });
     } else {
       openModal();
     }

@@ -5,10 +5,6 @@ import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import LotteryThumbnail from './LotteryThumbnail';
-import shortenAddress from '@/utilities/shortenAddress';
-import { useSigner } from 'wagmi';
-import { useBuySingleNftMutation } from '@/store/nftsReducer';
-import { toast } from 'react-toastify';
 
 function getGameDisplayInfo(systemType: Props['systemType']) {
   let focusText: string = '';

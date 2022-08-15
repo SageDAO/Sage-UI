@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ethers, Signer } from 'ethers';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Nft_include_NftContractAndOffers } from '@/prisma/types';
-import { OfferState, User } from '@prisma/client';
+import { Offer, OfferState, User } from '@prisma/client';
 import { usePlaceBidMutation } from '@/store/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
 import { BaseMedia } from '@/components/Media';
 import shortenAddress from '@/utilities/shortenAddress';
+import { OfferRequest, useCreateBuyOfferMutation } from '@/store/nftsReducer';
+import LoaderSpinner from '@/components/LoaderSpinner';
 
 interface Props extends ModalProps {
   artist: User;
@@ -18,11 +20,11 @@ interface Props extends ModalProps {
 
 //@scss : '@/styles/components/_games-modal.scss'
 export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Props) {
-  const [amount, setAmount] = useState(0);
-  const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
+  const [amount, setAmount] = useState(nft.price!);
+  const [createBuyOffer, { isLoading: isCreatingBuyOffer }] = useCreateBuyOfferMutation();
   const { data: signer } = useSigner();
 
-  function handlePlaceBidClick() {
+  async function handlePlaceBidClick() {
     if (!signer) {
       toast.info('Please Sign In With Ethereum before placing bids.');
       return;
@@ -31,12 +33,34 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
       toast.info(`Minimum offer for this piece is ${nft.price}`);
       return;
     }
-    // placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
+    await createBuyOffer({
+      nftId: nft.id,
+      amount,
+      signer: signer as Signer,
+      nftContractAddress: nft.NftContract?.contractAddress,
+    } as OfferRequest);
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setAmount(+e.target.value);
   }
+
+  function sortByAmountDesc(offers: Offer[]) {
+    return offers.sort((a, b) => {
+      return b.price - a.price;
+    })
+  }
+
+  useEffect(() => {
+    // find highest offer
+    var highestOffer = nft.price!;
+    for (const o of nft.Offers) {
+      if (o.state == OfferState.ACTIVE && o.price > highestOffer) {
+        highestOffer = o.price;
+      }
+    }
+    setAmount(highestOffer);
+  }, [nft]);
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -64,36 +88,37 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
               value={amount}
             />
             <button
-              disabled={isPlaceBidLoading}
+              disabled={isCreatingBuyOffer}
               className='games-modal__place-bid-button'
               onClick={handlePlaceBidClick}
             >
-              make offer
+              {isCreatingBuyOffer ? <LoaderSpinner /> : 'make offer'}
             </button>
           </div>
         </section>
         <section className='games-modal__bid-history-section'>
           <table className='games-modal__bid-history-table'>
             <tbody className='games-modal__bid-history-data'>
-              {nft.Offers.map(({ signer: offerSigner, state: offerState, price: offerPrice }) => {
-                if (offerState != OfferState.ACTIVE) return null;
-                return (
-                  <tr
-                    className='games-modal__bid-history-row'
-                    key={offerSigner}
-                    data-animate-first={true}
-                  >
-                    <th data-col='bidder' className='games-modal__bid-history-cell'>
-                      {shortenAddress(offerSigner)}
-                    </th>
-                    <th data-col='amount' className='games-modal__bid-history-cell'>
-                      {offerPrice} ASH
-                    </th>
-                  </tr>
-                );
-              })}
+              {nft.Offers.length > 0 && (
+                <span style={{ fontWeight: 'bolder' }}>active open offers</span>
+              )}
+              {sortByAmountDesc([...nft.Offers]).map(
+                ({ signer: offerSigner, state: offerState, price: offerPrice }, i: number) => {
+                  if (offerState != OfferState.ACTIVE) return null;
+                  return (
+                    <tr className='games-modal__bid-history-row' key={i} data-animate-first={true}>
+                      <th data-col='bidder' className='games-modal__bid-history-cell'>
+                        {shortenAddress(offerSigner)}
+                      </th>
+                      <th data-col='amount' className='games-modal__bid-history-cell'>
+                        {offerPrice} ASH
+                      </th>
+                    </tr>
+                  );
+                }
+              )}
             </tbody>
-          </table>
+          </table>{' '}
         </section>
       </div>
     </Modal>
