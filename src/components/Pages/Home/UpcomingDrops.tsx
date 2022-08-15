@@ -1,4 +1,5 @@
 import { getHomePageData } from '@/prisma/functions';
+import React from 'react';
 import { computeDropStatus } from '@/utilities/status';
 import { BaseMedia } from '@/components/Media';
 import Countdown from '@/components/Countdown';
@@ -17,36 +18,45 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
     const rowData1 = upcomingDrops.slice(0, midPoint);
     const rowData2 = upcomingDrops.slice(midPoint, upcomingDrops.length);
     const rows = new Array(rowData1, rowData2);
-    return rows.map((row, i: number) => {
-      return (
-        <div className='home-page__upcoming-drops-grid--mobile'>
-          <div className='home-page__upcoming-drops-row--mobile'>
-            {row.map((d) => {
-              const src = d.bannerImageS3Path;
-              async function onClick() {
-                await router.push(`/drops/${d.id}`);
-              }
-              const text = `${d.name} by ${d.NftContract.Artist.username}`;
-              const { startTime, status } = computeDropStatus(d);
-              const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
-              return (
-                <div className='home-page__upcoming-drops-tile--mobile' key={d.id} onClick={onClick}>
-                  <div className='home-page__upcoming-drops-countdown' data-status={status}>
-                    {display}
-                  </div>
-                  <BaseMedia src={src} isVideo={false} />
-                  <h1 className='home-page__upcoming-drops-tile-tag'>
-                    {text}
-                    <br />
-                    sage curated
-                  </h1>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    });
+    return (
+      <React.Fragment>
+        {rows.map((row, i: number) => {
+          return (
+            <div key={i} className='home-page__upcoming-drops-grid--mobile'>
+              <div className='home-page__upcoming-drops-row--mobile'>
+                {row.map((d) => {
+                  const src = d.bannerImageS3Path;
+                  async function onClick() {
+                    await router.push(`/drops/${d.id}`);
+                  }
+                  const text = `${d.name} by ${d.NftContract.Artist.username}`;
+                  const { startTime, status } = computeDropStatus(d);
+                  const display =
+                    status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
+                  return (
+                    <div
+                      className='home-page__upcoming-drops-tile--mobile'
+                      key={d.id}
+                      onClick={onClick}
+                    >
+                      <div className='home-page__upcoming-drops-countdown' data-status={status}>
+                        {display}
+                      </div>
+                      <BaseMedia src={src} isVideo={false} />
+                      <h1 className='home-page__upcoming-drops-tile-tag'>
+                        {text}
+                        <br />
+                        sage curated
+                      </h1>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </React.Fragment>
+    );
   }
   return (
     <div className='home-page__upcoming-drops-grid'>
