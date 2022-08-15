@@ -1,15 +1,12 @@
 import prisma from '@/prisma/client';
 import React from 'react';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { BaseMedia } from '@/components/Media';
-import { useRouter } from 'next/router';
 import Hero from '@/components/Hero';
-import Countdown from '@/components/Countdown';
-import { computeDropStatus } from '@/utilities/status';
 import { getHomePageData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import SageIconSVG from '@/public/icons/sage.svg';
-import { animated } from 'react-spring';
+import UpcomingDrops from '@/components/Pages/Home/UpcomingDrops';
+import { useRouter } from 'next/router';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -18,7 +15,6 @@ interface Props {
 
 function home({ featuredDrop, upcomingDrops }: Props) {
   const router = useRouter();
-
   return (
     <div className='home-page' data-cy='home-page'>
       <div className='home-page__main'>
@@ -54,45 +50,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
             </h1>
           </div>
         </div>
-        <div className='home-page__upcoming-drops-grid'>
-          {upcomingDrops.map((d, i: number) => {
-            const src = d.bannerImageS3Path;
-
-            //handle drop tile span behavior
-            let shouldTileSpanTwoColumns: boolean = false;
-            const isIndexEven = Boolean(i % 2 === 0);
-            const nextIndexNull = Boolean(!upcomingDrops[i + 1]);
-            if (isIndexEven && nextIndexNull) {
-              shouldTileSpanTwoColumns = true;
-            }
-
-            async function onClick() {
-              await router.push(`/drops/${d.id}`);
-            }
-            const text = `${d.name} by ${d.NftContract.Artist.username}`;
-            const { startTime, status } = computeDropStatus(d);
-            const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
-            return (
-              <div
-                data-span2={String(shouldTileSpanTwoColumns)}
-                className='home-page__upcoming-drops-tile'
-                key={d.id}
-                onClick={onClick}
-              >
-                <div className='home-page__upcoming-drops-countdown' data-status={status}>
-                  {display}
-                </div>
-
-                <BaseMedia src={src} isVideo={false} />
-                <h1 className='home-page__upcoming-drops-tile-tag'>
-                  {text}
-                  <br />
-                  sage curated
-                </h1>
-              </div>
-            );
-          })}
-        </div>
+        <UpcomingDrops upcomingDrops={upcomingDrops}></UpcomingDrops>
         <EventSlider />
       </div>
     </div>

@@ -28,7 +28,7 @@ export async function getHomePageData(prisma: PrismaClient) {
     where: {
       ...FilterDropApprovedOnly,
     },
-    take: 4,
+    take: 8,
   });
 
   const featuredDrop = drops[0];
