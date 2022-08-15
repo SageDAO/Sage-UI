@@ -37,16 +37,16 @@ function home({ featuredDrop, upcomingDrops }: Props) {
         )}
 
         <div className='home-page__statement'>
-          SAGE IS A NEW WAY TO HANDLE NFTS & INVESTMENTS. CURATED, HAND SELECTED FROM THE BEST OF
-          THE GLOBE.
+          SAGE is a curation system built to lead Web3. Through our selection, we mark value into
+          the future.
         </div>
         <div className='home-page__upcoming-drops-header'>
-          <h1 className='home-page__upcoming-drops-header-left'>DROPS</h1>
+          <h1 className='home-page__upcoming-drops-header-left'>drops</h1>
           <div className='home-page__upcoming-drops-header-right'>
             <div className='home-page__upcoming-drops-header-right-dot'></div>
             <h1 className='home-page__upcoming-drops-header-right-text'>
-              SAGE UPCOMING DROPS ARE CAREFULLY CURATED TO MEET THE HIGHEST VISUAL STANDARDS AND NEW
-              STRUCTURES IN NFT ASSETS. A VISION IN THE CRYPTO SPACE.
+              ASH is a store of value through the destruction of NFTS.SAGE accepts the ASH currency
+              as our medium of exchange.
             </h1>
           </div>
         </div>

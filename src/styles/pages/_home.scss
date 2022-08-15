@@ -52,6 +52,7 @@
   line-height: clamp(25px, 1.2em, 64px);
   padding: max(40px, 8.5vw) 0;
 
+  text-transform: capitalize;
   @include b.min-width('medium') {
     text-align: center;
   }
@@ -68,6 +69,7 @@
 .home-page__upcoming-drops-header-left {
   font-family: 'Marine';
   font-style: normal;
+  text-transform: capitalize;
   font-weight: 400;
   font-size: clamp(24px, 2vw, 40px);
   line-height: clamp(29px, 1em, 49px);
@@ -154,9 +156,6 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   z-index: $tile-img-z;
 }
 
-.home-page__upcoming-drops-row--mobile {
-}
-
 .home-page__upcoming-drops-tile-tag {
   padding: max(9px, 2vw);
   position: absolute;
@@ -168,6 +167,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   position: absolute;
   bottom: 0;
   color: c.$white;
+  text-transform: uppercase;
 }
 
 .home-page__upcoming-drops-countdown {
@@ -190,6 +190,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   height: 46.37px;
   justify-content: center;
   align-items: center;
+  text-transform: uppercase;
   &[data-status='Live'] {
     @include m.theme() {
       background-color: m.t('accent');
@@ -208,6 +209,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 
 .home-page__event-slide {
   @include m.interact;
+  transition-duration: 200ms;
   scroll-snap-align: start;
   display: flex;
   flex: none;
@@ -234,12 +236,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   align-items: center;
   z-index: 1;
   width: min(1152px, 80vw);
-
+  text-transform: capitalize;
   font-weight: 400;
   font-size: clamp(24px, 3vw, 40px);
-
-  font-size: 24px;
-
   line-height: 1.3em;
   @include m.theme() {
     color: m.t('contrast');
@@ -282,7 +281,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   letter-spacing: 0.1em;
   width: 101px;
   height: 21px;
-  text-transform: uppercase;
+  text-transform: capitalize;
   @include m.pill;
   @include m.interact;
   @include m.theme() {
