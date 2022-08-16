@@ -57,7 +57,7 @@
   display: flex;
   flex-direction: column;
   margin-top: clamp(30px, 5vw, 90px);
-  width: 100vw;
+  width: min(1440px, 100vw);
 }
 
 .drops-page__drop {
@@ -74,7 +74,7 @@
   display: flex;
   flex: 1;
   z-index: 1;
-  width: 80vw;
+  width: 80%;
   align-items: center;
   justify-content: space-between;
 }
@@ -122,7 +122,7 @@
   justify-content: flex-end;
   flex: 1;
   z-index: 1;
-  width: 80vw;
+  width: 80%;
 }
 
 .drops-page__drop-content-btn {
@@ -151,27 +151,10 @@
   }
 }
 
-.drops-page__drop-content-systems {
-  display: flex;
-  margin-left: auto;
-  gap: 10px;
-}
-
-.drops-page__drop-content-systems-icon {
-  position: relative;
-  backdrop-filter: invert(1);
-  width: clamp(10px, 4vw, 30px);
-  display: flex;
-  aspect-ratio: 1/1;
-  // @include m.theme() {
-  //   background-color: m.t(accent);
-  // }
-}
-
 .drops-page__drop-content-description {
   font-weight: 400;
   font-size: 16px;
-  width: min(466px, 30vw);
+  width: min(466px, 30%);
   line-height: 130%;
   text-transform: uppercase;
   color: c.$white;
@@ -190,7 +173,7 @@
 
 .drops-page__drop-focus {
   position: relative;
-  width: 80vw;
+  width: 80%;
   aspect-ratio: 1196/640;
   z-index: 2;
 }

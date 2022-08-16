@@ -26,10 +26,18 @@
   }
 }
 
+.footer__top-content {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+}
+
 .footer__logo {
   position: relative;
   width: clamp(80px, 10vw, 171px);
   aspect-ratio: 171/40;
+  height: 100%;
+  display: flex;
 }
 
 .footer__logo-svg {
@@ -38,6 +46,12 @@
   @include m.theme() {
     color: m.t(contrast);
   }
+}
+
+.footer__divider {
+  flex: 1;
+  height: 3px;
+  border-bottom: 1px solid c.$grey;
 }
 
 .footer__middle {
