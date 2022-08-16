@@ -6,6 +6,7 @@ import { baseApi } from './baseReducer';
 var escrowPoints: number = 0;
 
 export const pointsApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getEarnedPoints: builder.query<GetEarnedPointsResponse, void>({
       query: () => `points`,

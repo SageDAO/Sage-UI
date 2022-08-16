@@ -11,7 +11,8 @@ export interface NftContractBalance {
   sageSplit: string;
 }
 
-export const artistsApi = baseApi.injectEndpoints({
+const artistsApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getArtistBalance: builder.query<NftContractBalance, string>({
       queryFn: async (artistContractAddress) => {

@@ -25,7 +25,8 @@ export interface LotteryStats {
   prizesClaimed?: number;
 }
 
-export const dashboardApi = baseApi.injectEndpoints({
+const dashboardApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getAllUsersAndEarnedPoints: builder.query<User_include_EarnedPointsAndNftContracts[], void>({
       query: () => 'user?action=GetAllUsersAndEarnedPoints',

@@ -32,7 +32,8 @@ export interface OfferRequest {
   expiresAt?: Date;
 }
 
-export const nftsApi = baseApi.injectEndpoints({
+const nftsApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getListingNftsByArtist: builder.query<Nft_include_NftContractAndOffers[], string>({
       query: (artistAddress) => `nfts?action=GetListingNftsByArtist&address=${artistAddress}`,

@@ -11,7 +11,8 @@ import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.j
 import { _fetchOrCreateNftContract } from './nftsReducer';
 import { baseApi } from './baseReducer';
 
-export const dropsApi = baseApi.injectEndpoints({
+const dropsApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetApprovedDrops`,

@@ -15,7 +15,8 @@ export interface ClaimPrizeRequest {
   signer: Signer;
 }
 
-export const prizesApi = baseApi.injectEndpoints({
+const prizesApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     isLotteryDrawn: builder.query<boolean, Lottery['id']>({
       query: (lotteryId) => `prizes?action=IsLotteryDrawn&lotteryId=${lotteryId}`,

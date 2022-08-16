@@ -25,7 +25,8 @@ export type LotteryTickets = {
   totalTickets: number;
 };
 
-export const lotteriesApi = baseApi.injectEndpoints({
+const lotteriesApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getLottery: builder.query<LotteryWithNftsAndArtist, number>({
       query: (lotteryId: number) => `lotteries?action=GetLottery&lotteryId=${lotteryId}`,

@@ -71,7 +71,7 @@ async function getListingNftsByOwner(request: NextApiRequest, response: NextApiR
 }
 
 async function createOffer(request: NextApiRequest, response: NextApiResponse) {
-  console.log('createOffer()');
+  console.log(`createOffer()`);
   const session = await getSession({ req: request });
   const address: string = session?.address as string;
   if (!session || !address) {
@@ -82,9 +82,9 @@ async function createOffer(request: NextApiRequest, response: NextApiResponse) {
     var record = await prisma.offer.create({
       data: {
         signer: address,
-        price: +price,
-        expiresAt: +expiresAt,
-        isSellOffer: 'true' == isSellOffer,
+        price,
+        expiresAt,
+        isSellOffer,
         signedOffer,
         nftContractAddress,
         Nft: { connect: { id: +nftId } },

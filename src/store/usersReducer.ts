@@ -21,7 +21,8 @@ export type UserDisplayInfo = Pick<User, 'username' | 'profilePicture'>;
 //     return false;
 //   }
 // }
-export const usersApi = baseApi.injectEndpoints({
+const usersApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     signIn: builder.mutation<null, { message: SiweMessage; signature: string }>({
       queryFn: async ({ message, signature }) => {

@@ -20,8 +20,8 @@ export interface AuctionState {
   timeExtension: number;
 }
 
-// TODO improve tags/cache handling
-export const auctionsApi = baseApi.injectEndpoints({
+const auctionsApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getAuction: builder.query<Auction_include_Nft, number>({
       query: (auctionId: number) => `auctions?action=GetAuction&auctionId=${auctionId}`,
