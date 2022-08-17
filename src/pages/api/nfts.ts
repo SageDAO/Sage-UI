@@ -98,7 +98,7 @@ async function createOffer(request: NextApiRequest, response: NextApiResponse) {
 }
 
 async function deleteOffer(request: NextApiRequest, response: NextApiResponse) {
-  const id = +request.query.id;
+  const id = Number(request.query.id);
   const session = await getSession({ req: request });
   const address: string = session?.address as string;
   const state = OfferState.ACTIVE;
