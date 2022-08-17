@@ -6,12 +6,12 @@ import {
   getIndividualArtistsPagePaths,
   getIndividualDropsPageData,
   getIndividualDropsPagePaths,
+  getSageMediumData,
 } from './functions';
 import { assert, expect } from 'chai';
 import prisma from './client';
 import { parameters } from '../constants/config';
 import { Role } from '@prisma/client';
-import { forEach } from 'cypress/types/lodash';
 
 const { LOTTERY_ADDRESS, AUCTION_ADDRESS } = parameters;
 
@@ -20,7 +20,7 @@ Object.keys(parameters).forEach((key) => {
   console.log(`${key} = ${parameters[key]}`);
 });
 
-describe('Prisma data fetching', async () => {
+describe('Data fetching', async () => {
   after(() => {
     console.log('Test run complete, closing prisma instance...');
     prisma
@@ -30,9 +30,10 @@ describe('Prisma data fetching', async () => {
   });
 
   describe('"/" (home page) data fetching', () => {
-    type UpcomingDrops = Awaited<ReturnType<typeof getHomePageData>>['upcomingDrops'];
-    type FeaturedDrop = Awaited<ReturnType<typeof getHomePageData>>['featuredDrop'];
-    type Drops = Awaited<ReturnType<typeof getHomePageData>>['drops'];
+    type HomePageData = Awaited<ReturnType<typeof getHomePageData>>;
+    type UpcomingDrops = HomePageData['upcomingDrops'];
+    type FeaturedDrop = HomePageData['featuredDrop'];
+    type Drops = HomePageData['drops'];
     type Drop = Drops[number];
     let upcomingDrops: UpcomingDrops;
     let featuredDrop: FeaturedDrop;
@@ -42,10 +43,6 @@ describe('Prisma data fetching', async () => {
       const data = await getHomePageData(prisma);
       upcomingDrops = data.upcomingDrops;
       drops = data.drops;
-    });
-
-    it('Drops limited to 4', async () => {
-      assert.isAtMost(upcomingDrops.length, 4);
     });
 
     it('Featured drop is not null', async () => {

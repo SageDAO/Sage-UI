@@ -12,30 +12,23 @@ interface State {
 
 const INITIAL_STATE: State = { image: '/', title: '', link: '', items: [], description: '' };
 
-const mediumURL = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@SAGE_ART';
+interface Props {
+  mediumData: any;
+}
 
-const fetchMediumPosts = async (callback: (data: any) => void) => {
-  const response = await fetch(mediumURL);
-  const data = await response.json();
-  callback(data);
-};
-export default function EventSlider() {
+export default function EventSlider({ mediumData }: Props) {
   const [state, setState] = useState(INITIAL_STATE);
 
   useEffect(() => {
-    fetchMediumPosts((data) => {
-      if (data && data.feed) {
-        setState((prevState) => {
-          return {
-            ...prevState,
-            image: data.feed.image,
-            title: data.feed.title,
-            link: data.feed.link,
-            items: data.items,
-            description: data.feed.description,
-          };
-        });
-      }
+    setState((prevState) => {
+      return {
+        ...prevState,
+        image: mediumData.feed.image,
+        title: mediumData.feed.title,
+        link: mediumData.feed.link,
+        items: mediumData.items,
+        description: mediumData.feed.description,
+      };
     });
   }, []);
 

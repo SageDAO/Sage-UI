@@ -15,6 +15,13 @@ const FilterUserIsArtist: Prisma.UserWhereInput = {
   role: Role.ARTIST,
 };
 
+export async function getSageMediumData() {
+  const mediumURL = parameters.MEDIUM_URL;
+  const response = await fetch(mediumURL);
+  const data = await response.json();
+  return data;
+}
+
 export async function getHomePageData(prisma: PrismaClient) {
   let drops: Drop_include_GamesAndArtist[] = await prisma.drop.findMany({
     orderBy: {
@@ -114,7 +121,7 @@ export async function getIndividualArtistsPagePaths(prisma: PrismaClient) {
 export async function getIndividualArtistsPageData(prisma: PrismaClient, username: string) {
   const artist = await prisma.user.findFirst({
     where: { username },
-    include: { NftContract: true }
+    include: { NftContract: true },
   });
   return artist;
 }

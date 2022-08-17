@@ -6,6 +6,7 @@ export interface Parameters {
   CHAIN_ID: string;
   NETWORK_NAME: networks;
   SUBGRAPH_URL: string;
+  MEDIUM_URL: string;
   LOTTERY_ADDRESS: string;
   AUCTION_ADDRESS: string;
   REWARDS_ADDRESS: string;

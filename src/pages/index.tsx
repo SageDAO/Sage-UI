@@ -2,7 +2,7 @@ import prisma from '@/prisma/client';
 import React from 'react';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import Hero from '@/components/Hero';
-import { getHomePageData } from '@/prisma/functions';
+import { getHomePageData, getSageMediumData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import SageIconSVG from '@/public/icons/sage.svg';
 import UpcomingDrops from '@/components/Pages/Home/UpcomingDrops';
@@ -11,9 +11,10 @@ import { useRouter } from 'next/router';
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
   upcomingDrops: Drop_include_GamesAndArtist[];
+  mediumData: any;
 }
 
-function home({ featuredDrop, upcomingDrops }: Props) {
+function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
   const router = useRouter();
   return (
     <div className='home-page' data-cy='home-page'>
@@ -51,7 +52,7 @@ function home({ featuredDrop, upcomingDrops }: Props) {
           </div>
         </div>
         <UpcomingDrops upcomingDrops={upcomingDrops}></UpcomingDrops>
-        <EventSlider />
+        <EventSlider mediumData={mediumData} />
       </div>
     </div>
   );
@@ -59,10 +60,12 @@ function home({ featuredDrop, upcomingDrops }: Props) {
 
 export async function getStaticProps() {
   const { featuredDrop, upcomingDrops } = await getHomePageData(prisma);
+  const mediumData = await getSageMediumData();
   return {
     props: {
       featuredDrop,
       upcomingDrops,
+      mediumData,
     },
     revalidate: 60,
   };
