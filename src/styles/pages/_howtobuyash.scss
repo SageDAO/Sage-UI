@@ -1,0 +1,26 @@
+.howtobuyash-header {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  font-size: clamp(14px, 1.2vw, 20px);
+  line-height: clamp(17px, 1.2em, 24px);
+  text-transform: uppercase;
+}
+
+.howtobuyash-text {
+  line-height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.howtobuyash-text-link {
+  text-decoration: underline;
+}
+
+.howtobuyash-bullet {
+  font-weight: bolder;
+  font-size: clamp(14px, 1.2vw, 20px);
+  margin-right: 10px;
+}
