@@ -5,8 +5,10 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   padding: 10px 10vw;
-  width: 80vw;
+  width: min(1440px, 80vw);
   background: transparent;
+  margin-left: auto;
+  margin-right: auto;
   display: none;
   @include b.min-width('medium') {
     display: flex;

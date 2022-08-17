@@ -9,9 +9,6 @@
   background-color: c.$black;
   justify-content: center;
   z-index: 998;
-  max-width: 80vw;
-  padding-left: 10vw;
-  padding-right: 10vw;
   gap: 20%;
   @include m.theme() {
   }
@@ -27,6 +24,8 @@
   align-items: center;
   justify-content: center;
   gap: clamp(10px, 0.5vw, 19px);
+  justify-self: center;
+  width: 33%;
 }
 
 .nav__menu-link {
@@ -37,16 +36,21 @@
   cursor: pointer;
 }
 
-.nav__personal {
-  position: absolute;
-  left: 10vw;
-  top: -50%;
+.nav__content {
+  display: flex;
+  width: min(1440px, 80%);
+}
 
+.nav__personal {
+  // position: absolute;
+  // left: 10vw;
+  // top: -50%;
   overflow: visible;
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 240px;
+  // width: 240px;
+  width: 33%;
   white-space: no-wrap;
   line-height: 44px;
 }
@@ -86,5 +90,6 @@
 }
 
 .nav__search {
+  width: 33%;
   position: absolute;
 }

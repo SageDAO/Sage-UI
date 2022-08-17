@@ -39,32 +39,34 @@ export default function Nav() {
 
   return (
     <div className='nav' data-cy='nav'>
-      <div className='nav__personal'>
-        <div
-          onClick={() => {
-            router.push('/profile');
-          }}
-          className='nav__personal-pfp-container'
-        >
-          <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
+      <div className='nav__content'>
+        <div className='nav__personal'>
+          <div
+            onClick={() => {
+              router.push('/profile');
+            }}
+            className='nav__personal-pfp-container'
+          >
+            <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
+          </div>
+          <h1 className='nav__personal-message'>
+            <PersonalizedMessage />
+          </h1>
         </div>
-        <h1 className='nav__personal-message'>
-          <PersonalizedMessage />
-        </h1>
+        <div className='nav__menu'>
+          {navLinks.map(({ name, url }: NavLink) => {
+            const onClick = () => {
+              router.push(url);
+            };
+            return (
+              <div key={name} onClick={onClick} className='nav__menu-link'>
+                {name}
+              </div>
+            );
+          })}
+        </div>
+        <div className='nav__search'></div>
       </div>
-      <div className='nav__menu'>
-        {navLinks.map(({ name, url }: NavLink) => {
-          const onClick = () => {
-            router.push(url);
-          };
-          return (
-            <div key={name} onClick={onClick} className='nav__menu-link'>
-              {name}
-            </div>
-          );
-        })}
-      </div>
-      <div className='nav__search'></div>
     </div>
   );
 }
