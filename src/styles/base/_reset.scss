@@ -8,13 +8,14 @@
 
 html,
 button {
-  font-family: 'Marine';
+  font-family: 'Helvetica';
 }
 
 //element highlights in accented color
 *::selection {
   @include m.theme() {
     background-color: m.t(accent);
+    color: m.t(base);
   }
 }
 

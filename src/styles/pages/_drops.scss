@@ -7,7 +7,7 @@
 }
 
 .drops-page__header {
-  width: min(1440px, 80vw);
+  @include m.standard-width;
 }
 
 .drops-page__subheader {

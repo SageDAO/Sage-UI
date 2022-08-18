@@ -18,11 +18,11 @@
 .drop-page__header {
   display: flex;
   flex-direction: column;
-  // width: min(1440px, 80vw);
-  width: 80vw;
+  // width: 80vw;
+  @include m.standard-width;
   padding-top: 97px;
-  padding-left: 10vw;
-  padding-right: 10vw;
+  margin-left: auto;
+  margin-right: auto;
   padding-bottom: 80px;
   gap: 50px;
   position: relative;
@@ -33,7 +33,7 @@
 }
 
 .drop-page__header-logotype {
-  width: 100%;
+  @include m.standard-width;
   display: flex;
   justify-content: start;
 }
@@ -123,7 +123,7 @@
 
 .drop-page__grid {
   display: grid;
-  width: 80vw;
+  @include m.standard-width;
   gap: min(60px, 3vw);
   grid-template-columns: repeat(2, 1fr);
 
@@ -131,9 +131,9 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  @include b.min-width('large') {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  // @include b.min-width('2xl') {
+  //   grid-template-columns: repeat(4, 1fr);
+  // }
 }
 
 .drop-page__grid-item {

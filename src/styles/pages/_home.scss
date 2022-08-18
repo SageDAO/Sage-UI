@@ -19,12 +19,12 @@
 }
 
 .home-page__featured-drop-tag {
-  width: min(1440px, 80vw);
   @include m.interact;
   transition-duration: 300ms;
   display: flex;
   gap: clamp(10px, 1vw, 20px);
   align-items: center;
+  @include m.standard-width;
 }
 
 .home-page__featured-drop-tag-sage-logo {
@@ -43,7 +43,6 @@
 }
 
 .home-page__statement {
-  width: min(1440px, 80vw);
   display: flex;
   font-style: normal;
   justify-content: center;
@@ -56,14 +55,15 @@
   @include b.min-width('medium') {
     text-align: center;
   }
+  @include m.standard-width;
 }
 
 .home-page__upcoming-drops-header {
-  width: min(1440px, 80vw);
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
   justify-content: space-between;
+  @include m.standard-width;
 }
 
 .home-page__upcoming-drops-header-left {
@@ -104,9 +104,7 @@
   grid-template-columns: repeat(2, 1fr);
   width: min(1440px, 100vw);
   gap: 20px;
-  width: min(1440px, 80vw);
-  @include b.min-width('large') {
-  }
+  @include m.standard-width;
 }
 
 .home-page__upcoming-drops-grid--mobile {
@@ -228,6 +226,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   @include m.theme() {
     box-shadow: 0 0 0 99999px m.t('base');
   }
+  @include m.desktop-width;
 }
 
 .home-page__event-slide-header {
@@ -243,6 +242,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   @include m.theme() {
     color: m.t('contrast');
   }
+  @include m.desktop-width;
 }
 
 .home-page__event-slide-content {
@@ -254,6 +254,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   flex: 1;
   width: min(1152px, 80vw);
   justify-content: space-between;
+  @include m.desktop-width;
 }
 
 .home-page__event-slide-content-title {

@@ -9,7 +9,7 @@
 }
 
 .artists-page__logotype {
-  width: min(1440px, 80vw);
+  @include m.standard-width;
 }
 
 .artists-page__row {

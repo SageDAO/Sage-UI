@@ -3,19 +3,22 @@
 @use '@/styles/abstracts/breakpoints' as b;
 @use '@/styles/layout/layout' as l;
 .nav {
-  top: 0;
-  position: sticky;
-  min-height: 44px;
+  height: 44px;
   background-color: c.$black;
   justify-content: center;
-  z-index: 998;
   gap: 20%;
-  @include m.theme() {
-  }
   display: none;
   @include b.min-width('medium') {
     display: flex;
   }
+}
+
+.nav__wrapper {
+  top: 0;
+  z-index: 998;
+  position: sticky;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav__menu {
@@ -38,7 +41,7 @@
 
 .nav__content {
   display: flex;
-  width: min(1440px, 80%);
+  @include m.desktop-width;
 }
 
 .nav__personal {
