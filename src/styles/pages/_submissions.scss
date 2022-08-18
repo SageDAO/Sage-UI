@@ -3,13 +3,12 @@
 @use '@/styles/abstracts/breakpoints' as b;
 .submissions-page {
   @include m.page;
-  width: min(1440px, 100vw);
   margin-left: auto;
   margin-right: auto;
 }
 
 .submissions-page__logotype-container {
-  width: min(1440px, 80vw);
+  @include m.standard-width;
 }
 
 .submissions-page__header {

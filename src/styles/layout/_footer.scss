@@ -5,15 +5,17 @@
 .footer {
   @include m.theme() {
     background-color: m.t(base2);
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    @include m.standard-width;
   }
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
 }
 
 @mixin footer-section {
-  margin: 0 10vw;
+  // margin: 0 ;
   display: flex;
   align-items: center;
 }
@@ -84,6 +86,8 @@
   left: clamp(14px, 1.5vw, 56px);
   top: 50%;
   transform: translateY(-50%);
+  transform: translateX(-50%);
+  left: -5vw;
   @include m.theme() {
     color: m.t(contrast);
     width: 20px;
