@@ -15,6 +15,7 @@ button {
 *::selection {
   @include m.theme() {
     background-color: m.t(accent);
+    color: m.t(base);
   }
 }
 

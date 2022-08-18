@@ -45,6 +45,14 @@ export default function Footer() {
             </div>
           </div>
         </ul>
+        <ul className='footer__middle-item'>
+          <div className='footer__middle-item-header'>press</div>
+          <div className='footer__middle-item-content'>
+            <h1 className='footer__middle-item-content-link'>
+              <a href='/press'>sage press</a>
+            </h1>
+          </div>
+        </ul>
         <ul className='footer__follow'>
           <div className='footer__middle-item-header'>follow us on</div>
           <div className='footer__middle-item-content'>

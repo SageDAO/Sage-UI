@@ -8,9 +8,9 @@ export default function submissions() {
       <div className='submissions-page__logotype-container'>
         <Logotype></Logotype>
       </div>
-      <h1 className='submissions-page__header'>artist submissions</h1>
+      <h1 className='submissions-page__header'>Artist Submissions</h1>
       <section className='submissions-page__guidelines-group'>
-        <h1 className='submissions-page__guidelines-header'>SUBMISSION GUIDELINES</h1>
+        <h1 className='submissions-page__guidelines-header'>Submissions Guidelines</h1>
         <p className='submissions-page__guidelines-text'>
           SAGE IS A HIGHLY CURATED PLATFORM, WE TAKE THE APPLICATION PROCESS VERY SERIOUSLY THAT’S
           THE REASON WE CHANGED THE WAY HOW ARTIST CAN APPLY TO BE A CREATOR ON THE SAGE PLATFORM.
@@ -19,7 +19,7 @@ export default function submissions() {
         </p>
       </section>
       <section className='submissions-page__guidelines-group'>
-        <h1 className='submissions-page__guidelines-header'>STANDARDS GUIDELINES</h1>
+        <h1 className='submissions-page__guidelines-header'>Standards Guidelines</h1>
         <p className='submissions-page__guidelines-text'>
           SAGE IS A HIGHLY CURATED PLATFORM, WE TAKE THE APPLICATION PROCESS VERY SERIOUSLY THAT’S
           THE REASON WE CHANGED THE WAY HOW ARTIST CAN APPLY TO BE A CREATOR ON THE SAGE PLATFORM.
@@ -54,17 +54,17 @@ export default function submissions() {
           WE PROVIDE 2 TEMPLATES TO MAKE IT A BIT EASIER TO GET STARTED. YOU WONT NEED THIS IF YOU
           ALREADY MADE A PDF PRESENTATION.BELOW YOULL FIND AN INDESIGN AND ILLUSTRATOR FILE TO GET
           STARTED.
-          <section className='submissions-page__design-icons'>
+          <span className='submissions-page__design-icons'>
             <AdobeIllustratorSVG className='submissions-page__design-icons-svg'></AdobeIllustratorSVG>
             <IndesignSVG className='submissions-page__design-icons-svg'></IndesignSVG>
-          </section>
+          </span>
         </p>
       </section>
 
       <section className='submissions-page__guidelines-group'>
         <h1 className='submissions-page__guidelines-header'>how to send application?</h1>
         <p className='submissions-page__guidelines-text'>
-          ONCE RADY, PLEASE SEND YOUR APPLICATION TO: creator@sage.com
+          ONCE READY, PLEASE SEND YOUR APPLICATION TO: creator@sage.com
         </p>
       </section>
     </div>

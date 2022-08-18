@@ -9,7 +9,7 @@
 }
 
 .submissions-page__logotype-container {
-  width: 80%;
+  width: min(1440px, 80vw);
 }
 
 .submissions-page__header {
@@ -41,7 +41,7 @@
   font-weight: 600;
   font-size: clamp(16px, 1vw, 20px);
   line-height: 130%;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 
 .submissions-page__guidelines-text {
