@@ -25,8 +25,8 @@ const navLinks: NavLink[] = [
     url: '/artists',
   },
   {
-    name: 'Press',
-    url: '/press',
+    name: 'Apply',
+    url: '/artists/submissions',
   },
 ];
 
