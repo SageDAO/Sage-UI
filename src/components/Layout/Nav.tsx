@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useEnsName } from 'wagmi';
 import { PfpImage } from '../Media';
 import PersonalizedMessage from '../PersonalizedMessage';
+import SearchForm from '../SearchForm';
 
 interface NavLink {
   name: string;
@@ -65,7 +66,9 @@ export default function Nav() {
             );
           })}
         </div>
-        <div className='nav__search'></div>
+        <div className='nav__search'>
+          <SearchForm />
+        </div>
       </div>
     </div>
   );

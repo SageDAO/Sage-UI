@@ -1,0 +1,25 @@
+@use '@/styles/abstracts/colors' as c;
+
+.searchform {
+    width: 100%;
+    border-bottom: 1px solid c.$grey;
+    text-align: right;
+  
+    &__input {
+      margin-bottom: 2px;
+      width: 66%;
+      outline: none;
+      border: none;
+      background: c.$black;
+      color: c.$white;
+      text-transform: uppercase;
+      font-style: italic;
+      letter-spacing: 0.3em;
+    }
+  
+    &__white_icon {
+      cursor: pointer;
+      filter: invert(93%) sepia(94%) saturate(0%) hue-rotate(248deg) brightness(106%) contrast(106%);
+    }
+  }
+  

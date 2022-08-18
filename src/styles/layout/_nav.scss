@@ -25,7 +25,7 @@
   justify-content: center;
   gap: clamp(10px, 0.5vw, 19px);
   justify-self: center;
-  width: 33%;
+  width: 41%;
 }
 
 .nav__menu-link {
@@ -90,6 +90,7 @@
 }
 
 .nav__search {
-  width: 33%;
-  position: absolute;
+  width: 25%;
+  display: flex;
+  align-items: center;
 }
