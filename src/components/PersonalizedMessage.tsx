@@ -17,11 +17,11 @@ export default function PersonalizedMessage() {
   }
 
   if (isConnected) {
-    return <React.Fragment>sign in to continue</React.Fragment>;
+    return <React.Fragment>Sign In To Continue</React.Fragment>;
   }
 
   if (!isConnected) {
-    return <React.Fragment>wallet not connected</React.Fragment>;
+    return <React.Fragment>Wallet Not Connected</React.Fragment>;
   }
   return <React.Fragment>Error</React.Fragment>;
 }

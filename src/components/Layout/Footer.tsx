@@ -18,7 +18,6 @@ export default function Footer() {
             <div className='footer__logo'>
               <SageLogo className='footer__logo-svg'></SageLogo>
             </div>
-            <div className='footer__divider'></div>
           </div>
         </div>
         <div className='footer__middle'>
