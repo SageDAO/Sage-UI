@@ -12,58 +12,60 @@ export default function Footer() {
 
   return (
     <div className='footer' data-cy='footer'>
-      <div className='footer__top'>
-        <div className='footer__top-content'>
-          <div className='footer__logo'>
-            <SageLogo className='footer__logo-svg'></SageLogo>
-          </div>
-          <div className='footer__divider'></div>
-        </div>
-      </div>
-      <div className='footer__middle'>
-        <ul className='footer__middle-item'>
-          <div className='footer__middle-item-header'>contact sage</div>
-          <div className='footer__middle-item-content'>
-            <h1 className='footer__middle-item-content-link'>
-              <a href='mailto:contact@sage.art'>apply for artists</a>
-            </h1>
-            <h1 className='footer__middle-item-content-link'>
-              <a href='mailto:contact@sage.art'>business inquiry</a>
-            </h1>
-            <h1 className='footer__middle-item-content-link'>
-              <a href='mailto:contact@sage.art'>support</a>
-            </h1>
-          </div>
-        </ul>
-        <ul className='footer__middle-item'>
-          <div className='footer__middle-item-header'>token + lp</div>
-          <div className='footer__middle-item-content'>
-            <div className='footer__middle-item-content-link'>
-              <a href='/howtobuyash' onClick={handleHowToBuyAshClick}>
-                how to buy ash
-              </a>
+      <div className='footer__content'>
+        <div className='footer__top'>
+          <div className='footer__top-content'>
+            <div className='footer__logo'>
+              <SageLogo className='footer__logo-svg'></SageLogo>
             </div>
+            <div className='footer__divider'></div>
           </div>
-        </ul>
-        <ul className='footer__middle-item'>
-          <div className='footer__middle-item-header'>press</div>
-          <div className='footer__middle-item-content'>
-            <h1 className='footer__middle-item-content-link'>
-              <a href='/press'>sage press</a>
-            </h1>
-          </div>
-        </ul>
-        <ul className='footer__follow'>
-          <div className='footer__middle-item-header'>follow us on</div>
-          <div className='footer__middle-item-content'>
-            <Socials></Socials>
-          </div>
-        </ul>
+        </div>
+        <div className='footer__middle'>
+          <ul className='footer__middle-item'>
+            <div className='footer__middle-item-header'>contact sage</div>
+            <div className='footer__middle-item-content'>
+              <h1 className='footer__middle-item-content-link'>
+                <a href='mailto:contact@sage.art'>apply for artists</a>
+              </h1>
+              <h1 className='footer__middle-item-content-link'>
+                <a href='mailto:contact@sage.art'>business inquiry</a>
+              </h1>
+              <h1 className='footer__middle-item-content-link'>
+                <a href='mailto:contact@sage.art'>support</a>
+              </h1>
+            </div>
+          </ul>
+          <ul className='footer__middle-item'>
+            <div className='footer__middle-item-header'>token + lp</div>
+            <div className='footer__middle-item-content'>
+              <div className='footer__middle-item-content-link'>
+                <a href='/howtobuyash' onClick={handleHowToBuyAshClick}>
+                  how to buy ash
+                </a>
+              </div>
+            </div>
+          </ul>
+          <ul className='footer__middle-item'>
+            <div className='footer__middle-item-header'>press</div>
+            <div className='footer__middle-item-content'>
+              <h1 className='footer__middle-item-content-link'>
+                <a href='/press'>sage press</a>
+              </h1>
+            </div>
+          </ul>
+          <ul className='footer__follow'>
+            <div className='footer__middle-item-header'>follow us on</div>
+            <div className='footer__middle-item-content'>
+              <Socials></Socials>
+            </div>
+          </ul>
+        </div>
+        <div className='footer__bottom'>
+          <h4 className='footer__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h4>
+        </div>
+        <MottoSVG className='footer__motto' />
       </div>
-      <div className='footer__bottom'>
-        <h4 className='footer__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h4>
-      </div>
-      <MottoSVG className='footer__motto' />
     </div>
   );
 }

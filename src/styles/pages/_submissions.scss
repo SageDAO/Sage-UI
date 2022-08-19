@@ -15,8 +15,8 @@
   margin-top: clamp(24px, 10vw, 111px);
   font-weight: 400;
   font-size: clamp(20px, 1.2vw, 50px);
-  width: 80%;
   line-height: clamp(24px, 1em, 60px);
+  @include m.standard-width;
   @include m.theme() {
     color: m.t(contrast);
   }
@@ -28,7 +28,7 @@
 }
 
 .submissions-page__guidelines-group {
-  width: min(1000px, 80%);
+  @include m.standard-width;
   gap: 5px;
   margin-top: clamp(24px, 5vh, 79px);
   display: flex;

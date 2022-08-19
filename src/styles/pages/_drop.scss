@@ -111,14 +111,15 @@
 }
 
 .drop-page__content {
-  display: flex;
-  justify-content: center;
   @include m.theme() {
+    display: flex;
+    justify-content: center;
+    flex: 1;
     background-color: m.t(base2);
+    z-index: 999;
+    width: 100vw;
+    padding: 110px 0 0;
   }
-  z-index: 999;
-  width: 100vw;
-  padding: 110px 0 0;
 }
 
 .drop-page__grid {

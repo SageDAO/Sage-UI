@@ -5,17 +5,19 @@
 .footer {
   @include m.theme() {
     background-color: m.t(base2);
-    margin-right: auto;
-    margin-left: auto;
-    position: relative;
     display: flex;
-    flex-direction: column;
-    @include m.standard-width;
+    width: 100vw;
   }
 }
 
+.footer__content {
+  @include m.standard-width;
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 @mixin footer-section {
-  // margin: 0 ;
   display: flex;
   align-items: center;
 }
