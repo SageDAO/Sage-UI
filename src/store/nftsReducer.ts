@@ -32,9 +32,22 @@ export interface OfferRequest {
   expiresAt?: Date;
 }
 
+export interface SearchableNftData {
+  name: string;
+  tags: string;
+  s3Path: string;
+  isVid: boolean;
+  artist: string; // username
+  dId?: number; // dropId
+  dName?: string; // dropName
+}
+
 const nftsApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
+    getSearchableNftData: builder.query<SearchableNftData[], void>({
+      query: () => `nfts?action=GetSearchableNftData`,
+    }),
     getListingNftsByArtist: builder.query<Nft_include_NftContractAndOffers[], string>({
       query: (artistAddress) => `nfts?action=GetListingNftsByArtist&address=${artistAddress}`,
       providesTags: ['Nfts'],
@@ -358,6 +371,7 @@ export async function _fetchOrCreateNftContract(
 }
 
 export const {
+  useGetSearchableNftDataQuery,
   useGetListingNftsByArtistQuery,
   useGetListingNftsByOwnerQuery,
   useFetchOrCreateNftContractQuery,

@@ -5,12 +5,16 @@ import { getNFTContract } from '@/utilities/contracts';
 import { ethers } from 'ethers';
 import { getSession } from 'next-auth/react';
 import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/types';
+import { SearchableNftData } from '@/store/nftsReducer';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
     query: { action },
   } = request;
   switch (action) {
+    case 'GetSearchableNftData':
+      await getSearchableNftData(response);
+      break;
     case 'GetListingNftsByArtist':
       await getListingNftsByArtist(request.query.address as string, response);
       break;
@@ -30,6 +34,42 @@ export default async function handler(request: NextApiRequest, response: NextApi
       response.status(500);
   }
   response.end();
+}
+
+async function getSearchableNftData(response: NextApiResponse) {
+  console.log(`getSearchableNftData()`);
+  try {
+    const result = Array<SearchableNftData>();
+    const nfts = await prisma.nft.findMany({
+      where: { isHidden: false },
+      distinct: ['s3Path'],
+      include: {
+        Auction: { include: { Drop: { include: { NftContract: { include: { Artist: true } } } } } },
+        Lottery: { include: { Drop: { include: { NftContract: { include: { Artist: true } } } } } },
+        NftContract: { include: { Artist: true } },
+      },
+    });
+    for (const n of nfts) {
+      if (n.Auction && !n.Auction.Drop.approvedAt) continue;
+      if (n.Lottery && !n.Lottery.Drop.approvedAt) continue;
+      result.push({
+        name: n.name,
+        tags: n.tags,
+        s3Path: n.s3Path,
+        isVid: n.isVideo,
+        artist:
+          n.NftContract?.Artist.username! ||
+          n.Auction?.Drop.NftContract.Artist.username! ||
+          n.Lottery?.Drop.NftContract.Artist.username!,
+        dId: n.Auction?.Drop.id || n.Lottery?.Drop.id || undefined,
+        dName: n.Auction?.Drop.name || n.Lottery?.Drop.name || undefined,
+      });
+    }
+    response.json(result);
+  } catch (e) {
+    console.log({ e });
+    response.status(500);
+  }
 }
 
 async function getListingNftsByArtist(artistAddress: string, response: NextApiResponse) {

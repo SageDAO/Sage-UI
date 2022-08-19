@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function SearchForm() {
-  const [q, setQ] = useState<string>('');
+  const query = useRouter().query.q as string;
+  const [q, setQ] = useState<string>(query);
   const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
