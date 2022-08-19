@@ -7,19 +7,19 @@ export default function Search() {
   const router = useRouter();
   const query = router.query.q;
   const { data, isLoading } = useGetSearchableNftDataQuery();
-  const nfts = performSearch(data!, query as string);
+  const results = performSearch(data!, query as string);
 
   return (
     <>
       <div style={{ textAlign: 'center', marginTop: '50px' }}>
         <span style={{ textTransform: 'uppercase' }}>Search Results</span>
         {isLoading && <div style={{ marginTop: '50px' }}><LoaderSpinner /></div>}
-        {nfts && nfts.length == 0 && <div style={{ marginTop: '50px' }}>No results found</div>}
+        {data && results.length == 0 && <div style={{ marginTop: '50px' }}>No results found</div>}
       </div>
       <div className='drop-page__content'>
         <div className='drop-page__grid'>
-          {nfts &&
-            nfts.map((nft: SearchableNftData, i: number) => (
+          {results &&
+            results.map((nft: SearchableNftData, i: number) => (
               <SearchResultsTile key={i} nft={nft} />
             ))}
         </div>
