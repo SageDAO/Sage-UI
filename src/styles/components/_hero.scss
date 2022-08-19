@@ -6,12 +6,12 @@
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  // aspect-ratio: 322/380;
+  aspect-ratio: 322/380;
   @include m.standard-width;
   @include b.min-width('medium') {
     // aspect-ratio: none;
-    height: 1142px;
-    width: min(2040px, 80vw);
+    height: 761px;
+    width: min(1360px, 80vw);
   }
 }
 
@@ -20,10 +20,11 @@
   position: absolute;
   overflow: visible;
   aspect-ratio: 311/99.5;
-  width: min(500px, 39vw);
-  // width: 80vw;
-  width: min(1200px, 58vw);
   z-index: 1;
+  @include m.mobile-width;
+  @include b.min-width('medium') {
+    @include m.desktop-inner-width;
+  }
 }
 
 .hero__banner {
@@ -37,6 +38,6 @@
   aspect-ratio: 322/311;
   @include b.min-width('medium') {
     // aspect-ratio: 1196/872;
-    height: 872px;
+    height: 581px;
   }
 }

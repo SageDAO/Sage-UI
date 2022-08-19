@@ -154,12 +154,16 @@ $theme-map: null;
 
 @mixin desktop-width {
   @include b.min-width('medium') {
-    width: min(1440px, 39vw);
+    width: min(1360px, 80vw);
   }
 }
 
+@mixin desktop-inner-width {
+  width: 800px;
+}
+
 @mixin mobile-width {
-  width: min(1440px, 80vw);
+  width: min(1360px, 80vw);
 }
 
 @mixin standard-width {
