@@ -121,6 +121,12 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
               className='games-modal__bid-input'
               value={amount}
             />
+            <div
+              className='games-modal__game-description'
+              style={{ textAlign: 'right', fontSize: '80%' }}
+            >
+              min offer: {nft.price} ASH
+            </div>
             <button
               disabled={isCreatingBuyOffer}
               className='games-modal__place-bid-button'
@@ -128,6 +134,12 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
             >
               {isCreatingBuyOffer ? <LoaderSpinner /> : 'make ASH offer'}
             </button>
+
+            {isSelling && (
+              <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                <LoaderSpinner />
+              </div>
+            )}
 
             <div>
               {buyOffers.length > 0 && (
@@ -156,15 +168,16 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
                                   </a>
                                 </div>
                               )}
-                              {isOwner() && isSelling ? (
-                                <></>
-                              ) : (
-                                <div className='games-modal__trash-icon'>
-                                  <a onClick={() => handleAcceptClick(o)}>
-                                    <img src='/icons/check.svg' width='15' />
-                                  </a>
-                                </div>
-                              )}
+                              {isOwner() &&
+                                (isSelling ? (
+                                  ''
+                                ) : (
+                                  <div className='games-modal__trash-icon'>
+                                    <a onClick={() => handleAcceptClick(o)}>
+                                      <img src='/icons/check.svg' width='15' />
+                                    </a>
+                                  </div>
+                                ))}
                             </div>
                           </td>
                         </tr>
