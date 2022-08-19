@@ -97,7 +97,6 @@ export default function Layout({ children, router }: Props) {
           data-cy='toast-container'
         />
         <div ref={layoutEl} key={router.route} className='layout'>
-          <HiddenMenu />
           <Nav />
           {children}
           <Footer></Footer>

@@ -151,3 +151,18 @@ $theme-map: null;
     // background-color: c.$bg-base;
   }
 }
+
+@mixin desktop-width {
+  @include b.min-width('medium') {
+    width: min(1440px, 55vw);
+  }
+}
+
+@mixin mobile-width {
+  width: min(1440px, 80vw);
+}
+
+@mixin standard-width {
+  @include desktop-width;
+  @include mobile-width;
+}

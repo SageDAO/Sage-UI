@@ -3,19 +3,22 @@
 @use '@/styles/abstracts/breakpoints' as b;
 @use '@/styles/layout/layout' as l;
 .nav {
-  top: 0;
-  position: sticky;
-  min-height: 44px;
-  background-color: c.$black;
+  height: 44px;
   justify-content: center;
-  z-index: 998;
   gap: 20%;
-  @include m.theme() {
-  }
   display: none;
+  background-color: c.$black;
   @include b.min-width('medium') {
     display: flex;
   }
+}
+
+.nav__wrapper {
+  top: 0;
+  z-index: 998;
+  position: sticky;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav__menu {
@@ -30,15 +33,18 @@
 
 .nav__menu-link {
   @include m.noselect;
-  width: clamp(80px, 2vw, 102px);
+  width: clamp(72px, 2vw, 102px);
   color: c.$white;
+  font-size: 12px;
   text-transform: uppercase;
   cursor: pointer;
 }
 
 .nav__content {
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
-  width: min(1440px, 80%);
+  @include m.desktop-width;
 }
 
 .nav__personal {

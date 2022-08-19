@@ -50,12 +50,6 @@ function drops({ drops }: Props) {
           const { status, startTime } = computeDropStatus(d);
           const counterDisplay = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
           const buttonDisplay = status === 'Upcoming' ? 'get notifications' : 'View Drop Artworks';
-          const { drawings, lotteries } = filterLotteries(d.Lotteries);
-          const systems = computeDropSystems({
-            lotteries,
-            auctions: d.Auctions,
-            drawings,
-          });
           async function buttonHandler() {
             if (status === 'Upcoming') {
               //TODO: handle notifications
@@ -70,9 +64,11 @@ function drops({ drops }: Props) {
                 <h1 className='drops-page__drop-header-title'>
                   {d.name} by {d.NftContract.Artist.username}
                 </h1>
-                <div className='drops-page__drop-header-countdown' data-status={status}>
-                  {counterDisplay}
-                </div>
+                {status !== 'Done' && (
+                  <div className='drops-page__drop-header-countdown' data-status={status}>
+                    {counterDisplay}
+                  </div>
+                )}
               </div>
               <Image
                 src={d.bannerImageS3Path}

@@ -3,21 +3,20 @@
 @use '@/styles/abstracts/breakpoints' as b;
 .submissions-page {
   @include m.page;
-  width: min(1440px, 100vw);
   margin-left: auto;
   margin-right: auto;
 }
 
 .submissions-page__logotype-container {
-  width: min(1440px, 80vw);
+  @include m.standard-width;
 }
 
 .submissions-page__header {
   margin-top: clamp(24px, 10vw, 111px);
   font-weight: 400;
   font-size: clamp(20px, 1.2vw, 50px);
-  width: 80%;
   line-height: clamp(24px, 1em, 60px);
+  @include m.standard-width;
   @include m.theme() {
     color: m.t(contrast);
   }
@@ -29,7 +28,7 @@
 }
 
 .submissions-page__guidelines-group {
-  width: min(1000px, 80%);
+  @include m.standard-width;
   gap: 5px;
   margin-top: clamp(24px, 5vh, 79px);
   display: flex;

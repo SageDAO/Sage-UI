@@ -39,9 +39,11 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                       key={d.id}
                       onClick={onClick}
                     >
-                      <div className='home-page__upcoming-drops-countdown' data-status={status}>
-                        {display}
-                      </div>
+                      {status !== 'Done' && (
+                        <div className='home-page__upcoming-drops-countdown' data-status={status}>
+                          {display}
+                        </div>
+                      )}
                       <BaseMedia src={src} isVideo={false} />
                       <h1 className='home-page__upcoming-drops-tile-tag'>
                         {text}
@@ -82,9 +84,11 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
             key={d.id}
             onClick={onClick}
           >
-            <div className='home-page__upcoming-drops-countdown' data-status={status}>
-              {display}
-            </div>
+            {status !== 'Done' && (
+              <div className='home-page__upcoming-drops-countdown' data-status={status}>
+                {display}
+              </div>
+            )}
 
             <BaseMedia src={src} isVideo={false} />
             <h1 className='home-page__upcoming-drops-tile-tag'>

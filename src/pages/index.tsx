@@ -20,21 +20,9 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
     <div className='home-page' data-cy='home-page'>
       <div className='home-page__main'>
         {featuredDrop && (
-          <>
-            <div onClick={() => router.push(`/drops/${featuredDrop.id}`)}>
-              <Hero imgSrc={featuredDrop.bannerImageS3Path} />
-            </div>
-            <div
-              className='home-page__featured-drop-tag'
-              onClick={() => router.push(`/drops/${featuredDrop.id}`)}
-            >
-              <SageIconSVG className='home-page__featured-drop-tag-sage-logo' />
-              <div className='home-page__featured-drop-tag-label'>
-                This month active drop <br />
-                artist | {featuredDrop.NftContract.Artist.username}
-              </div>
-            </div>
-          </>
+          <div onClick={() => router.push(`/drops/${featuredDrop.id}`)}>
+            <Hero imgSrc={featuredDrop.bannerImageS3Path} />
+          </div>
         )}
 
         <div className='home-page__statement'>
