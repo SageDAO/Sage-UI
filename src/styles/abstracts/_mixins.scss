@@ -154,7 +154,7 @@ $theme-map: null;
 
 @mixin desktop-width {
   @include b.min-width('medium') {
-    width: min(1440px, 44vw);
+    width: min(1440px, 40vw);
   }
 }
 
