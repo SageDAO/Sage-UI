@@ -203,6 +203,7 @@ export default function CreationsPanel() {
                     value={state.description}
                     onChange={handleDescriptionInputChange}
                     className='creations-panel__file-desc-field'
+                    maxLength={500}
                   />
                 </div>
                 <div className='creations-panel__file-title-group'>
