@@ -264,7 +264,7 @@
   @include balance-value;
 }
 
-.wallet__profile-button {
+.wallet__interact-button {
   aspect-ratio: 86/34;
   @include m.theme() {
     color: m.t(contrast);

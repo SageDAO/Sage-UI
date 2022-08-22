@@ -12,6 +12,7 @@ import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
 import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 import { animated, Transition, Spring } from 'react-spring';
 import { useRouter } from 'next/router';
+import { useDisconnect } from 'wagmi';
 
 function profile() {
   const { data: sessionData } = useSession();
@@ -20,6 +21,7 @@ function profile() {
   });
   const [signOut] = useSignOutMutation();
   const { selectedTabIndex, setSelectedTabIndex } = useTabs();
+  const { disconnect } = useDisconnect();
   const { asPath } = useRouter();
 
   useEffect(() => {
@@ -27,6 +29,11 @@ function profile() {
       setSelectedTabIndex(2);
     }
   }, []);
+
+  async function handleSignOut() {
+    signOut();
+    disconnect();
+  }
 
   if (!sessionData) {
     return <div className='profile-page'>sign in to view profile</div>;

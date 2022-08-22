@@ -4,6 +4,7 @@ import Wallet from '@/components/Wallet';
 import { useRouter } from 'next/router';
 import useWindowDimensions from '@/hooks/useWindowSize';
 import Socials from '@/components/Socials';
+import useSignIn from '@/hooks/useSignIn';
 
 interface Props extends ModalProps {}
 
@@ -34,6 +35,7 @@ const navLinks: NavLink[] = [
 export default function MobileMenu({ isOpen, closeModal }: Props) {
   const router = useRouter();
   const { isMobile } = useWindowDimensions();
+  useSignIn(isOpen);
 
   if (!isMobile) return null;
 

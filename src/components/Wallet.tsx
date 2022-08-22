@@ -42,6 +42,7 @@ export default function Wallet({ closeModal }: Props) {
   const [signOut] = useSignOutMutation();
   const { signMessageAsync, isLoading: isSigningMessage } = useSignMessage();
   const { activeChain } = useNetwork();
+  const isSignedIn = sessionStatus === 'authenticated';
   const router = useRouter();
 
   async function goToProfile() {
@@ -132,9 +133,11 @@ export default function Wallet({ closeModal }: Props) {
                 </span>
               </h1>
             </div>
-            <button onClick={goToProfile} className='wallet__profile-button'>
-              go to profile
-            </button>
+            {isSignedIn && (
+              <button onClick={goToProfile} className='wallet__interact-button'>
+                go to profile
+              </button>
+            )}
           </section>
         </>
       )}
