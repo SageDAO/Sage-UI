@@ -13,10 +13,12 @@ export default function Connect() {
   const { status: sessionStatus } = useSession();
   const { data: accountData } = useAccount();
   let buttonText: string = 'connect';
+  let buttonClass: string = 'connect';
 
   if (accountData) {
     if (sessionStatus === 'authenticated') {
       buttonText = 'signed in';
+      buttonClass = 'connected';
     }
 
     if (sessionStatus === 'unauthenticated') {
@@ -25,7 +27,7 @@ export default function Connect() {
   }
 
   return (
-    <button className='connect' onClick={openAccountModal}>
+    <button className={buttonClass} onClick={openAccountModal}>
       {buttonText}
       <AccountModal
         isOpen={isAccountModalOpen}
