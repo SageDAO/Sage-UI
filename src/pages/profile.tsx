@@ -36,7 +36,7 @@ function profile() {
   }
 
   if (!sessionData) {
-    return <div className='profile-page'>sign in to view profile</div>;
+    return <div style={{ textAlign: 'center', margin: '150px' }}>sign in to view profile</div>;
   }
 
   if (!userData && isFetchingUser) {

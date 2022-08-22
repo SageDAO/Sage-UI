@@ -30,13 +30,14 @@ export default function Wallet({ closeModal }: Props) {
     skip: !sessionData,
   });
   const { connectors, connectAsync, activeConnector, isConnecting, isConnected } = useConnect();
-  const { data: balanceData } = useBalance({
+  const { data: pointsBalance } = useGetPointsBalanceQuery(undefined, {
+    skip: !sessionData,
+  });
+  const { data: walletBalance } = useBalance({
     token: parameters.ASHTOKEN_ADDRESS,
     addressOrName: sessionData?.address as string,
   });
-  const { data: pointsData } = useGetPointsBalanceQuery(undefined, {
-    skip: !sessionData,
-  });
+  const ashBalance = Number(walletBalance?.formatted);
 
   const [signIn] = useSignInMutation();
   const [signOut] = useSignOutMutation();
@@ -124,12 +125,12 @@ export default function Wallet({ closeModal }: Props) {
           <section className='wallet__utils-section'>
             <div className='wallet__utils-info'>
               <h1 className='wallet__points-balance'>
-                pixel balance: <span className='wallet__points-value'>{pointsData}</span>
+                pixel balance: <span className='wallet__points-value'>{pointsBalance}</span>
               </h1>
               <h1 className='wallet__token-balance'>
                 ash balance:
                 <span className='wallet__token-value'>
-                  {Number(balanceData?.formatted).toFixed(4)}
+                  {!isNaN(ashBalance) && ashBalance.toFixed(4)}
                 </span>
               </h1>
             </div>
