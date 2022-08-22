@@ -49,40 +49,13 @@ export default function Wallet({ closeModal }: Props) {
     if (closeModal) closeModal();
   }
 
-  const showWalletSelection: boolean = Boolean(!accountData);
+  const showWalletSelection: boolean = Boolean(!isConnected);
   const showAuthSection: boolean = Boolean(accountData);
-  const showSignInButton: boolean = Boolean(sessionStatus !== 'authenticated');
 
   async function handleConnectClick(c: Connector<any, any>) {
     try {
       await connectAsync(c);
     } catch {}
-  }
-
-  async function handleSignInClick() {
-    try {
-      const nonce = await getCsrfToken();
-      const message = new SiweMessage({
-        domain: window.location.host,
-        address: accountData?.address,
-        statement: 'Sign in with Ethereum to the app.',
-        uri: window.location.origin,
-        version: '1',
-        chainId: activeChain?.id,
-        nonce,
-      });
-      const signature = await signMessageAsync({
-        message: message.prepareMessage(),
-      });
-      signIn({ message, signature });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async function handleSignOutClick() {
-    signOut();
-    disconnect();
   }
 
   return (
@@ -91,7 +64,7 @@ export default function Wallet({ closeModal }: Props) {
         <h1 className='wallet__header-prompt'>
           <PersonalizedMessage></PersonalizedMessage>
         </h1>
-        {!isConnected && (
+        {showWalletSelection && (
           <h1 className='wallet__header-info'>
             SELECT YOUR WALLET YOU WANT TO CONNECT. REMEMBER SAGE WILL NEVER ASK FOR YOUR SECRET
             KEYS OR ANY CONFIDENTIAL INFO.

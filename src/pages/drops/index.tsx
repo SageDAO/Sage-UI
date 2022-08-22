@@ -34,13 +34,11 @@ function drops({ drops }: Props) {
         <div className='drops-page__subheader'>
           <div className='drops-page__subheader-top'>
             <div className='drops-page__subheader-content'>
-              <div className='drops-page__subheader-label'>
-                sage curated live and upcoming drops.
-              </div>
-              <p className='drops-page__subheader-info'>
+              <h1 className='drops-page__subheader-label'>sage curated live and upcoming drops.</h1>
+              <h2 className='drops-page__subheader-info'>
                 sage upcoming drops are carefully curated to meet the standards and new structures
                 in nft assets. a vision in the crypto space.
-              </p>
+              </h2>
             </div>
           </div>
         </div>
