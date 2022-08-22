@@ -166,6 +166,10 @@ $theme-map: null;
   width: min(1360px, 80vw);
 }
 
+@mixin mobile-width-full {
+  width: min(1360px, 100vw);
+}
+
 @mixin standard-width {
   @include desktop-width;
   @include mobile-width;

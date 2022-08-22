@@ -60,7 +60,10 @@
   display: flex;
   flex-direction: column;
   margin-top: clamp(30px, 5vw, 90px);
-  @include m.desktop-width;
+  @include m.mobile-width-full;
+  @include b.min-width('medium') {
+    @include m.desktop-width;
+  }
 }
 
 .drops-page__drop {
