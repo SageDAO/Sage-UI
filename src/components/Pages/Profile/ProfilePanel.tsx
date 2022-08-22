@@ -15,6 +15,7 @@ import {
   validateWebpage,
 } from './ProfileValidation';
 import { toast } from 'react-toastify';
+import PlusSVG from '@/public/icons/plus.svg';
 
 interface State extends SafeUserUpdate {}
 
@@ -195,6 +196,15 @@ export default function ProfilePanel() {
                   onChange={handleBioInput}
                   className='profile-panel__bio-field'
                 />
+              </div>
+              <div className='profile-panel__upload-artist-banner-container'>
+                <input
+                  onChange={() => {}}
+                  type='file'
+                  className='profile-panel__upload-artist-banner-input'
+                  accept='image/png, image/gif, image/jpeg, video/mp4'
+                ></input>
+                <PlusSVG className='profile-panel__upload-artist-banner-plus-svg'></PlusSVG>
               </div>
               <button disabled={isLoading} type='submit' className='profile-panel__save-button'>
                 save your changes
