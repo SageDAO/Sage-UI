@@ -1,6 +1,7 @@
 import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import {
   approveERC20Transfer,
+  extractErrorMessage,
   getMarketplaceContract,
   getNFTContract,
   getNftFactoryContract,
@@ -179,7 +180,8 @@ const nftsApi = baseApi.injectEndpoints({
           return { data: true };
         } catch (e) {
           console.log(e);
-          toast.error('Error accepting offer');
+          const errMsg = extractErrorMessage(e);
+          toast.error(`Failure! ${errMsg}`);
           return { data: false };
         }
       },
