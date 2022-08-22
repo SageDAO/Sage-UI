@@ -199,6 +199,7 @@
 .profile-page__tabs-panel {
   display: flex;
   flex: 1;
+  min-height: 60vh;
   flex-direction: column;
   gap: 45px;
   max-width: 851px;

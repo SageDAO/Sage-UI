@@ -1,7 +1,8 @@
-import SageLogo from '@/public/branding/sage-full-logo.svg';
+import FooterLogoSVG from '@/public/branding/footer-logo.svg';
 import MottoSVG from '@/public/branding/motto.svg';
 import Socials from '@/components/Socials';
 import { useRouter } from 'next/router';
+import SearchForm from '@/components/SearchForm';
 
 export default function Footer() {
   const router = useRouter();
@@ -16,8 +17,9 @@ export default function Footer() {
         <div className='footer__top'>
           <div className='footer__top-content'>
             <div className='footer__logo'>
-              <SageLogo className='footer__logo-svg'></SageLogo>
+              <FooterLogoSVG className='footer__logo-svg'></FooterLogoSVG>
             </div>
+            <SearchForm></SearchForm>
           </div>
         </div>
         <div className='footer__middle'>

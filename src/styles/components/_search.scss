@@ -1,26 +1,34 @@
 @use '@/styles/abstracts/colors' as c;
 
 .searchform {
+  border-bottom: 1px solid c.$grey;
+  flex: 1;
+  height: 22px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-bottom: 3px;
+
+  &__input {
+    text-align: center;
     width: 100%;
-    border-bottom: 1px solid c.$grey;
-    text-align: right;
-  
-    &__input {
-      margin-bottom: 2px;
-      width: 66%;
-      outline: none;
-      border: none;
-      background: c.$black;
-      color: c.$white;
-      text-transform: uppercase;
-      font-style: italic;
-      font-size: 80%;
-      letter-spacing: 0.2em;
-    }
-  
-    &__white_icon {
-      cursor: pointer;
-      filter: invert(93%) sepia(94%) saturate(0%) hue-rotate(248deg) brightness(106%) contrast(106%);
-    }
+    height: 100%;
+    outline: none;
+    border: none;
+    background: transparent;
+    color: c.$white;
+    text-transform: uppercase;
+    font-style: italic;
+    font-size: 80%;
+    letter-spacing: 0.2em;
+    flex: 1;
+    position: absolute;
   }
-  
+
+  &__white_icon {
+    cursor: pointer;
+    right: 0;
+    position: absolute;
+    filter: invert(93%) sepia(94%) saturate(0%) hue-rotate(248deg) brightness(106%) contrast(106%);
+  }
+}
