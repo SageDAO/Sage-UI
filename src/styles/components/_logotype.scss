@@ -1,15 +1,25 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/breakpoints' as b;
+
+.sage-logotype__wrapper {
+  @include m.noselect;
+  margin-bottom: auto;
+  overflow: visible;
+	position: relative;
+  z-index: 1;
+  @include m.desktop-width;
+}
+
 .sage-logotype {
   @include m.noselect;
   overflow: visible;
-  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   aspect-ratio: 1196/384;
   margin-left: auto;
   margin-right: auto;
+  @include m.mobile-width;
   @include b.min-width('medium') {
     @include m.desktop-inner-width;
   }
@@ -21,15 +31,16 @@
   align-items: center;
   position: absolute;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
   transform: translateX(-50%);
-  height: 100%;
   @include m.theme() {
     color: m.t(contrast2);
   }
   left: -5vw;
-  // @include b.min-width('large') {
-  // }
+  height: 25vw;
+  @include b.min-width('medium') {
+    height: 256px;
+  }
 }
 
 .sage-logotype__src {

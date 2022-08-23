@@ -11,9 +11,7 @@ export default function Hero({ imgSrc, path }: Props) {
   const router = useRouter();
   return (
     <div className='hero'>
-      <div className='hero__logotype-container'>
-        <Logotype></Logotype>
-      </div>
+      <Logotype></Logotype>
       <div className='hero__banner'>
         <BaseMedia
           onClickHandler={async () => {

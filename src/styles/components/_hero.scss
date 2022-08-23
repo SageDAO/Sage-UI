@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   aspect-ratio: 322/380;
   @include m.standard-width;
   @include b.min-width('medium') {
@@ -15,24 +15,11 @@
   }
 }
 
-.hero__logotype-container {
-  @include m.noselect;
-  position: absolute;
-  overflow: visible;
-  aspect-ratio: 311/99.5;
-  z-index: 1;
-  @include m.mobile-width;
-  @include b.min-width('medium') {
-    @include m.desktop-inner-width;
-  }
-}
-
 .hero__banner {
   @include m.noselect;
   @include m.interact;
-  margin-top: auto;
   overflow: hidden;
-  position: relative;
+  position: absolute;
   transition-duration: 300ms;
   width: 100%;
   aspect-ratio: 322/311;
