@@ -32,11 +32,12 @@ const navLinks: NavLink[] = [
 
 export default function Nav() {
   const router = useRouter();
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status: sessionStatus } = useSession();
   const { data: userData } = useGetUserQuery(undefined, {
     skip: !sessionData,
   });
   const { data: ensData } = useEnsName({ address: userData?.walletAddress });
+  const isSignedIn: boolean = sessionStatus === 'authenticated';
 
   return (
     <div className='nav__wrapper'>
@@ -44,14 +45,16 @@ export default function Nav() {
       <div className='nav' data-cy='nav'>
         <div className='nav__content'>
           <div className='nav__personal'>
-            <div
-              onClick={() => {
-                router.push('/profile');
-              }}
-              className='nav__personal-pfp-container'
-            >
-              <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
-            </div>
+            {isSignedIn && (
+              <div
+                onClick={() => {
+                  router.push('/profile');
+                }}
+                className='nav__personal-pfp-container'
+              >
+                <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
+              </div>
+            )}
             <h1 className='nav__personal-message'>
               <PersonalizedMessage />
             </h1>
