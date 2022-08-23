@@ -9,28 +9,33 @@
 
 .drop-page__banner-base {
   z-index: -1;
-}
-
-.drop-page__banner-img {
-  display: none;
+  height: 100vh;
+  position: relative;
+  width: 100%;
+  position: absolute;
+	filter: brightness(30%);
+  
 }
 
 .drop-page__header {
-  display: flex;
-  flex-direction: column;
-  // width: 80vw;
-  @include m.standard-width;
-  padding-top: 97px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 80px;
-  gap: 50px;
-  position: relative;
-
-  @include b.min-width('medium') {
-    padding-top: 80px;
+  @include m.theme() {
+    display: flex;
+    flex-direction: column;
+    // width: 80vw;
+    @include m.standard-width;
+    padding-top: 97px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 80px;
+    gap: 50px;
+    position: relative;
+    @include b.min-width('medium') {
+      padding-top: 80px;
+    }
   }
 }
+
+
 
 .drop-page__header-logotype {
   @include m.standard-width;
