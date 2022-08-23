@@ -1,4 +1,4 @@
-import { PfpImage } from './Media';
+import { PfpImage } from './Media/BaseMedia';
 import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
 import {
   useConnect,

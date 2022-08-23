@@ -1,7 +1,7 @@
 import { getHomePageData } from '@/prisma/functions';
 import React from 'react';
 import { computeDropStatus } from '@/utilities/status';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import Countdown from '@/components/Countdown';
 import useWindowDimensions from '@/hooks/useWindowSize';
 import { useRouter } from 'next/router';

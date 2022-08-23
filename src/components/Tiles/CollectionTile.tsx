@@ -1,4 +1,4 @@
-import { BaseMedia, PfpImage } from '../Media';
+import { BaseMedia, PfpImage } from '../Media/BaseMedia';
 import { ClaimPrizeRequest, useClaimLotteryPrizeMutation } from '@/store/prizesReducer';
 import { GamePrize } from '@/prisma/types';
 import { useClaimAuctionNftMutation } from '@/store/auctionsReducer';

@@ -8,7 +8,7 @@ import shortenAddress from '@/utilities/shortenAddress';
 import { useGetAllUsersAndEarnedPointsQuery } from '@/store/dashboardReducer';
 import { User } from '@prisma/client';
 import useModal from '@/hooks/useModal';
-import { PfpImage } from '@/components/Media';
+import { PfpImage } from '@/components/Media/BaseMedia';
 import LoaderDots from '../LoaderDots';
 import NftContractBalance from './NftContractBalance';
 

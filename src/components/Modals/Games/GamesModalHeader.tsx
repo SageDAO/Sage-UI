@@ -1,6 +1,6 @@
 import React from 'react';
 import { User } from '@/prisma/types';
-import { PfpImage, BaseMedia } from '@/components/Media';
+import { PfpImage, BaseMedia } from '@/components/Media/BaseMedia';
 interface Props {
   src: string;
   isVideo: boolean;

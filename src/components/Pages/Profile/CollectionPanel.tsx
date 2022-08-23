@@ -2,7 +2,7 @@ import { useGetClaimedAuctionNftsQuery } from '@/store/auctionsReducer';
 import { useGetClaimedPrizesQuery } from '@/store/prizesReducer';
 import { CollectedListingNft, GamePrize } from '@/prisma/types';
 import LoaderDots from '@/components/LoaderDots';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useSession } from 'next-auth/react';
 import { useGetListingNftsByOwnerQuery } from '@/store/nftsReducer';
 import { animated, Spring } from 'react-spring';

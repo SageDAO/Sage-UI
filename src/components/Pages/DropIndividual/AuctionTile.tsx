@@ -1,5 +1,5 @@
 import Countdown from '@/components/Countdown';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import PlaceBidModal, { computeAuctionStatus } from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';
 import { Auction_include_Nft, User } from '@/prisma/types';

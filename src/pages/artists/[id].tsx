@@ -4,7 +4,7 @@ import Hero from '@/components/Hero';
 import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
 import { useGetListingNftsByArtistQuery } from '@/store/nftsReducer';
 import { Nft_include_NftContractAndOffers, User_include_NftContract } from '@/prisma/types';
-import { PfpImage } from '@/components/Media';
+import { PfpImage } from '@/components/Media/BaseMedia';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
 import TwitterSVG from '@/public/socials/twitter.svg';
 import MediumSVG from '@/public/socials/medium.svg';

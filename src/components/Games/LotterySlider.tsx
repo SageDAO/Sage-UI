@@ -1,6 +1,6 @@
 import { Nft } from '@/prisma/types';
 import React, { Dispatch, SetStateAction,  useLayoutEffect } from 'react';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import Image from 'next/image';
 
 interface Props {

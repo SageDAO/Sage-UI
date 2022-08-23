@@ -5,10 +5,8 @@ import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
 import { Signer } from 'ethers';
 import LoaderSpinner from '@/components/LoaderSpinner';
-import { BaseMedia } from '@/components/Media';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
 import { animated, Spring } from 'react-spring';
-import { useSession } from 'next-auth/react';
 
 interface State {
   file: File | null;
@@ -18,6 +16,7 @@ interface State {
   price: string;
   preview: string;
   isFixedPrice: boolean;
+  isVideo: boolean;
 }
 
 const INITIAL_STATE: State = {
@@ -28,14 +27,13 @@ const INITIAL_STATE: State = {
   price: '',
   preview: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
   isFixedPrice: true,
+  isVideo: false,
 };
 
 export default function CreationsPanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [mintSingleNft, { isLoading: isMinting }] = useMintSingleNftMutation();
   const { data: signer } = useSigner();
-  const { data: sessionData } = useSession();
-  const reactTags = React.createRef();
 
   function handleTitleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
@@ -68,7 +66,7 @@ export default function CreationsPanel() {
   }
 
   function handleFilesInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const validTypes = ['image/png', 'image/gif', 'image/jpeg', 'video/mpeg'];
+    const validTypes = ['image/png', 'image/gif', 'image/jpeg', 'video/mp4'];
     const newFile = e.target.files![0];
     setState((prevState) => {
       return { ...prevState, file: validTypes.includes(newFile.type) ? newFile : null };
@@ -111,27 +109,16 @@ export default function CreationsPanel() {
     }
   }
 
-  async function setAspectRatio(imgData: string) {
-    const div = document.getElementById('file-upload-preview-container');
-    if (div) {
-      let img = document.createElement('img');
-      img.src = imgData;
-      while (img.width == 0) {
-        await new Promise((r) => setTimeout(r, 500));
-      }
-      div.style.aspectRatio = `${img.width}/${img.height}`;
-    }
-  }
-
   useEffect(() => {
     if (state.file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const preview: string = reader.result as string;
+        const isVideo: boolean = state.file?.type == 'video/mp4';
         setState((prevState) => {
-          return { ...prevState, preview };
+          return { ...prevState, preview, isVideo };
         });
-        setAspectRatio(preview);
+        setAspectRatio(preview, isVideo);
       };
       reader.readAsDataURL(state.file);
     } else {
@@ -140,10 +127,6 @@ export default function CreationsPanel() {
       });
     }
   }, [state.file]);
-
-  if (!sessionData) {
-    return null;
-  }
 
   return (
     <Fragment>
@@ -172,18 +155,39 @@ export default function CreationsPanel() {
                       type='file'
                       className='creations-panel__file-upload-field'
                       accept='image/png, image/gif, image/jpeg, video/mp4'
-                    ></input>
+                    />
                     <Image
                       className='creations-panel__file-upload-plus-icon'
                       src='/icons/plus.svg'
                       width={40}
                       height={40}
-                    ></Image>
-                    <BaseMedia
-                      type={state.file?.type}
-                      src={state.preview}
-                      isVideo={state.file?.type.includes('video')}
-                    ></BaseMedia>
+                    />
+
+                    {state.isVideo ? (
+                      <video
+                        autoPlay={true}
+                        muted={true}
+                        loop={true}
+                        playsInline={true}
+                        style={{
+                          inset: '0px',
+                          overflow: 'hidden',
+                          position: 'absolute',
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      >
+                        <source src={state.preview} type={'video/mp4'} />
+                      </video>
+                    ) : (
+                      <Image
+                        draggable={false}
+                        src={state.preview}
+                        layout='fill'
+                        objectFit='cover'
+                      />
+                    )}
                   </div>
                   <h1 className='creations-panel__file-upload-label'>
                     ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF and MP4 )
@@ -242,19 +246,39 @@ export default function CreationsPanel() {
                   {isMinting ? <LoaderSpinner /> : `mint artwork`}
                 </button>
               </form>
-
-              {/*
-      <div className='creations-panel__manage'>
-        <div className='creations-panel__manage-header'>
-          manage creations
-          <h1 className='creations-panel__manage-subheader'>group, send, burn your creations</h1>
-        </div>
-      </div>
-      */}
             </animated.div>
           );
         }}
       </Spring>
     </Fragment>
   );
+}
+
+async function getImageAspectRatio(data: string) {
+  let img = document.createElement('img');
+  img.src = data;
+  while (img.width == 0) {
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  return `${img.width}/${img.height}`;
+}
+
+async function getVideoAspectRatio(data: string) {
+  let video = document.createElement('video');
+  let source = document.createElement('source');
+  source.type = 'video/mp4';
+  source.src = data;
+  video.appendChild(source);
+  while (video.videoWidth == 0) {
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  return `${video.videoWidth}/${video.videoHeight}`;
+}
+
+async function setAspectRatio(data: string, isVideo: boolean) {
+  const div = document.getElementById('file-upload-preview-container');
+  if (div) {
+    const aspectRatio = isVideo ? await getVideoAspectRatio(data) : await getImageAspectRatio(data);
+    div.style.aspectRatio = aspectRatio;
+  }
 }

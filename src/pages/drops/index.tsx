@@ -2,7 +2,7 @@ import React from 'react';
 import { GetStaticPropsContext, GetStaticPropsResult } from 'next';
 import useDropDown from '@/hooks/useDropDown';
 import Logotype from '@/components/Logotype';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import { Lottery_include_Nft } from '@/prisma/types';
 import prisma from '@/prisma/client';
 import Image from 'next/image';

@@ -1,5 +1,5 @@
 import { Lottery_include_Nft } from '@/prisma/types';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 
 interface Props {
   lottery: Lottery_include_Nft;

@@ -323,7 +323,7 @@ function inferMimeType(filename: string): string {
   const extension = filename.toLowerCase().split('.').pop();
   switch (extension) {
     case 'mp4':
-      return 'video/mpeg';
+      return 'video/mp4';
     case 'gif':
       return 'image/gif';
     case 'png':

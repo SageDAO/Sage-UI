@@ -2,7 +2,7 @@ import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } fro
 import prisma from '@/prisma/client';
 import { Drop as DropType, Lottery, Nft, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';

@@ -1,5 +1,5 @@
 import Logotype from '@/components/Logotype';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useRouter } from 'next/router';
 
 export default function Custom404() {

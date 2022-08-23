@@ -1,6 +1,6 @@
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import Image from 'next/image';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import Zoom from 'react-medium-image-zoom';
 
 const ConditionalWrapper = ({ condition, wrapper, children }) =>
@@ -16,12 +16,8 @@ interface BaseMediaProps {
 }
 
 function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
-  if (!isVideo) {
-    isVideo = false;
-  }
-
   return (
-    <Fragment>
+    <div>
       <ConditionalWrapper
         condition={true === isZoomable}
         wrapper={(children: JSX.Element) => (
@@ -30,12 +26,12 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }
       >
         {isVideo ? (
           <video
-            preload='auto'
-            autoPlay
-            muted
-            loop
-            playsInline
+            autoPlay={true}
+            muted={true}
+            loop={true}
+            playsInline={true}
             style={{
+              inset: '0px',
               overflow: 'hidden',
               position: 'absolute',
               width: '100%',
@@ -66,7 +62,7 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }
           />
         )}
       </ConditionalWrapper>
-    </Fragment>
+    </div>
   );
 }
 interface PfpImageProps {

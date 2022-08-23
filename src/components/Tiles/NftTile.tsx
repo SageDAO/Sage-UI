@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseMedia } from '../Media';
+import { BaseMedia } from '../Media/BaseMedia';
 import { useRouter } from 'next/router';
 
 interface Props {

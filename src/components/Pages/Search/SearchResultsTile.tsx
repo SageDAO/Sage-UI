@@ -1,5 +1,5 @@
 import { SearchableNftData } from '@/store/nftsReducer';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useRouter } from 'next/router';
 
 interface Props {

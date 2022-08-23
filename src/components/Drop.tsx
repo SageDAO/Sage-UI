@@ -1,7 +1,7 @@
 import shortenAddress from '@/utilities/shortenAddress';
 import Link from 'next/link';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { BaseMedia, PfpImage } from './Media';
+import { BaseMedia, PfpImage } from './Media/BaseMedia';
 import Countdown from '@/components/Countdown';
 import { computeDropStatus } from '@/utilities/status';
 

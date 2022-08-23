@@ -1,6 +1,6 @@
 import System, { SystemTypes } from '@/components/Icons/System';
 import { Auction_include_Nft, Lottery_include_Nft, User } from '@/prisma/types';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useModal from '@/hooks/useModal';

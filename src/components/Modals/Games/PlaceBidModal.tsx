@@ -8,7 +8,7 @@ import { AuctionState, usePlaceBidMutation } from '@/store/auctionsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import System from '@/components/Icons/System';
 import BidHistoryTable from '@/components/Games/BidHistoryTable';
 import Countdown from '@/components/Countdown';

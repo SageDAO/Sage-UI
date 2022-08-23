@@ -7,7 +7,7 @@ import { Offer, OfferState, User } from '@prisma/client';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import shortenAddress from '@/utilities/shortenAddress';
 import {
   OfferRequest,

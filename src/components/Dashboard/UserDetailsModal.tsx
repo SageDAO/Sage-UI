@@ -1,6 +1,6 @@
 import { useGetPointsBalanceByUserQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
-import { PfpImage } from '@/components/Media';
+import { PfpImage } from '@/components/Media/BaseMedia';
 import LoaderDots from '../LoaderDots';
 import { User_include_EarnedPoints } from '@/prisma/types';
 import { usePromoteUserToArtistMutation } from '@/store/dashboardReducer';

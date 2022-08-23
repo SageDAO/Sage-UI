@@ -1,4 +1,4 @@
-import { PfpImage } from '@/components/Media';
+import { PfpImage } from '@/components/Media/BaseMedia';
 import { useGetUserQuery } from '@/store/usersReducer';
 import { useState, useEffect } from 'react';
 import { useUpdateUserMutation } from '@/store/usersReducer';

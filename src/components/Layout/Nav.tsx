@@ -2,7 +2,7 @@ import { useGetUserQuery } from '@/store/usersReducer';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEnsName } from 'wagmi';
-import { PfpImage } from '../Media';
+import { PfpImage } from '../Media/BaseMedia';
 import PersonalizedMessage from '../PersonalizedMessage';
 import SearchForm from '../SearchForm';
 import HiddenMenu from './HiddenMenu';

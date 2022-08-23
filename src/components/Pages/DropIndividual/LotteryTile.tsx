@@ -1,4 +1,4 @@
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import { Lottery_include_Nft, User } from '@/prisma/types';
 import React from 'react';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';

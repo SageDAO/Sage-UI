@@ -4,7 +4,7 @@ import { Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
 import LoaderSpinner from '../LoaderSpinner';
-import { BaseMedia, PfpImage } from '../Media';
+import { BaseMedia, PfpImage } from '../Media/BaseMedia';
 
 interface Props {
   drop: DropWithArtist;

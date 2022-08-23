@@ -1,4 +1,4 @@
-import { PfpImage } from '@/components/Media';
+import { PfpImage } from '@/components/Media/BaseMedia';
 import shortenAddress from '@/utilities/shortenAddress';
 import { User } from '@prisma/client';
 import { useRouter } from 'next/router';

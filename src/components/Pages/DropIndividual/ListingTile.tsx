@@ -2,7 +2,7 @@ import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Nft_include_NftContractAndOffers, User } from '@/prisma/types';
 import { useBuyFromSellOfferMutation } from '@/store/nftsReducer';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import shortenAddress from '@/utilities/shortenAddress';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { Offer, OfferState } from '@prisma/client';

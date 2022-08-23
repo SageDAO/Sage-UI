@@ -12,7 +12,7 @@ import {
 } from '@/store/lotteriesReducer';
 import { useGetEarnedPointsQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 import System, { SystemTypes } from '@/components/Icons/System';
 import LotterySlider from '@/components/Games/LotterySlider';
 import PlusSVG from '@/public/icons/plus.svg';

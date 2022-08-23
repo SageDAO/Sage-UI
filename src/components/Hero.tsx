@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Logotype from '@/components/Logotype';
-import { BaseMedia } from '@/components/Media';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 
 interface Props {
   imgSrc: string;
