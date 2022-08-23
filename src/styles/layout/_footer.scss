@@ -85,16 +85,16 @@
 }
 
 .footer__motto {
-  position: absolute;
-  left: clamp(14px, 1.5vw, 56px);
-  top: 50%;
-  transform: translateY(-50%);
-  transform: translateX(-50%);
-  left: -5vw;
   @include m.theme() {
+    position: absolute;
+    left: clamp(14px, 1.5vw, 56px);
+    top: 50%;
+    transform: translateY(-50%);
+    transform: translateX(-50%);
     color: m.t(contrast);
     width: 20px;
-    height: clamp(120px, 5vw, 200px);
+    height: clamp(120px, 10vw, 200px);
+    left: -5vw;
   }
 }
 
