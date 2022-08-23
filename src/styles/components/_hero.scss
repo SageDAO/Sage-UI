@@ -10,7 +10,7 @@
   @include m.standard-width;
   @include b.min-width('medium') {
     // aspect-ratio: none;
-    height: 761px;
+    height: 861px;
     width: min(1360px, 80vw);
   }
 }
@@ -25,6 +25,6 @@
   aspect-ratio: 322/311;
   @include b.min-width('medium') {
     // aspect-ratio: 1196/872;
-    height: 581px;
+    height: 681px;
   }
 }
