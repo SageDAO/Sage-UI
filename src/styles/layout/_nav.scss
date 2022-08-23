@@ -28,13 +28,13 @@
   justify-content: center;
   gap: clamp(10px, 0.5vw, 19px);
   justify-self: center;
-	text-align: center;
+  text-align: center;
   width: 33%;
 }
 
 .nav__menu-link {
   @include m.noselect;
-  width: clamp(72px, 2vw, 102px);
+  width: clamp(72px, 8.3vw, 102px);
   color: c.$white;
   font-size: 12px;
   text-transform: uppercase;
@@ -99,5 +99,14 @@
 .nav__search {
   width: 33%;
   display: flex;
+  justify-content: center;
   align-items: center;
+}
+
+.nav__search-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: max(200px, 50%);
 }

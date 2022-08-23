@@ -72,7 +72,9 @@ export default function Nav() {
             })}
           </div>
           <div className='nav__search'>
+            <div className='nav__search-wrapper'>
               <SearchForm />
+            </div>
           </div>
         </div>
       </div>
