@@ -115,6 +115,15 @@ export default function CreationsPanel() {
       reader.onloadend = () => {
         const preview: string = reader.result as string;
         const isVideo: boolean = state.file?.type == 'video/mp4';
+        if (state.isVideo) {
+          let video = document.getElementById('artistCreationVideoPreview') as HTMLVideoElement;
+          if (video) {
+            video.pause();
+            video.src = preview;
+            video.load();
+            video.play();
+          }
+        }
         setState((prevState) => {
           return { ...prevState, preview, isVideo };
         });
@@ -165,6 +174,7 @@ export default function CreationsPanel() {
 
                     {state.isVideo ? (
                       <video
+                        id='artistCreationVideoPreview'
                         autoPlay={true}
                         muted={true}
                         loop={true}
