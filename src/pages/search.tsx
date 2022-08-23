@@ -2,19 +2,22 @@ import LoaderSpinner from '@/components/LoaderSpinner';
 import SearchResultsTile from '@/components/Pages/Search/SearchResultsTile';
 import { SearchableNftData, useGetSearchableNftDataQuery } from '@/store/nftsReducer';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Search() {
-  const displayPageCount = 9;
-  const [displayTotalCount, setDisplayTotalCount] = useState<number>(displayPageCount);
-  const router = useRouter();
-  const query = router.query.q;
+  const ITEMS_PER_PAGE = 9;
+  const [displayCount, setDisplayCount] = useState<number>(ITEMS_PER_PAGE);
   const { data, isLoading } = useGetSearchableNftDataQuery();
-  const results = performSearch(data!, query as string);
-  const displayResults = results.slice(0, displayTotalCount);
+  const query = useRouter().query.q as string;
+  const results = performSearch(data!, query);
+  const displayResults = results.slice(0, displayCount);
+
+  useEffect(() => {
+    setDisplayCount(ITEMS_PER_PAGE); // reset display count when query changes
+  }, [query]);
 
   const handleLoadMoreBtnClick = () => {
-    setDisplayTotalCount(displayTotalCount + displayPageCount);
+    setDisplayCount(displayCount + ITEMS_PER_PAGE);
   };
 
   return (
@@ -37,7 +40,7 @@ export default function Search() {
             ))}
         </div>
       </div>
-      {displayTotalCount < results.length && (
+      {displayCount < results.length && (
         <button className='searchresults__button' onClick={handleLoadMoreBtnClick}>
           Load more results
         </button>
