@@ -4,7 +4,7 @@
 @use '@/styles/layout/layout' as l;
 .footer {
   @include m.theme() {
-    background-color: m.t(base2);
+    background-color: m.t(base);
     display: flex;
     width: 100vw;
   }

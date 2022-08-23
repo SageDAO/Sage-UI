@@ -14,7 +14,7 @@ $indent: max(1em, 10vw);
   overflow-x: hidden;
 
   @include m.theme() {
-    background-color: m.t('base2');
+    background-color: m.t('base');
     color: m.t('contrast');
   }
 
