@@ -28,7 +28,8 @@
   justify-content: center;
   gap: clamp(10px, 0.5vw, 19px);
   justify-self: center;
-  width: 41%;
+	text-align: center;
+  width: 33%;
 }
 
 .nav__menu-link {
@@ -96,7 +97,7 @@
 }
 
 .nav__search {
-  width: 25%;
+  width: 33%;
   display: flex;
   align-items: center;
 }

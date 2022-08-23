@@ -4,7 +4,6 @@
 @use '@/styles/abstracts/breakpoints' as b;
 
 .drop-page {
-  // @include m.page;
 }
 
 .drop-page__banner-base {
@@ -123,7 +122,7 @@
     background-color: m.t(base);
     z-index: 999;
     width: 100vw;
-    padding: 110px 0 0;
+    padding: 110px 0 300px;
   }
 }
 

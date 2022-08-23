@@ -72,7 +72,7 @@ export default function Nav() {
             })}
           </div>
           <div className='nav__search'>
-            <SearchForm />
+              <SearchForm />
           </div>
         </div>
       </div>
