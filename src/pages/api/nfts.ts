@@ -24,6 +24,9 @@ export default async function handler(request: NextApiRequest, response: NextApi
     case 'CreateOffer':
       await createOffer(request, response);
       break;
+    case 'InvalidateOffer':
+      await invalidateOffer(request, response);
+      break;
     case 'DeleteOffer':
       await deleteOffer(request, response);
       break;
@@ -151,6 +154,29 @@ async function deleteOffer(request: NextApiRequest, response: NextApiResponse) {
       where: { id, signer: address, state },
       data: { state: OfferState.CANCELLED },
     });
+    response.status(200);
+  } catch (e: any) {
+    console.log(e);
+    response.json({ error: e.message });
+  }
+}
+
+async function invalidateOffer(request: NextApiRequest, response: NextApiResponse) {
+  const id = Number(request.query.id as string);
+  const session = await getSession({ req: request });
+  const address: string = session?.address as string;
+  if (!session || !address) {
+    return;
+  }
+  console.log(`invalidateOffer(${id}, ${address})`);
+  try {
+    const offer = await prisma.offer.findUnique({ where: { id }, include: { Nft: true } });
+    if (offer && offer.state == OfferState.ACTIVE && offer.Nft.artistAddress == address) {
+      await prisma.offer.update({
+        where: { id },
+        data: { state: OfferState.INVALID },
+      });
+    }
     response.status(200);
   } catch (e: any) {
     console.log(e);

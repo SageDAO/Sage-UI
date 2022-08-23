@@ -181,6 +181,9 @@ const nftsApi = baseApi.injectEndpoints({
         } catch (e) {
           console.log(e);
           const errMsg = extractErrorMessage(e);
+          if (errMsg.includes('transfer amount exceeds balance')) {
+            await fetchWithBQ(`nfts?action=InvalidateOffer&id=${buyOffer.id}`);
+          }
           toast.error(`Failure! ${errMsg}`);
           return { data: false };
         }
