@@ -1,24 +1,51 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["./src/components/*"],
-      "@/prisma/*": ["./src/prisma/*"],
-      "@/constants/*": ["./src/constants/*"],
-      "@/styles/*": ["./src/styles/*"],
-      "@/store/*": ["./src/store/*"],
-      "@/utilities/*": ["./src/utilities/*"],
-      "@/types/*": ["./types/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/api/*": ["./src/pages/api/*"],
-      "@/public/*": ["./public/*"]
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/prisma/*": [
+        "./src/prisma/*"
+      ],
+      "@/constants/*": [
+        "./src/constants/*"
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
+      ],
+      "@/store/*": [
+        "./src/store/*"
+      ],
+      "@/utilities/*": [
+        "./src/utilities/*"
+      ],
+      "@/types/*": [
+        "./types/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/api/*": [
+        "./src/pages/api/*"
+      ],
+      "@/public/*": [
+        "./public/*"
+      ]
     },
-    "types": ["node", "mocha", "chai"],
+    "types": [
+      "node",
+      "mocha",
+      "chai"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": false,
     "removeComments": true,
@@ -33,8 +60,18 @@
     "noImplicitReturns": true,
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["./additional.d.ts"]
+    "typeRoots": [
+      "./additional.d.ts"
+    ],
+    "strict": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "cypress"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "cypress"
+  ]
 }

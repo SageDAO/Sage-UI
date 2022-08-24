@@ -35,7 +35,6 @@ const navLinks: NavLink[] = [
 export default function MobileMenu({ isOpen, closeModal }: Props) {
   const router = useRouter();
   const { isMobile } = useWindowDimensions();
-  useSignIn(isOpen);
 
   if (!isMobile) return null;
 
@@ -65,7 +64,7 @@ export default function MobileMenu({ isOpen, closeModal }: Props) {
         })}
       </section>
       <section className='mobile-menu__user'></section>
-      <Wallet closeModal={closeModal}></Wallet>
+      <Wallet closeModal={closeModal} isOpen={isOpen}></Wallet>
       <section className='mobile-menu__socials'>
         <h1 className='mobile-menu__socials-header'>follow us on</h1>
         <div className='mobile-menu__socials-icons'>
