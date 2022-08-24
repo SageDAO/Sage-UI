@@ -19,7 +19,6 @@ export default function Footer() {
             <div className='footer__logo'>
               <FooterLogoSVG className='footer__logo-svg'></FooterLogoSVG>
             </div>
-            <SearchForm></SearchForm>
           </div>
         </div>
         <div className='footer__middle'>
