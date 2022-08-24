@@ -2,7 +2,6 @@ import FooterLogoSVG from '@/public/branding/footer-logo.svg';
 import MottoSVG from '@/public/branding/motto.svg';
 import Socials from '@/components/Socials';
 import { useRouter } from 'next/router';
-import SearchForm from '@/components/SearchForm';
 
 export default function Footer() {
   const router = useRouter();

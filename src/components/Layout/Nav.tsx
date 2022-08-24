@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEnsName } from 'wagmi';
 import { PfpImage } from '../Media/BaseMedia';
 import PersonalizedMessage from '../PersonalizedMessage';
-import SearchForm from '../SearchForm';
+import { SearchInput } from '../SearchInput';
 import HiddenMenu from './HiddenMenu';
 interface NavLink {
   name: string;
@@ -80,7 +80,14 @@ export default function Nav() {
           {shouldShowSearch && (
             <div className='nav__search'>
               <div className='nav__search-wrapper'>
-                <SearchForm />
+                <div className='searchform'>
+                  <SearchInput
+                    placeholder='search sage'
+                    className='searchform__input'
+                    displayIcon={true}
+                    onChange={() => {}}
+                  />
+                </div>
               </div>
             </div>
           )}

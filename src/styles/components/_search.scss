@@ -54,6 +54,19 @@
     }
   }
 
+  &__input {
+    outline: none;
+    border: none;
+    background: transparent;
+    @include m.theme() {
+      color: m.t('contrast');
+    }
+    text-transform: uppercase;
+    font-size: 60px;
+    line-height: 64px;
+    font-weight: bold;
+  }
+
   &__term {
     margin-top: 50px;
     text-transform: uppercase;

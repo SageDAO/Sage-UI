@@ -1,14 +1,14 @@
+import { useSearch } from '@/store/searchContext';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function SearchForm() {
-  const query = useRouter().query.q as string;
-  const [q, setQ] = useState<string>(query || '');
+export const SearchInput = ({ className, placeholder, displayIcon, onChange }) => {
+  const { query, setQuery } = useSearch();
   const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQ(event.target.value);
+    onChange();
+    setQuery(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -18,24 +18,30 @@ export default function SearchForm() {
   };
 
   const handleButtonClick = () => {
-    if (q.length < 3) {
+    if (query.length < 3) {
       toast.info('Search must include at least 3 characters');
       return;
     }
-    router.push(`/search?q=${q}`);
+    router.push(`/search?q=${query}`);
   };
 
   return (
-    <div className='searchform'>
+    <>
       <input
         type='text'
-        value={q}
+        value={query}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder='search sage'
-        className='searchform__input'
+        placeholder={placeholder}
+        className={className}
       />
-      <img src='/icons/search.svg' onClick={handleButtonClick} className='searchform__white_icon' />
-    </div>
+      {displayIcon && (
+        <img
+          src='/icons/search.svg'
+          onClick={handleButtonClick}
+          className='searchform__white_icon'
+        />
+      )}
+    </>
   );
-}
+};
