@@ -31,10 +31,8 @@
 }
 
 .wallet__header-prompt {
-  font-style: normal;
   font-weight: 400;
-  font-size: clamp(20px, 3vw, 60px);
-  line-height: 136.6%;
+  font-size: clamp(20px, 3vw, 54px);
   letter-spacing: 0.1em;
 
   @include m.theme() {
@@ -50,15 +48,7 @@
 }
 
 .wallet__header-info {
-  // text-transform: uppercase;
-  // font-style: normal;
-  // font-weight: 400;
-  // font-size: 16px;
-  // line-height: 130%;
-  // width: 345px;
 
-  font-family: 'Marine';
-  font-style: normal;
   font-weight: 400;
   font-size: clamp(8px, 1vw, 16px);
   line-height: 130%;
