@@ -17,12 +17,14 @@ import Image from 'next/image';
 import { parameters } from '@/constants/config';
 import { useRouter } from 'next/router';
 import PersonalizedMessage from './PersonalizedMessage';
+import useSignIn from '@/hooks/useSignIn';
 
 interface Props {
   closeModal?: ModalProps['closeModal'];
+  isOpen: ModalProps['isOpen'];
 }
 
-export default function Wallet({ closeModal }: Props) {
+export default function Wallet({ closeModal, isOpen }: Props) {
   const { data: accountData } = useAccount();
   const { disconnect } = useDisconnect();
   const { data: sessionData, status: sessionStatus } = useSession();
@@ -59,6 +61,8 @@ export default function Wallet({ closeModal }: Props) {
       await connectAsync(c);
     } catch {}
   }
+
+  useSignIn(isOpen);
 
   return (
     <div className='wallet'>

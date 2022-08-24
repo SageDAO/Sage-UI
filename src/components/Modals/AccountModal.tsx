@@ -7,7 +7,6 @@ interface Props extends ModalProps {}
 
 export default function AccountModal({ isOpen, closeModal }: Props) {
   const { isMobile } = useWindowDimensions();
-  useSignIn(isOpen);
 
   if (isMobile) return null;
 

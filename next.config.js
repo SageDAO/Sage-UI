@@ -2,7 +2,7 @@
 
 const nextConfig = {
   trailingSlash: true,
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     domains: [
       'urn-dev.s3.us-east-2.amazonaws.com',
