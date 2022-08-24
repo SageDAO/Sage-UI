@@ -17,8 +17,7 @@ export default function Connect() {
 
   if (accountData) {
     if (sessionStatus === 'authenticated') {
-      buttonText = 'signed in';
-      buttonClass = 'connected';
+      return null;
     }
 
     if (sessionStatus === 'unauthenticated') {
@@ -29,10 +28,7 @@ export default function Connect() {
   return (
     <button className={buttonClass} onClick={openAccountModal}>
       {buttonText}
-      <AccountModal
-        isOpen={isAccountModalOpen}
-        closeModal={closeAccountModal}
-      />
+      <AccountModal isOpen={isAccountModalOpen} closeModal={closeAccountModal} />
     </button>
   );
 }

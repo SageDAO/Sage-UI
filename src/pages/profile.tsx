@@ -13,6 +13,7 @@ import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 import { animated, Transition, Spring } from 'react-spring';
 import { useRouter } from 'next/router';
 import { useDisconnect } from 'wagmi';
+import { PfpImage } from '@/components/Media';
 
 function profile() {
   const { data: sessionData } = useSession();
@@ -48,8 +49,11 @@ function profile() {
   return (
     <Tab.Group selectedIndex={selectedTabIndex} onChange={setSelectedTabIndex} vertical>
       <div className='profile-page'>
-        <div>
+        <div className='profile-page__left'>
           <SageFullLogoSVG className='profile-page__sage-logo-svg' />
+          <div className='profile-page__pfp-container'>
+            <PfpImage src={userData?.profilePicture}></PfpImage>
+          </div>
           <Tab.List className='profile-page__tabs'>
             <Tab as={React.Fragment}>
               {({ selected }) => {

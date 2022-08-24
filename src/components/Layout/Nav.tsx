@@ -38,27 +38,32 @@ export default function Nav() {
   });
   const { data: ensData } = useEnsName({ address: userData?.walletAddress });
   const isSignedIn: boolean = sessionStatus === 'authenticated';
+  const shouldShowPersonal: boolean = !router.pathname.includes('/profile');
+  const shouldShowSearch: boolean = !router.pathname.includes('/profile');
 
   return (
     <div className='nav__wrapper'>
       <HiddenMenu></HiddenMenu>
       <div className='nav' data-cy='nav'>
         <div className='nav__content'>
-          <div className='nav__personal'>
-            {isSignedIn && (
-              <div
-                onClick={() => {
-                  router.push('/profile');
-                }}
-                className='nav__personal-pfp-container'
-              >
-                <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
-              </div>
-            )}
-            <h1 className='nav__personal-message'>
-              <PersonalizedMessage />
-            </h1>
-          </div>
+          {shouldShowPersonal && (
+            <div className='nav__personal'>
+              {isSignedIn && (
+                <div
+                  onClick={() => {
+                    router.push('/profile');
+                  }}
+                  className='nav__personal-pfp-container'
+                >
+                  <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
+                </div>
+              )}
+              <h1 className='nav__personal-message'>
+                <PersonalizedMessage />
+              </h1>
+            </div>
+          )}
+
           <div className='nav__menu'>
             {navLinks.map(({ name, url }: NavLink) => {
               const onClick = () => {
@@ -71,11 +76,14 @@ export default function Nav() {
               );
             })}
           </div>
-          <div className='nav__search'>
-            <div className='nav__search-wrapper'>
-              <SearchForm />
+
+          {shouldShowSearch && (
+            <div className='nav__search'>
+              <div className='nav__search-wrapper'>
+                <SearchForm />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
