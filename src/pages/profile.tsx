@@ -10,10 +10,9 @@ import Balances from '@/components/Pages/Profile/Balances';
 import CreationsPanel from '@/components/Pages/Profile/CreationsPanel';
 import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
 import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
-import { animated, Transition, Spring } from 'react-spring';
 import { useRouter } from 'next/router';
 import { useDisconnect } from 'wagmi';
-import { PfpImage } from '@/components/Media';
+import { PfpImage } from '@/components/Media/BaseMedia';
 
 function profile() {
   const { data: sessionData } = useSession();
