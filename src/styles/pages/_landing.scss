@@ -9,18 +9,18 @@
     height: 100vh;
     color: m.t(contrast);
     display: flex;
+    justify-content: center;
     align-items: center;
-		justify-content: center;
   }
 }
 
 .landing-page__content {
   display: flex;
-  gap: 10px;
+  gap: 40px 10px;
   flex-direction: column;
   @include b.min-width('small') {
     flex-direction: row;
-  align-items: center;
+
     justify-content: center;
   }
 }
@@ -39,9 +39,9 @@
 }
 
 .landing-page__title {
-	text-align: left;
-  font-weight: 400;
-	flex: 1;
+  text-align: left;
+  font-weight: 200;
+  flex: 1;
   font-size: clamp(12px, 1.2vw, 24px);
   line-height: 1.2em;
 }
