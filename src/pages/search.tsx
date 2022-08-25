@@ -1,4 +1,5 @@
 import LoaderSpinner from '@/components/LoaderSpinner';
+import SearchGrid from '@/components/Pages/Search/Grid';
 import SearchResultsTile from '@/components/Pages/Search/SearchResultsTile';
 import { SearchInput } from '@/components/SearchInput';
 import { SearchableNftData, useGetSearchableNftDataQuery } from '@/store/nftsReducer';
@@ -56,7 +57,7 @@ export default function Search() {
         </div>
       </div>
       <div className='drop-page__content' style={{ padding: '50px 0 0' }}>
-        <div className='drop-page__grid'>
+        <div className='search-page__grid'>
           {displayResults &&
             displayResults.map((nft: SearchableNftData, i: number) => (
               <SearchResultsTile key={i} nft={nft} />

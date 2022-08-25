@@ -1,0 +1,50 @@
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
+
+.search-page {
+}
+
+.search-page__grid {
+  display: grid;
+  // background-color: red;
+  width: 100%;
+  gap: 0 1vw;
+  grid-template-columns: repeat(2, 1fr);
+  @include b.min-width('small') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include b.min-width('medium') {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.search-page__grid-item {
+  // background-color: blue;
+	transition-duration: 200ms;
+  @include m.theme() {
+    background-color: m.t(base);
+    color: m.t(contrast);
+    @include m.interact {
+      background-color: m.t(contrast);
+      color: m.t(base);
+    }
+  }
+}
+
+.search-page__grid-item-img {
+  aspect-ratio: 1/1;
+  position: relative;
+}
+
+.search-page__grid-item-info {
+  display: flex;
+  gap: 2px;
+  padding: 2px 0;
+  flex-direction: column;
+}
+
+
+.search-page__grid-item-info-drop-name {
+
+}

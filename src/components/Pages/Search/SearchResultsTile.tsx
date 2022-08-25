@@ -7,9 +7,8 @@ interface Props {
 }
 
 export default function SearchResultsTile({ nft }: Props) {
-
   const router = useRouter();
-  
+
   const handleClick = async () => {
     if (nft.dId) {
       router.push(`/drops/${nft.dId}`);
@@ -19,13 +18,13 @@ export default function SearchResultsTile({ nft }: Props) {
   };
 
   return (
-    <div className='drop-page__grid-item' onClick={handleClick}>
-      <div className='drop-page__grid-item-img'>
-        <BaseMedia src={nft.s3Path} isVideo={nft.isVid} />
+    <div className='search-page__grid-item' onClick={handleClick}>
+      <div className='search-page__grid-item-img'>
+        <BaseMedia src={nft.s3Path}></BaseMedia>
       </div>
-      <div className='drop-page__grid-item-info'>
-        <h1 className='drop-page__grid-item-info-drop-name'>by {nft.artist}</h1>
-        <h1 className='drop-page__grid-item-info-game-name'>{nft.name}</h1>
+      <div className='search-page__grid-item-info'>
+        <h1 className='search-page__grid-item-info-drop-name'>by {nft.artist}</h1>
+        <h1 className='search-page__grid-item-info-game-name'>{nft.name}</h1>
       </div>
     </div>
   );
