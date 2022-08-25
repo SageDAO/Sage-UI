@@ -12,7 +12,7 @@ export default function AccountModal({ isOpen, closeModal }: Props) {
 
   return (
     <Modal title='' isOpen={isOpen} closeModal={closeModal}>
-      <Wallet></Wallet>
+      <Wallet isOpen={isOpen}></Wallet>
     </Modal>
   );
 }
