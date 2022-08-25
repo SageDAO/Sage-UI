@@ -1,13 +1,13 @@
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Nft_include_NftContractAndOffers, User } from '@/prisma/types';
-import { useBuyFromSellOfferMutation } from '@/store/nftsReducer';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import shortenAddress from '@/utilities/shortenAddress';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { Offer, OfferState } from '@prisma/client';
 import useModal from '@/hooks/useModal';
 import MakeOfferModal from '@/components/Modals/Games/MakeOfferModal';
+import BuyNowModal from '@/components/Modals/Games/BuyNowModal';
 
 interface Props {
   nft: Nft_include_NftContractAndOffers;
@@ -25,9 +25,8 @@ function findActiveSellOffer(offers: Offer[]): Offer | null {
 }
 
 export default function ListingTile({ nft, artist }: Props) {
-  const [buyFromSellOffer, { isLoading }] = useBuyFromSellOfferMutation();
   const { data: signer } = useSigner();
-  const { isOpen, closeModal, openModal: openMakeOfferModal } = useModal();
+  const { isOpen, closeModal, openModal } = useModal();
   const sellOffer = findActiveSellOffer(nft.Offers!);
 
   const handleClick = async () => {
@@ -36,18 +35,25 @@ export default function ListingTile({ nft, artist }: Props) {
     }
     if (!signer) {
       toast.info('Please Sign In With Ethereum.');
-    } else if (isLoading) {
-      toast.info('Please wait for transaction to complete.');
-    } else if (sellOffer) {
-      await buyFromSellOffer({ sellOffer, signer });
     } else {
-      openMakeOfferModal();
+      openModal();
     }
   };
 
   return (
     <div className='drop-page__grid-item' onClick={handleClick}>
-      <MakeOfferModal artist={artist} nft={nft} isOpen={isOpen} closeModal={closeModal} />
+      {!sellOffer && (
+        <MakeOfferModal artist={artist} nft={nft} isOpen={isOpen} closeModal={closeModal} />
+      )}
+      {sellOffer && (
+        <BuyNowModal
+          artist={artist}
+          nft={nft}
+          sellOffer={sellOffer}
+          isOpen={isOpen}
+          closeModal={closeModal}
+        />
+      )}
       <div className='drop-page__grid-item-header'>
         <h1 className='drop-page__grid-item-header-left'>edition size: {1}</h1>
         <div className='drop-page__grid-item-header-right'></div>
@@ -55,15 +61,11 @@ export default function ListingTile({ nft, artist }: Props) {
       <div className='drop-page__grid-item-img'>
         <BaseMedia src={nft.s3Path} />
         <div className='drop-page__grid-item-focus'>
-          {isLoading ? (
-            <LoaderSpinner />
-          ) : nft.ownerAddress ? (
-            `owned by ${shortenAddress(nft.ownerAddress)}`
-          ) : sellOffer ? (
-            `buy now for ${nft.price} ASH`
-          ) : (
-            `make an offer`
-          )}
+          {nft.ownerAddress
+            ? `owned by ${shortenAddress(nft.ownerAddress)}`
+            : sellOffer
+            ? `buy now for ${nft.price} ASH`
+            : `make an offer`}
         </div>
       </div>
       <div className='drop-page__grid-item-info'>
