@@ -36,7 +36,10 @@ input[type='number'] {
 }
 
 body {
-  overflow: hidden;
+  @include m.theme() {
+    overflow: hidden;
+    background-color: m.t(base);
+  }
 }
 
 html,
