@@ -100,9 +100,9 @@ model Nft {
   description              String
   metadataPath             String
   s3Path                   String
+  s3PathOptimized          String
   tags                     String
   numberOfEditions         Int          @default(0)
-  isVideo                  Boolean      @default(false)
   isHidden                 Boolean      @default(false)
   lotteryId                Int?
   price                    Float?
@@ -124,6 +124,7 @@ model NftContract {
   Artist                 User        @relation("ArtistContract", fields: [artistAddress], references: [walletAddress])
   Drops                  Drop[]  @relation("ContractDrops")
   ListingNfts            Nft[] 
+
   @@unique([contractAddress])      
 }
 
@@ -150,6 +151,7 @@ model TokenTransaction {
   assetType      AssetType
   id             Int       @id @default(autoincrement())
   txHash         String    @db.Char(66)
+
   @@index([from, to])
 }
 
@@ -182,13 +184,14 @@ model User {
   role                          Role          @default(USER)
   bio                           String?       @db.VarChar(200)
   profilePicture                String?
-  artistBanner                	String?
+  bannerImageS3Path            	String?
   receiveEmailNotification      Boolean       @default(true)
   username                      String?       @db.VarChar(40)
   DropsApproved                 Drop[]        @relation("Drop_approvedByToUser")
   NftContract                   NftContract?  @relation("ArtistContract")
   EarnedPoints                  EarnedPoints?
   FavoriteDrops                 Drop[]        @relation("userFavoriteDrops")
+
   @@index([walletAddress])
   @@unique([username])
 }
@@ -217,6 +220,7 @@ enum OfferState {
 model Follow {
   walletAddress                 String @db.Char(42)
   followedAddress               String @db.Char(42)
+
   @@id([walletAddress, followedAddress])  
 }
 
