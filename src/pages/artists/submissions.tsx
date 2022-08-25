@@ -8,23 +8,24 @@ export default function submissions() {
       <div className='submissions-page__logotype-container'>
         <Logotype></Logotype>
       </div>
-      <h1 className='submissions-page__header'>Artist Submissions</h1>
+      <h1 className='submissions-page__header'>Artist Submission.</h1>
       <section className='submissions-page__guidelines-group'>
         <h1 className='submissions-page__guidelines-header'>Submissions Guidelines</h1>
         <p className='submissions-page__guidelines-text'>
-          SAGE IS A HIGHLY CURATED PLATFORM, WE TAKE THE APPLICATION PROCESS VERY SERIOUSLY THAT’S
-          THE REASON WE CHANGED THE WAY HOW ARTIST CAN APPLY TO BE A CREATOR ON THE SAGE PLATFORM.
-          ARTIST SHOULD PRESENT THEIR WORKS IN A PDF FORMAT AND SUBMIT IT BELOW. WE WOULD LIKE YOU
-          TO TAKE YOUR TIME TO PRESENT YOURSELF AND YOUR CREATIONS.
+          Sage is a highly curated platform, we take the application process very seriously that’s
+          the reason we changed the way how artist can apply to be a creator on the sage platform.
+          Artist should present their works in a pdf format and submit it below. We would like you
+          to take your time to present yourself and your creations.
         </p>
       </section>
       <section className='submissions-page__guidelines-group'>
         <h1 className='submissions-page__guidelines-header'>Standards Guidelines</h1>
         <p className='submissions-page__guidelines-text'>
-          SAGE IS A HIGHLY CURATED PLATFORM, WE TAKE THE APPLICATION PROCESS VERY SERIOUSLY THAT’S
-          THE REASON WE CHANGED THE WAY HOW ARTIST CAN APPLY TO BE A CREATOR ON THE SAGE PLATFORM.
-          ARTIST SHOULD PRESENT THEIR WORKS IN A PDF FORMAT AND SUBMIT IT BELOW. WE WOULD LIKE YOU
-          TO TAKE YOUR TIME TO PRESENT YOURSELF AND YOUR CREATIONS.
+          When it comes to digital art, guidlines are provided so we can make sure not only the
+          quality of the works are up to pair but also the standards of how the works will look and
+          be presented in an exhibition outside of web.This standards are currently what we look for
+          when checking the applications.In terms of animation or 3d rendering artwork we look for a
+          quality of 4k standard and up.
         </p>
       </section>
       <section className='submissions-page__aspect-ratios-section'>
@@ -51,9 +52,10 @@ export default function submissions() {
       <section className='submissions-page__guidelines-group'>
         <h1 className='submissions-page__guidelines-header'>some help</h1>
         <p className='submissions-page__guidelines-text'>
-          WE PROVIDE 2 TEMPLATES TO MAKE IT A BIT EASIER TO GET STARTED. YOU WONT NEED THIS IF YOU
-          ALREADY MADE A PDF PRESENTATION.BELOW YOULL FIND AN INDESIGN AND ILLUSTRATOR FILE TO GET
-          STARTED.
+          Sage is a highly curated platform, we take the application process very seriously that’s
+          the reason we changed the way how artist can apply to be a creator on the sage platform.
+          Artist should present their works in a PDF format and submit it below. We would like you
+          to take your time to present yourself and your creations.
           <span className='submissions-page__design-icons'>
             <AdobeIllustratorSVG className='submissions-page__design-icons-svg'></AdobeIllustratorSVG>
             <IndesignSVG className='submissions-page__design-icons-svg'></IndesignSVG>
@@ -64,7 +66,7 @@ export default function submissions() {
       <section className='submissions-page__guidelines-group'>
         <h1 className='submissions-page__guidelines-header'>how to send application?</h1>
         <p className='submissions-page__guidelines-text'>
-          ONCE READY, PLEASE SEND YOUR APPLICATION TO: creator@sage.com
+          Once ready, please send your application to: creator@sage.com
         </p>
       </section>
     </div>
