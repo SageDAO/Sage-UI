@@ -20,7 +20,7 @@ export default function SearchResultsTile({ nft }: Props) {
   return (
     <div className='search-page__grid-item' onClick={handleClick}>
       <div className='search-page__grid-item-img'>
-        <BaseMedia src={nft.s3Path}></BaseMedia>
+        <BaseMedia src={nft.s3Path} isVideo={nft.isVid}></BaseMedia>
       </div>
       <div className='search-page__grid-item-info'>
         <h1 className='search-page__grid-item-info-drop-name'>by {nft.artist}</h1>
