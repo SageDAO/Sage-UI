@@ -16,7 +16,7 @@
 
 .landing-page__content {
   display: flex;
-  gap: 40px 10px;
+  gap: 20px;
   flex-direction: column;
   @include b.min-width('small') {
     flex-direction: row;
@@ -26,8 +26,9 @@
 }
 
 .landing-page__sage-logo {
-  width: min(100vw, 300px);
-  aspect-ratio: 309/71;
+  width: min(250px, 100vw);
+  height: 70px;
+  display: flex;
 }
 
 .landing-page__sage-svg {
@@ -44,4 +45,11 @@
   flex: 1;
   font-size: clamp(10px, 1.5vw, 24px);
   line-height: 1.2em;
+  display: flex;
+  flex-direction: column;
 }
+
+.landing-page__contact-label {
+	margin-top: 10px;
+}
+
