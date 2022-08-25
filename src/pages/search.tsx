@@ -1,5 +1,4 @@
 import LoaderSpinner from '@/components/LoaderSpinner';
-import SearchGrid from '@/components/Pages/Search/Grid';
 import SearchResultsTile from '@/components/Pages/Search/SearchResultsTile';
 import { SearchInput } from '@/components/SearchInput';
 import { SearchableNftData, useGetSearchableNftDataQuery } from '@/store/nftsReducer';
