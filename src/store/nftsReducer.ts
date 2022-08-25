@@ -270,6 +270,7 @@ async function dbInsertNft(
       s3Path,
       metadataPath,
       numberOfEditions: 1,
+      isVideo: mintRequest.file.name.toLowerCase().endsWith('mp4'),
     },
   });
   const nftId = (data as any).nftId;

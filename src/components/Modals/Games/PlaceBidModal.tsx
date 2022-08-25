@@ -133,7 +133,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
-            <BaseMedia src={auction.Nft.s3Path} />
+            <BaseMedia src={auction.Nft.s3Path} isVideo={auction.Nft.isVideo} />
             {!isOpenForBids && (
               <Countdown endTime={auction.startTime} className='games-modal__countdown'></Countdown>
             )}

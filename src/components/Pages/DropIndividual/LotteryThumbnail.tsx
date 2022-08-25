@@ -19,7 +19,7 @@ export default function LotteryThumbnail({ lottery }: Props) {
       {uniqueImages.map((nft, i) => {
         return (
           <div key={i} data-item={`lottery-nft-${nft.id}`} className='lottery-thumbnail__item'>
-            <BaseMedia src={nft.s3Path}></BaseMedia>
+            <BaseMedia src={nft.s3Path} isVideo={nft.isVideo} />
           </div>
         );
       })}
