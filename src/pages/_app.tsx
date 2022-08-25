@@ -16,6 +16,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { parameters } from '@/constants/config';
 import { useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
+import LandingPage from '@/components/Pages/Landing';
 
 // set up connectors
 const connectors = [
@@ -48,6 +49,8 @@ const apolloClient = new ApolloClient({
 function App({ Component, pageProps, router }: AppProps) {
   useTheme();
   const [query, setQuery] = useState<string>('');
+
+  return <LandingPage />;
 
   if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <MaintenancePage />;
 
