@@ -14,17 +14,18 @@ interface BaseMediaProps {
 }
 
 function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
-
   const isVideo = (): boolean => {
     return src.toLowerCase().endsWith('mp4');
-  }
-  
+  };
+
   return (
     <div>
       <ConditionalWrapper
         condition={true === isZoomable}
         wrapper={(children: JSX.Element) => (
-          <Zoom wrapStyle={{ height: '100%', width: '100%' }}>{children}</Zoom>
+          <Zoom wrapStyle={{ width: '100%', height: '100%', aspectRatio: '487/527' }}>
+            {children}
+          </Zoom>
         )}
       >
         {isVideo() ? (
@@ -47,11 +48,11 @@ function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMed
           </video>
         ) : isZoomable ? (
           <Image
-            draggable={false}
-            className={className}
             src={src}
             layout='fill'
             objectFit='cover'
+            draggable={false}
+            className={className}
           />
         ) : (
           <Image

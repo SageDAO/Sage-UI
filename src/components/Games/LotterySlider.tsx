@@ -48,7 +48,7 @@ export default function LotterySlider({ nfts, selectedNftIndex, setSelectedNftIn
             data-selected={selectedNftIndex === i}
           >
             NFT{nft.id}
-            <BaseMedia src={nft.s3Path} />
+            <BaseMedia src={nft.s3Path} isZoomable={true} />
           </div>
         );
       })}

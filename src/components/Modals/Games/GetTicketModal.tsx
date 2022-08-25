@@ -166,7 +166,7 @@ function GetTicketModal({
                 setSelectedNftIndex={setSelectedNftIndex}
               ></LotterySlider>
             ) : (
-              <BaseMedia src={lottery.Nfts[selectedNftIndex].s3Path} />
+              <BaseMedia src={lottery.Nfts[selectedNftIndex].s3Path} isZoomable={true} />
             )}
             {isActive && (
               <Countdown endTime={lottery.endTime} className='games-modal__countdown'></Countdown>

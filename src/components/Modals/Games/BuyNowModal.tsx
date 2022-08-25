@@ -42,7 +42,7 @@ export default function BuyNowModal({ isOpen, closeModal, artist, nft, sellOffer
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
-            <BaseMedia src={nft.s3Path} />
+            <BaseMedia src={nft.s3Path} isZoomable={true} />
           </div>
           <div className='games-modal__main-content'>
             <div>
@@ -52,12 +52,12 @@ export default function BuyNowModal({ isOpen, closeModal, artist, nft, sellOffer
             <p className='games-modal__game-description'>
               {nft.description || 'this artwork has no description provided.'}
             </p>
-            <p className='games-modal__price-fixed'>{nft.price}</p>
+            <p className='games-modal__price-fixed'>{nft.price} ASH</p>
             <div
               className='games-modal__game-description'
               style={{ textAlign: 'right', fontSize: '80%' }}
             >
-              fixed price: {nft.price} ASH
+              fixed price
             </div>
             <button
               disabled={isLoading}
