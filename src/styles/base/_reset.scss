@@ -6,11 +6,6 @@
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/mixins' as m;
 
-html,
-button {
-  font-family: 'Helvetica';
-}
-
 //element highlights in accented color
 *::selection {
   @include m.theme() {
@@ -131,7 +126,7 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  font-family: 'Poppins';
+  font-family: 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;
 }
 /* HTML5 display-role reset for older browsers */
 article,
