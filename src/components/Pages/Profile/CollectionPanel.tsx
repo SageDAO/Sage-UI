@@ -53,11 +53,7 @@ export default function CollectionPanel() {
                     return (
                       <div key={nft.nftId} className='collection-panel__tile'>
                         <div className='collection-panel__img-container'>
-                          <BaseMedia
-                            src={nft.s3Path}
-                            isVideo={nft.isVideo}
-                            isZoomable={true}
-                          ></BaseMedia>
+                          <BaseMedia src={nft.s3Path} isZoomable={true}></BaseMedia>
                         </div>
                         <div className='collection-panel__tile-header'>
                           by {nft.artistUsername}

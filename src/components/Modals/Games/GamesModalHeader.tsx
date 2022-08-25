@@ -3,18 +3,17 @@ import { User } from '@/prisma/types';
 import { PfpImage, BaseMedia } from '@/components/Media/BaseMedia';
 interface Props {
   src: string;
-  isVideo: boolean;
   artist: User;
   nftEditions: number;
   nftName: string;
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
-export default function GamesModalHeader({ src, isVideo, artist, nftEditions, nftName }: Props) {
+export default function GamesModalHeader({ src, artist, nftEditions, nftName }: Props) {
   return (
     <div className='games-modal__header'>
       <div className='games-modal__header-nft-img'>
-        <BaseMedia src={src} isVideo={isVideo} />
+        <BaseMedia src={src} />
       </div>
       <div className='games-modal__header-right'>
         <div className='games-modal__header-artist'>

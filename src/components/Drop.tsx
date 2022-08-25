@@ -15,7 +15,7 @@ export default function Drop({ drop }: Props) {
     <div className='drop' data-cy={`drop-tile`}>
       <Link href={`drops/${drop.id}`}>
         <div className='drop__thumbnail'>
-          <BaseMedia src={drop.bannerImageS3Path || '/'} isVideo={false} />
+          <BaseMedia src={drop.bannerImageS3Path || '/'} />
         </div>
       </Link>
       <div className='details'>

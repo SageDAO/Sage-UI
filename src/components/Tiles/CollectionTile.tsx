@@ -34,7 +34,7 @@ export default function CollectionTile({ item }: Props) {
   return (
     <div className='collection__tile'>
       <div className='collection__tile-img'>
-        <BaseMedia src={item.s3Path} isVideo={item.isVideo} isZoomable={true} />
+        <BaseMedia src={item.s3Path} isZoomable={true} />
       </div>
       <div className='collection__tile-details'>
         <div className='collection__tile-artist'>

@@ -20,7 +20,6 @@ function flatten({ auction, drop, artist }: FlattenArgs): GamePrize {
     artistUsername: artist.username!,
     artistProfilePicture: artist.profilePicture!,
     s3Path: auction.Nft.s3Path,
-    isVideo: auction.Nft.isVideo,
     claimedAt: auction.claimedAt || undefined,
   };
 }

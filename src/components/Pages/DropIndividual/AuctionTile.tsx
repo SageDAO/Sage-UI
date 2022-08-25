@@ -8,14 +8,14 @@ import React from 'react';
 import TileHeader from './TileHeader';
 
 interface Props {
-  imgSrc: string;
+  s3Path: string;
   dropName: string;
   artist: User;
   editionSize: number;
   auction: Auction_include_Nft;
 }
 
-export default function AuctionTile({ artist, dropName, imgSrc, editionSize, auction }: Props) {
+export default function AuctionTile({ artist, dropName, s3Path, editionSize, auction }: Props) {
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
   const { isOpen, closeModal, openModal } = useModal();
 
@@ -35,7 +35,7 @@ export default function AuctionTile({ artist, dropName, imgSrc, editionSize, auc
       />
       <TileHeader editionSize={editionSize} systemType='auctions' />
       <div className='drop-page__grid-item-img'>
-        <BaseMedia src={imgSrc} />
+        <BaseMedia src={s3Path} />
         <div className='drop-page__grid-item-focus'>
           {isOpenForBids ? 'place bid' : isEnded ? 'view results' : 'starting soon'}
         </div>

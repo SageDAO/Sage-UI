@@ -9,7 +9,7 @@ export default function Custom404() {
       <Logotype />
       <h1 className='custom404__catchphrase'>You missed the mark</h1>
       <div className='custom404__404logo' onClick={() => router.push('/')}>
-        <BaseMedia src='/branding/404.svg' isVideo={false} />
+        <BaseMedia src='/branding/404.svg' />
       </div>
     </div>
   );

@@ -53,7 +53,7 @@ export default function ListingTile({ nft, artist }: Props) {
         <div className='drop-page__grid-item-header-right'></div>
       </div>
       <div className='drop-page__grid-item-img'>
-        <BaseMedia src={nft.s3Path} isVideo={nft.isVideo}></BaseMedia>
+        <BaseMedia src={nft.s3Path} />
         <div className='drop-page__grid-item-focus'>
           {isLoading ? (
             <LoaderSpinner />

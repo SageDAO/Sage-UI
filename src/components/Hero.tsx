@@ -19,7 +19,6 @@ export default function Hero({ imgSrc, path }: Props) {
             await router.push(path);
           }}
           src={imgSrc}
-          isVideo={false}
         ></BaseMedia>
       </div>
     </div>

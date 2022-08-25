@@ -1,6 +1,5 @@
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import Image from 'next/image';
-import { Fragment, useEffect } from 'react';
 import Zoom from 'react-medium-image-zoom';
 
 const ConditionalWrapper = ({ condition, wrapper, children }) =>
@@ -8,14 +7,18 @@ const ConditionalWrapper = ({ condition, wrapper, children }) =>
 
 interface BaseMediaProps {
   src: string;
-  isVideo?: boolean;
   onClickHandler?: React.MouseEventHandler<HTMLImageElement>;
   isZoomable?: boolean;
   type?: string;
   className?: string;
 }
 
-function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
+function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
+
+  const isVideo = (): boolean => {
+    return src.toLowerCase().endsWith('mp4');
+  }
+  
   return (
     <div>
       <ConditionalWrapper
@@ -24,7 +27,7 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }
           <Zoom wrapStyle={{ height: '100%', width: '100%' }}>{children}</Zoom>
         )}
       >
-        {isVideo ? (
+        {isVideo() ? (
           <video
             autoPlay={true}
             muted={true}

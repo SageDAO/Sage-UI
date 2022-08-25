@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 
 interface Props {
   src: string;
-  isVideo: boolean;
   children?: React.ReactNode;
   name: string;
   subtitle: string;
@@ -14,7 +13,7 @@ interface Props {
   tileLink: string;
 }
 
-function NftTile({ src, isVideo, name, subtitle, button, tileLink, children }: Props) {
+function NftTile({ src, name, subtitle, button, tileLink, children }: Props) {
   const router = useRouter();
   function handleNftTileClick() {
     router.push(tileLink);
@@ -22,7 +21,7 @@ function NftTile({ src, isVideo, name, subtitle, button, tileLink, children }: P
   return (
     <div className='nft-tile'>
       <div className='nft-tile__media-container' onClick={handleNftTileClick}>
-        <BaseMedia src={src} isVideo={isVideo} />
+        <BaseMedia src={src} />
       </div>
       <div className='nft-tile__interact'>
         <div className='nft-tile__interact-container'>
