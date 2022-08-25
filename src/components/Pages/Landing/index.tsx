@@ -7,8 +7,8 @@ export default function LandingPage() {
           <SageFullLogoSVG className='landing-page__sage-svg' />
         </div>
         <h1 className='landing-page__title'>
-          SAGE is a curation system built to lead Web3. <pre />  Through our selection, we mark
-          value into the
+          SAGE is a curation system created to refine and lead Web3. <pre /> Through our portal, you
+          secure an entrance into the future.
         </h1>
       </div>
     </div>
