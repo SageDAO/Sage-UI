@@ -1,5 +1,6 @@
 import { useSearch } from '@/store/searchContext';
 import { useRouter } from 'next/router';
+import SearchSVG from '@/public/icons/search.svg';
 import { toast } from 'react-toastify';
 
 export const SearchInput = ({ className, placeholder, displayIcon, onChange }) => {
@@ -35,13 +36,7 @@ export const SearchInput = ({ className, placeholder, displayIcon, onChange }) =
         placeholder={placeholder}
         className={className}
       />
-      {displayIcon && (
-        <img
-          src='/icons/search.svg'
-          onClick={handleButtonClick}
-          className='searchform__white_icon'
-        />
-      )}
+      {displayIcon && <SearchSVG onClick={handleButtonClick} className='searchform__white_icon' />}
     </>
   );
 };

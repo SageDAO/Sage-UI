@@ -17,7 +17,9 @@
     outline: none;
     border: none;
     background: transparent;
-    color: c.$white;
+    @include m.theme() {
+      color: m.t(contrast);
+    }
     text-transform: uppercase;
     font-style: italic;
     font-size: 80%;
@@ -30,12 +32,13 @@
     cursor: pointer;
     right: 0;
     position: absolute;
-    filter: invert(93%) sepia(94%) saturate(0%) hue-rotate(248deg) brightness(106%) contrast(106%);
+    @include m.theme() {
+      color: m.t(contrast);
+    }
   }
 }
 
 .searchresults {
-  
   &__header {
     @include m.standard-width;
     position: relative;
