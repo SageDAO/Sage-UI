@@ -227,6 +227,7 @@ async function insertAuction(data: any, response: NextApiResponse) {
             numberOfEditions: 1,
             metadataPath: data.metadataPath,
             s3Path: data.s3Path,
+            s3PathOptimized: data.s3PathOptimized,
           },
         },
       },
@@ -253,6 +254,7 @@ async function insertNft(data: any, response: NextApiResponse) {
         Auction: null || {},
         Lottery: null || {},
         NftContract: null || {},
+        s3PathOptimized: data.s3PathOptimized,
       },
     };
     // Game NFT either belongs to an Auction or to a Lottery
