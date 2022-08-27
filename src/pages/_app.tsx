@@ -1,4 +1,5 @@
 import '@/styles/index.scss';
+import Head from 'next/head';
 import useTheme from '@/hooks/useTheme';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import 'react-medium-image-zoom/dist/styles.css';
@@ -50,7 +51,7 @@ function App({ Component, pageProps, router }: AppProps) {
   useTheme();
   const [query, setQuery] = useState<string>('');
 
-  if (process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true') return <LandingPage />;
+  const isMaintenanceOn = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
 
   return (
     <ReduxProvider store={store}>
@@ -58,9 +59,21 @@ function App({ Component, pageProps, router }: AppProps) {
         <SessionProvider session={pageProps.session} refetchInterval={0}>
           <ApolloProvider client={apolloClient}>
             <SearchContext.Provider value={{ query, setQuery }}>
-              <Layout router={router}>
-                <Component {...pageProps} key={router.pathname} />
-              </Layout>
+              <Head>
+                <title>Sage Marketplace</title>
+                <link rel='icon' href='/icons/sage.svg' />
+                <meta
+                  name='viewport'
+                  content='width=device-width,initial-scale=1,viewport-fit=cover'
+                />
+              </Head>
+              {isMaintenanceOn ? (
+                <LandingPage />
+              ) : (
+                <Layout router={router}>
+                  <Component {...pageProps} key={router.pathname} />
+                </Layout>
+              )}
             </SearchContext.Provider>
           </ApolloProvider>
         </SessionProvider>

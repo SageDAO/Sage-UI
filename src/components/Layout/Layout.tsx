@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import type { Router } from 'next/router';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -72,11 +71,6 @@ export default function Layout({ children, router }: Props) {
   return transitions((props, item) => {
     return (
       <React.Fragment>
-        <Head>
-          <title>Sage Marketplace</title>
-          <link rel='icon' href='/icons/sage.svg' />
-          <meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover' />
-        </Head>
         <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
         <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
         <WrongNetworkModal
