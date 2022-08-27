@@ -10,7 +10,9 @@ export default function LandingPage() {
           <h1 className='landing-page__title'>
             SAGE is a curation system created to refine and lead Web3. <pre /> Through our portal,
             you secure an entrance into the future.
-            <span className='landing-page__contact-label'>contact@sage.art</span>
+            <a href='mailto: contact@sage.art' className='landing-page__contact-label'>
+              contact@sage.art
+            </a>
           </h1>
         </div>
       </div>

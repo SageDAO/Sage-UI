@@ -75,6 +75,10 @@ export default function Layout({ children, router }: Props) {
         <Head>
           <title>Sage Marketplace</title>
           <link rel='icon' href='/icons/sage.svg' />
+          <meta
+            name='viewport'
+            content='width=device-width, initial-scale=1.0, viewport-fit=cover'
+          />
         </Head>
         <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
         <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
