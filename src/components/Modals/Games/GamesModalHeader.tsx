@@ -14,7 +14,7 @@ export default function GamesModalHeader({ src, isVideo, artist, nftEditions, nf
   return (
     <div className='games-modal__header'>
       <div className='games-modal__header-nft-img'>
-        <BaseMedia src={src} isVideo={isVideo} />
+        <BaseMedia src={src}  />
       </div>
       <div className='games-modal__header-right'>
         <div className='games-modal__header-artist'>

@@ -105,7 +105,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
-            <BaseMedia src={nft.s3Path} isVideo={nft.isVideo} />
+            <BaseMedia src={nft.s3Path}  />
           </div>
           <div className='games-modal__main-content'>
             <div>

@@ -44,7 +44,7 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                           {display}
                         </div>
                       )}
-                      <BaseMedia src={src} isVideo={false} />
+                      <BaseMedia src={src}  />
                       <h1 className='home-page__upcoming-drops-tile-tag'>
                         {text}
                         <br />
@@ -90,7 +90,7 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
               </div>
             )}
 
-            <BaseMedia src={src} isVideo={false} />
+            <BaseMedia src={src}  />
             <h1 className='home-page__upcoming-drops-tile-tag'>
               {text}
               <br />

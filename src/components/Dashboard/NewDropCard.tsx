@@ -42,7 +42,7 @@ export default function NewDropCard({ drop }: Props) {
   return (
     <div className='dashboard__tile'>
       <div className='dashboard__tile-img'>
-        <BaseMedia src={drop.bannerImageS3Path} isVideo={false} />
+        <BaseMedia src={drop.bannerImageS3Path}  />
       </div>
       <div className='dashboard__tile-details'>
         <div className='dashboard__tile-artist-pfp'>

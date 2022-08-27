@@ -168,7 +168,6 @@ function GetTicketModal({
             ) : (
               <BaseMedia
                 src={lottery.Nfts[selectedNftIndex].s3Path}
-                isVideo={lottery.Nfts[selectedNftIndex].isVideo}
               />
             )}
             {isActive && (
