@@ -212,31 +212,31 @@ async function insertDrop(data: any, response: NextApiResponse) {
 
 async function insertAuction(data: any, response: NextApiResponse) {
   console.log('insertAuction()');
-  try {
-    var record = await prisma.auction.create({
-      data: {
-        Drop: { connect: { id: Number(data.dropId) } },
-        minimumPrice: data.minPrice,
-        startTime: new Date(Number(data.startDate) * 1000),
-        endTime: new Date(Number(data.endDate) * 1000),
-        Nft: {
-          create: {
-            name: data.name,
-            description: data.description || '',
-            tags: data.tags || '',
-            numberOfEditions: 1,
-            isVideo: 'true' == data.isVideo,
-            metadataPath: data.metadataPath,
-            s3Path: data.s3Path,
-          },
-        },
-      },
-    });
-    response.json({ auctionId: record.id, nftId: record.nftId });
-  } catch (e: any) {
-    console.log(e);
-    response.json({ error: e.message });
-  }
+  // try {
+  //   var record = await prisma.auction.create({
+  //     data: {
+  //       Drop: { connect: { id: Number(data.dropId) } },
+  //       minimumPrice: data.minPrice,
+  //       startTime: new Date(Number(data.startDate) * 1000),
+  //       endTime: new Date(Number(data.endDate) * 1000),
+  //       Nft: {
+  //         create: {
+  //           name: data.name,
+  //           description: data.description || '',
+  //           tags: data.tags || '',
+  //           numberOfEditions: 1,
+  //           isVideo: 'true' == data.isVideo,
+  //           metadataPath: data.metadataPath,
+  //           s3Path: data.s3Path,
+  //         },
+  //       },
+  //     },
+  //   });
+  //   response.json({ auctionId: record.id, nftId: record.nftId });
+  // } catch (e: any) {
+  //   console.log(e);
+  //   response.json({ error: e.message });
+  // }
 }
 
 async function insertNft(data: any, response: NextApiResponse) {
@@ -266,8 +266,8 @@ async function insertNft(data: any, response: NextApiResponse) {
     if (data.artistAddress) {
       insertData.data.NftContract = { connect: { artistAddress: data.artistAddress } };
     }
-    var record = await prisma.nft.create(insertData);
-    response.json({ nftId: record.id });
+    // var record = await prisma.nft.create(insertData);
+    // response.json({ nftId: record.id });
   } catch (e: any) {
     console.log(e);
     response.json({ error: e.message });
