@@ -59,7 +59,6 @@ async function getSearchableNftData(response: NextApiResponse) {
         name: n.name,
         tags: n.tags,
         s3Path: n.s3Path,
-        isVid: false,
         artist:
           n.NftContract?.Artist.username! ||
           n.Auction?.Drop.NftContract.Artist.username! ||
@@ -224,6 +223,5 @@ function flatten(nft: Nft, artist: User): CollectedListingNft {
     artistUsername: artist.username!,
     artistProfilePicture: artist.profilePicture!,
     s3Path: nft.s3Path,
-    isVideo: false,
   };
 }
