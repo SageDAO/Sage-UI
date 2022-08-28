@@ -1,6 +1,5 @@
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import Image from 'next/image';
-import { Fragment, useEffect } from 'react';
 import Zoom from 'react-medium-image-zoom';
 
 const ConditionalWrapper = ({ condition, wrapper, children }) =>
@@ -8,23 +7,28 @@ const ConditionalWrapper = ({ condition, wrapper, children }) =>
 
 interface BaseMediaProps {
   src: string;
-  isVideo?: boolean;
   onClickHandler?: React.MouseEventHandler<HTMLImageElement>;
   isZoomable?: boolean;
   type?: string;
   className?: string;
 }
 
-function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
+function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
+  const isVideo = (): boolean => {
+    return src.toLowerCase().endsWith('mp4');
+  };
+
   return (
     <div>
       <ConditionalWrapper
         condition={true === isZoomable}
         wrapper={(children: JSX.Element) => (
-          <Zoom wrapStyle={{ height: '100%', width: '100%' }}>{children}</Zoom>
+          <Zoom wrapStyle={{ width: '100%', height: '100%', aspectRatio: '487/527' }}>
+            {children}
+          </Zoom>
         )}
       >
-        {isVideo ? (
+        {isVideo() ? (
           <video
             autoPlay={true}
             muted={true}
@@ -44,11 +48,11 @@ function BaseMedia({ src, isVideo, onClickHandler, isZoomable, type, className }
           </video>
         ) : isZoomable ? (
           <Image
-            draggable={false}
-            className={className}
             src={src}
             layout='fill'
             objectFit='cover'
+            draggable={false}
+            className={className}
           />
         ) : (
           <Image

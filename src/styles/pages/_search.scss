@@ -9,7 +9,7 @@
   display: grid;
   // background-color: red;
   width: 100%;
-  gap: 0 1vw;
+  gap: 1vw;
   grid-template-columns: repeat(2, 1fr);
   @include b.min-width('small') {
     grid-template-columns: repeat(3, 1fr);
@@ -21,7 +21,7 @@
 
 .search-page__grid-item {
   // background-color: blue;
-	transition-duration: 200ms;
+  transition-duration: 200ms;
   @include m.theme() {
     background-color: m.t(base);
     color: m.t(contrast);
@@ -44,7 +44,5 @@
   flex-direction: column;
 }
 
-
 .search-page__grid-item-info-drop-name {
-
 }

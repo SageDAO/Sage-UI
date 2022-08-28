@@ -356,6 +356,23 @@
   }
 }
 
+.games-modal__price-fixed {
+  margin-top: clamp(10px, 2vw, 40px);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 169%;
+  /* or 41px */
+
+  text-align: center;
+  text-transform: uppercase;
+  height: 40px;
+  @include m.theme() {
+    border: 1px solid m.t(contrast2);
+    color: m.t(contrast2);
+  }
+}
+
 .games-modal__place-bid-button {
   @include game-interact-button;
 }
