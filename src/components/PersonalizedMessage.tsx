@@ -21,7 +21,7 @@ export default function PersonalizedMessage() {
   }
 
   if (!isConnected) {
-    return <React.Fragment>Wallet Not Connected</React.Fragment>;
+    return null;
   }
   return <React.Fragment>Error</React.Fragment>;
 }
