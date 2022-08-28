@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface Props {
-  ref: React.LegacyRef<HTMLDivElement>;
+  ref: React.MutableRefObject<HTMLDivElement>;
 }
 
 export default function Cursor({ ref }: Props) {

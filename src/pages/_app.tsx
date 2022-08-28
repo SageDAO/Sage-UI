@@ -15,9 +15,10 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { parameters } from '@/constants/config';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
+import useCursor from '@/hooks/useCursor';
 
 // set up connectors
 const connectors = [
@@ -50,8 +51,8 @@ const apolloClient = new ApolloClient({
 function App({ Component, pageProps, router }: AppProps) {
   useTheme();
   const [query, setQuery] = useState<string>('');
-
-  const isMaintenanceOn = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
+  const isMaintenanceOn: boolean = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
+  const { cursorEl } = useCursor();
 
   return (
     <ReduxProvider store={store}>
@@ -67,6 +68,7 @@ function App({ Component, pageProps, router }: AppProps) {
                   content='width=device-width,initial-scale=1,viewport-fit=cover'
                 />
               </Head>
+              <div className='cursor' ref={cursorEl}></div>
               {isMaintenanceOn ? (
                 <LandingPage />
               ) : (

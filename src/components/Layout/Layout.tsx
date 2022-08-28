@@ -28,7 +28,6 @@ export default function Layout({ children, router }: Props) {
     isLoading: isChangingNetwork,
   } = useWatchNetwork();
 
-  const cursorEl = useRef<HTMLDivElement>(null);
   const layoutEl = useRef<HTMLDivElement>(null);
 
   const { data: sessionData } = useSession();
@@ -57,17 +56,6 @@ export default function Layout({ children, router }: Props) {
     toggleModal: toggleMobileMenu,
   } = useModal(true);
 
-  useEffect(() => {
-    layoutEl.current?.addEventListener('mousemove', (e) => {
-      const dataX = String(e.pageX);
-      const dataY = String(e.pageY);
-      cursorEl.current?.setAttribute(
-        'style',
-        `transform: translate3d(${dataX}px, ${dataY}px, 0px);`
-      );
-    });
-  }, [router.asPath]);
-
   return transitions((props, item) => {
     return (
       <React.Fragment>
@@ -79,7 +67,6 @@ export default function Layout({ children, router }: Props) {
           switchToCorrectNetwork={switchToCorrectNetwork}
           isLoading={isChangingNetwork}
         />
-        <div className='cursor' ref={cursorEl}></div>
         <ToastContainer
           position='bottom-center'
           autoClose={5000}
