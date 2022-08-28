@@ -141,6 +141,12 @@ $theme-map: null;
   @return map-get($theme-map, $key);
 }
 
+@mixin data-color {
+  &[data-color='white'] {
+    color: $white;
+  }
+}
+
 @mixin animate-highlight {
   animation-duration: 900ms;
   animation-iteration-count: 7;

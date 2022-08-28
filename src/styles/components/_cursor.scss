@@ -15,7 +15,7 @@
     border: 1px solid m.t(contrast);
     transition-duration: 200ms;
     transition-timing-function: ease-out;
-		background:transparent;
+    background-color: m.t(base);
     &[data='link'] {
       width: 40px;
     }

@@ -36,6 +36,7 @@ input[type='number'] {
 }
 
 body {
+  @include m.no-scrollbar;
   @include m.theme() {
     overflow: hidden;
     background-color: m.t(base);

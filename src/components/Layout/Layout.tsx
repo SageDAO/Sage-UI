@@ -66,7 +66,7 @@ export default function Layout({ children, router }: Props) {
         `transform: translate3d(${dataX}px, ${dataY}px, 0px);`
       );
     });
-  }, []);
+  }, [router.asPath]);
 
   return transitions((props, item) => {
     return (
