@@ -20,15 +20,16 @@
 }
 
 .search-page__grid-item {
-  // background-color: blue;
-  transition-duration: 200ms;
   @include m.theme() {
+    transition-duration: 200ms;
     background-color: m.t(base);
     color: m.t(contrast);
+    grid-row: span 2 / span 2;
     @include m.interact {
       background-color: m.t(contrast);
       color: m.t(base);
     }
+    background-color: red;
   }
 }
 

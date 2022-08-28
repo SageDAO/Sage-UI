@@ -49,6 +49,7 @@
 
 .sage-logotype__motto {
   flex: 1;
+  @include m.data-color;
 }
 
 .sage-logotype__sage-icon {
@@ -56,6 +57,7 @@
   @include m.theme() {
     color: m.t(contrast2);
   }
+  @include m.data-color;
 }
 
 .sage-logotype__svg {

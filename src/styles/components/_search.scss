@@ -26,6 +26,7 @@
     letter-spacing: 0.2em;
     flex: 1;
     position: absolute;
+    @include m.data-color;
   }
 
   &__white_icon {
@@ -35,6 +36,7 @@
     @include m.theme() {
       color: m.t(contrast);
     }
+    @include m.data-color;
   }
 }
 

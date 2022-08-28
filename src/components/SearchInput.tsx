@@ -3,7 +3,21 @@ import { useRouter } from 'next/router';
 import SearchSVG from '@/public/icons/search.svg';
 import { toast } from 'react-toastify';
 
-export const SearchInput = ({ className, placeholder, displayIcon, onChange }) => {
+interface Props {
+  className?: string;
+  placeholder?: string;
+  displayIcon?: boolean;
+  onChange?: any;
+  dataColor?: string;
+}
+
+export const SearchInput = ({
+  className,
+  placeholder,
+  displayIcon,
+  onChange,
+  dataColor,
+}: Props) => {
   const { query, setQuery } = useSearch();
   const router = useRouter();
 
@@ -35,8 +49,15 @@ export const SearchInput = ({ className, placeholder, displayIcon, onChange }) =
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className={className}
+        data-color={dataColor}
       />
-      {displayIcon && <SearchSVG onClick={handleButtonClick} className='searchform__white_icon' />}
+      {displayIcon && (
+        <SearchSVG
+          data-color={dataColor}
+          onClick={handleButtonClick}
+          className='searchform__white_icon'
+        />
+      )}
     </>
   );
 };

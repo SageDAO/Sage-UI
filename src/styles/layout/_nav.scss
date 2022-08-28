@@ -10,6 +10,7 @@
   @include b.min-width('medium') {
     display: flex;
   }
+  @include m.data-color;
 }
 
 .nav__content {
@@ -40,8 +41,6 @@
   @include m.theme() {
     @include m.noselect;
     width: clamp(72px, 8.3vw, 102px);
-    color: m.t(contrast);
-
     font-size: 12px;
     text-transform: uppercase;
     cursor: pointer;
@@ -102,7 +101,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-	color: red;
 }
 
 .nav__search-wrapper {

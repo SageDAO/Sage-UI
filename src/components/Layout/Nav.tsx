@@ -40,11 +40,14 @@ export default function Nav() {
   const isSignedIn: boolean = sessionStatus === 'authenticated';
   const shouldShowPersonal: boolean = !router.pathname.includes('/profile');
   const shouldShowSearch: boolean = !router.pathname.includes('/profile');
+  const urlIsSingleDropPage: boolean = router.pathname.includes('drops/');
+  const dataColor: string = urlIsSingleDropPage && 'white';
+  const urlIsSingleDropsPage: boolean = router.pathname.includes('drops/');
 
   return (
     <div className='nav__wrapper'>
       <HiddenMenu></HiddenMenu>
-      <div className='nav' data-cy='nav'>
+      <div className='nav' data-color={dataColor} data-cy='nav'>
         <div className='nav__content'>
           {shouldShowPersonal && (
             <div className='nav__personal'>
@@ -85,7 +88,7 @@ export default function Nav() {
                     placeholder='search sage'
                     className='searchform__input'
                     displayIcon={true}
-                    onChange={() => {}}
+                    dataColor={urlIsSingleDropPage && 'white'}
                   />
                 </div>
               </div>
