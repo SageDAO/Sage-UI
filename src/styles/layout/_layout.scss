@@ -14,17 +14,16 @@ $indent: max(1em, 10vw);
   overflow-x: hidden;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
     env(safe-area-inset-left);
-
   @include m.theme() {
     background-color: m.t('base');
     color: m.t('contrast');
   }
-
   @include m.no-scrollbar;
-
   @include b.min-width(medium) {
     @include m.custom-scrollbar;
   }
+
+	perspective: 2px;
 }
 
 .layout__main {

@@ -1,4 +1,5 @@
 import LoaderSpinner from '@/components/LoaderSpinner';
+import Logotype from '@/components/Logotype';
 import SearchResultsTile from '@/components/Pages/Search/SearchResultsTile';
 import { SearchInput } from '@/components/SearchInput';
 import { SearchableNftData, useGetSearchableNftDataQuery } from '@/store/nftsReducer';
@@ -30,7 +31,10 @@ export default function Search() {
   };
 
   return (
-    <>
+    <div className='search-page'>
+      <div className='search-page__logotype-container'>
+        <Logotype></Logotype>
+      </div>
       <div className='searchresults__header'>
         <div className='searchresults__term'>
           <div className='searchresults__right-dot'></div>
@@ -59,7 +63,7 @@ export default function Search() {
         <div className='search-page__grid'>
           {displayResults &&
             displayResults.map((nft: SearchableNftData, i: number) => (
-              <SearchResultsTile key={i} nft={nft} i={i}/>
+              <SearchResultsTile key={i} nft={nft} i={i} />
             ))}
         </div>
       </div>
@@ -68,7 +72,7 @@ export default function Search() {
           Load more results
         </button>
       )}
-    </>
+    </div>
   );
 }
 

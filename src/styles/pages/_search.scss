@@ -3,11 +3,16 @@
 @use '@/styles/abstracts/breakpoints' as b;
 
 .search-page {
+	@include m.page;
+}
+
+.search-page__logotype-container {
+  display: flex;
+  justify-content: center;
 }
 
 .search-page__grid {
   display: grid;
-  // background-color: red;
   width: 100%;
   gap: 1vw;
   // grid-template-columns: repeat(2, 1fr);
