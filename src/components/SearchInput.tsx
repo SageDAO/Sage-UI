@@ -22,7 +22,7 @@ export const SearchInput = ({
   const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange();
+    onChange && onChange();
     setQuery(event.target.value);
   };
 
