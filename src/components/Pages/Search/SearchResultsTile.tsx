@@ -4,11 +4,42 @@ import { useRouter } from 'next/router';
 
 interface Props {
   nft: SearchableNftData;
+  i: number;
 }
 
-export default function SearchResultsTile({ nft }: Props) {
-  const router = useRouter();
+type ImgAspectRatio = '16/9' | '9/16' | '1/1';
 
+function getRandomizedAspectRatio(i: number): ImgAspectRatio {
+  let dataAspect: ImgAspectRatio = '1/1';
+  if (i % 2 === 0) {
+    dataAspect = '16/9';
+  }
+
+  if (i % 3 === 0) {
+    if (i !== 6) {
+      dataAspect = '9/16';
+    }
+  }
+  if (i % 5 === 0) {
+    if (i !== 10) {
+      dataAspect === '1/1';
+    }
+  }
+
+  const rand = Math.random();
+  if (rand < 0.33) {
+    return '16/9';
+  }
+
+  if (rand > 0.66) {
+    return '9/16';
+  }
+
+  return '1/1';
+}
+
+export default function SearchResultsTile({ nft, i }: Props) {
+  const router = useRouter();
   const handleClick = async () => {
     if (nft.dId) {
       router.push(`/drops/${nft.dId}`);
@@ -17,10 +48,12 @@ export default function SearchResultsTile({ nft }: Props) {
     }
   };
 
+  const dataAspect = getRandomizedAspectRatio(i);
+
   return (
-    <div className='search-page__grid-item' onClick={handleClick}>
+    <div className='search-page__grid-item' data-aspect={dataAspect} onClick={handleClick}>
       <div className='search-page__grid-item-img'>
-        <BaseMedia src={nft.s3Path} ></BaseMedia>
+        <BaseMedia src={nft.s3Path}></BaseMedia>
       </div>
       <div className='search-page__grid-item-info'>
         <h1 className='search-page__grid-item-info-drop-name'>by {nft.artist}</h1>

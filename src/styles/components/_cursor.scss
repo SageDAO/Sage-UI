@@ -19,5 +19,10 @@
     &[data='link'] {
       width: 40px;
     }
+
+    display: none;
+    @include b.min-width('medium') {
+      display: flex;
+    }
   }
 }

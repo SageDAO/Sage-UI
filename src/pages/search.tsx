@@ -59,7 +59,7 @@ export default function Search() {
         <div className='search-page__grid'>
           {displayResults &&
             displayResults.map((nft: SearchableNftData, i: number) => (
-              <SearchResultsTile key={i} nft={nft} />
+              <SearchResultsTile key={i} nft={nft} i={i}/>
             ))}
         </div>
       </div>
