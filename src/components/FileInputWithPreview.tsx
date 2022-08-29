@@ -36,6 +36,7 @@ export default function FileInputWithPreview({ onFileChange, initialPreview }: P
       reader.readAsDataURL(file);
     } else {
       setPreview(initialPreview ? initialPreview : EMPTY_PREVIEW);
+      setContainerAspectRatio(preview, isVideo);
     }
   }, [file]);
 
