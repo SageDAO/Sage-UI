@@ -36,10 +36,10 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
             key={i}
           >
             <div className='artists-page__item-img'>
-              <PfpImage src={a.profilePicture} />
+              <PfpImage src={a.bannerImageS3Path || a.profilePicture} />
               <h1 className='artists-page__item-img-text'>
-                drop by {a.username || shortenAddress(a.walletAddress)} <br />
-                Sage Curated
+                {/* drop by {a.username || shortenAddress(a.walletAddress)} <br />
+                Sage Curated */}
               </h1>
             </div>
             <div className='artists-page__item-content'>

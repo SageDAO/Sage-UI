@@ -128,7 +128,7 @@ export type SafeUserUpdate = Partial<
     | 'twitterUsername'
     | 'instagramUsername'
     | 'webpage'
-    | 'artistBanner'
+    | 'bannerImageS3Path'
   >
 >;
 

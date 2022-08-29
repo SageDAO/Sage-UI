@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
 import { Signer } from 'ethers';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
 import { animated, Spring } from 'react-spring';
+import FileInputWithPreview from '@/components/FileInputWithPreview';
 
 interface State {
   file: File | null;
@@ -14,9 +14,7 @@ interface State {
   description: string;
   tags: string;
   price: string;
-  preview: string;
   isFixedPrice: boolean;
-  isVideo: boolean;
 }
 
 const INITIAL_STATE: State = {
@@ -25,9 +23,7 @@ const INITIAL_STATE: State = {
   description: '',
   tags: '',
   price: '',
-  preview: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
   isFixedPrice: true,
-  isVideo: false,
 };
 
 export default function CreationsPanel() {
@@ -65,11 +61,9 @@ export default function CreationsPanel() {
     });
   }
 
-  function handleFilesInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const validTypes = ['image/png', 'image/gif', 'image/jpeg', 'video/mp4'];
-    const newFile = e.target.files![0];
+  function handleFileInputChange(file: File | null) {
     setState((prevState) => {
-      return { ...prevState, file: validTypes.includes(newFile.type) ? newFile : null };
+      return { ...prevState, file };
     });
   }
 
@@ -109,34 +103,6 @@ export default function CreationsPanel() {
     }
   }
 
-  useEffect(() => {
-    if (state.file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const preview: string = reader.result as string;
-        const isVideo: boolean = state.file?.type == 'video/mp4';
-        if (state.isVideo) {
-          let video = document.getElementById('artistCreationVideoPreview') as HTMLVideoElement;
-          if (video) {
-            video.pause();
-            video.src = preview;
-            video.load();
-            video.play();
-          }
-        }
-        setState((prevState) => {
-          return { ...prevState, preview, isVideo };
-        });
-        setAspectRatio(preview, isVideo);
-      };
-      reader.readAsDataURL(state.file);
-    } else {
-      setState((prevState) => {
-        return { ...prevState, preview: INITIAL_STATE.preview };
-      });
-    }
-  }, [state.file]);
-
   return (
     <Fragment>
       <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
@@ -155,50 +121,7 @@ export default function CreationsPanel() {
             <animated.div style={styles} className='creations-panel'>
               <form className='creations-panel__form'>
                 <div className='creations-panel__file-upload-group'>
-                  <div
-                    id='file-upload-preview-container'
-                    className='creations-panel__file-upload-field-wrapper'
-                  >
-                    <input
-                      onChange={handleFilesInputChange}
-                      type='file'
-                      className='creations-panel__file-upload-field'
-                      accept='image/png, image/gif, image/jpeg, video/mp4'
-                    />
-                    <Image
-                      className='creations-panel__file-upload-plus-icon'
-                      src='/icons/plus.svg'
-                      width={40}
-                      height={40}
-                    />
-
-                    {state.isVideo ? (
-                      <video
-                        id='artistCreationVideoPreview'
-                        autoPlay={true}
-                        muted={true}
-                        loop={true}
-                        playsInline={true}
-                        style={{
-                          inset: '0px',
-                          overflow: 'hidden',
-                          position: 'absolute',
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                        }}
-                      >
-                        <source src={state.preview} type={'video/mp4'} />
-                      </video>
-                    ) : (
-                      <Image
-                        draggable={false}
-                        src={state.preview}
-                        layout='fill'
-                        objectFit='cover'
-                      />
-                    )}
-                  </div>
+                  <FileInputWithPreview onFileChange={handleFileInputChange} />
                   <h1 className='creations-panel__file-upload-label'>
                     ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF and MP4 )
                   </h1>
@@ -262,33 +185,4 @@ export default function CreationsPanel() {
       </Spring>
     </Fragment>
   );
-}
-
-async function getImageAspectRatio(data: string) {
-  let img = document.createElement('img');
-  img.src = data;
-  while (img.width == 0) {
-    await new Promise((r) => setTimeout(r, 500));
-  }
-  return `${img.width}/${img.height}`;
-}
-
-async function getVideoAspectRatio(data: string) {
-  let video = document.createElement('video');
-  let source = document.createElement('source');
-  source.type = 'video/mp4';
-  source.src = data;
-  video.appendChild(source);
-  while (video.videoWidth == 0) {
-    await new Promise((r) => setTimeout(r, 500));
-  }
-  return `${video.videoWidth}/${video.videoHeight}`;
-}
-
-async function setAspectRatio(data: string, isVideo: boolean) {
-  const div = document.getElementById('file-upload-preview-container');
-  if (div) {
-    const aspectRatio = isVideo ? await getVideoAspectRatio(data) : await getImageAspectRatio(data);
-    div.style.aspectRatio = aspectRatio;
-  }
 }

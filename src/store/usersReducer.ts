@@ -4,6 +4,7 @@ import type { SafeUserUpdate } from '@/prisma/types';
 import { signIn, signOut } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
 import { baseApi } from './baseReducer';
+import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3';
 // import {
 //   playLikeDropSound,
 //   playUnlikeDropSound,
@@ -68,6 +69,20 @@ const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updateArtist: builder.mutation<null, { user: SafeUserUpdate; bannerFile: File }>({
+      queryFn: async ({ user, bannerFile }, { dispatch }, extraOptions, fetchWithBQ) => {
+        const endpoint = '/api/dropUploadEndpoint/';
+        const s3Path = await uploadFileToS3Bucket(
+          endpoint,
+          createBucketName(),
+          bannerFile.name.toLocaleLowerCase(),
+          bannerFile
+        );
+        user.bannerImageS3Path = s3Path;
+        dispatch(usersApi.endpoints.updateUser.initiate(user));
+        return { data: null };
+      },
+    }),
     updateUser: builder.mutation<null, SafeUserUpdate>({
       queryFn: async (user, { dispatch }, extraOptions, fetchWithBQ) => {
         try {
@@ -125,6 +140,7 @@ export const {
   useGetUserQuery,
   useGetUserDisplayInfoQuery,
   useUpdateUserMutation,
+  useUpdateArtistMutation,
   useGetIsFollowingQuery,
   useSetIsFollowingMutation,
   useSignInMutation,

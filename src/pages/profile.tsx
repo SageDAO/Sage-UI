@@ -103,7 +103,7 @@ function profile() {
           <Balances />
           <Tab.Panels>
             <Tab.Panel as='div' className='profile-page__tabs-panel'>
-              <ProfilePanel />
+              <ProfilePanel isArtist={isArtist} />
             </Tab.Panel>
             <Tab.Panel as='div' className='profile-page__tabs-panel'>
               <CollectionPanel />

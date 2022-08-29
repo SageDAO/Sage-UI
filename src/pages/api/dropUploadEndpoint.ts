@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import aws from 'aws-sdk';
 import NextCors from 'nextjs-cors';
 import prisma from '@/prisma/client';
-import { OfferState, Role } from '@prisma/client';
+import { Role } from '@prisma/client';
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import Transaction from 'arweave/node/lib/transaction';
@@ -131,7 +131,7 @@ async function sendArweaveTransaction(
   //     `${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`
   //   );
   // }
-  console.log(`sendArweaveTransaction() :: file ${filename} -> ${transaction.id}`);
+  console.log(`sendArweaveTransaction() :: ${filename} -> ${transaction.id}`);
   return transaction;
 }
 
@@ -212,31 +212,31 @@ async function insertDrop(data: any, response: NextApiResponse) {
 
 async function insertAuction(data: any, response: NextApiResponse) {
   console.log('insertAuction()');
-  // try {
-  //   var record = await prisma.auction.create({
-  //     data: {
-  //       Drop: { connect: { id: Number(data.dropId) } },
-  //       minimumPrice: data.minPrice,
-  //       startTime: new Date(Number(data.startDate) * 1000),
-  //       endTime: new Date(Number(data.endDate) * 1000),
-  //       Nft: {
-  //         create: {
-  //           name: data.name,
-  //           description: data.description || '',
-  //           tags: data.tags || '',
-  //           numberOfEditions: 1,
-  //           isVideo: 'true' == data.isVideo,
-  //           metadataPath: data.metadataPath,
-  //           s3Path: data.s3Path,
-  //         },
-  //       },
-  //     },
-  //   });
-  //   response.json({ auctionId: record.id, nftId: record.nftId });
-  // } catch (e: any) {
-  //   console.log(e);
-  //   response.json({ error: e.message });
-  // }
+  try {
+    var record = await prisma.auction.create({
+      data: {
+        Drop: { connect: { id: Number(data.dropId) } },
+        minimumPrice: data.minPrice,
+        startTime: new Date(Number(data.startDate) * 1000),
+        endTime: new Date(Number(data.endDate) * 1000),
+        Nft: {
+          create: {
+            name: data.name,
+            description: data.description || '',
+            tags: data.tags || '',
+            numberOfEditions: 1,
+            metadataPath: data.metadataPath,
+            s3Path: data.s3Path,
+            s3PathOptimized: data.s3Path,
+          },
+        },
+      },
+    });
+    response.json({ auctionId: record.id, nftId: record.nftId });
+  } catch (e: any) {
+    console.log(e);
+    response.json({ error: e.message });
+  }
 }
 
 async function insertNft(data: any, response: NextApiResponse) {
@@ -251,6 +251,7 @@ async function insertNft(data: any, response: NextApiResponse) {
         isVideo: 'true' == data.isVideo,
         metadataPath: data.metadataPath,
         s3Path: data.s3Path,
+        s3PathOptimized: data.s3Path,
         price: data.price || undefined,
         Auction: null || {},
         Lottery: null || {},
@@ -266,8 +267,8 @@ async function insertNft(data: any, response: NextApiResponse) {
     if (data.artistAddress) {
       insertData.data.NftContract = { connect: { artistAddress: data.artistAddress } };
     }
-    // var record = await prisma.nft.create(insertData);
-    // response.json({ nftId: record.id });
+    var record = await prisma.nft.create(insertData);
+    response.json({ nftId: record.id });
   } catch (e: any) {
     console.log(e);
     response.json({ error: e.message });

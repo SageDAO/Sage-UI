@@ -1,5 +1,5 @@
 import { PfpImage } from '@/components/Media/BaseMedia';
-import { useGetUserQuery } from '@/store/usersReducer';
+import { useGetUserQuery, useUpdateArtistMutation } from '@/store/usersReducer';
 import { useState, useEffect } from 'react';
 import { useUpdateUserMutation } from '@/store/usersReducer';
 import type { SafeUserUpdate } from '@/prisma/types';
@@ -15,7 +15,7 @@ import {
   validateWebpage,
 } from './ProfileValidation';
 import { toast } from 'react-toastify';
-import PlusSVG from '@/public/icons/plus.svg';
+import FileInputWithPreview from '@/components/FileInputWithPreview';
 
 interface State extends SafeUserUpdate {}
 
@@ -28,12 +28,19 @@ const INITIAL_STATE: State = {
   twitterUsername: '',
   instagramUsername: '',
   mediumUsername: '',
+  bannerImageS3Path: '',
 };
 
-export default function ProfilePanel() {
+interface Props {
+  isArtist: boolean;
+}
+
+export default function ProfilePanel({ isArtist }: Props) {
   const { data: sessionData } = useSession();
   const [state, setState] = useState<State>(INITIAL_STATE);
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const [artistBannerFile, setArtistBannerFile] = useState<File | null>(null);
+  const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
+  const [updateArtist, { isLoading: isUpdatingArtist }] = useUpdateArtistMutation();
   const { data } = useGetUserQuery(undefined, { skip: !sessionData });
   const {
     isOpen: isProfilePicModalOpen,
@@ -41,7 +48,7 @@ export default function ProfilePanel() {
     openModal: openProfilePicModal,
   } = useModal();
 
-  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!validateEmail(state.email)) {
       toast.warn('Please provide a valid e-mail address');
@@ -63,7 +70,15 @@ export default function ProfilePanel() {
       toast.warn('Please provide a valid webpage URL');
       return;
     }
-    updateUser(state);
+    if (isArtist && artistBannerFile) {
+      await updateArtist({ user: state, bannerFile: artistBannerFile });
+    } else {
+      await updateUser(state);
+    }
+  }
+
+  function handleFileInputChange(file: File | null) {
+    setArtistBannerFile(file);
   }
 
   function handleBioInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -197,16 +212,17 @@ export default function ProfilePanel() {
                   className='profile-panel__bio-field'
                 />
               </div>
-              <div className='profile-panel__upload-artist-banner-container'>
-                <input
-                  onChange={() => {}}
-                  type='file'
-                  className='profile-panel__upload-artist-banner-input'
-                  accept='image/png, image/gif, image/jpeg, video/mp4'
-                ></input>
-                <PlusSVG className='profile-panel__upload-artist-banner-plus-svg'></PlusSVG>
-              </div>
-              <button disabled={isLoading} type='submit' className='profile-panel__save-button'>
+              {isArtist && (
+                <FileInputWithPreview
+                  onFileChange={handleFileInputChange}
+                  initialPreview={data.bannerImageS3Path}
+                />
+              )}
+              <button
+                disabled={isUpdatingUser || isUpdatingArtist}
+                type='submit'
+                className='profile-panel__save-button'
+              >
                 save your changes
               </button>
             </animated.form>

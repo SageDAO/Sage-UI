@@ -37,7 +37,7 @@ export default function artist({ artist }: Props) {
 
   return (
     <div className='artist-page' data-cy='artist-page'>
-      <Hero imgSrc={artist.profilePicture || '/'} />
+      <Hero imgSrc={artist.bannerImageS3Path || artist.profilePicture || '/'} />
       <h1 className='artist-page__banner-label'>part of this month active drop</h1>
       <div className='artist-page__artist-section'>
         <div className='artist-page__artist-section-flex-x'>
