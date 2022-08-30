@@ -8,6 +8,7 @@ import CloseSVG from '@/public/interactive/close.svg';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useBuyFromSellOfferMutation } from '@/store/nftsReducer';
 import LoaderSpinner from '@/components/LoaderSpinner';
+import { useSession } from 'next-auth/react';
 
 interface Props extends ModalProps {
   artist: User;
@@ -19,13 +20,11 @@ interface Props extends ModalProps {
 export default function BuyNowModal({ isOpen, closeModal, artist, nft, sellOffer }: Props) {
   const [buyFromSellOffer, { isLoading }] = useBuyFromSellOfferMutation();
   const { data: signer } = useSigner();
+  const { data: sessionData } = useSession();
 
   const handleClick = async () => {
-    if (nft.ownerAddress) {
-      return; // can't buy an NFT that is already owned
-    }
-    if (!signer) {
-      toast.info('Please Sign In With Ethereum.');
+    if (!signer || !sessionData) {
+      toast.info('Please Sign In With Ethereum before buying NFTs.');
     } else if (isLoading) {
       toast.info('Please wait for transaction to complete.');
     } else {

@@ -49,8 +49,8 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
     }
   }
 
-  async function handlePlaceBidClick() {
-    if (!signer) {
+  async function handleMakeOfferClick() {
+    if (!signer || !sessionData) {
       toast.info('Please Sign In With Ethereum before placing bids.');
       return;
     }
@@ -130,7 +130,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
             <button
               disabled={isCreatingBuyOffer}
               className='games-modal__place-bid-button'
-              onClick={handlePlaceBidClick}
+              onClick={handleMakeOfferClick}
             >
               {isCreatingBuyOffer ? <LoaderSpinner /> : 'make ASH offer'}
             </button>

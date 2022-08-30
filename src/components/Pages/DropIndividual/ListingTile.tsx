@@ -1,9 +1,7 @@
 import { useSigner } from 'wagmi';
-import { toast } from 'react-toastify';
 import { Nft_include_NftContractAndOffers, User } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import shortenAddress from '@/utilities/shortenAddress';
-import LoaderSpinner from '@/components/LoaderSpinner';
 import { Offer, OfferState } from '@prisma/client';
 import useModal from '@/hooks/useModal';
 import MakeOfferModal from '@/components/Modals/Games/MakeOfferModal';
@@ -33,11 +31,7 @@ export default function ListingTile({ nft, artist }: Props) {
     if (nft.ownerAddress) {
       return; // can't buy an NFT that is already owned
     }
-    if (!signer) {
-      toast.info('Please Sign In With Ethereum.');
-    } else {
-      openModal();
-    }
+    openModal();
   };
 
   return (
