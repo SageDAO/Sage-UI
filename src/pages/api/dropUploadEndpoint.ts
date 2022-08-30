@@ -248,7 +248,6 @@ async function insertNft(data: any, response: NextApiResponse) {
         description: data.description || '',
         tags: data.tags || '',
         numberOfEditions: toNumber(data.numberOfEditions),
-        isVideo: 'true' == data.isVideo,
         metadataPath: data.metadataPath,
         s3Path: data.s3Path,
         s3PathOptimized: data.s3Path,
