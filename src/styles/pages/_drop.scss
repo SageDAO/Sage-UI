@@ -25,7 +25,7 @@
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 80px;
-    gap: 50px;
+    // gap: 50px;
     position: relative;
     @include b.min-width('medium') {
       padding-top: 80px;
@@ -42,11 +42,17 @@
 //the bottom section below the logo type
 .drop-page__header-drop-info {
   display: flex;
-  width: 100%;
   flex: 1;
   color: c.$white;
   z-index: 99;
   gap: 40px;
+  margin-right: auto;
+  margin-left: auto;
+
+  @include m.mobile-width;
+  @include b.min-width('medium') {
+    @include m.desktop-inner-width;
+  }
 }
 
 .drop-page__header-logo-column {
@@ -68,16 +74,25 @@
 .drop-page__header-main-column {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  // gap: 20px;
   max-width: 700px;
   width: 100%;
 }
 
 .drop-page__header-drop-name {
-  font-style: normal;
+  // font-style: normal;
+  // font-weight: 400;
+  // font-size: clamp(24px, 2vw, 50px);
+  // line-height: clamp(21px, 1em, 60px);
+
   font-weight: 400;
-  font-size: clamp(24px, 2vw, 50px);
-  line-height: clamp(21px, 1em, 60px);
+  font-size: clamp(20px, 5vw, 50px);
+  line-height: clamp(24px, 1em, 60px);
+  text-transform: uppercase;
+  text-align: left;
+
+  margin-top: clamp(24px, 10vw, 111px);
+  margin-bottom: clamp(10px, 5vw, 50px);
 }
 
 .drop-page__header-drop-description {
@@ -85,30 +100,43 @@
   font-weight: 400;
   font-size: clamp(10px, 1vw, 16px);
   line-height: 130%;
+  margin-bottom: clamp(10px, 5vw, 50px);
 }
 
 .drop-page__header-drop-details {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.6em;
-}
 
-.drop-page__header-drop-details-item {
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
   line-height: 130%;
-  /* or 13px */
-
   text-transform: uppercase;
+  margin-bottom: clamp(5px, 2.5vw, 25px);
+}
 
+.drop-page__header-drop-details-item {
   color: c.$white;
 }
 
 .drop-page__header-drop-details-systems {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 130%;
+  text-transform: uppercase;
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+.drop-page__systems-icon {
+  @include m.theme() {
+    background-color: m.t(accent);
+  }
+  position: relative;
+  width: clamp(15px, 2vw, 15px);
+  height: clamp(15px, 2vw, 15px);
 }
 
 .drop-page__content {
@@ -286,13 +314,4 @@
   @include m.theme() {
     color: m.t(accent);
   }
-}
-
-.drop-page__systems-icon {
-  @include m.theme() {
-    background-color: m.t(accent);
-  }
-  position: relative;
-  width: 30px;
-  height: 30px;
 }

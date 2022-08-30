@@ -24,7 +24,7 @@
   grid-auto-flow: row dense;
 
   @include b.min-width('medium') {
-    grid-template-columns: repeat(18, 1fr);
+    grid-template-columns: repeat(12, 1fr);
   }
 }
 
@@ -41,27 +41,26 @@
       // color: m.t(base);
     }
     &[data-aspect='9/16'] {
-      grid-column: span 2 / span 2;
+      grid-column: span 3 / span 3;
       .search-page__grid-item-img {
-        aspect-ratio: 9/16;
       }
     }
     &[data-aspect='16/9'] {
-      grid-column: span 5 / span 5;
+      grid-column: span 6 / span 6;
       .search-page__grid-item-img {
-        aspect-ratio: 16/9;
+        // aspect-ratio: 16/9;
       }
     }
     &[data-aspect='1/1'] {
       grid-column: span 3 / span 3;
       // grid-column: span 1;
       .search-page__grid-item-img {
-        aspect-ratio: 1/1;
+        // aspect-ratio: 1/1;
       }
     }
     .search-page__grid-item-img {
       // aspect-ratio: 1/1;
-      // height: 18vw;
+      height: 18vw;
       position: relative;
     }
   }

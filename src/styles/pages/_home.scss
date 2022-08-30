@@ -41,7 +41,6 @@
   font-size: clamp(25px, 3.8vw, 50px);
   line-height: clamp(25px, 1.2em, 64px);
   padding: max(40px, 8.5vw) 0;
-
   text-transform: capitalize;
   @include b.min-width('medium') {
     text-align: center;
@@ -58,7 +57,6 @@
 }
 
 .home-page__upcoming-drops-header-left {
-  font-family: 'Marine';
   font-style: normal;
   text-transform: capitalize;
   font-weight: 400;
@@ -149,7 +147,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 }
 
 .home-page__upcoming-drops-tile-tag {
-  padding: max(9px, 2vw);
+  margin: max(9px, 2vw);
   position: absolute;
   font-style: normal;
   font-weight: 400;
@@ -160,6 +158,15 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   bottom: 0;
   color: c.$white;
   text-transform: uppercase;
+  & > * {
+    @include m.theme() {
+      background-color: m.t(accent);
+      padding: 0 0.01em;
+      display: inline-block;
+      height: 1.15em;
+      line-height: 1.15;
+    }
+  }
 }
 
 .home-page__upcoming-drops-countdown {
