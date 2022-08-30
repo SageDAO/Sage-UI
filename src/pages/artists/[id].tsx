@@ -86,14 +86,15 @@ export default function artist({ artist }: Props) {
           </div>
           {false && isOwner() && (
             <div style={{ width: '100%' }}>
-              <ArtistBalancePanel artistContractAddress={artist.NftContract?.contractAddress}/>
+              <ArtistBalancePanel artistContractAddress={artist.NftContract?.contractAddress} />
             </div>
           )}
         </div>
         <FollowButton artistAddress={artist.walletAddress} />
       </div>
-      <p className='artist-page__bio'>{artist.bio}</p>
-
+      <div className='artist-page__bio-container'>
+        <p className='artist-page__bio'>{artist.bio}</p>
+      </div>
       <section className='drop-page__content'>
         <div className='drop-page__grid'>
           {nfts &&

@@ -21,6 +21,7 @@
 }
 
 .artist-page__artist-section-flex-x {
+  margin-top: 30px;
   display: flex;
   gap: 28px;
 }
@@ -92,11 +93,16 @@
   }
 }
 
+.artist-page__bio-container {
+  margin-top: 100px;
+  display: flex;
+  gap: 6px;
+}
+
 .artist-page__bio {
-  margin-top: 26px;
   font-style: normal;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 143%;
   @include m.theme() {
     color: m.t(contrast2);
