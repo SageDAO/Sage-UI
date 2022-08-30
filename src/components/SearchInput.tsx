@@ -7,7 +7,6 @@ interface Props {
   className?: string;
   placeholder?: string;
   displayIcon?: boolean;
-  onChange?: any;
   dataColor?: string;
 }
 
@@ -15,14 +14,12 @@ export const SearchInput = ({
   className,
   placeholder,
   displayIcon,
-  onChange,
   dataColor,
 }: Props) => {
   const { query, setQuery } = useSearch();
   const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange && onChange();
     setQuery(event.target.value);
   };
 

@@ -1,12 +1,12 @@
 import { createContext, useContext, useState } from 'react';
 
 export type SearchContextType = {
-  query: string;
+  query: string | null;
   setQuery: (query: string) => void;
 };
 
 export const SearchContext = createContext<SearchContextType>({
-  query: '',
+  query: null,
   setQuery: (q) => console.warn('no search provider'),
 });
 

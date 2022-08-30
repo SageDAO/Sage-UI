@@ -12,14 +12,13 @@ export default function Search() {
   const [displayCount, setDisplayCount] = useState<number>(ITEMS_PER_PAGE);
   const { data, isLoading } = useGetSearchableNftDataQuery();
   const { query, setQuery } = useSearch();
-  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
     setDisplayCount(ITEMS_PER_PAGE); // reset display count to default when query changes
   }, [query]);
 
   const urlParamQuery = useRouter().query.q as string;
-  if (query == '' && urlParamQuery && urlParamQuery != '' && !isEditing) {
+  if (query == null && urlParamQuery) {
     setQuery(urlParamQuery); // use url param if context is uninitialized
   }
 
@@ -40,18 +39,14 @@ export default function Search() {
           <div className='searchresults__right-dot'></div>
           <div>
             <SearchInput
-              placeholder=''
               className='searchresults__input'
               displayIcon={false}
-              onChange={() => {
-                setIsEditing(true);
-              }}
             />
           </div>
         </div>
         <div className='searchresults__text'>
           {isLoading && <LoaderSpinner />}
-          {data &&
+          {data && query &&
             (query.length < 3
               ? 'Search must include at least 3 characters'
               : results.length == 0

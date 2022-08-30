@@ -50,7 +50,7 @@ const apolloClient = new ApolloClient({
 
 function App({ Component, pageProps, router }: AppProps) {
   useTheme();
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState<string | null>(null);
   const isMaintenanceOn: boolean = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
   const { cursorEl } = useCursor();
 
