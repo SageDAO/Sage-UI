@@ -21,6 +21,9 @@ export default async function handler(request: NextApiRequest, response: NextApi
     case 'GetListingNftsByOwner':
       await getListingNftsByOwner(request, response);
       break;
+    case 'GetListingNftsSalesData':
+      await getListingNftsSalesData(response);
+      break;
     case 'CreateOffer':
       await createOffer(request, response);
       break;
@@ -110,6 +113,19 @@ async function getListingNftsByOwner(request: NextApiRequest, response: NextApiR
     console.log({ e });
     response.status(500);
   }
+}
+
+export async function getListingNftsSalesData(response: NextApiResponse) {
+  console.log(`getListingNftsSalesData()`);
+  const returnVal = [];
+  const result = await prisma.nft.findMany({
+    where: { NOT: { artistAddress: null, ownerAddress: null } },
+    select: { price: true, NftContract: { select: { Artist: { select: { username: true } } } } },
+  });
+  for (const row of result) {
+    returnVal.push({ artist: row.NftContract.Artist.username, price: row.price });
+  }
+  response.json(returnVal);
 }
 
 async function createOffer(request: NextApiRequest, response: NextApiResponse) {

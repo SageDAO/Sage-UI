@@ -1,7 +1,10 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Lottery as LotteryContract } from '@/types/contracts';
 import { getLotteryContract, getStorageContract } from '@/utilities/contracts';
-import { User_include_EarnedPoints, User_include_EarnedPointsAndNftContracts } from '@/prisma/types';
+import {
+  User_include_EarnedPoints,
+  User_include_EarnedPointsAndNftContracts,
+} from '@/prisma/types';
 import { ethers, Signer } from 'ethers';
 import { baseApi } from './baseReducer';
 
@@ -32,18 +35,8 @@ const dashboardApi = baseApi.injectEndpoints({
       query: () => 'user?action=GetAllUsersAndEarnedPoints',
       providesTags: ['AllUsers'],
     }),
-    promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
-      queryFn: async ({ walletAddress, signer }, { dispatch }, extraOptions, fetchWithBQ) => {
-        const contract = await getStorageContract(signer);
-        const tx = await contract.setBool(
-          ethers.utils.solidityKeccak256(['string', 'address'], ['role.artist', walletAddress]),
-          true
-        );
-        await tx.wait();
-        await fetchWithBQ(`user?action=PromoteToArtist&address=${walletAddress}`);
-        return { data: true };
-      },
-      invalidatesTags: ['AllUsers'],
+    getListingNftsSalesData: builder.query<[], void>({
+      query: () => `nfts?action=GetListingNftsSalesData`,
     }),
     getLotteriesStats: builder.query<LotteryStats[], void>({
       queryFn: async () => {
@@ -77,6 +70,19 @@ const dashboardApi = baseApi.injectEndpoints({
           console.timeEnd('getLotteriesStats()');
         }
       },
+    }),
+    promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
+      queryFn: async ({ walletAddress, signer }, { dispatch }, extraOptions, fetchWithBQ) => {
+        const contract = await getStorageContract(signer);
+        const tx = await contract.setBool(
+          ethers.utils.solidityKeccak256(['string', 'address'], ['role.artist', walletAddress]),
+          true
+        );
+        await tx.wait();
+        await fetchWithBQ(`user?action=PromoteToArtist&address=${walletAddress}`);
+        return { data: true };
+      },
+      invalidatesTags: ['AllUsers'],
     }),
   }),
 });
@@ -130,6 +136,7 @@ async function getLotteryStats(
 
 export const {
   useGetAllUsersAndEarnedPointsQuery,
+  useGetListingNftsSalesDataQuery,
   useGetLotteriesStatsQuery,
   usePromoteUserToArtistMutation,
 } = dashboardApi;

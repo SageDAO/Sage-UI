@@ -41,7 +41,7 @@ export const SearchInput = ({
     <>
       <input
         type='text'
-        value={query}
+        value={query || undefined}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
