@@ -40,9 +40,11 @@ body {
     overflow: hidden;
     background-color: m.t(base);
   }
-  @include m.no-scrollbar;
 }
 
+* {
+  @include m.no-scrollbar;
+}
 
 html,
 body,
