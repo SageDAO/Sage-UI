@@ -1,66 +1,59 @@
 import LoaderSpinner from '@/components/LoaderSpinner';
-import { useGetListingNftsSalesDataQuery } from '@/store/dashboardReducer';
-import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import { gql, useQuery } from '@apollo/client';
+import prisma from '@/prisma/client';
+import {
+  getArtistsUsernamesAndWallets,
+  getDropsSalesData,
+  getListingsSalesData,
+} from '@/prisma/functions';
+import { ethers } from 'ethers';
 
-const GAMES_QUERY = gql`
-  query GetGames {
+interface SaleItem {
+  origin: 'Lottery' | 'Auction' | 'Marketplace';
+  eventId: number;
+  nftCount: number;
+  amount: string; // bigint
+}
+interface ArtistSales {
+  username: string;
+  nftCountTotal: number;
+  amountTotal: string; // bigint
+  sales: SaleItem[];
+  highestSale: string; // bigint
+}
+
+const GAMES_SALES_QUERY = gql`
+  query GetGamesSales {
     lotteries {
       id
-      status
       tickets {
         id
-        txnHash
-        address
-      }
-      claimedPrizes {
-        id
-        txnHash
       }
     }
     auctions {
       id
-      status
       highestBid
-      highestBidder
-      endTime
-      bids {
-        id
-        txnHash
-        bidder
-        amount
-        blockTimestamp
-      }
+    }
+    nftSales {
+      nftId
+      seller
+      price
     }
   }
 `;
 
-export default function ranking() {
-  const { data: drops, isFetching: isLoadingDrops } = useGetApprovedDropsQuery();
-  const { data: listingsSales, isLoading: isLoadingListingsSales } =
-    useGetListingNftsSalesDataQuery();
-  const { data: gamesSales, loading: isLoadingGamesSales } = useQuery(GAMES_QUERY);
+export default function ranking({ dbSalesData }: { dbSalesData: Map<string, ArtistSales> }) {
+  const { data: chainData, loading: isLoadingChainData } = useQuery(GAMES_SALES_QUERY);
 
-  const getLotteryGameStats = (id: number) => {
-    for (let lottery of gamesSales.lotteries) {
-      if (parseInt(lottery.id) == id) return lottery;
-    }
-    return {};
-  };
-  const getAuctionGameStats = (id: number) => {
-    for (let auction of gamesSales.auctions) {
-      if (parseInt(auction.id) == id) return auction;
-    }
-    return {};
-  };
-
-  if (isLoadingDrops || isLoadingListingsSales || isLoadingGamesSales) {
+  if (isLoadingChainData) {
     return (
       <div style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: '50px' }}>
         <LoaderSpinner />
       </div>
     );
   }
+
+  // TODO merge skeleton data from db with blockchain data, sort and filter results
 
   return (
     <div className='ranking-page'>
@@ -77,56 +70,74 @@ export default function ranking() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>artist_a</td>
-            <td>
-              1,000,000 ASH
-              <br />
-              <span className='ranking-page__table__pixelvalue'>500,000 PIXEL</span>
-            </td>
-            <td>50</td>
-            <td>25,000 ASH</td>
-            <td>5,000 ASH</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>artist_b</td>
-            <td>
-              1,000,000 ASH
-              <br />
-              <span className='ranking-page__table__pixelvalue'>500,000 PIXEL</span>
-            </td>
-            <td>50</td>
-            <td>25,000 ASH</td>
-            <td>5,000 ASH</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>artist_c</td>
-            <td>
-              1,000,000 ASH
-              <br />
-              <span className='ranking-page__table__pixelvalue'>500,000 PIXEL</span>
-            </td>
-            <td>50</td>
-            <td>25,000 ASH</td>
-            <td>5,000 ASH</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>artist_d</td>
-            <td>
-              1,000,000 ASH
-              <br />
-              <span className='ranking-page__table__pixelvalue'>500,000 PIXEL</span>
-            </td>
-            <td>50</td>
-            <td>25,000 ASH</td>
-            <td>5,000 ASH</td>
-          </tr>
+          {Array.from(dbSalesData.values()).map((item, i) => {
+            return (
+              <tr key={i}>
+                <td>{i+1}</td>
+                <td>{item.username}</td>
+                <td>
+                  {item.amountTotal} ASH
+                </td>
+                <td>{item.nftCountTotal}</td>
+                <td>- ASH</td>
+                <td>- ASH</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const artists = await getArtistsUsernamesAndWallets(prisma);
+  const drops = await getDropsSalesData(prisma);
+  const listings = await getListingsSalesData(prisma);
+  const salesData = new Map<string, ArtistSales>();
+  for (const a of artists) {
+    salesData.set(a.walletAddress, {
+      username: a.username,
+      nftCountTotal: 0,
+      amountTotal: '0',
+      sales: [],
+      highestSale: '0'
+    } as ArtistSales);
+  }
+  for (const d of drops) {
+    const s = salesData.get(d.artistAddress);
+    for (const l of d.Lotteries) {
+      s.nftCountTotal += l.Nfts.length;
+      s.sales.push({
+        origin: 'Lottery',
+        eventId: l.id,
+        amount: ethers.utils.parseEther(l.costPerTicketTokens.toString()).toString(), // will be updated with blockchain data
+        nftCount: l.Nfts.length,
+      } as SaleItem);
+    }
+    for (const a of d.Auctions) {
+      s.nftCountTotal += 1;
+      s.sales.push({
+        origin: 'Auction',
+        eventId: a.id,
+        amount: '0', // will be updated with blockchain data
+        nftCount: 1,
+      } as SaleItem);
+    }
+  }
+  for (const n of listings) {
+    const s = salesData.get(n.artistAddress);
+    s.sales.push({
+      origin: 'Marketplace',
+      eventId: n.id,
+      amount: '0', // will be updated with blockchain data
+      nftCount: 1,
+    } as SaleItem);
+  }
+  return {
+    props: {
+      dbSalesData: salesData,
+    },
+    revalidate: 600,
+  };
 }

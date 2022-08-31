@@ -9,7 +9,7 @@ const configuration: Configuration = {
   dev: {
     CHAIN_ID: '4',
     NETWORK_NAME: 'rinkeby',
-    SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.8',
+    SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.9',
     MEDIUM_URL:
       'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@winterland8888',
     LOTTERY_ADDRESS: '0x86295B8B322dBCA2f132FDb6390BbcEBd6573Ed4',

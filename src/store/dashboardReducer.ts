@@ -35,9 +35,6 @@ const dashboardApi = baseApi.injectEndpoints({
       query: () => 'user?action=GetAllUsersAndEarnedPoints',
       providesTags: ['AllUsers'],
     }),
-    getListingNftsSalesData: builder.query<[], void>({
-      query: () => `nfts?action=GetListingNftsSalesData`,
-    }),
     getLotteriesStats: builder.query<LotteryStats[], void>({
       queryFn: async () => {
         try {
@@ -70,6 +67,9 @@ const dashboardApi = baseApi.injectEndpoints({
           console.timeEnd('getLotteriesStats()');
         }
       },
+    }),
+    getMarketNftsSalesData: builder.query<[], void>({
+      query: () => `nfts?action=GetListingNftsSalesData`,
     }),
     promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
       queryFn: async ({ walletAddress, signer }, { dispatch }, extraOptions, fetchWithBQ) => {
@@ -136,7 +136,7 @@ async function getLotteryStats(
 
 export const {
   useGetAllUsersAndEarnedPointsQuery,
-  useGetListingNftsSalesDataQuery,
+  useGetMarketNftsSalesDataQuery,
   useGetLotteriesStatsQuery,
   usePromoteUserToArtistMutation,
 } = dashboardApi;

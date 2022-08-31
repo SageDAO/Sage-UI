@@ -125,3 +125,33 @@ export async function getIndividualArtistsPageData(prisma: PrismaClient, usernam
   });
   return artist;
 }
+
+export async function getArtistsUsernamesAndWallets(prisma: PrismaClient) {
+  let artists = await prisma.user.findMany({
+    select: { username: true, walletAddress: true },
+    where: { ...FilterUserIsArtist },
+  });
+  return artists;
+}
+
+export async function getDropsSalesData(prisma: PrismaClient) {
+  const drops = await prisma.drop.findMany({
+    include: {
+      Lotteries: { include: { Nfts: true } },
+      Auctions: { include: { Nft: true } },
+    },
+    where: {
+      ...FilterDropContractValidation,
+      ...FilterDropApprovedOnly,
+    },
+  });
+  return drops;
+}
+
+export async function getListingsSalesData(prisma: PrismaClient) {
+  const data = await prisma.nft.findMany({
+    select: { id: true, artistAddress: true },
+    where: { NOT: { ownerAddress: null } },
+  });
+  return data;
+}
