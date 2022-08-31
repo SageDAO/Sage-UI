@@ -18,7 +18,6 @@ import { parameters } from '@/constants/config';
 import { useEffect, useRef, useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
-import useCursor from '@/hooks/useCursor';
 
 // set up connectors
 const connectors = [
@@ -52,7 +51,6 @@ function App({ Component, pageProps, router }: AppProps) {
   useTheme();
   const [query, setQuery] = useState<string | null>(null);
   const isMaintenanceOn: boolean = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
-  const { cursorEl } = useCursor();
 
   return (
     <ReduxProvider store={store}>
@@ -68,7 +66,6 @@ function App({ Component, pageProps, router }: AppProps) {
                   content='width=device-width,initial-scale=1,viewport-fit=cover'
                 />
               </Head>
-              <div className='cursor' ref={cursorEl}></div>
               {isMaintenanceOn ? (
                 <LandingPage />
               ) : (
