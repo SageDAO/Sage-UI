@@ -36,12 +36,13 @@ input[type='number'] {
 }
 
 body {
-  @include m.no-scrollbar;
   @include m.theme() {
     overflow: hidden;
     background-color: m.t(base);
   }
+  @include m.no-scrollbar;
 }
+
 
 html,
 body,
@@ -130,7 +131,7 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  font-family: 'Helvetica Neue','HelveticaNeue' , 'Helvetica';
+  font-family: 'Helvetica Neue', 'HelveticaNeue', 'Helvetica';
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -180,6 +181,10 @@ button {
 
 input {
   border: none;
+}
+
+img {
+  @include m.noselect;
 }
 
 input::-webkit-outer-spin-button,

@@ -48,10 +48,7 @@
 }
 
 .submissions-page__guidelines-text {
-  font-style: normal;
-  font-weight: 400;
-  font-size: clamp(8px, 2vw, 16px);
-  @include m.p-text;
+  @include m.text-p1;
   @include m.theme() {
     color: m.t(contrast2);
   }

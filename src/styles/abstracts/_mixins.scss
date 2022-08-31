@@ -14,7 +14,10 @@
   &::-webkit-scrollbar {
     width: 0px;
     height: 0px;
+    display: none;
   }
+  -ms-overflow-style: none; /* IE 11 */
+  scrollbar-width: none; /* Firefox 64 */
 }
 
 @mixin custom-scrollbar {
@@ -182,6 +185,11 @@ $theme-map: null;
   @include mobile-width;
 }
 
-@mixin p-text {
+@mixin text-p1 {
   line-height: 140%;
+  font-size: clamp(8px, 2vw, 16px);
+}
+
+@mixin text-p3 {
+  font-size: clamp(14px, 1.2vw, 20px);
 }

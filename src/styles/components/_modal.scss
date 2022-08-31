@@ -29,7 +29,6 @@
   display: flex;
   align-items: flex-start;
   flex-direction: column;
-  opacity: 0.9;
   @include m.theme() {
     background-color: m.t(base);
     color: m.t(contrast);

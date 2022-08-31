@@ -34,29 +34,30 @@
   display: flex;
   align-items: flex-end;
   width: 100%;
-  gap: 40px;
+  // gap: 40px;
 }
 
 .footer__logo {
   position: relative;
-  width: clamp(80px, 10vw, 171px);
+  width: max(80px, 20%);
+  // background-color: red;
   aspect-ratio: 171/40;
   height: 100%;
   display: flex;
+  align-items: end;
 }
 
 .footer__logo-svg {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   @include m.theme() {
     color: m.t(contrast);
   }
 }
 
-.footer__divider {
+.footer__search-container {
   flex: 1;
-  height: 3px;
-  border-bottom: 1px solid c.$grey;
+  height: 100%;
 }
 
 .footer__middle {
@@ -64,12 +65,25 @@
   min-height: 20vh;
   flex-direction: row;
   align-items: flex-start;
+  // justify-content: flex-end;
   gap: clamp(10px, 10vw, 30px);
   flex-wrap: wrap;
 }
 
+.footer__middle-info {
+  display: flex;
+  // background-color: red;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+  @include b.min-width('medium') {
+    padding-left: 20%;
+  }
+}
+
 .footer__middle-item {
-  width: clamp(156px, 10vw, 223px);
+  // width: clamp(156px, 16vw, 220px);
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -77,11 +91,8 @@
 }
 
 .footer__middle-item-header {
-  font-style: normal;
-  font-weight: 400;
-  font-size: clamp(14px, 1.2vw, 20px);
-  line-height: clamp(17px, 1.2em, 24px);
   text-transform: uppercase;
+  @include m.text-p3;
 }
 
 .footer__motto {

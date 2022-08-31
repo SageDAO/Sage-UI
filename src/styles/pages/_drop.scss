@@ -74,17 +74,11 @@
 .drop-page__header-main-column {
   display: flex;
   flex-direction: column;
-  // gap: 20px;
   max-width: 700px;
   width: 100%;
 }
 
 .drop-page__header-drop-name {
-  // font-style: normal;
-  // font-weight: 400;
-  // font-size: clamp(24px, 2vw, 50px);
-  // line-height: clamp(21px, 1em, 60px);
-
   font-weight: 400;
   font-size: clamp(20px, 5vw, 50px);
   line-height: clamp(24px, 1em, 60px);
@@ -100,7 +94,7 @@
   font-weight: 400;
   font-size: clamp(10px, 1vw, 16px);
   margin-bottom: clamp(10px, 5vw, 50px);
-  @include m.p-text;
+  @include m.text-p1;
 }
 
 .drop-page__header-drop-details {

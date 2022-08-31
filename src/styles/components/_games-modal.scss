@@ -23,7 +23,6 @@
   overflow-y: auto;
   height: 100vh;
   align-items: center;
-
   & > :first-child {
     margin-top: 160px;
   }
@@ -99,6 +98,7 @@
   // height: clamp(300px, 80vw, 527px);
   width: 100%;
   aspect-ratio: 487/527;
+  opacity: 1;
 
   @include b.min-width('medium') {
     width: 487px;
