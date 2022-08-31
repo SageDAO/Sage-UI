@@ -67,17 +67,14 @@
   align-items: flex-start;
   // justify-content: flex-end;
   gap: clamp(10px, 10vw, 30px);
-  flex-wrap: wrap;
 }
 
 .footer__middle-info {
   display: flex;
-  // background-color: red;
   flex: 1;
-  flex-wrap: wrap;
   gap: 30px;
   justify-content: space-between;
-  @include b.min-width('medium') {
+  @include b.min-width('small') {
     padding-left: 20%;
   }
 }
@@ -94,6 +91,17 @@
   text-transform: uppercase;
   @include m.text-p3;
 }
+
+.footer__socials {
+  flex: 1;
+  align-items: center;
+  @include b.min-width('small') {
+		flex: 0;
+    display: flex;
+  }
+}
+
+
 
 .footer__motto {
   @include m.theme() {

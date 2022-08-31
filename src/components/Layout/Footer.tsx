@@ -64,12 +64,14 @@ export default function Footer() {
                 </h1>
               </div>
             </ul>
-            <ul className='footer__middle-item'>
+            <ul className='footer__middle-item footer__socials'>
               <div className='footer__middle-item-header'>follow us on</div>
               <div className='footer__middle-item-content'>
                 <Socials></Socials>
               </div>
             </ul>
+
+
           </div>
         </div>
         <div className='footer__bottom'>
