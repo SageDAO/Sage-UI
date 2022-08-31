@@ -95,8 +95,8 @@ export default function artist({ artist }: Props) {
       <div className='artist-page__bio-container'>
         <p className='artist-page__bio'>{artist.bio}</p>
       </div>
-      <section className='drop-page__content'>
-        <div className='drop-page__grid'>
+      <section className='artist-page__content'>
+        <div className='artist-page__grid'>
           {nfts &&
             [...nfts]
               .sort(sort)

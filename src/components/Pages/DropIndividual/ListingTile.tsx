@@ -22,22 +22,39 @@ function findActiveSellOffer(offers: Offer[]): Offer | null {
   return null;
 }
 
+function sortAndFilterOffers(offers: Offer[]) {
+  const now = Math.floor(new Date().getTime() / 1000);
+  const filtered = [...offers].filter((o) => o.state == OfferState.ACTIVE && o.expiresAt > now);
+  const sorted = filtered.sort((a, b) => {
+    return b.price - a.price;
+  });
+  return sorted.splice(0, 5);
+}
+
 export default function ListingTile({ nft, artist }: Props) {
-  const { data: signer } = useSigner();
   const { isOpen, closeModal, openModal } = useModal();
   const sellOffer = findActiveSellOffer(nft.Offers!);
-
   const handleClick = async () => {
     if (nft.ownerAddress) {
       return; // can't buy an NFT that is already owned
     }
     openModal();
   };
+  const buyOffers = sortAndFilterOffers(nft.Offers);
+  const highestOffer = buyOffers[0];
+  const hasOffers: boolean = buyOffers.length > 0;
+  const isForSale: boolean = !nft.ownerAddress;
 
   return (
-    <div className='drop-page__grid-item' onClick={handleClick}>
+    <div className='artist-page__grid-tile' onClick={handleClick}>
       {!sellOffer && (
-        <MakeOfferModal artist={artist} nft={nft} isOpen={isOpen} closeModal={closeModal} />
+        <MakeOfferModal
+          buyOffers={buyOffers}
+          artist={artist}
+          nft={nft}
+          isOpen={isOpen}
+          closeModal={closeModal}
+        />
       )}
       {sellOffer && (
         <BuyNowModal
@@ -48,23 +65,33 @@ export default function ListingTile({ nft, artist }: Props) {
           closeModal={closeModal}
         />
       )}
-      <div className='drop-page__grid-item-header'>
-        <h1 className='drop-page__grid-item-header-left'>edition size: {1}</h1>
-        <div className='drop-page__grid-item-header-right'></div>
-      </div>
-      <div className='drop-page__grid-item-img'>
+      <div className='artist-page__grid-tile-media'>
         <BaseMedia src={nft.s3Path} />
-        <div className='drop-page__grid-item-focus'>
-          {nft.ownerAddress
-            ? `owned by ${shortenAddress(nft.ownerAddress)}`
-            : sellOffer
-            ? `buy now for ${nft.price} ASH`
-            : `make an offer`}
-        </div>
       </div>
-      <div className='drop-page__grid-item-info'>
-        <h1 className='drop-page__grid-item-info-drop-name'>by {artist.username}</h1>
-        <h1 className='drop-page__grid-item-info-game-name'>{nft.name}</h1>
+      <div className='artist-page__grid-tile-info'>
+        <div className='artist-page__grid-tile-info-left'>
+          <h3 className='artist-page__grid-tile-title'>{nft.name}</h3>
+          <h3 className='artist-page__grid-tile-artist-name'> by {artist.username}</h3>
+        </div>
+        <div className='artist-page__grid-tile-info-right'>
+          {isForSale ? (
+            <>
+              {hasOffers ? (
+                <h2 className='artist-page__grid-tile-info-price'>
+                  {sellOffer
+                    ? `BUY NOW: ${nft.price} ASH`
+                    : `CURRENT BID: ${highestOffer.price} ASH`}
+                </h2>
+              ) : (
+                <h2 className='artist-page__grid-tile-info-price'>MINIMUM: {nft.price} ASH</h2>
+              )}
+            </>
+          ) : (
+            <h2 className='artist-page__grid-tile-info-price'>
+              OWNED BY: {shortenAddress(nft.ownerAddress)}
+            </h2>
+          )}
+        </div>
       </div>
     </div>
   );

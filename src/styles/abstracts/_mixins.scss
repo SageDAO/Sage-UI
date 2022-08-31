@@ -185,6 +185,16 @@ $theme-map: null;
   @include mobile-width;
 }
 
+@mixin text-h2 {
+  font-size: clamp(25px, 3vw, 40px);
+  line-height: 51px;
+}
+
+@mixin text-h3 {
+  font-size: 16px;
+  line-height: 22px;
+}
+
 @mixin text-p1 {
   line-height: 140%;
   font-size: clamp(8px, 2vw, 16px);
@@ -192,4 +202,8 @@ $theme-map: null;
 
 @mixin text-p3 {
   font-size: clamp(14px, 1.2vw, 20px);
+}
+
+@mixin transition-base {
+  transition-duration: 200ms;
 }

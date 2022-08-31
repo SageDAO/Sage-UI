@@ -22,10 +22,11 @@ import { parameters } from '@/constants/config';
 interface Props extends ModalProps {
   artist: User;
   nft: Nft_include_NftContractAndOffers;
+  buyOffers: Offer[];
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
-export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Props) {
+export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOffers }: Props) {
   const [amount, setAmount] = useState(nft.price!);
   const [createBuyOffer, { isLoading: isCreatingBuyOffer }] = useCreateBuyOfferMutation();
   const [sellFromBuyOffer, { isLoading: isSelling }] = useSellFromBuyOfferMutation();
@@ -74,15 +75,6 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
     setAmount(+e.target.value);
   }
 
-  function sortAndFilterOffers(offers: Offer[]) {
-    const now = Math.floor(new Date().getTime() / 1000);
-    const filtered = [...offers].filter((o) => o.state == OfferState.ACTIVE && o.expiresAt > now);
-    const sorted = filtered.sort((a, b) => {
-      return b.price - a.price;
-    });
-    return sorted.splice(0, 5);
-  }
-
   useEffect(() => {
     // find highest offer
     var highestOffer = nft.price!;
@@ -94,8 +86,6 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
     setAmount(highestOffer);
   }, [nft]);
 
-  const buyOffers = sortAndFilterOffers(nft.Offers);
-
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
       <div className='games-modal'>
@@ -105,7 +95,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft }: Prop
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
-            <BaseMedia src={nft.s3Path}  />
+            <BaseMedia src={nft.s3Path} />
           </div>
           <div className='games-modal__main-content'>
             <div>
