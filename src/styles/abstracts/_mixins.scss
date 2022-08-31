@@ -57,7 +57,7 @@
 
 @mixin interact {
   &[disabled] {
-    filter: brightness(0.6);
+    filter: brightness(0.4);
 
     &[data-loading='true'] {
       cursor: progress;
@@ -180,4 +180,8 @@ $theme-map: null;
 @mixin standard-width {
   @include desktop-width;
   @include mobile-width;
+}
+
+@mixin p-text {
+  line-height: 140%;
 }

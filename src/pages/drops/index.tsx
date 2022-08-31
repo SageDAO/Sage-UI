@@ -75,7 +75,7 @@ function drops({ drops }: Props) {
                 layout='fill'
                 draggable={false}
               />
-              <div className='drops-page__drop-focus'>
+              <div onClick={buttonHandler} className='drops-page__drop-focus'>
                 <Image
                   draggable={false}
                   src={d.bannerImageS3Path}

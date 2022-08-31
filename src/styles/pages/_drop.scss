@@ -99,8 +99,8 @@
   font-style: normal;
   font-weight: 400;
   font-size: clamp(10px, 1vw, 16px);
-  line-height: 130%;
   margin-bottom: clamp(10px, 5vw, 50px);
+  @include m.p-text;
 }
 
 .drop-page__header-drop-details {

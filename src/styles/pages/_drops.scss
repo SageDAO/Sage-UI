@@ -24,7 +24,7 @@
 
 .drops-page__subheader-top {
   margin-top: clamp(24px, 10vw, 111px);
-  margin-bottom: clamp(10px, 3vw, 50px);
+  margin-bottom: clamp(10px, 5vw, 50px);
   display: flex;
   gap: min(40px, 3vw);
 }
@@ -55,6 +55,7 @@
 }
 
 .drops-page__subheader-info {
+  margin-top: 20px;
   text-transform: capitalize;
   font-style: normal;
   font-weight: 400;
@@ -66,7 +67,7 @@
   display: flex;
   flex-direction: column;
   margin-top: clamp(30px, 5vw, 90px);
-  @include m.mobile-width;
+  @include m.mobile-width-full;
   @include b.min-width('medium') {
     @include m.desktop-width;
   }
@@ -144,14 +145,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-style: normal;
   font-weight: 400;
-  font-size: min(14px, 2vw);
-  line-height: 136.6%;
+  font-size: clamp(10px, 1.5vw, 16px);
+  line-height: 130%;
   text-align: center;
-  letter-spacing: 0.35em;
-  width: min(345px, 20em);
-  aspect-ratio: 345/50;
+  letter-spacing: 0.1em;
+  width: 100%;
+  text-transform: uppercase;
+  aspect-ratio: 600/50;
+  @include b.min-width('medium') {
+    width: min(345px, 20em);
+    aspect-ratio: 345/50;
+  }
 
   @include m.theme {
     color: c.$black;
@@ -165,8 +170,8 @@
 
 .drops-page__drop-content-description {
   font-weight: 400;
-  font-size: 16px;
-  width: min(466px, 30%);
+  font-size: clamp(12px, 1vw, 16px);
+  width: min(506px, 40%);
   line-height: 130%;
   text-transform: uppercase;
   color: c.$white;
@@ -184,6 +189,7 @@
 }
 
 .drops-page__drop-focus {
+  cursor: pointer;
   position: relative;
   width: 80%;
   aspect-ratio: 1196/640;

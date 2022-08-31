@@ -89,6 +89,7 @@
 // ------------------------ local mixins ----------------------------------
 
 .profile-page {
+  text-transform: uppercase;
   @include m.page;
   flex-direction: row;
   align-items: flex-start;
@@ -102,16 +103,21 @@
 }
 
 .profile-page__left {
-  width: max(300px, 33%);
   display: flex;
   flex-direction: column;
   gap: 30px;
   padding-right: 20px;
+  width: 100%;
+  @include b.min-width('medium') {
+    width: max(300px, 33%);
+  }
 }
 
 .profile-page__sage-logo-svg {
   width: 243px;
   height: 56px;
+  @include m.interact;
+  transition-duration: 200ms;
 }
 
 .profile-page__menu {
@@ -130,15 +136,26 @@
 .profile-page__tabs {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
+  @include b.min-width('medium') {
+    width: 70%;
+  }
 }
 
 .profile-page__tabs-tab {
-  padding: 4px 16px;
-  transition-duration: 20ms;
-  outline: none;
-  @include m.noselect;
+  font-family: 'Helvetica Neue', Helvetica;
   @include m.theme() {
+    padding: 8px 8px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    text-transform: uppercase;
+    line-height: 30px;
+    // letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition-duration: 20ms;
+    outline: none;
+    @include m.noselect;
     color: m.t(contrast);
     text-align: left;
     background-color: transparent;
@@ -146,10 +163,12 @@
       background-color: m.t(contrast);
       color: m.t(base);
     }
-
     &[data-active='true'] {
       background-color: m.t(contrast);
       color: m.t(base2);
+    }
+    @include b.min-width('medium') {
+      padding: 4px 16px;
     }
   }
 }
@@ -169,6 +188,7 @@
 }
 
 .profile-page__balances-points {
+  flex: 1;
   @include balance-group;
 }
 
@@ -181,7 +201,6 @@
 }
 
 .profile-page__balances-token {
-  flex: 1;
   @include balance-group;
 }
 
@@ -323,18 +342,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 136.6%;
-
   text-align: center;
   letter-spacing: 0.2em;
-
+  font-weight: 400;
+  font-size: clamp(10px, 1.5vw, 16px);
+  line-height: 130%;
+  text-align: center;
+  letter-spacing: 0.1em;
   width: min(365px, 80vw);
   min-height: 50px;
-
   @include m.interact;
   @include m.theme() {
     background-color: m.t(contrast);
@@ -359,13 +379,13 @@
     gap: 5px;
     transition-duration: 200ms;
 
-    background-color: m.t(base2);
-    color: m.t(contrast2);
+    background-color: m.t(base);
+    color: m.t(contrast);
     border: 1px solid transparent;
     @include m.interact() {
-      border: 1px solid contrast2;
-      color: m.t(base2);
-      background-color: m.t(contrast2);
+      border: 1px solid m.t(contrast);
+      color: m.t(base);
+      background-color: m.t(contrast);
       img {
         transition-duration: 200ms;
         transform: scale(1.02);

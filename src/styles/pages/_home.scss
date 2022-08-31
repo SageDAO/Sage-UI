@@ -27,7 +27,6 @@
 }
 
 .home-page__featured-drop-tag-label {
-  font-style: normal;
   font-weight: 400;
   font-size: max(7px, 1vw);
   line-height: max(9px, 1.5em);
@@ -35,7 +34,6 @@
 
 .home-page__statement {
   display: flex;
-  font-style: normal;
   justify-content: center;
   font-weight: 400;
   font-size: clamp(25px, 3.8vw, 50px);
@@ -57,7 +55,6 @@
 }
 
 .home-page__upcoming-drops-header-left {
-  font-style: normal;
   text-transform: capitalize;
   font-weight: 400;
   font-size: clamp(24px, 2vw, 40px);
@@ -80,7 +77,6 @@
 }
 
 .home-page__upcoming-drops-header-right-text {
-  font-style: normal;
   font-weight: 400;
   font-size: clamp(10px, 1.2vw, 16px);
   line-height: 130%;
@@ -149,7 +145,6 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 .home-page__upcoming-drops-tile-tag {
   margin: max(9px, 2vw);
   position: absolute;
-  font-style: normal;
   font-weight: 400;
   font-size: clamp(10px, 1.4vw, 32px);
   line-height: clamp(12px, 1.5em, 30px);
@@ -263,7 +258,6 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 }
 
 .home-page__event-slide-content-title {
-  font-style: normal;
   font-weight: 400;
   font-size: clamp(24px, 1vw, 40px);
   line-height: clamp(29px, 1em, 49px);
@@ -278,7 +272,6 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 }
 
 .home-page__event-slide-content-read-more-button {
-  font-style: normal;
   font-weight: 400;
   font-size: 10px;
   line-height: 14px;

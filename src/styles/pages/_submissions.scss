@@ -51,10 +51,7 @@
   font-style: normal;
   font-weight: 400;
   font-size: clamp(8px, 2vw, 16px);
-  line-height: 130%;
-  /* or 21px */
-
-  color: #f5f5f5;
+  @include m.p-text;
   @include m.theme() {
     color: m.t(contrast2);
   }

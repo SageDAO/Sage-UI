@@ -15,6 +15,7 @@ import { useDisconnect } from 'wagmi';
 import { PfpImage } from '@/components/Media/BaseMedia';
 
 function profile() {
+  const router = useRouter();
   const { data: sessionData } = useSession();
   const { data: userData, isFetching: isFetchingUser } = useGetUserQuery(undefined, {
     skip: !sessionData,
@@ -49,7 +50,12 @@ function profile() {
     <Tab.Group selectedIndex={selectedTabIndex} onChange={setSelectedTabIndex} vertical>
       <div className='profile-page'>
         <div className='profile-page__left'>
-          <SageFullLogoSVG className='profile-page__sage-logo-svg' />
+          <SageFullLogoSVG
+            onClick={() => {
+              router.push('/');
+            }}
+            className='profile-page__sage-logo-svg'
+          />
           <div className='profile-page__pfp-container'>
             <PfpImage src={userData?.profilePicture}></PfpImage>
           </div>
