@@ -2,6 +2,7 @@ import LoaderSpinner from '@/components/LoaderSpinner';
 import Logotype from '@/components/Logotype';
 import SearchResultsTile from '@/components/Pages/Search/SearchResultsTile';
 import { SearchInput } from '@/components/SearchInput';
+import useWindowDimensions from '@/hooks/useWindowSize';
 import { SearchableNftData, useGetSearchableNftDataQuery } from '@/store/nftsReducer';
 import { useSearch } from '@/store/searchContext';
 import { useRouter } from 'next/router';
@@ -29,6 +30,11 @@ export default function Search() {
     setDisplayCount(displayCount + ITEMS_PER_PAGE);
   };
 
+  const { isMobile } = useWindowDimensions();
+  const rowDivisor: number = isMobile ? 3.5 / 2 : 3.5;
+  const gridRows: number = Math.floor(displayCount / rowDivisor);
+  const rowHeight: string = isMobile ? '32vw' : '16vw';
+
   return (
     <div className='search-page'>
       <div className='search-page__logotype-container'>
@@ -38,15 +44,13 @@ export default function Search() {
         <div className='searchresults__term'>
           <div className='searchresults__right-dot'></div>
           <div>
-            <SearchInput
-              className='searchresults__input'
-              displayIcon={false}
-            />
+            <SearchInput className='searchresults__input' displayIcon={false} />
           </div>
         </div>
         <div className='searchresults__text'>
           {isLoading && <LoaderSpinner />}
-          {data && query &&
+          {data &&
+            query &&
             (query.length < 3
               ? 'Search must include at least 3 characters'
               : results.length == 0
@@ -55,7 +59,10 @@ export default function Search() {
         </div>
       </div>
       <div className='drop-page__content' style={{ padding: '50px 0 0' }}>
-        <div className='search-page__grid'>
+        <div
+          className='search-page__grid'
+          style={{ gridTemplateRows: `repeat(${gridRows}, ${rowHeight})` }}
+        >
           {displayResults &&
             displayResults.map((nft: SearchableNftData, i: number) => (
               <SearchResultsTile key={i} nft={nft} i={i} />
