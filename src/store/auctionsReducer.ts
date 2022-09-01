@@ -99,7 +99,22 @@ const auctionsApi = baseApi.injectEndpoints({
             error: 'Failure! Unable to complete request.',
           });
           await tx.wait();
-          var claimedAt = await updateDbPrizeClaimedDate(_fetchWithBQ, id);
+          const claimedAt = await updateDbPrizeClaimedDate(_fetchWithBQ, id);
+          
+          const auctionState = await contract.getAuction(id);
+          await fetch(`/api/sales?action=RegisterSale`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              eventType: 'AUCTION',
+              eventId: id,
+              amountTokens: ethers.utils.formatUnits(auctionState.highestBid),
+              buyer: auctionState.highestBidder,
+              txHash: tx.hash,
+              blockTimestamp: tx.timestamp,
+            }),
+          });
+
           playPrizeClaimedSound();
           return { data: claimedAt };
         } catch (e) {

@@ -142,6 +142,20 @@ const nftsApi = baseApi.injectEndpoints({
           });
           await tx.wait(1);
           await fetchWithBQ(`nfts?action=UpdateOwner&id=${sellOffer.id}`);
+
+          await fetch(`/api/sales?action=RegisterSale`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              eventType: 'MARKETPLACE',
+              eventId: sellOffer.nftId,
+              amountTokens: sellOffer.price,
+              buyer: await signer.getAddress(),
+              txHash: tx.hash,
+              blockTimestamp: tx.timestamp,
+            }),
+          });
+
           playTxSuccessSound();
           return { data: true };
         } catch (e) {
@@ -175,6 +189,20 @@ const nftsApi = baseApi.injectEndpoints({
           });
           await tx.wait(1);
           await fetchWithBQ(`nfts?action=UpdateOwner&id=${buyOffer.id}`);
+
+          await fetch(`/api/sales?action=RegisterSale`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              eventType: 'MARKETPLACE',
+              eventId: buyOffer.nftId,
+              amountTokens: buyOffer.price,
+              buyer: buyOffer.signer,
+              txHash: tx.hash,
+              blockTimestamp: tx.timestamp,
+            }),
+          });
+
           playTxSuccessSound();
           return { data: true };
         } catch (e) {

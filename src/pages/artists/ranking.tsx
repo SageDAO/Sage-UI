@@ -6,7 +6,7 @@ import {
   getDropsSalesData,
   getListingsSalesData,
 } from '@/prisma/functions';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 interface SaleItem {
   origin: 'Lottery' | 'Auction' | 'Marketplace';
@@ -53,7 +53,7 @@ export default function ranking({ dbSalesData }: { dbSalesData: Map<string, Arti
     );
   }
 
-  // TODO merge skeleton data from db with blockchain data, sort and filter results
+  computeChainData(dbSalesData, chainData);
 
   return (
     <div className='ranking-page'>
@@ -88,6 +88,48 @@ export default function ranking({ dbSalesData }: { dbSalesData: Map<string, Arti
       </table>
     </div>
   );
+}
+
+function findArtistAndSaleItem(dbSalesData: Map<string, ArtistSales>, eventId: number, eventType: string): { artistSales: ArtistSales, saleItem: SaleItem } {
+  for (const as of Array.from(dbSalesData.values())) {
+    for (const i of as.sales) {
+      if (i.eventId == eventId && i.origin == eventType) {
+        return { artistSales: as, saleItem: i };
+      }
+    }
+  }
+  return null;
+}
+
+function computeChainData(dbSalesData: Map<string, ArtistSales>, chainData: any) {
+  for (const l of chainData.lotteries) {
+    const { artistSales, saleItem } = findArtistAndSaleItem(dbSalesData, l.id, 'Lottery');
+    const ticketCost = BigNumber.from(saleItem.amount);
+    const itemValue = ticketCost.mul(l.tickets.length);
+    if (itemValue.gt(BigNumber.from(artistSales.highestSale))) {
+      artistSales.highestSale = itemValue.toString();
+    }
+    saleItem.amount = itemValue.toString();
+    artistSales.amountTotal = BigNumber.from(artistSales.amountTotal).add(itemValue).toString();
+  }
+  for (const a of chainData.auctions) {
+    const { artistSales, saleItem } = findArtistAndSaleItem(dbSalesData, a.id, 'Auction');
+    const itemValue = BigNumber.from(a.highestBid.toString());
+    if (itemValue.gt(BigNumber.from(artistSales.highestSale))) {
+      artistSales.highestSale = itemValue.toString();
+    }
+    saleItem.amount = itemValue.toString();
+    artistSales.amountTotal = BigNumber.from(artistSales.amountTotal).add(itemValue).toString();
+  }
+  for (const n of chainData.nftSales) {
+    const { artistSales, saleItem } = findArtistAndSaleItem(dbSalesData, n.id, 'Marketplace');
+    const itemValue = BigNumber.from(n.price);
+    if (itemValue.gt(BigNumber.from(artistSales.highestSale))) {
+      artistSales.highestSale = itemValue.toString();
+    }
+    saleItem.amount = itemValue.toString();
+    artistSales.amountTotal = BigNumber.from(artistSales.amountTotal).add(itemValue).toString();
+  }
 }
 
 export async function getStaticProps() {

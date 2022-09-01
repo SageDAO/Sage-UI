@@ -51,10 +51,10 @@ const lotteriesApi = baseApi.injectEndpoints({
     buyTickets: builder.mutation<boolean, BuyTicketRequest>({
       queryFn: async (buyRequest, { dispatch }) => {
         console.log(`buyTickets(${buyRequest.lotteryId})`);
+        const purchaseCost = BigNumber.from(buyRequest.numberOfTickets).mul(
+          buyRequest.ticketCostCoins
+        );
         try {
-          const purchaseCost = BigNumber.from(buyRequest.numberOfTickets).mul(
-            buyRequest.ticketCostCoins
-          );
           console.log(`buyTickets() :: Cost = ${purchaseCost}`);
           const lotteryContract = await getLotteryContract(buyRequest.signer);
           const tokenAddress = await lotteryContract.token();
@@ -88,6 +88,23 @@ const lotteriesApi = baseApi.injectEndpoints({
             error: 'Failure! Unable to complete request.',
           });
           await tx.wait();
+
+          await fetch(`/api/sales?action=RegisterSale`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              eventType: 'LOTTERY',
+              eventId: buyRequest.lotteryId,
+              amountTokens: ethers.utils.formatUnits(purchaseCost),
+              amountPoints: usePoints
+                ? Number(buyRequest.numberOfTickets) * Number(buyRequest.ticketCostPoints)
+                : null,
+              buyer: await buyRequest.signer.getAddress(),
+              txHash: tx.hash,
+              blockTimestamp: tx.timestamp,
+            }),
+          });
+
           playTxSuccessSound();
           if (usePoints) {
             // TODO make subscribed UI components refetch points from db and contract
