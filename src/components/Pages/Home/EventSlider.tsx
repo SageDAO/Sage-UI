@@ -36,7 +36,12 @@ export default function EventSlider({ mediumData }: Props) {
 
   return (
     <div className='home-page__events'>
-      
+      {state.items.map((item, i: number) => {
+        return (
+          <a target='__blank' key={i} className='home-page__event-slide' href={item.link}>
+          </a>
+        );
+      })}
     </div>
   );
 }
