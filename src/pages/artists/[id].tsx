@@ -95,16 +95,12 @@ export default function artist({ artist }: Props) {
       <div className='artist-page__bio-container'>
         <p className='artist-page__bio'>{artist.bio}</p>
       </div>
-      <section className='artist-page__content'>
-        <div className='artist-page__grid'>
-          {nfts &&
-            [...nfts]
-              .sort(sort)
-              .map((nft: ListingNft, i: number) => (
-                <ListingTile key={i} nft={nft} artist={artist} />
-              ))}
-        </div>
-      </section>
+      <div className='artist-page__grid'>
+        {nfts &&
+          [...nfts]
+            .sort(sort)
+            .map((nft: ListingNft, i: number) => <ListingTile key={i} nft={nft} artist={artist} />)}
+      </div>
     </div>
   );
 }

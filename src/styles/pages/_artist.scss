@@ -117,28 +117,28 @@
 }
 
 .artist-page__content {
-  margin-top: 40px;
-  @include m.standard-width;
-  width: 100%;
+  // @include m.standard-width;
 }
 
 .artist-page__grid {
+  margin-top: 40px;
   display: grid;
   gap: 20px;
   @include b.min-width('small') {
     grid-template-columns: repeat(2, 1fr);
   }
+  width: 100%;
 }
 
 .artist-page__grid-tile {
   @include m.theme() {
     display: flex;
     flex-direction: column;
-    border: 1px solid transparent;
+    // border: 1px solid transparent;
     @include m.transition-base;
     @include m.interact {
       background-color: m.t(accent);
-      border: 1px solid m.t(accent);
+      // border: 1px solid m.t(accent);
       color: m.t(base);
       .artist-page__grid-tile-info-price {
         @include m.transition-base;
