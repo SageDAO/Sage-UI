@@ -24,6 +24,7 @@ const nextConfig = {
     };
   },
   staticPageGenerationTimeout: 180,
+	swcMinify: false
 };
 
 module.exports = nextConfig;
