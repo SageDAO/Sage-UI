@@ -37,7 +37,7 @@ export default function EventSlider({ mediumData }: Props) {
   return (
     <div className='home-page__events'>
       {state.items.map((item, i: number) => {
-        const date = item.pubDate;
+        const date = reformatDate(item.pubDate);
         return (
           <a target='__blank' key={i} className='home-page__event-slide' href={item.link}>
             <h1 className='home-page__event-slide-header'>news</h1>
