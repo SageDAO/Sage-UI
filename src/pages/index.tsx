@@ -40,6 +40,7 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
           </div>
         </div>
         <UpcomingDrops upcomingDrops={upcomingDrops}></UpcomingDrops>
+        <EventSlider mediumData={mediumData} />
       </div>
     </div>
   );
