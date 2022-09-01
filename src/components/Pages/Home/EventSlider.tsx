@@ -37,7 +37,7 @@ export default function EventSlider({ mediumData }: Props) {
   return (
     <div className='home-page__events'>
       {state.items.map((item, i: number) => {
-        // const date = reformatDate(item.pubDate);
+        const date = item.pubDate;
         return (
           <a target='__blank' key={i} className='home-page__event-slide' href={item.link}>
             <h1 className='home-page__event-slide-header'>news</h1>
@@ -53,9 +53,7 @@ export default function EventSlider({ mediumData }: Props) {
             <div className='home-page__event-slide-content'>
               <h1 className='home-page__event-slide-content-title'>{item.title}</h1>
               <div className='home-page__event-slide-content-group'>
-                <p className='home-page__event-slide-content-description'>
-                 date 
-                </p>
+                <p className='home-page__event-slide-content-description'>{date}</p>
                 <button className='home-page__event-slide-content-read-more-button'>
                   read more
                 </button>
