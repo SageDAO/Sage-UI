@@ -59,7 +59,6 @@ export default function Layout({ children, router }: Props) {
   return transitions((props, item) => {
     return (
       <React.Fragment>
-        <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
         <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
         <WrongNetworkModal
           isOpen={isNetworkModalOpen}
@@ -81,6 +80,7 @@ export default function Layout({ children, router }: Props) {
         />
         <div ref={layoutEl} key={router.route} className='layout'>
           <Nav />
+          <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
           {children}
           <Footer></Footer>
         </div>
