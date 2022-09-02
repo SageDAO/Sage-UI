@@ -43,8 +43,8 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
     deleteBuyOffer(offerId);
   }
 
-  async function handleAcceptClick(buyOffer: Offer) {
-    const result = await sellFromBuyOffer({ buyOffer, signer: signer as Signer });
+  async function handleAcceptClick(offer: Offer) {
+    const result = await sellFromBuyOffer({ offer, signer: signer as Signer });
     if ((result as any).data) {
       closeModal();
     }
@@ -52,7 +52,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
 
   async function handleMakeOfferClick() {
     if (!signer || !sessionData) {
-      toast.info('Please Sign In With Ethereum before placing bids.');
+      toast.info('Please sign in with a wallet.');
       return;
     }
     if (amount < nft.price!) {

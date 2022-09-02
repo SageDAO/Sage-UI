@@ -13,6 +13,8 @@ import { toast } from 'react-toastify';
 import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { Offer } from '@prisma/client';
 import { baseApi } from './baseReducer';
+import { promiseToast } from '@/utilities/toast';
+import { registerMarketplaceSale } from '@/utilities/sales';
 
 export interface MintRequest {
   name: string;
@@ -110,10 +112,10 @@ const nftsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Nfts'],
     }),
-    buyFromSellOffer: builder.mutation<boolean, { sellOffer: Offer; signer: Signer }>({
-      queryFn: async ({ sellOffer, signer }, { dispatch }, _, fetchWithBQ) => {
+    buyFromSellOffer: builder.mutation<boolean, { offer: Offer; signer: Signer }>({
+      queryFn: async ({ offer, signer }, { dispatch }, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
-        const weiPrice = ethers.utils.parseEther(sellOffer.price.toString());
+        const weiPrice = ethers.utils.parseEther(offer.price.toString());
         try {
           const tokenAddress = await marketplaceContract.token();
           await approveERC20Transfer(tokenAddress, marketplaceContract.address, weiPrice, signer);
@@ -125,37 +127,26 @@ const nftsApi = baseApi.injectEndpoints({
         }
         try {
           console.log(
-            `buyFromSellOffer(${sellOffer.signer}, ${sellOffer.nftContractAddress}, ${weiPrice}, ${sellOffer.nftId}, ${sellOffer.expiresAt}, ${sellOffer.signedOffer})`
+            `buyFromSellOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${offer.nftId}, ${offer.expiresAt}, ${offer.signedOffer})`
           );
           const tx = await marketplaceContract.buyFromSellOffer(
-            sellOffer.signer,
-            sellOffer.nftContractAddress,
+            offer.signer,
+            offer.nftContractAddress,
             weiPrice,
-            sellOffer.nftId,
-            sellOffer.expiresAt,
-            sellOffer.signedOffer
+            offer.nftId,
+            offer.expiresAt,
+            offer.signedOffer
           );
-          toast.promise(tx.wait(), {
-            pending: 'Request submitted to the blockchain, awaiting confirmation...',
-            success: `Success! You've bought an NFT!`,
-            error: 'Failure! Unable to complete request.',
-          });
+          promiseToast(tx, `You've bought an NFT!`);
           await tx.wait(1);
-          await fetchWithBQ(`nfts?action=UpdateOwner&id=${sellOffer.id}`);
-
-          await fetch(`/api/sales?action=RegisterSale`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              eventType: 'MARKETPLACE',
-              eventId: sellOffer.nftId,
-              amountTokens: sellOffer.price,
-              buyer: await signer.getAddress(),
-              txHash: tx.hash,
-              blockTimestamp: tx.timestamp,
-            }),
-          });
-
+          await fetchWithBQ(`nfts?action=UpdateOwner&id=${offer.id}`);
+          await registerMarketplaceSale(
+            offer.nftId,
+            offer.price,
+            await signer.getAddress(),
+            tx,
+            signer
+          );
           playTxSuccessSound();
           return { data: true };
         } catch (e) {
@@ -166,50 +157,33 @@ const nftsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Nfts'],
     }),
-    sellFromBuyOffer: builder.mutation<boolean, { buyOffer: Offer; signer: Signer }>({
-      queryFn: async ({ buyOffer, signer }, { dispatch }, _, fetchWithBQ) => {
+    sellFromBuyOffer: builder.mutation<boolean, { offer: Offer; signer: Signer }>({
+      queryFn: async ({ offer, signer }, { dispatch }, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
-        const weiPrice = ethers.utils.parseEther(buyOffer.price.toString());
+        const weiPrice = ethers.utils.parseEther(offer.price.toString());
         try {
           console.log(
-            `sellFromBuyOffer(${buyOffer.signer}, ${buyOffer.nftContractAddress}, ${weiPrice}, ${buyOffer.nftId}, ${buyOffer.expiresAt}, ${buyOffer.signedOffer})`
+            `sellFromBuyOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${offer.nftId}, ${offer.expiresAt}, ${offer.signedOffer})`
           );
           const tx = await marketplaceContract.sellFromBuyOffer(
-            buyOffer.signer,
-            buyOffer.nftContractAddress,
+            offer.signer,
+            offer.nftContractAddress,
             weiPrice,
-            buyOffer.nftId,
-            buyOffer.expiresAt,
-            buyOffer.signedOffer
+            offer.nftId,
+            offer.expiresAt,
+            offer.signedOffer
           );
-          toast.promise(tx.wait(), {
-            pending: 'Request submitted to the blockchain, awaiting confirmation...',
-            success: `Success! You've sold an NFT!`,
-            error: 'Failure! Unable to complete request.',
-          });
+          promiseToast(tx, `You've sold an NFT!`);
           await tx.wait(1);
-          await fetchWithBQ(`nfts?action=UpdateOwner&id=${buyOffer.id}`);
-
-          await fetch(`/api/sales?action=RegisterSale`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              eventType: 'MARKETPLACE',
-              eventId: buyOffer.nftId,
-              amountTokens: buyOffer.price,
-              buyer: buyOffer.signer,
-              txHash: tx.hash,
-              blockTimestamp: tx.timestamp,
-            }),
-          });
-
+          await fetchWithBQ(`nfts?action=UpdateOwner&id=${offer.id}`);
+          await registerMarketplaceSale(offer.nftId, offer.price, offer.signer, tx, signer);
           playTxSuccessSound();
           return { data: true };
         } catch (e) {
           console.log(e);
           const errMsg = extractErrorMessage(e);
           if (errMsg.includes('transfer amount exceeds balance')) {
-            await fetchWithBQ(`nfts?action=InvalidateOffer&id=${buyOffer.id}`);
+            await fetchWithBQ(`nfts?action=InvalidateOffer&id=${offer.id}`);
           }
           toast.error(`Failure! ${errMsg}`);
           return { data: false };
@@ -238,7 +212,7 @@ const nftsApi = baseApi.injectEndpoints({
             fetchWithBQ
           );
           toast.success(
-            `Success! You've placed an offer of ${offer.amount} ASH for this NFT. We'll let you know if the artist accepts it!`
+            `Success! You've placed an offer of ${offer.amount} ASH. We'll let you know if the artist accepts it!`
           );
         } catch (e) {
           console.error(e);

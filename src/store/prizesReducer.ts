@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { extractErrorMessage, getLotteryContract } from '../utilities/contracts';
 import { playErrorSound, playPrizeClaimedSound } from '../utilities/sounds';
 import { baseApi } from './baseReducer';
+import { promiseToast } from '@/utilities/toast';
 
 export interface ClaimPrizeRequest {
   lotteryId: Lottery['id'];
@@ -52,11 +53,7 @@ const prizesApi = baseApi.injectEndpoints({
             args.uri,
             toByteArray(args.proof)
           );
-          toast.promise(tx.wait(), {
-            pending: 'Request submitted to the blockchain, awaiting confirmation...',
-            success: 'Success! NFT claimed and moved to your collection!',
-            error: 'Failure! Unable to complete request.',
-          });
+          promiseToast(tx, `NFT claimed and moved to your collection!`);
           await tx.wait();
           var claimedAt = await updateDbPrizeClaimedDate(
             _fetchWithBQ,

@@ -62,7 +62,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
 
   function handlePlaceBidClick() {
     if (!signer) {
-      toast.info('Please Sign In With Ethereum before placing bids.');
+      toast.info('Please sign in with a wallet.');
       return;
     }
     if (state.desiredBidValue < state.minBid) {

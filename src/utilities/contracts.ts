@@ -1,5 +1,4 @@
 import { BigNumber, Contract, ethers, Signer } from 'ethers';
-import { toast } from 'react-toastify';
 import { parameters } from '@/constants/config';
 import RewardsJson from '@/constants/abis/Rewards/Rewards.sol/Rewards.json';
 import LotteryJson from '@/constants/abis/Lottery/Lottery.sol/Lottery.json';
@@ -19,6 +18,7 @@ import {
   Marketplace as MarketplaceContract,
   SageStorage as StorageContract
 } from '@/types/contracts';
+import { promiseToast } from './toast';
 
 const {
   REWARDS_ADDRESS,
@@ -148,11 +148,7 @@ export async function approveERC20Transfer(
   );
   if (allowance.lt(amount)) {
     var tx = await erc20Contract.approve(dstContractAddress, ethers.constants.MaxUint256);
-    toast.promise(tx.wait(), {
-      pending: 'Token transfer approval submitted to the blockchain...',
-      success: `Approved! Preparing transaction...`,
-      error: 'Failure! Unable to complete request.',
-    });
+    promiseToast(tx, `Transfer approved, preparing transaction...`);
     await tx.wait(1);
   }
 }

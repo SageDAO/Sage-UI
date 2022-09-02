@@ -15,29 +15,33 @@ export default async function (request: NextApiRequest, response: NextApiRespons
   }
   switch (action) {
     case 'RegisterSale':
-      await registerSale(walletAddress as string, body, response);
+      await registerSale(body, response);
       break;
   }
   response.end();
 }
 
-async function registerSale(walletAddress: string, body: any, response: NextApiResponse) {
-  // id              Int    @id @default(autoincrement())
-  // eventType       SaleEventType
-  // eventId         Int    // lotteryId | auctionId | nftId
-  // seller          String @db.Char(42) // artistAddress
-  // buyer           String @db.Char(42)
-  // amountTokens    Float // ASH
-  // amountPoints    Int?
-  // amountUSD       Float?
-  // txHash          String @db.Char(66)
-  // blockTimestamp  Int
+async function registerSale(body: any, response: NextApiResponse) {
   var { eventType, eventId, amountTokens, amountPoints, buyer, txHash, blockTimestamp } = body;
-  const artistAddress = findArtistAddress(eventType, Number(eventId));
+  const artistAddress = await findArtistAddress(eventType, Number(eventId));
   const tokenUSDValue = await getTokenUSDValue();
   const amountUSD = tokenUSDValue > 0 ? amountTokens * tokenUSDValue : null;
   const amountPixel = amountPoints && !isNaN(Number(amountPoints)) ? Number(amountPoints) : null;
-  // TODO INSERT
+
+  await prisma.saleEvent.create({
+    data: {
+      eventType,
+      eventId,
+      seller: artistAddress,
+      buyer,
+      txHash,
+      blockTimestamp,
+      amountUSD,
+      amountPoints: amountPixel,
+      amountTokens,
+    },
+  });
+  response.status(200);
 }
 
 async function findArtistAddress(eventType: string, eventId: number) {

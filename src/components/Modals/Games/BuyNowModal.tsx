@@ -13,22 +13,22 @@ import { useSession } from 'next-auth/react';
 interface Props extends ModalProps {
   artist: User;
   nft: Nft_include_NftContractAndOffers;
-  sellOffer: Offer;
+  offer: Offer;
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
-export default function BuyNowModal({ isOpen, closeModal, artist, nft, sellOffer }: Props) {
+export default function BuyNowModal({ isOpen, closeModal, artist, nft, offer }: Props) {
   const [buyFromSellOffer, { isLoading }] = useBuyFromSellOfferMutation();
   const { data: signer } = useSigner();
   const { data: sessionData } = useSession();
 
   const handleClick = async () => {
     if (!signer || !sessionData) {
-      toast.info('Please Sign In With Ethereum before buying NFTs.');
+      toast.info('Please sign in with a wallet.');
     } else if (isLoading) {
       toast.info('Please wait for transaction to complete.');
     } else {
-      await buyFromSellOffer({ sellOffer, signer });
+      await buyFromSellOffer({ offer, signer });
     }
   };
 

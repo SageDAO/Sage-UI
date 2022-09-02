@@ -1,4 +1,3 @@
-import { useSigner } from 'wagmi';
 import { Nft_include_NftContractAndOffers, User } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import shortenAddress from '@/utilities/shortenAddress';
@@ -59,7 +58,7 @@ export default function ListingTile({ nft, artist }: Props) {
         <BuyNowModal
           artist={artist}
           nft={nft}
-          sellOffer={sellOffer}
+          offer={sellOffer}
           isOpen={isOpen}
           closeModal={closeModal}
         />

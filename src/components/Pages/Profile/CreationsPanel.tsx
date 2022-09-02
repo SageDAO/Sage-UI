@@ -69,7 +69,7 @@ export default function CreationsPanel() {
 
   async function handleMintButtonClick() {
     if (!signer) {
-      toast.info('Please Sign In With Ethereum before submitting your artwork');
+      toast.info('Please sign in with a wallet.');
       return;
     }
     if (!state.file) {

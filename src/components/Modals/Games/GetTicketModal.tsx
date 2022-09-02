@@ -134,9 +134,9 @@ function GetTicketModal({
     try {
       const request: BuyTicketRequest = {
         lotteryId: lottery.id,
-        numberOfTickets: desiredTicketAmount,
+        numTickets: desiredTicketAmount,
         ticketCostPoints: pricePoints.toString(),
-        ticketCostCoins: getPriceCoins().toString(),
+        ticketCostTokens: getPriceCoins().toString(),
         signer: signer as Signer,
         earnedPoints: earnedPoints,
       };

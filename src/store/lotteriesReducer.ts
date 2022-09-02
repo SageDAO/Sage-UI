@@ -10,11 +10,13 @@ import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { pointsApi } from './pointsReducer';
 import { baseApi } from './baseReducer';
+import { promiseToast } from '@/utilities/toast';
+import { registerLotterySale } from '@/utilities/sales';
 
 export interface BuyTicketRequest {
   lotteryId: number;
-  numberOfTickets: number;
-  ticketCostCoins: string;
+  numTickets: number;
+  ticketCostTokens: string;
   ticketCostPoints: string;
   signer: Signer;
   earnedPoints: GetEarnedPointsResponse;
@@ -49,20 +51,23 @@ const lotteriesApi = baseApi.injectEndpoints({
       providesTags: ['TicketCount'],
     }),
     buyTickets: builder.mutation<boolean, BuyTicketRequest>({
-      queryFn: async (buyRequest, { dispatch }) => {
-        console.log(`buyTickets(${buyRequest.lotteryId})`);
-        const purchaseCost = BigNumber.from(buyRequest.numberOfTickets).mul(
-          buyRequest.ticketCostCoins
-        );
+      queryFn: async (
+        { lotteryId, numTickets, ticketCostPoints, ticketCostTokens, signer, earnedPoints },
+        { dispatch }
+      ) => {
+        const purchaseCostTokens = BigNumber.from(numTickets).mul(ticketCostTokens);
+        const purchaseCostPoints = Boolean(Number(ticketCostPoints) > 0)
+          ? Number(numTickets) * Number(ticketCostPoints)
+          : null;
         try {
-          console.log(`buyTickets() :: Cost = ${purchaseCost}`);
-          const lotteryContract = await getLotteryContract(buyRequest.signer);
+          console.log(`buyTickets() :: ${purchaseCostTokens} ASH + ${purchaseCostPoints} PIXEL`);
+          const lotteryContract = await getLotteryContract(signer);
           const tokenAddress = await lotteryContract.token();
           await approveERC20Transfer(
             tokenAddress,
             lotteryContract.address,
-            purchaseCost,
-            buyRequest.signer
+            purchaseCostTokens,
+            signer
           );
         } catch (e) {
           console.error(e);
@@ -70,50 +75,24 @@ const lotteriesApi = baseApi.injectEndpoints({
           playErrorSound();
           return { data: false };
         }
-        const usePoints = Boolean(Number(buyRequest.ticketCostPoints) > 0);
         try {
-          if (usePoints) {
-            const escrowPoints =
-              Number(buyRequest.numberOfTickets) * Number(buyRequest.ticketCostPoints);
-            dispatch(pointsApi.endpoints.withholdEscrowPoints.initiate(escrowPoints));
-            var tx = await buyTicketsUsingPoints(buyRequest);
+          if (purchaseCostPoints) {
+            dispatch(pointsApi.endpoints.withholdEscrowPoints.initiate(purchaseCostPoints));
+            var tx = await buyTicketsUsingPoints(signer, lotteryId, numTickets, earnedPoints);
           } else {
-            var tx = await buyTicketsWithoutPoints(buyRequest);
+            var tx = await buyTicketsWithoutPoints(signer, lotteryId, numTickets);
           }
-          toast.promise(tx.wait(), {
-            pending: 'Request submitted to the blockchain, awaiting confirmation...',
-            success: `Success! You obtained ${buyRequest.numberOfTickets} ${
-              buyRequest.numberOfTickets > 1 ? 'entries' : 'entry'
-            }!`,
-            error: 'Failure! Unable to complete request.',
-          });
+          promiseToast(tx, `You obtained ${numTickets} ${numTickets > 1 ? 'entries' : 'entry'}!`);
           await tx.wait();
-
-          await fetch(`/api/sales?action=RegisterSale`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              eventType: 'LOTTERY',
-              eventId: buyRequest.lotteryId,
-              amountTokens: ethers.utils.formatUnits(purchaseCost),
-              amountPoints: usePoints
-                ? Number(buyRequest.numberOfTickets) * Number(buyRequest.ticketCostPoints)
-                : null,
-              buyer: await buyRequest.signer.getAddress(),
-              txHash: tx.hash,
-              blockTimestamp: tx.timestamp,
-            }),
-          });
-
+          await registerLotterySale(lotteryId, purchaseCostTokens, purchaseCostPoints, tx, signer);
           playTxSuccessSound();
-          if (usePoints) {
-            // TODO make subscribed UI components refetch points from db and contract
+          if (purchaseCostPoints) {
             dispatch(pointsApi.util.invalidateTags(['UserPoints']));
           }
           return { data: true };
         } catch (e: any) {
-          console.error(e);
-          if (usePoints) {
+          console.log(e);
+          if (purchaseCostPoints) {
             dispatch(pointsApi.endpoints.releaseEscrowPoints.initiate());
           }
           const errMsg = extractErrorMessage(e);
@@ -126,17 +105,21 @@ const lotteriesApi = baseApi.injectEndpoints({
   }),
 });
 
-async function buyTicketsWithoutPoints(buyRequest: BuyTicketRequest): Promise<ContractTransaction> {
-  const contract = await getLotteryContract(buyRequest.signer);
-  return await contract.buyTickets(buyRequest.lotteryId, buyRequest.numberOfTickets);
+async function buyTicketsWithoutPoints(
+  signer: Signer,
+  lotteryId: number,
+  numberOfTickets: number
+): Promise<ContractTransaction> {
+  const contract = await getLotteryContract(signer);
+  return await contract.buyTickets(lotteryId, numberOfTickets);
 }
 
-async function buyTicketsUsingPoints({
-  signer,
-  lotteryId,
-  numberOfTickets,
-  earnedPoints,
-}: BuyTicketRequest): Promise<ContractTransaction> {
+async function buyTicketsUsingPoints(
+  signer: Signer,
+  lotteryId: number,
+  numberOfTickets: number,
+  earnedPoints: GetEarnedPointsResponse
+): Promise<ContractTransaction> {
   try {
     const contract = await getLotteryContract(signer);
     const points = Number(earnedPoints.totalPointsEarned);

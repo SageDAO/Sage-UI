@@ -1,7 +1,7 @@
 import { BaseMedia, PfpImage } from '../Media/BaseMedia';
 import { ClaimPrizeRequest, useClaimLotteryPrizeMutation } from '@/store/prizesReducer';
 import { GamePrize } from '@/prisma/types';
-import { useClaimAuctionNftMutation } from '@/store/auctionsReducer';
+import { useClaimAuctionMutation } from '@/store/auctionsReducer';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
@@ -15,11 +15,11 @@ export default function CollectionTile({ item }: Props) {
   const { data: signer } = useSigner();
   const [claimLotteryPrize, { isLoading: isClaimLotteryPrizeLoading }] =
     useClaimLotteryPrizeMutation();
-  const [claimAuctionNft, { isLoading: isClaimAuctionNftLoading }] = useClaimAuctionNftMutation();
+  const [claimAuctionPrize, { isLoading: isClaimAuctionPrizeLoading }] = useClaimAuctionMutation();
 
   const handleClaimPrizeClick = async (prize: GamePrize) => {
     if (prize.auctionId) {
-      await claimAuctionNft({ id: prize.auctionId, signer: signer as Signer });
+      await claimAuctionPrize({ id: prize.auctionId, signer: signer as Signer });
     } else {
       await claimLotteryPrize({
         lotteryId: prize.lotteryId,
@@ -50,7 +50,7 @@ export default function CollectionTile({ item }: Props) {
           <button
             className='collection__tile-claim-button'
             onClick={() => handleClaimPrizeClick(item)}
-            disabled={isClaimAuctionNftLoading || isClaimLotteryPrizeLoading}
+            disabled={isClaimAuctionPrizeLoading || isClaimLotteryPrizeLoading}
           >
             Claim NFT
           </button>

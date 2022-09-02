@@ -2,8 +2,8 @@ import { baseApi } from './baseReducer';
 import { BigNumber, ethers, Signer } from 'ethers';
 import { getERC20Contract, getNFTContract } from '@/utilities/contracts';
 import { parameters } from '@/constants/config';
-import { toast } from 'react-toastify';
 import { playTxSuccessSound } from '@/utilities/sounds';
+import { promiseToast } from '@/utilities/toast';
 
 export interface NftContractBalance {
   balance: string;
@@ -38,11 +38,7 @@ const artistsApi = baseApi.injectEndpoints({
         const { ASHTOKEN_ADDRESS } = parameters;
         const contract = await getNFTContract(artistContractAddress, signer as Signer);
         var tx = await contract.withdrawERC20(ASHTOKEN_ADDRESS);
-        toast.promise(tx.wait(), {
-          pending: 'Withdrawal submitted to the blockchain, awaiting confirmation...',
-          success: `Success! Balance has been withdrawed!`,
-          error: 'Failure! Unable to complete request.',
-        });
+        promiseToast(tx, 'Balance has been withdrawed!');
         await tx.wait();
         playTxSuccessSound();
         return { data: null };
