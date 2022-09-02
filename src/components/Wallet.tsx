@@ -18,6 +18,8 @@ import { parameters } from '@/constants/config';
 import { useRouter } from 'next/router';
 import PersonalizedMessage from './PersonalizedMessage';
 import useSignIn from '@/hooks/useSignIn';
+import WalletConnectSVG from '@/public/icons/walletconnect.svg';
+import MetamaskSVG from '@/public/icons/metamask.svg';
 
 interface Props {
   closeModal?: ModalProps['closeModal'];
@@ -72,26 +74,25 @@ export default function Wallet({ closeModal, isOpen }: Props) {
         </h1>
         {showWalletSelection && (
           <h1 className='wallet__header-info'>
-            SELECT YOUR WALLET YOU WANT TO CONNECT. REMEMBER SAGE WILL NEVER ASK FOR YOUR SECRET
-            KEYS OR ANY CONFIDENTIAL INFO.
+            CONNECT TO SAGE THROUGH WALLET CONNECT.
+            <pre />
+            REMEMBER SAGE WILL NEVER ASK FOR YOUR PRIVATE KEYS.
           </h1>
         )}
       </section>
 
       {showWalletSelection && (
-        <section className='wallet__wallets'>
+        <section className='wallet__wallets '>
           <button
-            className='wallet__wallet-item'
+            className='wallet__wallet-item wallet__metamask'
             disabled={isConnecting}
-            onClick={() => {
+            data-loading={isConnecting && 'true'}
+            onClick={async () => {
               const c = connectors[0];
               handleConnectClick(c);
             }}
           >
-            <div className='wallet__wallet-icon'>
-              <Image src='/icons/metamask.svg' width={120} height={120}></Image>
-            </div>
-            <h1 className='wallet__wallet-name'>metamask</h1>
+            <MetamaskSVG className='wallet__wallet-icon' />
           </button>
           <button
             className='wallet__wallet-item'
@@ -102,10 +103,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
               handleConnectClick(c);
             }}
           >
-            <div className='wallet__wallet-icon'>
-              <Image src='/icons/walletconnect.svg' height={103.5} width={120}></Image>
-            </div>
-            <h1 className='wallet__wallet-name'>walletconnect</h1>
+            <WalletConnectSVG className='wallet__wallet-icon' />
           </button>
         </section>
       )}

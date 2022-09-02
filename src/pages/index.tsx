@@ -34,8 +34,8 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
           <div className='home-page__upcoming-drops-header-right'>
             <div className='home-page__upcoming-drops-header-right-dot'></div>
             <h1 className='home-page__upcoming-drops-header-right-text'>
-              ASH is a store of value through the destruction of NFTS.SAGE accepts the ASH currency
-              as our medium of exchange.
+              We only accept ASH as a medium of exchange. ASH is a store of value generated through
+              the process of burning NFTs.
             </h1>
           </div>
         </div>

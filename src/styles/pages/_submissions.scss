@@ -24,7 +24,7 @@
   text-transform: uppercase;
   text-align: left;
   @include b.min-width('medium') {
-    text-align: center;
+    @include m.desktop-inner-width;
   }
 }
 

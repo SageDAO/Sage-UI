@@ -68,6 +68,7 @@
 }
 
 .home-page__upcoming-drops-header-right-dot {
+  @include m.animate-pulse;
   border-radius: 100%;
   width: 12px;
   height: 12px;
@@ -79,7 +80,7 @@
 .home-page__upcoming-drops-header-right-text {
   font-weight: 400;
   font-size: clamp(10px, 1.2vw, 16px);
-  line-height: 130%;
+  line-height: 1.6em;
   flex: 1;
 }
 
@@ -161,6 +162,13 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
       height: 1.15em;
       line-height: 1.15;
     }
+  }
+}
+
+.home-page__upcoming-drops-tile-tag-item {
+  @include m.theme() {
+    background-color: m.t(base);
+    color: m.t(contrast);
   }
 }
 

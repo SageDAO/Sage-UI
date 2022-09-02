@@ -18,6 +18,7 @@ export default function Footer() {
           <div className='footer__top-content'>
             <div className='footer__logo'>
               <FooterLogoSVG className='footer__logo-svg'></FooterLogoSVG>
+              <MottoSVG className='footer__motto' />
             </div>
             <div className='footer__search-container'>
               <div className='searchform'>
@@ -70,14 +71,17 @@ export default function Footer() {
                 <Socials></Socials>
               </div>
             </ul>
-
-
           </div>
+          <ul className=' footer__socials-mobile'>
+            <div className='footer__middle-item-header'>follow us on</div>
+            <div className='footer__middle-item-content'>
+              <Socials></Socials>
+            </div>
+          </ul>
         </div>
         <div className='footer__bottom'>
           <h4 className='footer__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h4>
         </div>
-        <MottoSVG className='footer__motto' />
       </div>
     </div>
   );

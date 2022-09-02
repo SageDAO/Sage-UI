@@ -21,12 +21,12 @@ const navLinks: NavLink[] = [
     url: '/drops',
   },
   {
-    name: 'Artists',
-    url: '/artists',
+    name: 'Creators',
+    url: '/creators',
   },
   {
     name: 'Apply',
-    url: '/artists/submissions',
+    url: '/creators/submissions',
   },
 ];
 

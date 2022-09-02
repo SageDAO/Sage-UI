@@ -44,7 +44,6 @@ export default function ListingTile({ nft, artist }: Props) {
   const highestOffer = buyOffers[0];
   const hasOffers: boolean = buyOffers.length > 0;
   const isForSale: boolean = !nft.ownerAddress;
-
   return (
     <div className='artist-page__grid-tile' onClick={handleClick}>
       {!sellOffer && (
@@ -71,7 +70,6 @@ export default function ListingTile({ nft, artist }: Props) {
       <div className='artist-page__grid-tile-info'>
         <div className='artist-page__grid-tile-info-left'>
           <h3 className='artist-page__grid-tile-title'>{nft.name}</h3>
-          <h3 className='artist-page__grid-tile-artist-name'> by {artist.username}</h3>
         </div>
         <div className='artist-page__grid-tile-info-right'>
           {isForSale ? (
@@ -80,10 +78,10 @@ export default function ListingTile({ nft, artist }: Props) {
                 <h2 className='artist-page__grid-tile-info-price'>
                   {sellOffer
                     ? `BUY NOW: ${nft.price} ASH`
-                    : `CURRENT BID: ${highestOffer.price} ASH`}
+                    : `HIGHEST BID: ${highestOffer.price} ASH`}
                 </h2>
               ) : (
-                <h2 className='artist-page__grid-tile-info-price'>MINIMUM: {nft.price} ASH</h2>
+                <h2 className='artist-page__grid-tile-info-price'>ACCEPTING BIDS</h2>
               )}
             </>
           ) : (

@@ -44,12 +44,14 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                           {display}
                         </div>
                       )}
-                      <BaseMedia src={src}  />
-                      <h1 className='home-page__upcoming-drops-tile-tag'>
-                        {text}
+                      <BaseMedia src={src} />
+                      <h3 className='home-page__upcoming-drops-tile-tag'>
+                        <mark className='home-page__upcoming-drops-tile-tag-item'>{text}</mark>
                         <br />
-                        sage curated
-                      </h1>
+                        <mark className='home-page__upcoming-drops-tile-tag-item'>
+                          sage curated
+                        </mark>
+                      </h3>
                     </div>
                   );
                 })}
@@ -90,11 +92,11 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
               </div>
             )}
 
-            <BaseMedia src={src}  />
+            <BaseMedia src={src} />
             <h1 className='home-page__upcoming-drops-tile-tag'>
-              {text}
+              <mark className='home-page__upcoming-drops-tile-tag-item'>{text}</mark>
               <br />
-              sage curated
+              <mark className='home-page__upcoming-drops-tile-tag-item'>sage curated</mark>
             </h1>
           </div>
         );

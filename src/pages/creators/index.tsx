@@ -14,21 +14,21 @@ export default function artists({ artistGroups }: Props) {
         <Logotype />
       </div>
       <div className='artists-page__header-content'>
-        <h1 className='artists-page__header'>Artists On Sage</h1>
+        <h1 className='artists-page__header'>Creators On Sage</h1>
       </div>
-        {artistGroups.map((artists, i: number) => {
-          let shouldStartAsymmetric: boolean = false;
-          if (i % 2 !== 0) {
-            shouldStartAsymmetric = true;
-          }
-          return (
-            <ArtistsRow
-              key={i}
-              shouldStartAsymmetric={shouldStartAsymmetric}
-              artists={artists}
-            ></ArtistsRow>
-          );
-        })}
+      {artistGroups.map((artists, i: number) => {
+        let shouldStartAsymmetric: boolean = false;
+        if (i % 2 !== 0) {
+          shouldStartAsymmetric = true;
+        }
+        return (
+          <ArtistsRow
+            key={i}
+            shouldStartAsymmetric={shouldStartAsymmetric}
+            artists={artists}
+          ></ArtistsRow>
+        );
+      })}
     </div>
   );
 }

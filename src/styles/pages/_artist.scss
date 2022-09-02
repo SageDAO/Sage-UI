@@ -93,6 +93,9 @@
     background-color: m.t(base2);
     border: 1px solid m.t(contrast2);
     @include m.interact {
+      background-color: m.t(accent);
+      color: m.t(base);
+      border: 1px solid m.t(base);
     }
     @include b.min-width('small') {
       width: clamp(60px, 100%, 309px);
@@ -140,11 +143,6 @@
       background-color: m.t(accent);
       // border: 1px solid m.t(accent);
       color: m.t(base);
-      .artist-page__grid-tile-info-price {
-        @include m.transition-base;
-        background-color: m.t('base');
-        color: m.t(contrast);
-      }
     }
   }
 }
@@ -157,13 +155,15 @@
 }
 
 .artist-page__grid-tile-info {
-  padding: 10px;
+  padding: 10px 10px 50px;
+  gap: 30px;
   display: flex;
   align-items: center;
   flex: 1;
 }
 
 .artist-page__grid-tile-info-left {
+  max-width: 50%;
 }
 
 .artist-page__grid-tile-info-right {
@@ -184,9 +184,15 @@
   font-weight: 600;
   @include m.text-h2;
   line-height: 1em;
+  white-space: nowrap;
   text-transform: uppercase;
+  text-overflow: ellipsis;
+  overflow: hidden;
+	
+  // background-color: red;
 }
 
 .artist-page__grid-tile-artist-name {
+	font-weight: 600;
   @include m.text-h3;
 }

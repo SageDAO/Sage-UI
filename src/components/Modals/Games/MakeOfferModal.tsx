@@ -122,7 +122,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
               className='games-modal__place-bid-button'
               onClick={handleMakeOfferClick}
             >
-              {isCreatingBuyOffer ? <LoaderSpinner /> : 'make ASH offer'}
+              {isCreatingBuyOffer ? <LoaderSpinner /> : 'BID'}
             </button>
 
             {isSelling && (

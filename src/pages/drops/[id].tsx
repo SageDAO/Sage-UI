@@ -98,7 +98,6 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                 <h1 className='drop-page__header-drop-details-item'>
                   MINTED BY: {artist.username}
                 </h1>
-                <h1 className='drop-page__header-drop-details-item'>edition size: {editionSize}</h1>
                 <h1 className='drop-page__header-drop-details-item'>
                   creation date: {reformatDate(drop.createdAt)}
                 </h1>
