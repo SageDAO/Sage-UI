@@ -48,10 +48,10 @@ const apolloClient = new ApolloClient({
 });
 
 function App({ Component, pageProps, router }: AppProps) {
-  useTheme();
+  const { theme } = useTheme();
   const [query, setQuery] = useState<string | null>(null);
   const isMaintenanceOn: boolean = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
-
+  const themeContent: string = theme === 'dark' ? 'black' : 'white';
   return (
     <ReduxProvider store={store}>
       <WagmiProvider client={wagmiClient}>
@@ -65,6 +65,7 @@ function App({ Component, pageProps, router }: AppProps) {
                   name='viewport'
                   content='width=device-width,initial-scale=1,viewport-fit=cover'
                 />
+                <meta name='theme-color' content={themeContent} />
               </Head>
               {isMaintenanceOn ? (
                 <LandingPage />
