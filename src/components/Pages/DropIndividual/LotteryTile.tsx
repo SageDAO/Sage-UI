@@ -54,7 +54,7 @@ export default function LotteryTile({
           <h1 className='drop-page__grid-item-info-game-name'>{'lottery'}</h1>
           {tickets > 0 && (
             <h1 className='drop-page__grid-item-info-tickets'>
-              you have {tickets} ticket{tickets > 1 ? 's' : ''}
+              you have {tickets} {tickets > 1 ? 'entries' : 'entry'}
             </h1>
           )}
         </div>
