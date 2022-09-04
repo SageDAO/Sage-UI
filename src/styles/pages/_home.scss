@@ -44,6 +44,7 @@
   font-weight: 400;
   font-size: clamp(5px, 1.5vw, 10px);
   line-height: clamp(6px, 1em, 12px);
+  @include m.interact;
 }
 
 .home-page__statement {

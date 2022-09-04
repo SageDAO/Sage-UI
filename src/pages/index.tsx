@@ -25,7 +25,14 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
             <div className='home-page__featured-drop-tag-section'>
               <SageIconSVG className='home-page__featured-drop-tag-sage-logo' />
               <div className='home-page__featured-drop-tag-info'>
-                <span className='home-page__featured-drop-tag-label'>|ARTIST NAME|</span>
+                <span
+                  className='home-page__featured-drop-tag-label'
+                  onClick={() => {
+                    router.push(`/creators/${featuredDrop.NftContract.Artist.username}`);
+                  }}
+                >
+                  {featuredDrop.NftContract.Artist.username}
+                </span>
               </div>
             </div>
           </>
