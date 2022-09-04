@@ -1,4 +1,5 @@
 @use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
 /** Used to define container behavior: width, position: fixed etc... **/
 .Toastify__toast-container {
 }
@@ -19,8 +20,12 @@
 
 /** Classes for the displayed toast **/
 .Toastify__toast {
-  background-color: c.$box-black !important;
-  color: c.$white !important;
+  @include m.theme() {
+    aspect-ratio: 400/120;
+    background-color: m.t(base2) !important;
+    color: c.$white !important;
+    border-radius: 0px;
+  }
 }
 .Toastify__toast--rtl {
 }
@@ -48,6 +53,8 @@
 }
 
 .Toastify__progress-bar {
+	background-color: red !important;
+	margin-bottom: 20px;
 }
 .Toastify__progress-bar--rtl {
 }
@@ -72,8 +79,18 @@
 
 /** Classes for the close button. Better use your own closeButton **/
 .Toastify__close-button {
-	color: white !important;
+  @include m.theme() {
+    background-color: m.t(contrast2);
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+		opacity: 1;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
+
 .Toastify__close-button--default {
 }
 .Toastify__close-button > svg {

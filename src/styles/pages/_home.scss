@@ -277,6 +277,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 .home-page__event-slide-content-group {
   display: grid;
   gap: 14px;
+		flex: 1;
+		justify-content: flex-end;
+
 }
 
 .home-page__event-slide-content-read-more-button {
@@ -288,7 +291,6 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   width: 101px;
   height: 21px;
   text-transform: capitalize;
-  @include m.pill;
   @include m.interact;
   @include m.theme() {
     color: m.t(base2);

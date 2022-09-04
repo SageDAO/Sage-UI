@@ -59,7 +59,7 @@ export default function Layout({ children, router }: Props) {
   return transitions((props, item) => {
     return (
       <React.Fragment>
-        <MobileMenu isOpen={isMobileMenuOpen} closeModal={closeMobileMenu}></MobileMenu>
+        <MobileMenu isOpen={isMobileMenuOpen} toggleMenu={toggleMobileMenu} closeModal={closeMobileMenu}></MobileMenu>
         <WrongNetworkModal
           isOpen={isNetworkModalOpen}
           closeModal={closeNetworkModal}
@@ -68,11 +68,12 @@ export default function Layout({ children, router }: Props) {
         />
         <ToastContainer
           position='bottom-center'
-          autoClose={5000}
+          autoClose={50000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
           rtl={false}
+					limit={3}
           pauseOnFocusLoss
           draggable
           pauseOnHover

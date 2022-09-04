@@ -23,6 +23,9 @@
   @include b.min-width('medium') {
     @include m.desktop-inner-width;
   }
+  &[data-route-home='true'] {
+    cursor: pointer;
+  }
 }
 
 .sage-logotype__side {

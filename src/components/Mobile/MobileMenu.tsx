@@ -5,8 +5,12 @@ import { useRouter } from 'next/router';
 import useWindowDimensions from '@/hooks/useWindowSize';
 import Socials from '@/components/Socials';
 import useSignIn from '@/hooks/useSignIn';
+import ASHPrice from '../ASHPrice';
+import MenuToggle from './MenuToggle';
 
-interface Props extends ModalProps {}
+interface Props extends ModalProps {
+  toggleMenu: any;
+}
 
 interface NavLink {
   name: string;
@@ -28,11 +32,11 @@ const navLinks: NavLink[] = [
   },
   {
     name: 'Apply',
-    url: '/artists/submissions',
+    url: '/creators/submissions',
   },
 ];
 
-export default function MobileMenu({ isOpen, closeModal }: Props) {
+export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
   const router = useRouter();
   const { isMobile } = useWindowDimensions();
 
@@ -40,6 +44,12 @@ export default function MobileMenu({ isOpen, closeModal }: Props) {
 
   return (
     <div className='mobile-menu' data-is-open={isOpen}>
+      <MenuToggle isOpen={isOpen} toggleMobileMenu={toggleMenu} />
+      <div className='mobile-menu__ash-price-container-wrapper'>
+        <div className='mobile-menu__ash-price-container'>
+          <ASHPrice />
+        </div>
+      </div>
       <div className='mobile-menu__logotype'>
         <Logotype></Logotype>
       </div>
@@ -49,7 +59,6 @@ export default function MobileMenu({ isOpen, closeModal }: Props) {
             await router.push(l.url);
             closeModal();
           }
-
           const isCurrent: boolean = router.pathname === l.url;
           return (
             <div
@@ -63,7 +72,6 @@ export default function MobileMenu({ isOpen, closeModal }: Props) {
           );
         })}
       </section>
-      <section className='mobile-menu__user'></section>
       <Wallet closeModal={closeModal} isOpen={isOpen}></Wallet>
       <section className='mobile-menu__socials'>
         <h1 className='mobile-menu__socials-header'>follow us on</h1>

@@ -44,7 +44,7 @@
     font-size: 12px;
     text-transform: uppercase;
     cursor: pointer;
-		letter-spacing: 0.15em;
+    letter-spacing: 0.15em;
   }
 }
 
@@ -89,6 +89,7 @@
 }
 
 .nav__personal-message {
+  text-transform: uppercase;
   font-style: normal;
   font-weight: 400;
   font-size: clamp(12px, 0.7vw, 14px);

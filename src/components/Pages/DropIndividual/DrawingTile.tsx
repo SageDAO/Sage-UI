@@ -41,8 +41,9 @@ export default function DrawingTile({
       <TileHeader editionSize={editionSize} systemType='drawings'></TileHeader>
       <div className='drop-page__grid-item-img'>
         <BaseMedia src={imgSrc}></BaseMedia>
+        <div className='drop-page__grid-item-img-overlay'></div>
         <div className='drop-page__grid-item-focus'>
-          {drawing.endTime.getTime() > new Date().getTime() ? 'enter drawing' : 'view results'}
+          {drawing.endTime.getTime() > new Date().getTime() ? 'enter drawing' : 'results'}
         </div>
       </div>
       <div className='drop-page__grid-item-info'>

@@ -15,10 +15,10 @@ $menu-toggle-z: $menu-z + 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-
   @include m.theme() {
     background-color: m.t(base);
   }
+
   transform: translateY(-100%);
   &[data-is-open='true'] {
     transform: translateY(0%);
@@ -70,8 +70,8 @@ $menu-toggle-z: $menu-z + 1;
       @include m.circle;
       background-color: m.t(accent);
       position: absolute;
-      transform: translateX(-100%);
-      left: -10px;
+      transform: translateX(-50%);
+      left: -5vw;
     }
 
     &[data-is-current='true'] {
@@ -177,6 +177,20 @@ $menu-toggle-z: $menu-z + 1;
   @include m.theme() {
     color: m.t(contrast);
   }
+}
+
+.mobile-menu__ash-price-container-wrapper {
+  width: 100vw;
+  top: 49px;
+  position: relative;
+  @include m.mobile-width;
+}
+
+.mobile-menu__ash-price-container {
+  width: clamp(60px, 10vw, 100px);
+  transform: translateX(-10%);
+  left: -5vw;
+  position: absolute;
 }
 
 @keyframes pulse {

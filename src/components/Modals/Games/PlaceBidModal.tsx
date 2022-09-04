@@ -131,7 +131,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
           <SageFullLogo className='games-modal__sage-logo' />
           <CloseSVG onClick={closeModal} className='games-modal__close-button' />
         </section>
-        <section className='games-modal__body'>
+				<div className="games-modal__body">
+<section className='games-modal__main'>
           <div className='games-modal__main-img-container'>
             <BaseMedia src={auction.Nft.s3Path}  />
             {!isOpenForBids && (
@@ -206,6 +207,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
             )}
           </div>
         </section>
+
+				</div>
+        
         <section className='games-modal__bid-history-section'>
           <BidHistoryTable
             isActive={state.shouldShowBidHistory}

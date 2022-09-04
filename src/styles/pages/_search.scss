@@ -38,10 +38,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    @include m.interact {
-      // background-color: m.t(contrast);
-      // color: m.t(base);
-    }
     &[data-aspect='9/16'] {
       grid-column: span 2 / span 2;
       grid-row: span 2 / span 2;
@@ -64,17 +60,19 @@
     .search-page__grid-item-img {
       // aspect-ratio: 1/1;
       // height: 18vw;
-			flex: 1;
+      @include m.interact {
+      }
+      flex: 1;
       position: relative;
     }
   }
 }
 
 .search-page__grid-item-info {
-	position: absolute;
-	z-index: 999;
-	bottom: 2px;
-	left: 2px;
+  z-index: 999;
+  text-transform: uppercase;
+  bottom: 2px;
+  left: 2px;
   display: flex;
   gap: 2px;
   padding: 2px 0;
@@ -98,5 +96,6 @@
     font-size: 14px;
     line-height: 14px;
     color: m.t(contrast);
+    @include m.interact;
   }
 }

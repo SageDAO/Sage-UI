@@ -43,7 +43,7 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
   if (gamePrize.claimedAt) {
     return (
       <button disabled={true} className='notifications-panel__interact-button'>
-        minted/claimed
+        claimed
       </button>
     );
   }
@@ -53,7 +53,7 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
       onClick={handleInteractButtonClick}
       className='notifications-panel__interact-button'
     >
-      mint/claim
+      claim
     </button>
   );
 }

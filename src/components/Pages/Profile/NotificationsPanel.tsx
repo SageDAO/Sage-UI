@@ -9,6 +9,8 @@ import {
   useGetUnclaimedAuctionNftsQuery,
 } from '@/store/auctionsReducer';
 import { GamePrize } from '@/prisma/types';
+import { BaseMedia } from '@/components/Media/BaseMedia';
+import CheckSVG from '@/public/icons/check.svg';
 
 export default function Notifications() {
   const { data: lotteryNfts, isFetching: fetchingLotteryNfts } = useGetPrizesByUserQuery();
@@ -57,7 +59,7 @@ export default function Notifications() {
               <Tab.Group>
                 <Tab.List as='div' className='notifications-panel__tab-list'>
                   <Tab className='notifications-panel__tab-item' as='button'>
-                    claim prizes &amp; auctions winnings
+                    claim prizes
                   </Tab>
                 </Tab.List>
                 <Tab.Panels as='div' className='notifications-panel__panels'>
@@ -78,18 +80,20 @@ export default function Notifications() {
                           return (
                             <tr key={nft.nftId} className='notifications-panel__data-row'>
                               <td className='notifications-panel__td--creation'>
-                                <Image
-                                  width={50}
-                                  height={50}
-                                  src={nft.s3Path}
-                                  objectFit='cover'
-                                  className=''
-                                ></Image>
-                                {nft.nftName}
+                                <div className='notifications-panel__td-media-container'>
+                                  <BaseMedia
+                                    src={nft.s3Path}
+                                    className='notifications-panel__td-media'
+                                  ></BaseMedia>
+                                </div>
+                                <span className='notifications-panel__td--creation-name'>
+                                  {nft.nftName}
+                                </span>
                               </td>
-                              <td className='notifications-panel__td'>{dateDisplay}</td>
+                              <td className='notifications-panel__td--date'>{dateDisplay}</td>
                               <td className='notifications-panel__td--interact'>
                                 <ClaimPrizeButton gamePrize={nft} />
+                                  <CheckSVG data-claimed={!!nft.claimedAt} className='notifications-panel__td--interact-check-svg' />
                               </td>
                             </tr>
                           );

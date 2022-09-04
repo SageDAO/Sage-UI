@@ -81,8 +81,13 @@ function profile() {
             <Tab as={React.Fragment}>
               {({ selected }) => {
                 return (
-                  <button data-active={selected} className='profile-page__tabs-tab'>
+                  <button
+                    data-active={selected}
+                    data-type='notifications'
+                    className='profile-page__tabs-tab  '
+                  >
                     notifications
+                    <span className='profile-page__tabs-tab-notifications-counter'>9999</span>
                   </button>
                 );
               }}

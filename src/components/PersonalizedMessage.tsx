@@ -11,6 +11,7 @@ export default function PersonalizedMessage() {
     return (
       <React.Fragment>
         <span>welcome back! </span>
+        <pre></pre>
         <UserHandle />
       </React.Fragment>
     );
@@ -21,7 +22,7 @@ export default function PersonalizedMessage() {
   }
 
   if (!isConnected) {
-    return null;
+    return <span>welcome back! </span>;
   }
   return <React.Fragment>Error</React.Fragment>;
 }

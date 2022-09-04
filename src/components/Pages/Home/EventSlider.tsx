@@ -51,7 +51,6 @@ export default function EventSlider({ mediumData }: Props) {
             <div className='home-page__event-slide-content'>
               <h1 className='home-page__event-slide-content-title'>{item.title}</h1>
               <div className='home-page__event-slide-content-group'>
-                <p className='home-page__event-slide-content-description'>{item.pubDate}</p>
                 <button className='home-page__event-slide-content-read-more-button'>
                   read more
                 </button>

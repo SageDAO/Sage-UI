@@ -158,94 +158,94 @@ function GetTicketModal({
           <CloseSVG onClick={closeModal} className='games-modal__close-button' />
         </section>
         <section className='games-modal__body'>
-          <div className='games-modal__main-img-container'>
-            {systemType === 'lotteries' ? (
-              <LotterySlider
-                nfts={lottery.Nfts}
-                selectedNftIndex={selectedNftIndex}
-                setSelectedNftIndex={setSelectedNftIndex}
-              ></LotterySlider>
-            ) : (
-              <BaseMedia
-                src={lottery.Nfts[selectedNftIndex].s3Path}
-              />
-            )}
-            {isActive && (
-              <Countdown endTime={lottery.endTime} className='games-modal__countdown'></Countdown>
-            )}
-          </div>
-          <div className='games-modal__main-content'>
-            <h1 className='games-modal__drop-name'>
-              {dropName} by {artist.username}
-            </h1>
-            <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
-            <p className='games-modal__game-description'>
-              {lottery.Nfts[selectedNftIndex].description ||
-                'this artwork has no description provided.'}
-            </p>
-            <div className='games-modal__system'>
-              <div className='games-modal__system-icon-container'>
-                <System type={systemType}></System>
-              </div>
-              <h1 className='games-modal__system-info'>
-                This is a fair drop mechanic. Buy purchasing one or more entries, you have the
-                opportunity to be selected to mint this NFT.
-              </h1>
+          <div className='games-modal__main'>
+					<div className='games-modal__main-img-container'>
+              {systemType === 'lotteries' ? (
+                <LotterySlider
+                  nfts={lottery.Nfts}
+                  selectedNftIndex={selectedNftIndex}
+                  setSelectedNftIndex={setSelectedNftIndex}
+                ></LotterySlider>
+              ) : (
+                <BaseMedia src={lottery.Nfts[selectedNftIndex].s3Path} />
+              )}
+              {isActive && (
+                <Countdown endTime={lottery.endTime} className='games-modal__countdown'></Countdown>
+              )}
             </div>
-
-            {!isStarted && !isEnded && (
-              <div>
-                <h1 className='games-modal__countdown-label'>starts in </h1>
-                <Countdown
-                  endTime={lottery.startTime}
-                  className='games-modal__countdown'
-                ></Countdown>
+            <div className='games-modal__main-content'>
+              <h1 className='games-modal__drop-name'>
+                {dropName} by {artist.username}
+              </h1>
+              <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
+              <p className='games-modal__game-description'>
+                {lottery.Nfts[selectedNftIndex].description ||
+                  'this artwork has no description provided.'}
+              </p>
+              <div className='games-modal__system'>
+                <div className='games-modal__system-icon-container'>
+                  <System type={systemType}></System>
+                </div>
+                <h1 className='games-modal__system-info'>
+                  This is a fair drop mechanic. Buy purchasing one or more entries, you have the
+                  opportunity to be selected to mint this NFT.
+                </h1>
               </div>
-            )}
 
-            {isStarted && !isEnded && (
-              <>
+              {!isStarted && !isEnded && (
                 <div>
-                  <h1 className='games-modal__ticket-cost-label'>entry cost</h1>
-                  <h1 className='games-modal__ticket-cost-value'>
-                    {lottery.costPerTicketTokens * desiredTicketAmount} ASH
-                    {lottery.costPerTicketPoints > 0 &&
-                      ` + ${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`}
-                  </h1>
+                  <h1 className='games-modal__countdown-label'>starts in </h1>
+                  <Countdown
+                    endTime={lottery.startTime}
+                    className='games-modal__countdown'
+                  ></Countdown>
                 </div>
-                <div className='games-modal__tickets-controls'>
-                  <MinusSVG onClick={handleTicketSubClick} className='games-modal__tickets-sub' />
-                  <input
-                    type='number'
-                    onChange={handleTicketInputChange}
-                    min={1}
-                    max={DEFAULT_MAX_TICKETS}
-                    className='games-modal__tickets-input'
-                    value={desiredTicketAmount}
-                  />
-                  <PlusSVG onClick={handleTicketAddClick} className='games-modal__tickets-add' />
-                </div>
-                <button
-                  disabled={isBuyTicketsLoading || errorState.isError}
-                  onClick={handleBuyTicketClick}
-                  className='games-modal__buy-tickets-button'
-                >
-                  {errorState.isError ? errorState.message : 'Buy Entries'}
-                </button>
-              </>
-            )}
+              )}
 
-            {winners && winners.length > 0 && (
-              <>
-                <h1 className='games-modal__winners-label'>winners</h1>
-                <div className='games-modal__winners-list'>
-                  {winners.map((winnerAddress) => (
-                    <div key={winnerAddress}>{shortenAddress(winnerAddress)}</div>
-                  ))}
+              {isStarted && !isEnded && (
+                <div className='games-modal__live-section'>
+                  <div className='games-modal__ticket-cost-group'>
+                    <h1 className='games-modal__ticket-cost-label'>entry cost</h1>
+                    <h1 className='games-modal__ticket-cost-value'>
+                      {lottery.costPerTicketTokens * desiredTicketAmount} ASH
+                      {lottery.costPerTicketPoints > 0 &&
+                        ` + ${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`}
+                    </h1>
+                  </div>
+                  <div className='games-modal__tickets-controls'>
+                    <MinusSVG onClick={handleTicketSubClick} className='games-modal__tickets-sub' />
+                    <input
+                      type='number'
+                      onChange={handleTicketInputChange}
+                      min={1}
+                      max={DEFAULT_MAX_TICKETS}
+                      className='games-modal__tickets-input'
+                      value={desiredTicketAmount}
+                    />
+                    <PlusSVG onClick={handleTicketAddClick} className='games-modal__tickets-add' />
+                  </div>
+                  <button
+                    disabled={isBuyTicketsLoading || errorState.isError}
+                    onClick={handleBuyTicketClick}
+                    className='games-modal__buy-tickets-button'
+                  >
+                    {errorState.isError ? errorState.message : 'Buy Entries'}
+                  </button>
                 </div>
-              </>
-            )}
+              )}
+              {winners && winners.length > 0 && (
+                <>
+                  <h1 className='games-modal__winners-label'>winners</h1>
+                  <div className='games-modal__winners-list'>
+                    {winners.map((winnerAddress) => (
+                      <div key={winnerAddress}>{shortenAddress(winnerAddress)}</div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
+          <span className='games-modal__editions-tag'>{lottery.Nfts[selectedNftIndex].numberOfEditions} editions</span>
         </section>
       </div>
     </Modal>

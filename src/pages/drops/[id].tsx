@@ -88,11 +88,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                 {drop.name} by {artist.username}
               </h1>
               <p className='drop-page__header-drop-description'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta numquam, quos
-                adipisci necessitatibus est culpa sapiente a optio? In dolorum, eum, ratione placeat
-                beatae eos adipisci quisquam tempore esse, unde cumque accusamus inventore ab.
-                Aliquid iste at quod optio omnis veniam nulla rerum, itaque consequuntur labore,
-                quibusdam eos numquam quam.
+							{drop.description}
               </p>
               <div className='drop-page__header-drop-details'>
                 <h1 className='drop-page__header-drop-details-item'>

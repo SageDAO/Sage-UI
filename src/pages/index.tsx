@@ -24,7 +24,6 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
             <Hero imgSrc={featuredDrop.bannerImageS3Path} />
           </div>
         )}
-
         <h1 className='home-page__statement'>
           SAGE is a curation system built to lead Web3. Through our selection, we mark value into
           the future.

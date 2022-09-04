@@ -42,8 +42,9 @@ export default function LotteryTile({
       <TileHeader systemType={'lotteries'} editionSize={editionSize}></TileHeader>
       <div className='drop-page__grid-item-img'>
         <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
+        <div className='drop-page__grid-item-img-overlay'></div>
         <div className='drop-page__grid-item-focus'>
-          {lottery.endTime.getTime() > new Date().getTime() ? 'enter lottery' : 'view results'}
+          {lottery.endTime.getTime() > new Date().getTime() ? 'enter lottery' : 'results'}
         </div>
       </div>
       <div className='drop-page__grid-item-info'>
