@@ -1,5 +1,6 @@
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
 
 .searchform {
   border-bottom: 1px solid c.$grey;
@@ -42,10 +43,15 @@
 
 .searchresults {
   &__header {
-    @include m.standard-width;
     position: relative;
     margin-right: auto;
     margin-left: auto;
+    @include m.mobile-width;
+    margin-top: clamp(24px, 10vw, 111px);
+    margin-bottom: clamp(10px, 5vw, 50px);
+    @include b.min-width('medium') {
+      @include m.desktop-inner-width;
+    }
   }
 
   &__right-dot {
@@ -73,7 +79,6 @@
   }
 
   &__term {
-    margin-top: 50px;
     text-transform: uppercase;
     font-family: Helvetica;
     font-size: 60px;
@@ -92,16 +97,12 @@
   }
 
   &__button {
-    cursor: pointer;
-    margin-top: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 345px;
-    font-family: Helvetica;
-    font-size: 14px;
-    line-height: 40px;
-
     @include m.theme() {
+      margin-top: 50px;
+      margin-left: auto;
+      margin-right: auto;
+      @include m.button-base;
+      margin: 60px 0;
       background: m.t(accent);
       color: m.t(base);
     }

@@ -125,10 +125,10 @@ export default function ProfilePanel({ isArtist }: Props) {
                 <div onClick={openProfilePicModal} className='profile-panel__pfp-container'>
                   <PfpImage src={state?.profilePicture}></PfpImage>
                 </div>
-                <h2 className='profile-panel__pfp-label'>add a profile picture</h2>
+                <h2 className='profile-panel__pfp-label'>edit profile picture</h2>
               </div>
               <div className='profile-panel__personal-group'>
-                <h2 className='profile-panel__personal-label'>sage username</h2>
+                <h2 className='profile-panel__personal-label'>username</h2>
                 <input
                   type='text'
                   value={state?.username ?? ''}
@@ -156,7 +156,7 @@ export default function ProfilePanel({ isArtist }: Props) {
                 />
               </div>
               <div className='profile-panel__socials-group'>
-                <h2 className='profile-panel__socials-label'>add up to 4 social profiles</h2>
+                <h2 className='profile-panel__socials-label'>add up to 4 profiles</h2>
                 <div className='profile-panel__socials-field-container'>
                   <input
                     type='text'

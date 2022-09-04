@@ -98,9 +98,9 @@ export default function ProfilePictureModal({ isOpen, closeModal }: ModalProps) 
             className='profile-picture-modal__btn'
             onClick={handleUploadBtnClick}
           >
-            upload
+            upload photo
           </button>
-          <button type='button' className='profile-picture-modal__btn' onClick={save}>
+          <button type='button' data-type='save' className='profile-picture-modal__btn' onClick={save}>
             save
           </button>
         </div>

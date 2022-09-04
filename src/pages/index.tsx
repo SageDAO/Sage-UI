@@ -20,9 +20,15 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
     <div className='home-page' data-cy='home-page'>
       <div className='home-page__main'>
         {featuredDrop && (
-          <div onClick={() => router.push(`/drops/${featuredDrop.id}`)}>
-            <Hero imgSrc={featuredDrop.bannerImageS3Path} />
-          </div>
+          <>
+            <Hero path={`/drops/${featuredDrop.id}`} imgSrc={featuredDrop.bannerImageS3Path} />
+            <div className='home-page__featured-drop-tag-section'>
+              <SageIconSVG className='home-page__featured-drop-tag-sage-logo' />
+              <div className='home-page__featured-drop-tag-info'>
+                <span className='home-page__featured-drop-tag-label'>|ARTIST NAME|</span>
+              </div>
+            </div>
+          </>
         )}
         <h1 className='home-page__statement'>
           SAGE is a curation system built to lead Web3. Through our selection, we mark value into

@@ -18,18 +18,32 @@
   height: min-content;
 }
 
+.home-page__featured-drop-tag-section {
+  align-items: center;
+  display: flex;
+  @include m.standard-width;
+  height: 40px;
+  gap: 10px;
+}
+
+.home-page__featured-drop-tag-info {
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+}
+
 .home-page__featured-drop-tag-sage-logo {
   @include m.theme() {
     color: m.t(contrast);
+    height: clamp(20px, 3vw, 25px);
+    width: clamp(20px, 3vw, 25px);
   }
-  height: clamp(20px, 5vw, 45px);
-  width: clamp(20px, 5vw, 45px);
 }
 
 .home-page__featured-drop-tag-label {
   font-weight: 400;
-  font-size: max(7px, 1vw);
-  line-height: max(9px, 1.5em);
+  font-size: clamp(5px, 1.5vw, 10px);
+  line-height: clamp(6px, 1em, 12px);
 }
 
 .home-page__statement {
@@ -169,6 +183,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   @include m.theme() {
     background-color: m.t(base);
     color: m.t(contrast);
+    padding: 0 4px;
   }
 }
 
@@ -277,9 +292,8 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 .home-page__event-slide-content-group {
   display: grid;
   gap: 14px;
-		flex: 1;
-		justify-content: flex-end;
-
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .home-page__event-slide-content-read-more-button {

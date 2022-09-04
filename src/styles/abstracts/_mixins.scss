@@ -38,13 +38,13 @@
 @mixin page {
   width: 100vw;
   flex: 1;
-  padding: 97px 0 50px;
+  padding: 97px 0 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
   @include b.min-width('medium') {
-    padding: 80px 0 150px;
+    padding: 80px 0 0px;
   }
 }
 
@@ -237,4 +237,23 @@ $theme-map: null;
 @mixin animate-pulse {
   animation: pulse 1900ms infinite;
   animation-timing-function: ease-in;
+}
+
+@mixin button-base {
+  display: flex;
+  text-transform: uppercase;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  font-weight: 400;
+  font-size: clamp(10px, 1.5vw, 16px);
+  width: min(365px, 80vw);
+  text-align: center;
+  letter-spacing: 0.1em;
+  @include interact;
 }

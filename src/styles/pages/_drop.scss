@@ -177,7 +177,6 @@
     @include m.interact {
       background-color: m.t(contrast2);
       color: m.t(base);
-
       .drop-page__grid-item-systems-icon {
         background-color: m.t(accent);
       }

@@ -50,6 +50,7 @@ export default function CollectionPanel() {
                 {myNfts &&
                   myNfts?.map((nft: GamePrize | CollectedListingNft) => {
                     if (!nft?.s3Path) return null;
+										// if ()
                     return (
                       <div key={nft.nftId} className='collection-panel__tile'>
                         <div className='collection-panel__img-container'>

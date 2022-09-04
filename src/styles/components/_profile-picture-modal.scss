@@ -7,28 +7,33 @@
   flex-direction: column;
   gap: 10px;
   text-align: center;
-  padding: 30px 20px;
   @include m.theme() {
     background-color: m.t(base);
   }
 
   &__btn-container {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
-    gap: 20px;
+    gap: 6px;
+    padding: 10px;
   }
 
   &__btn {
     @include m.theme() {
       cursor: pointer;
       color: m.t(contrast);
+      text-transform: uppercase;
       border: 1px solid m.t(contrast);
-      font-style: normal;
-      font-weight: 400;
+      font-weight: 600;
       font-size: 12px;
       line-height: 19px;
-      // border-radius: 26px;
       background-color: transparent;
+      &[data-type='save'] {
+        color: m.t(base);
+        border: 1px solid m.t(base);
+        background-color: m.t(accent);
+      }
     }
   }
 }

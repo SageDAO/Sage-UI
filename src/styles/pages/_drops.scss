@@ -143,20 +143,23 @@
   @include m.interact;
   margin-right: auto;
   transition-duration: 200ms;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 400;
-  font-size: clamp(10px, 1.5vw, 16px);
-  line-height: 130%;
-  text-align: center;
-  letter-spacing: 0.1em;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // font-weight: 400;
+  // font-size: clamp(10px, 1.5vw, 16px);
+  // line-height: 130%;
+  // text-align: center;
+  // letter-spacing: 0.1em;
+  // text-transform: uppercase;
+  // aspect-ratio: 600/50;
+  @include m.button-base;
   width: 100%;
-  text-transform: uppercase;
-  aspect-ratio: 600/50;
   @include b.min-width('medium') {
-    width: min(345px, 20em);
-    aspect-ratio: 345/50;
+    // width:
+    // width: min(345px, 20em);
+    // aspect-ratio: 345/50;
+    width: min(365px, 80vw);
   }
 
   @include m.theme {
