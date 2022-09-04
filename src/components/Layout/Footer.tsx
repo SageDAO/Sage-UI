@@ -80,7 +80,7 @@ export default function Footer() {
           </ul>
         </div>
         <div className='footer__bottom'>
-          <h4 className='footer__copyright'>SAGE <sup>TM</sup> - ALL RIGHTS RESERVED 2022</h4>
+          <h4 className='footer__copyright'>SAGE<sup>TM</sup> - ALL RIGHTS RESERVED 2022</h4>
         </div>
       </div>
     </div>
