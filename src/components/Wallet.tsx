@@ -101,41 +101,46 @@ export default function Wallet({ closeModal, isOpen }: Props) {
             </button>
           </section>
         )}
-        <>
-          <section className='wallet__user-section'>
-            <div className='wallet__user-pfp-container' onClick={goToProfile}>
-              <PfpImage className='wallet__user-pfp-src' src={userData?.profilePicture}></PfpImage>
-            </div>
-            <div className='wallet__user-connection-indicator'></div>
-            <div className='wallet__user-metamask-container'>
-              <Image
-                layout='fill'
-                className='wallet__user-metamask-src'
-                src={'/icons/metamask.svg'}
-              ></Image>
-            </div>
-          </section>
-          <section className='wallet__utils-section'>
-            <div className='wallet__utils-info'>
-              <h1 className='wallet__token-balance'>
-                ash balance:
-                <span>pixel balance: </span>
-              </h1>
-              <h1 className='wallet__points-balance'>
-                <span className='wallet__points-value'>
-                  {!isNaN(ashBalance) && ashBalance.toFixed(2)}
-                </span>
-                <span className='wallet__points-value'>{Number(pointsBalance).toFixed(2)}</span>
-              </h1>
-            </div>
-            {isSignedIn && (
-              <button onClick={goToProfile} className='wallet__interact-button'>
-                PROFILE
-              </button>
-            )}
-          </section>
-        </>
-      </div>
+        {showAuthSection && (
+          <>
+            <section className='wallet__user-section'>
+              <div className='wallet__user-pfp-container' onClick={goToProfile}>
+                <PfpImage
+                  className='wallet__user-pfp-src'
+                  src={userData?.profilePicture}
+                ></PfpImage>
+              </div>
+              <div className='wallet__user-connection-indicator'></div>
+              <div className='wallet__user-metamask-container'>
+                <Image
+                  layout='fill'
+                  className='wallet__user-metamask-src'
+                  src={'/icons/metamask.svg'}
+                ></Image>
+              </div>
+            </section>
+            <section className='wallet__utils-section'>
+              <div className='wallet__utils-info'>
+                <h1 className='wallet__token-balance'>
+                  ash balance:
+                  <span>pixel balance: </span>
+                </h1>
+                <h1 className='wallet__points-balance'>
+                  <span className='wallet__points-value'>
+                    {!isNaN(ashBalance) && ashBalance.toFixed(2)}
+                  </span>
+                  <span className='wallet__points-value'>{Number(pointsBalance).toFixed(2)}</span>
+                </h1>
+              </div>
+              {isSignedIn && (
+                <button onClick={goToProfile} className='wallet__interact-button'>
+                  PROFILE
+                </button>
+              )}
+            </section>
+          </>
+        )}
+              </div>
     </div>
   );
 }
