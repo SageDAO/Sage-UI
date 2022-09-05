@@ -3,6 +3,14 @@ import type { DropWhereInput } from '@prisma/client';
 
 export type { User, Drop, Nft };
 
+export interface ArtistSales {
+  username: string;
+  walletAddress: string;
+  nftCountTotal: number;
+  amountTotalUSD: number;
+  highestSaleUSD: number;
+}
+
 export type Auction_include_DropNftArtist = Prisma.AuctionGetPayload<{
   include: {
     Nft: true;

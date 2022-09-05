@@ -1,6 +1,7 @@
 import { parameters } from '../constants/config';
-import { Drop_include_GamesAndArtist } from '@/prisma/types';
+import { ArtistSales, Drop_include_GamesAndArtist } from '@/prisma/types';
 import { PrismaClient, Prisma, Role } from '@prisma/client';
+import { BigNumber } from 'ethers';
 
 const FilterDropApprovedOnly: Prisma.DropWhereInput = {
   approvedAt: { not: null },
@@ -126,32 +127,47 @@ export async function getIndividualArtistsPageData(prisma: PrismaClient, usernam
   return artist;
 }
 
-export async function getArtistsUsernamesAndWallets(prisma: PrismaClient) {
-  let artists = await prisma.user.findMany({
-    select: { username: true, walletAddress: true },
-    where: { ...FilterUserIsArtist },
-  });
-  return artists;
-}
-
-export async function getDropsSalesData(prisma: PrismaClient) {
-  const drops = await prisma.drop.findMany({
-    include: {
-      Lotteries: { include: { Nfts: true } },
-      Auctions: { include: { Nft: true } },
-    },
-    where: {
-      ...FilterDropContractValidation,
-      ...FilterDropApprovedOnly,
-    },
-  });
-  return drops;
-}
-
-export async function getListingsSalesData(prisma: PrismaClient) {
-  const data = await prisma.nft.findMany({
-    select: { id: true, artistAddress: true },
-    where: { NOT: { ownerAddress: null } },
-  });
-  return data;
+export async function getArtistsSalesData(prisma: PrismaClient) {
+  const salesData = new Map<string, ArtistSales>();
+  // get list of artists' usernames, wallets and nft counts from all games, including listings
+  var query = `
+    select "u"."walletAddress", "u"."username", 
+	    coalesce("a"."auctionCount", 0) + coalesce("b"."lotteryCount", 0) + coalesce("c"."listingCount", 0) as "nftCount"
+    from "User" as "u" 
+    left join (
+      select "artistAddress", count(*) as "auctionCount" from "Drop", "Auction"
+      where ("Auction"."dropId" = "Drop"."id") and ("Auction"."settled" = true) group by "Drop"."artistAddress"
+    ) as "a" on ("u"."walletAddress" = "a"."artistAddress")
+    left join (
+      select "Drop"."artistAddress", count(*) as "lotteryCount" from "Drop", "Lottery", "Nft"
+      where ("Lottery"."dropId" = "Drop"."id") and ("Nft"."lotteryId" = "Lottery"."id") group by "Drop"."artistAddress"
+    ) as "b" on ("u"."walletAddress" = "b"."artistAddress")
+    left join (
+      select "artistAddress", count(*) as "listingCount" from "Nft" 
+      where ("ownerAddress" is not null) and ("artistAddress" is not null) group by "artistAddress"
+    ) as "c" on ("u"."walletAddress" = "c"."artistAddress")
+    where "u"."role" = 'ARTIST'`;
+  var result = await prisma.$queryRaw(Prisma.raw(query));
+  for (const row of result as any) {
+    salesData.set(row.walletAddress, {
+      username: row.username,
+      walletAddress: row.walletAddress,
+      nftCountTotal: row.nftCount,
+      amountTotalUSD: 0,
+      highestSaleUSD: 0,
+    } as ArtistSales);
+  }
+  // query sales statistics
+  query = `
+    select "seller", sum(coalesce("amountUSD", 0)) as "amount" 
+    from "SaleEvent" group by ("eventType", "eventId", "seller")`;
+  result = await prisma.$queryRaw(Prisma.raw(query));
+  for (const row of result as any) {
+    const item = salesData.get(row.seller);
+    item.amountTotalUSD += row.amount;
+    if (row.amount > item.highestSaleUSD) {
+      item.highestSaleUSD = row.amount;
+    }
+  }
+  return salesData;
 }

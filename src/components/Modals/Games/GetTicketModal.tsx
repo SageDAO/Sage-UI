@@ -85,12 +85,12 @@ function GetTicketModal({
       setErrorState({ message: 'cannot buy negative entries', isError: true });
       return;
     }
-    if (desiredTicketAmount > lottery.maxTicketsPerUser - ticketCount) {
+    if (hasMaxTicketsPerUser && desiredTicketAmount > lottery.maxTicketsPerUser - ticketCount) {
       setErrorState({ message: 'max entries per user reached', isError: true });
       return;
     }
 
-    if (desiredTicketAmount > lottery.maxTickets) {
+    if (lottery.maxTickets > 0 && desiredTicketAmount > lottery.maxTickets) {
       setErrorState({ message: 'max entries reached', isError: true });
       return;
     }
