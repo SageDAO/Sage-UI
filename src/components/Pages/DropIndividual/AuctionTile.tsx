@@ -34,9 +34,9 @@ export default function AuctionTile({ artist, dropName, s3Path, editionSize, auc
         closeModal={closeModal}
       />
       <TileHeader editionSize={editionSize} systemType='auctions' />
-      <div className='drop-page__grid-item-img'>
-        <BaseMedia src={s3Path} />
-        <div className='drop-page__grid-item-img-overlay'></div>
+      <div className='drop-page__grid-item-media-container'>
+        <BaseMedia className='drop-page__grid-item-media-src' src={s3Path} />
+        <div className='drop-page__grid-item-media-overlay'></div>
         <div className='drop-page__grid-item-focus'>
           {isOpenForBids ? 'place bid' : isEnded ? 'results' : 'starting soon'}
         </div>

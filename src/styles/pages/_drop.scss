@@ -8,8 +8,8 @@
 
 .drop-page__banner-base {
   z-index: -1;
-  height: 100vh;
   position: relative;
+  height: 100vh;
   width: 100%;
   position: absolute;
   filter: brightness(30%);
@@ -19,13 +19,11 @@
   @include m.theme() {
     display: flex;
     flex-direction: column;
-    // width: 80vw;
     @include m.standard-width;
     padding-top: 97px;
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 80px;
-    // gap: 50px;
     position: relative;
     @include b.min-width('medium') {
       padding-top: 80px;
@@ -79,14 +77,7 @@
 }
 
 .drop-page__header-drop-name {
-  font-weight: 400;
-  font-size: clamp(20px, 5vw, 50px);
-  line-height: clamp(24px, 1em, 60px);
-  text-transform: uppercase;
-  text-align: left;
-
-  margin-top: clamp(24px, 10vw, 111px);
-  margin-bottom: clamp(10px, 5vw, 50px);
+  @include m.text-h1;
 }
 
 .drop-page__header-drop-description {
@@ -131,8 +122,6 @@
   width: clamp(15px, 2vw, 15px);
   height: clamp(15px, 2vw, 15px);
 }
-
-
 
 .drop-page__content {
   @include m.theme() {
@@ -181,13 +170,17 @@
         background-color: m.t(accent);
       }
 
-      .drop-page__grid-item-img-overlay {
+      .drop-page__grid-item-media-overlay {
         display: flex;
-        opacity: 0.4;
+        opacity: 0.5;
       }
 
-      .drop-page__grid-item-img {
+      .drop-page__grid-item-media-container {
         // transform: scale(1.05);
+      }
+
+      .drop-page__grid-item-media-src {
+        filter: blur(8px);
       }
 
       .drop-page__grid-item-focus {
@@ -208,13 +201,14 @@
     content: 'content';
     border: 1px solid m.t(contrast2);
     padding: 5% 7%;
-    font-weight: 600;
+    font-weight: 300;
     background-color: m.t(contrast2);
     color: m.t(base);
     // @include m.text-p4;
+    @include m.transition-base;
     letter-spacing: 0.2em;
     z-index: 999;
-    font-size: clamp(6px, 1.2vw, 20px);
+    font-size: clamp(6px, 0.8vw, 20px);
     text-transform: uppercase;
   }
 }
@@ -231,7 +225,7 @@
   text-transform: uppercase;
   padding: 1px 0 1px 5px;
   @include b.min-width('medium') {
-  padding: 5px 0 5px 5px;
+    padding: 5px 0 5px 5px;
   }
 }
 
@@ -256,20 +250,20 @@
   height: clamp(14px, 1vw, 20px);
 }
 
-.drop-page__grid-item-img {
+.drop-page__grid-item-media-container {
   position: relative;
   width: 100%;
   // height: 345px;
   aspect-ratio: 1/1;
+  z-index: 994;
 }
 
-.drop-page__grid-item-img-overlay {
+.drop-page__grid-item-media-overlay {
   position: absolute;
   width: 100%;
   opacity: 0;
   height: 100%;
   z-index: 995;
-  // height: 345px;
   background-color: black;
 }
 

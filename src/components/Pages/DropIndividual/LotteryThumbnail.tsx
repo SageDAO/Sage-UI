@@ -4,7 +4,7 @@ import { BaseMedia } from '@/components/Media/BaseMedia';
 interface Props {
   lottery: Lottery_include_Nft;
 }
-export default function LotteryThumbnail({ lottery }: Props) {
+export default function LotteryThumbnail({ lottery}: Props) {
   function unique(array: any[], propertyName: string) {
     return array.filter(
       (e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i
@@ -19,7 +19,7 @@ export default function LotteryThumbnail({ lottery }: Props) {
       {uniqueImages.map((nft, i) => {
         return (
           <div key={i} data-item={`lottery-nft-${nft.id}`} className='lottery-thumbnail__item'>
-            <BaseMedia src={nft.s3Path}  />
+            <BaseMedia className='drop-page__grid-item-media-src' src={nft.s3Path} />
           </div>
         );
       })}

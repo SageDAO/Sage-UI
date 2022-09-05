@@ -87,13 +87,14 @@
   border-radius: 100%;
   width: 12px;
   height: 12px;
+	margin-top: 2.5px;
   @include m.theme() {
     background-color: m.t('accent');
   }
 }
 
 .home-page__upcoming-drops-header-right-text {
-  font-weight: 400;
+  font-weight: 300;
   font-size: clamp(10px, 1.2vw, 16px);
   line-height: 1.6em;
   flex: 1;

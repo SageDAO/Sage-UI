@@ -50,7 +50,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   }
 
   const showWalletSelection: boolean = Boolean(!isConnected);
-  const showAuthSection: boolean = Boolean(accountData);
+  const showAuthSection: boolean = Boolean(accountData && isSignedIn);
 
   async function handleConnectClick(c: Connector<any, any>) {
     try {
@@ -71,7 +71,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
             <h1 className='wallet__header-info'>
               CONNECT TO SAGE THROUGH YOUR WALLET.
               <pre />
-              REMEMBER SAGE WILL NEVER ASK FOR YOUR PRIVATE KEYS.
+              SAGE WILL NEVER ASK FOR YOUR PRIVATE KEYS.
             </h1>
           )}
         </section>

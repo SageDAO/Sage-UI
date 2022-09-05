@@ -40,7 +40,7 @@ export default function LotteryTile({
         systemType={'lotteries'}
       ></GetTicketModal>
       <TileHeader systemType={'lotteries'} editionSize={editionSize}></TileHeader>
-      <div className='drop-page__grid-item-img'>
+      <div className='drop-page__grid-item-media-container'>
         <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
         <div className='drop-page__grid-item-img-overlay'></div>
         <div className='drop-page__grid-item-focus'>

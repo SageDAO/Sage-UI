@@ -4,6 +4,7 @@ export default function useCursor() {
   const cursorEl = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const body = document.body;
+
     body.addEventListener('mousemove', (e) => {
       const dataX = String(e.pageX);
       const dataY = String(e.pageY);

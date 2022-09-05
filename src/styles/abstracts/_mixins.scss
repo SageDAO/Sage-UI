@@ -186,8 +186,15 @@ $theme-map: null;
 }
 
 @mixin text-h1 {
-  font-size: clamp(25px, 7vw, 45px);
-  line-height: 1em;
+  // font-size: clamp(25px, 7vw, 45px);
+  // line-height: 1em;
+  text-align: left;
+  margin-top: clamp(24px, 10vw, 111px);
+  margin-bottom: clamp(10px, 5vw, 50px);
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: clamp(20px, 5vw, 50px);
+  line-height: clamp(24px, 1em, 60px);
   @include b.min-width('medium') {
     line-height: 1.33em;
   }

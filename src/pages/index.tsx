@@ -52,6 +52,7 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
           </div>
         </div>
         <UpcomingDrops upcomingDrops={upcomingDrops}></UpcomingDrops>
+        <h3 className='home-page__event-slide-header'>news</h3>
         <EventSlider mediumData={mediumData} />
       </div>
     </div>
