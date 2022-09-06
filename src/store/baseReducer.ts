@@ -8,6 +8,7 @@ export const baseApi = createApi({
     'ArtistBalance',
     'Auction',
     'AuctionState',
+    'Config',
     'EscrowPoints',
     'Following',
     'Nfts',

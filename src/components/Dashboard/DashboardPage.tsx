@@ -3,6 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { GamesStatsPanel } from './GamesStatsPanel';
 import { UsersPanel } from './UsersPanel';
 import { NewDropsPanel } from './NewDropsPanel';
+import { ConfigPanel } from './ConfigPanel';
 
 export function DashBoardPage() {
   return (
@@ -18,6 +19,9 @@ export function DashBoardPage() {
           <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
             Users
           </Tab>
+          <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
+            Config
+          </Tab>
         </TabList>
         <TabPanel className='dashboard-panel'>
           <NewDropsPanel />
@@ -27,6 +31,9 @@ export function DashBoardPage() {
         </TabPanel>
         <TabPanel className='dashboard-panel'>
           <UsersPanel />
+        </TabPanel>
+        <TabPanel className='dashboard-panel'>
+          <ConfigPanel />
         </TabPanel>
       </Tabs>
     </div>
