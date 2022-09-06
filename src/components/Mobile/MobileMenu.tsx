@@ -72,7 +72,6 @@ export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
           );
         })}
       </section>
-      <Wallet closeModal={closeModal} isOpen={isOpen}></Wallet>
       <section className='mobile-menu__socials'>
         <h1 className='mobile-menu__socials-header'>follow us on</h1>
         <div className='mobile-menu__socials-icons'>

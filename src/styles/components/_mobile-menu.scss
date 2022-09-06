@@ -48,7 +48,7 @@ $menu-toggle-z: $menu-z + 1;
   display: flex;
   align-items: center;
 
-  padding: 8px 8px;
+  padding: 4px 8px;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -150,7 +150,7 @@ $menu-toggle-z: $menu-z + 1;
 
 .mobile-menu__socials {
   margin-top: auto;
-  gap: 15px;
+  gap: 7px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,8 +169,8 @@ $menu-toggle-z: $menu-z + 1;
 }
 
 .mobile-menu__copyright {
-  margin-top: 10px;
-  margin-bottom: 32px;
+  margin-top: 4px;
+  margin-bottom: 16px;
   font-weight: 400;
   font-size: 5px;
   line-height: 6px;
