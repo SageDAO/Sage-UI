@@ -23,7 +23,6 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
           <>
             <Hero path={`/drops/${featuredDrop.id}`} imgSrc={featuredDrop.bannerImageS3Path} />
             <div className='home-page__featured-drop-tag-section'>
-              <SageIconSVG className='home-page__featured-drop-tag-sage-logo' />
               <div className='home-page__featured-drop-tag-info'>
                 <span
                   className='home-page__featured-drop-tag-label'
@@ -31,7 +30,7 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
                     router.push(`/creators/${featuredDrop.NftContract.Artist.username}`);
                   }}
                 >
-                  {featuredDrop.NftContract.Artist.username}
+                  Artwork by | {featuredDrop.NftContract.Artist.username}
                 </span>
               </div>
             </div>
