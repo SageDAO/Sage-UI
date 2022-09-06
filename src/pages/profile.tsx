@@ -13,6 +13,7 @@ import { useGetUserQuery, useSignOutMutation } from '@/store/usersReducer';
 import { useRouter } from 'next/router';
 import { useDisconnect } from 'wagmi';
 import { PfpImage } from '@/components/Media/BaseMedia';
+import useUserNotifications from '@/hooks/useUserNotifications';
 
 function profile() {
   const router = useRouter();
@@ -24,6 +25,8 @@ function profile() {
   const { selectedTabIndex, setSelectedTabIndex } = useTabs();
   const { disconnect } = useDisconnect();
   const { asPath } = useRouter();
+
+  const { notificationCount, hasNotifications } = useUserNotifications();
 
   useEffect(() => {
     if (asPath.indexOf('notifications')) {
@@ -87,7 +90,11 @@ function profile() {
                     className='profile-page__tabs-tab  '
                   >
                     notifications
-                    <span className='profile-page__tabs-tab-notifications-counter'>9999</span>
+                    {hasNotifications && (
+                      <span className='profile-page__tabs-tab-notifications-counter'>
+                        {notificationCount}
+                      </span>
+                    )}
                   </button>
                 );
               }}
@@ -105,7 +112,7 @@ function profile() {
                 );
               }}
             </Tab>
-            <button onClick={() => signOut()} className='profile-page__tabs-tab'>
+            <button onClick={handleSignOut} className='profile-page__tabs-tab'>
               log out
             </button>
           </Tab.List>

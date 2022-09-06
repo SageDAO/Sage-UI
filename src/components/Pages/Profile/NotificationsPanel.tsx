@@ -1,51 +1,33 @@
 import { Tab } from '@headlessui/react';
-import { useGetPrizesByUserQuery } from '@/store/prizesReducer';
 import { animated, Spring } from 'react-spring';
 import ClaimPrizeButton from './ClaimPrizeButton';
 import { reformatDate } from '@/utilities/strings';
-import {
-  useGetClaimedAuctionNftsQuery,
-  useGetUnclaimedAuctionNftsQuery,
-} from '@/store/auctionsReducer';
 import { GamePrize } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import CheckSVG from '@/public/icons/check.svg';
 import usePagination from '@/hooks/usePagination';
+import useUserNotifications from '@/hooks/useUserNotifications';
+
+const prizeSorting = (a: GamePrize, b: GamePrize) => {
+  if (a.claimedAt) {
+    return b.claimedAt ? new Date(b.claimedAt).getTime() - new Date(a.claimedAt).getTime() : 1;
+  }
+  if (b.claimedAt) {
+    return -1;
+  }
+  return b.nftId - a.nftId;
+};
 
 export default function Notifications() {
-  const { data: lotteryNfts, isFetching: fetchingLotteryNfts } = useGetPrizesByUserQuery();
-  const { data: claimedAuctionNfts, isFetching: fetchingClaimedAuctionNfts } =
-    useGetClaimedAuctionNftsQuery();
-  const { data: unclaimedAuctionNfts, isFetching: fetchingUnclaimedAuctionNfts } =
-    useGetUnclaimedAuctionNftsQuery();
-
-  const prizeSorting = (a: GamePrize, b: GamePrize) => {
-    if (a.claimedAt) {
-      return b.claimedAt ? new Date(b.claimedAt).getTime() - new Date(a.claimedAt).getTime() : 1;
-    }
-    if (b.claimedAt) {
-      return -1;
-    }
-    return b.nftId - a.nftId;
-  };
-
-  const isLoading =
-    fetchingLotteryNfts || fetchingClaimedAuctionNfts || fetchingUnclaimedAuctionNfts;
-
-  const prizeNfts: GamePrize[] = new Array().concat(
-    lotteryNfts,
-    claimedAuctionNfts,
-    unclaimedAuctionNfts
-  );
-
+  const { prizeNfts, isLoading } = useUserNotifications();
+  const sortedPrizes = prizeNfts.sort(prizeSorting);
   const { selectedPage, onNext, onPrev, pageSize } = usePagination({
     totalCount: prizeNfts.length,
     pageSize: 10,
   });
-
   const firstIndex = (selectedPage - 1) * pageSize;
   const secondIndex = selectedPage * pageSize;
-  const pageItems = prizeNfts.slice(firstIndex, secondIndex);
+  const pageItems = sortedPrizes.slice(firstIndex, secondIndex);
 
   return (
     <>
@@ -82,7 +64,7 @@ export default function Notifications() {
                     </thead>
                     <tbody className='notifications-panel__data-list'>
                       {!isLoading &&
-                        pageItems.sort(prizeSorting).map((nft: GamePrize) => {
+                        pageItems.map((nft: GamePrize) => {
                           const dateDisplay = nft.claimedAt
                             ? reformatDate(nft.claimedAt)
                             : 'unclaimed';
