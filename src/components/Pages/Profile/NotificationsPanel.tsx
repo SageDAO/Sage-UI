@@ -93,16 +93,16 @@ export default function Notifications() {
                           );
                         })}
                     </tbody>
-                    <div className='notifications-panel__pagination'>
-                      <div onClick={onPrev} className='notifications-panel__pagination-page-arrow'>
-                        &lt;
-                      </div>
-                      <div className='notifications-panel__pagination-page'>{selectedPage}</div>
-                      <div onClick={onNext} className='notifications-panel__pagination-page-arrow'>
-                        &gt;
-                      </div>
-                    </div>
                   </Tab.Panel>
+                  <div className='notifications-panel__pagination'>
+                    <div onClick={onPrev} className='notifications-panel__pagination-page-arrow'>
+                      &lt;
+                    </div>
+                    <div className='notifications-panel__pagination-page'>{selectedPage}</div>
+                    <div onClick={onNext} className='notifications-panel__pagination-page-arrow'>
+                      &gt;
+                    </div>
+                  </div>
                 </Tab.Panels>
               </Tab.Group>
             </animated.div>
