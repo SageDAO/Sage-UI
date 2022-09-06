@@ -24,10 +24,10 @@
   height: 100vh;
   align-items: center;
   & > :first-child {
-    margin-top: 160px;
+    // margin-top: 80px;
   }
   & > :last-child {
-    margin-bottom: 160px;
+    // margin-bottom: 80px;
   }
 
   @include b.min-width('medium') {
@@ -160,7 +160,7 @@
   font-weight: 400;
   font-size: clamp(10px, 1vw, 20px);
   line-height: 130%;
-  margin: 20px 0;
+  // margin: 20px 0;
 
   @include m.theme() {
     color: c.$grey;

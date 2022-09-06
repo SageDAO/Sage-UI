@@ -159,7 +159,7 @@ function GetTicketModal({
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main'>
-					<div className='games-modal__main-img-container'>
+            <div className='games-modal__main-img-container'>
               {systemType === 'lotteries' ? (
                 <LotterySlider
                   nfts={lottery.Nfts}
@@ -179,6 +179,9 @@ function GetTicketModal({
               </h1>
               <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
               <p className='games-modal__game-description'>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis saepe iusto corrupti
+                repellendus soluta odit. Beatae dolores accusamus eveniet quo, voluptatem doloribus
+                rem libero. Cum vel dolores ducimus iure quod!
                 {lottery.Nfts[selectedNftIndex].description ||
                   'this artwork has no description provided.'}
               </p>
@@ -245,7 +248,9 @@ function GetTicketModal({
               )}
             </div>
           </div>
-          <span className='games-modal__editions-tag'>{lottery.Nfts[selectedNftIndex].numberOfEditions} editions</span>
+          <span className='games-modal__editions-tag'>
+            {lottery.Nfts[selectedNftIndex].numberOfEditions} editions
+          </span>
         </section>
       </div>
     </Modal>
