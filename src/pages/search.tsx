@@ -42,7 +42,6 @@ export default function Search() {
       </div>
       <div className='searchresults__header'>
         <div className='searchresults__term'>
-          <div className='searchresults__right-dot'></div>
           <div>
             <SearchInput className='searchresults__input' displayIcon={false} />
           </div>

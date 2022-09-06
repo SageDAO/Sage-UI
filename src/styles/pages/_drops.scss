@@ -103,24 +103,25 @@
 }
 
 .drops-page__drop-header-countdown {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  aspect-ratio: 466/85;
-  width: min(400px, 10em);
-
-  font-style: normal;
-  font-weight: 400;
-  font-size: min(40px, 2.5vw);
-  line-height: 130%;
-  text-align: center;
-  letter-spacing: 0.1em;
-
   @include m.theme() {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    aspect-ratio: 466/85;
+    width: clamp(30px, 7em, 150px);
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(14px, 2.3vw, 30px);
+    line-height: 130%;
+    text-align: center;
+    letter-spacing: 0.1em;
+
     color: c.$white;
     border: 1px solid c.$white;
     &[data-status='Live'] {
+      aspect-ratio: 400/85;
       color: m.t(accent);
       border: 1px solid m.t(accent);
     }

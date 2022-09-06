@@ -10,12 +10,7 @@ interface Props {
   dataColor?: string;
 }
 
-export const SearchInput = ({
-  className,
-  placeholder,
-  displayIcon,
-  dataColor,
-}: Props) => {
+export const SearchInput = ({ className, placeholder, displayIcon, dataColor }: Props) => {
   const { query, setQuery } = useSearch();
   const router = useRouter();
 
