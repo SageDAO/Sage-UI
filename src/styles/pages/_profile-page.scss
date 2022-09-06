@@ -722,3 +722,33 @@
     }
   }
 }
+
+.notifications-panel__pagination {
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+	gap: 14px;
+	@include m.noselect;
+}
+
+.notifications-panel__pagination-page {
+  @include m.theme() {
+    background-color: m.t(accent);
+    color: m.t(base);
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include m.circle;
+    @include m.interact;
+  }
+}
+
+.notifications-panel__pagination-page-arrow {
+	padding: 2px;
+  @include m.theme() {
+    @include m.interact;
+    color: m.t(contrast);
+  }
+}

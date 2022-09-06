@@ -1,6 +1,5 @@
 import { Tab } from '@headlessui/react';
 import { useGetPrizesByUserQuery } from '@/store/prizesReducer';
-import Image from 'next/image';
 import { animated, Spring } from 'react-spring';
 import ClaimPrizeButton from './ClaimPrizeButton';
 import { reformatDate } from '@/utilities/strings';
@@ -11,6 +10,7 @@ import {
 import { GamePrize } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import CheckSVG from '@/public/icons/check.svg';
+import usePagination from '@/hooks/usePagination';
 
 export default function Notifications() {
   const { data: lotteryNfts, isFetching: fetchingLotteryNfts } = useGetPrizesByUserQuery();
@@ -37,6 +37,15 @@ export default function Notifications() {
     claimedAuctionNfts,
     unclaimedAuctionNfts
   );
+
+  const { selectedPage, onNext, onPrev, pageSize } = usePagination({
+    totalCount: prizeNfts.length,
+    pageSize: 10,
+  });
+
+  const firstIndex = (selectedPage - 1) * pageSize;
+  const secondIndex = selectedPage * pageSize;
+  const pageItems = prizeNfts.slice(firstIndex, secondIndex);
 
   return (
     <>
@@ -73,7 +82,7 @@ export default function Notifications() {
                     </thead>
                     <tbody className='notifications-panel__data-list'>
                       {!isLoading &&
-                        prizeNfts.sort(prizeSorting).map((nft: GamePrize) => {
+                        pageItems.sort(prizeSorting).map((nft: GamePrize) => {
                           const dateDisplay = nft.claimedAt
                             ? reformatDate(nft.claimedAt)
                             : 'unclaimed';
@@ -93,12 +102,24 @@ export default function Notifications() {
                               <td className='notifications-panel__td--date'>{dateDisplay}</td>
                               <td className='notifications-panel__td--interact'>
                                 <ClaimPrizeButton gamePrize={nft} />
-                                  <CheckSVG data-claimed={!!nft.claimedAt} className='notifications-panel__td--interact-check-svg' />
+                                <CheckSVG
+                                  data-claimed={!!nft.claimedAt}
+                                  className='notifications-panel__td--interact-check-svg'
+                                />
                               </td>
                             </tr>
                           );
                         })}
                     </tbody>
+                    <div className='notifications-panel__pagination'>
+                      <div onClick={onPrev} className='notifications-panel__pagination-page-arrow'>
+                        &lt;
+                      </div>
+                      <div className='notifications-panel__pagination-page'>{selectedPage}</div>
+                      <div onClick={onNext} className='notifications-panel__pagination-page-arrow'>
+                        &gt;
+                      </div>
+                    </div>
                   </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>

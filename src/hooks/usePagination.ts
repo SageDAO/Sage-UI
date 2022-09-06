@@ -1,19 +1,31 @@
-import { useMemo } from "react";
+import { useMemo, useState } from 'react';
 
-interface PaginationArgs {
+interface Args {
   totalCount: number;
   pageSize: number;
-  siblingCount?: number;
-  currentPage: number;
 }
 
-export default function usePagination({
-  totalCount,
-  pageSize,
-  siblingCount,
-  currentPage,
-}: PaginationArgs) {
-  const paginationRange = useMemo(() => {}, [totalCount, pageSize, siblingCount, currentPage]);
+export default function usePagination({ totalCount, pageSize }: Args) {
+  const [selectedPage, setSelectedPage] = useState<number>(1);
 
-  return paginationRange;
+  const totalPages = useMemo(() => {
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return totalPages;
+  }, [totalCount, pageSize]);
+
+  function onNext() {
+    if (selectedPage + 1 > totalPages) return;
+    setSelectedPage((prevState) => {
+      return prevState + 1;
+    });
+  }
+
+  function onPrev() {
+    if (selectedPage - 1 <= 0) return;
+    setSelectedPage((prevState) => {
+      return prevState - 1;
+    });
+  }
+
+  return { selectedPage, onNext, onPrev, pageSize };
 }

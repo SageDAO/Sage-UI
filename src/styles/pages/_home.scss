@@ -87,7 +87,7 @@
   border-radius: 100%;
   width: 12px;
   height: 12px;
-	margin-top: 2.5px;
+  margin-top: 2.5px;
   @include m.theme() {
     background-color: m.t('accent');
   }
@@ -193,25 +193,24 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   @include m.theme() {
     color: m.t('contrast');
     background-color: m.t('base');
-  }
-  @include b.min-width('medium') {
-    display: flex;
-  }
-  display: none;
-  position: absolute;
-  z-index: $tile-info-z;
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 1px;
-  top: 20px;
-  left: 20px;
-  width: 121px;
-  height: 46.37px;
-  justify-content: center;
-  align-items: center;
-  text-transform: uppercase;
-  &[data-status='Live'] {
-    @include m.theme() {
+    @include b.min-width('medium') {
+      display: flex;
+    }
+    display: none;
+    position: absolute;
+    z-index: $tile-info-z;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 1px;
+    top: 20px;
+    left: 20px;
+    width: 121px;
+    height: 46.37px;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    &[data-status='Live'] {
+      color: m.t(base);
       background-color: m.t('accent');
     }
   }
