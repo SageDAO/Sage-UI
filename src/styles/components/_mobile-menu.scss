@@ -7,6 +7,7 @@ $menu-toggle-z: $menu-z + 1;
 
 .mobile-menu {
   overflow-y: auto;
+  overflow-y: hidden;
   position: absolute;
   padding: 0px 10vw 0px;
   width: 80vw;
