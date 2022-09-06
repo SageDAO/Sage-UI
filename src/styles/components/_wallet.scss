@@ -20,7 +20,7 @@
 .wallet__header {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
   justify-content: space-between;
   text-transform: uppercase;
   @include m.theme() {

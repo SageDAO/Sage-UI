@@ -68,7 +68,9 @@ function GetTicketModal({
   const { data: winners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
 
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
-  //ui event handlers
+  const editionsCount: number = lottery.Nfts[selectedNftIndex].numberOfEditions;
+  const editionsText: string = editionsCount > 1 ? 'editions' : 'edition';
+
   function handleTicketSubClick() {
     if (desiredTicketAmount == 1) {
       return;
@@ -159,7 +161,7 @@ function GetTicketModal({
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main'>
-					<div className='games-modal__main-img-container'>
+            <div className='games-modal__main-img-container'>
               {systemType === 'lotteries' ? (
                 <LotterySlider
                   nfts={lottery.Nfts}
@@ -174,13 +176,16 @@ function GetTicketModal({
               )}
             </div>
             <div className='games-modal__main-content'>
-              <h1 className='games-modal__drop-name'>
+              <span className='games-modal__drop-name'>
                 {dropName} by {artist.username}
-              </h1>
+                <span className='games-modal__editions-tag--mobile'>
+                  {editionsCount} {editionsText}
+                </span>
+              </span>
               <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
               <p className='games-modal__game-description'>
                 {lottery.Nfts[selectedNftIndex].description ||
-                  'this artwork has no description provided.'}
+                  'This artwork has no description provided.'}
               </p>
               <div className='games-modal__system'>
                 <div className='games-modal__system-icon-container'>
@@ -245,7 +250,9 @@ function GetTicketModal({
               )}
             </div>
           </div>
-          <span className='games-modal__editions-tag'>{lottery.Nfts[selectedNftIndex].numberOfEditions} editions</span>
+          <span className='games-modal__editions-tag--desktop'>
+            {editionsCount} {editionsText}
+          </span>
         </section>
       </div>
     </Modal>
