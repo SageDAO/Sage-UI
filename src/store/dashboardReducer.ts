@@ -30,7 +30,7 @@ const dashboardApi = baseApi.injectEndpoints({
       query: () => 'user?action=GetAllUsersAndEarnedPoints',
       providesTags: ['AllUsers'],
     }),
-    getConfig: builder.query<{ featuredDropId: Number; welcomeMessage: string }, void>({
+    getConfig: builder.query<{ featuredDropId: number; welcomeMessage: string }, void>({
       query: () => `config`,
       providesTags: ['Config'],
     }),
