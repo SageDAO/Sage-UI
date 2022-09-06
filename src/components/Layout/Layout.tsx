@@ -59,7 +59,11 @@ export default function Layout({ children, router }: Props) {
   return transitions((props, item) => {
     return (
       <React.Fragment>
-        <MobileMenu isOpen={isMobileMenuOpen} toggleMenu={toggleMobileMenu} closeModal={closeMobileMenu}></MobileMenu>
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          toggleMenu={toggleMobileMenu}
+          closeModal={closeMobileMenu}
+        ></MobileMenu>
         <WrongNetworkModal
           isOpen={isNetworkModalOpen}
           closeModal={closeNetworkModal}
@@ -73,7 +77,7 @@ export default function Layout({ children, router }: Props) {
           newestOnTop={false}
           closeOnClick
           rtl={false}
-					limit={3}
+          limit={3}
           pauseOnFocusLoss
           draggable
           pauseOnHover
@@ -81,7 +85,11 @@ export default function Layout({ children, router }: Props) {
         />
         <div ref={layoutEl} key={router.route} className='layout'>
           <Nav />
-          <MenuToggle isOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
+          <MenuToggle
+            isDynamicColors={true}
+            isOpen={isMobileMenuOpen}
+            toggleMobileMenu={toggleMobileMenu}
+          />
           {children}
           <Footer></Footer>
         </div>

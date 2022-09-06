@@ -150,6 +150,12 @@ $theme-map: null;
   }
 }
 
+@mixin data-bg-color {
+  &[data-bg-color='white'] {
+    background-color: $white;
+  }
+}
+
 @mixin animate-highlight {
   animation-duration: 900ms;
   animation-iteration-count: 7;

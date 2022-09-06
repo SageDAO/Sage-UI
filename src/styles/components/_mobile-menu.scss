@@ -116,6 +116,7 @@ $menu-toggle-z: $menu-z + 1;
   @include m.theme() {
     background-color: m.t(contrast);
   }
+  @include m.data-bg-color;
 }
 
 .mobile-menu__toggle-line1 {
