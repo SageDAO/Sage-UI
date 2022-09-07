@@ -1,4 +1,5 @@
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
+import DEFAULT_PFP from '@/public/branding/sage-icon.svg';
 import Image from 'next/image';
 import Zoom from 'react-medium-image-zoom';
 
@@ -75,7 +76,10 @@ interface PfpImageProps {
 }
 
 function PfpImage({ src, className }: PfpImageProps) {
-  return <Image src={src || DEFAULT_PROFILE_PICTURE} layout='fill' objectFit='cover' />;
+  if (!src) {
+    return <DEFAULT_PFP className={'default-pfp-src'} />;
+  }
+  return <Image src={src} layout='fill' className={className} objectFit='cover' />;
 }
 
 export { BaseMedia, PfpImage };

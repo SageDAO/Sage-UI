@@ -42,7 +42,7 @@ export default function artist({ artist }: Props) {
       <div className='artist-page__artist-section'>
         <div className='artist-page__artist-section-flex-x'>
           <div className='artist-page__pfp-container'>
-            <PfpImage src={artist.profilePicture}></PfpImage>
+            <PfpImage className='artist-page__pfp' src={artist.profilePicture}></PfpImage>
           </div>
           <div>
             <h1 className='artist-page__name'>{artist.username}</h1>

@@ -128,6 +128,9 @@
 .profile-page__pfp-container {
   margin-top: 20px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: grey;
   width: 100px;
   overflow: hidden;
@@ -728,8 +731,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-	gap: 14px;
-	@include m.noselect;
+  gap: 14px;
+  @include m.noselect;
 }
 
 .notifications-panel__pagination-page {
@@ -746,7 +749,7 @@
 }
 
 .notifications-panel__pagination-page-arrow {
-	padding: 2px;
+  padding: 2px;
   @include m.theme() {
     @include m.interact;
     color: m.t(contrast);

@@ -29,11 +29,25 @@
 }
 
 .artist-page__pfp-container {
-  position: relative;
-  overflow: hidden;
-  height: 100px;
-  width: 100px;
-  border-radius: 100%;
+  @include m.theme() {
+    height: 80px;
+    width: 80px;
+		position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+		overflow: hidden;
+    // background-color: m.t(contrast);
+  }
+}
+
+.artist-page__pfp {
+  @include m.theme() {
+    width: 70%;
+    height: 70%;
+    color: m.t(base);
+  }
 }
 
 .artist-page__name {
@@ -188,11 +202,11 @@
   text-transform: uppercase;
   text-overflow: ellipsis;
   overflow: hidden;
-	
+
   // background-color: red;
 }
 
 .artist-page__grid-tile-artist-name {
-	font-weight: 600;
+  font-weight: 600;
   @include m.text-h3;
 }

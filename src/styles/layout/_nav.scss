@@ -70,22 +70,23 @@
 }
 
 .nav__personal-pfp-container {
-  position: relative;
-
-  width: 70px;
-  height: 70px;
-  border-radius: 100%;
-  overflow: hidden;
-
-  @include m.interact() {
-    .nav__personal-pfp-src {
-      transition: 200ms;
-      transform: scale(1.03);
+  @include m.theme() {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    overflow: hidden;
+    background-color: m.t(contrast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include m.interact() {
+      .nav__personal-pfp-src {
+        transition: 200ms;
+        transform: scale(1.03);
+      }
     }
   }
-}
-
-.nav__personal-pfp-src {
 }
 
 .nav__personal-message {
