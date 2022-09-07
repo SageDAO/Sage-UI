@@ -83,7 +83,11 @@ async function getDropsPendingApproval(response: NextApiResponse) {
   try {
     const result = await prisma.drop.findMany({
       where: { approvedAt: null },
-      include: { NftContract: { include: { Artist: true } } },
+      include: {
+        NftContract: { include: { Artist: true } },
+        Lotteries: { include: { Nfts: true } },
+        Auctions: { include: { Nft: true } },
+      },
     });
     response.json(result);
   } catch (e) {

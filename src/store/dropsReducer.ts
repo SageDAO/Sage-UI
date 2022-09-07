@@ -18,7 +18,7 @@ const dropsApi = baseApi.injectEndpoints({
       query: () => `drops?action=GetApprovedDrops`,
       providesTags: ['PendingDrops'],
     }),
-    getDropsPendingApproval: builder.query<DropWithArtist[], void>({
+    getDropsPendingApproval: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetDropsPendingApproval`,
       providesTags: ['PendingDrops'],
     }),

@@ -30,7 +30,7 @@ export default function SearchResultsTile({ nft, i }: Props) {
     if (nft.dId) {
       router.push(`/drops/${nft.dId}`);
     } else {
-      router.push(`/artists/${nft.artist}`);
+      router.push(`/creators/${nft.artist}`);
     }
   };
   const dataAspect = getRandomizedAspectRatio(i);

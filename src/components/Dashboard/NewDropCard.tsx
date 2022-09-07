@@ -1,19 +1,22 @@
-import { DropWithArtist } from '@/prisma/types';
+import useModal from '@/hooks/useModal';
+import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { useApproveAndDeployDropMutation, useDeleteDropMutation } from '@/store/dropsReducer';
 import { Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { useSigner } from 'wagmi';
 import LoaderSpinner from '../LoaderSpinner';
 import { BaseMedia, PfpImage } from '../Media/BaseMedia';
+import { NewDropDetailsModal } from './NewDropDetailsModal';
 
 interface Props {
-  drop: DropWithArtist;
+  drop: Drop_include_GamesAndArtist;
 }
 
 export default function NewDropCard({ drop }: Props) {
   const { data: signer } = useSigner();
   const [approveAndDeployDrop, { isLoading: isDeploying }] = useApproveAndDeployDropMutation();
   const [deleteDrop, { isLoading: isDeleting }] = useDeleteDropMutation();
+  const { isOpen, closeModal, openModal } = useModal();
 
   const handleApproveBtnClick = async () => {
     if (!signer) {
@@ -41,8 +44,9 @@ export default function NewDropCard({ drop }: Props) {
 
   return (
     <div className='dashboard__tile'>
+      <NewDropDetailsModal isOpen={isOpen} closeModal={closeModal} drop={drop} />
       <div className='dashboard__tile-img'>
-        <BaseMedia src={drop.bannerImageS3Path}  />
+        <BaseMedia src={drop.bannerImageS3Path} onClickHandler={openModal} />
       </div>
       <div className='dashboard__tile-details'>
         <div className='dashboard__tile-artist-pfp'>
