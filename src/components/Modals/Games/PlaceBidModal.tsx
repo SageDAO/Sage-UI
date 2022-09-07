@@ -129,87 +129,91 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
       <div className='games-modal'>
         <section className='games-modal__header'>
           <SageFullLogo className='games-modal__sage-logo' />
-          <CloseSVG onClick={closeModal} className='games-modal__close-button' />
+          <button className='games-modal__close-button'>
+            <CloseSVG onClick={closeModal} className='games-modal__close-button-svg' />
+          </button>
         </section>
-				<div className="games-modal__body">
-<section className='games-modal__main'>
-          <div className='games-modal__main-img-container'>
-            <BaseMedia src={auction.Nft.s3Path}  />
-            {!isOpenForBids && (
-              <Countdown endTime={auction.startTime} className='games-modal__countdown'></Countdown>
-            )}
-            {isOpenForBids && (
-              <Countdown
-                endTime={auctionState?.endTime}
-                className='games-modal__countdown'
-              ></Countdown>
-            )}
-          </div>
-          <div className='games-modal__main-content'>
-            <div>
-              <h1 className='games-modal__drop-name'>
-                {dropName} by {artist.username}
-              </h1>
-              <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
+        <div className='games-modal__body'>
+          <section className='games-modal__main'>
+            <div className='games-modal__main-img-container'>
+              <BaseMedia src={auction.Nft.s3Path} />
+              {!isOpenForBids && (
+                <Countdown
+                  endTime={auction.startTime}
+                  className='games-modal__countdown'
+                ></Countdown>
+              )}
+              {isOpenForBids && (
+                <Countdown
+                  endTime={auctionState?.endTime}
+                  className='games-modal__countdown'
+                ></Countdown>
+              )}
             </div>
-            <p className='games-modal__game-description'>
-              {auction.Nft.description || 'this artwork has no description provided.'}
-            </p>
-            <div className='games-modal__system'>
-              <div className='games-modal__system-icon-container'>
-                <System type='auctions'></System>
-              </div>
-              <h1 className='games-modal__system-info'>This is an auction</h1>
-            </div>
-            {isStarted && (
+            <div className='games-modal__main-content'>
               <div>
-                <div className='games-modal__bid-info-group'>
-                  <div className='games-modal__highest-bid'>
-                    <h1 className='games-modal__highest-bid-label'>Highest Bid</h1>
-                    <h1 className='games-modal__highest-bid-value'>
-                      {auctionState.highestBidNumber}
-                    </h1>
-                  </div>
-
-                  <button
-                    onClick={toggleBidHistory}
-                    className='games-modal__see-bid-history-button'
-                  >
-                    <ArrowRightSVG
-                      data-is-open={state.shouldShowBidHistory}
-                      className='games-modal__see-bid-history-icon'
-                    ></ArrowRightSVG>
-                    See Bid History
-                  </button>
-                </div>
+                <h1 className='games-modal__drop-name'>
+                  {dropName} by {artist.username}
+                </h1>
+                <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
               </div>
-            )}
-            {!isOpenForBids && !isEnded && (
-              <div className='games-modal__not-yet-open'>Auction not yet open</div>
-            )}
-            {isOpenForBids && (
-              <>
-                <input
-                  onChange={handleBidInputChange}
-                  type='number'
-                  className='games-modal__bid-input'
-                  min={auctionState?.nextMinBid}
-                  value={state.desiredBidValue}
-                />
-                <button
-                  disabled={isPlaceBidLoading}
-                  className='games-modal__place-bid-button'
-                  onClick={handlePlaceBidClick}
-                >
-                  place bid
-                </button>
-              </>
-            )}
-          </div>
-        </section>
+              <p className='games-modal__game-description'>
+                {auction.Nft.description || 'this artwork has no description provided.'}
+              </p>
+              <div className='games-modal__system'>
+                <div className='games-modal__system-icon-container'>
+                  <System type='auctions'></System>
+                </div>
+                <h1 className='games-modal__system-info'>This is an auction</h1>
+              </div>
+              {isStarted && (
+                <div>
+                  <div className='games-modal__bid-info-group'>
+                    <div className='games-modal__highest-bid'>
+                      <h1 className='games-modal__highest-bid-label'>Highest Bid</h1>
+                      <h1 className='games-modal__highest-bid-value'>
+                        {auctionState.highestBidNumber}
+                      </h1>
+                    </div>
 
-				</div>
-        
+                    <button
+                      onClick={toggleBidHistory}
+                      className='games-modal__see-bid-history-button'
+                    >
+                      <ArrowRightSVG
+                        data-is-open={state.shouldShowBidHistory}
+                        className='games-modal__see-bid-history-icon'
+                      ></ArrowRightSVG>
+                      See Bid History
+                    </button>
+                  </div>
+                </div>
+              )}
+              {!isOpenForBids && !isEnded && (
+                <div className='games-modal__not-yet-open'>Auction not yet open</div>
+              )}
+              {isOpenForBids && (
+                <>
+                  <input
+                    onChange={handleBidInputChange}
+                    type='number'
+                    className='games-modal__bid-input'
+                    min={auctionState?.nextMinBid}
+                    value={state.desiredBidValue}
+                  />
+                  <button
+                    disabled={isPlaceBidLoading}
+                    className='games-modal__place-bid-button'
+                    onClick={handlePlaceBidClick}
+                  >
+                    place bid
+                  </button>
+                </>
+              )}
+            </div>
+          </section>
+        </div>
+
         <section className='games-modal__bid-history-section'>
           <BidHistoryTable
             isActive={state.shouldShowBidHistory}

@@ -157,7 +157,9 @@ function GetTicketModal({
       <div className='games-modal'>
         <section className='games-modal__header'>
           <SageFullLogo className='games-modal__sage-logo' />
-          <CloseSVG onClick={closeModal} className='games-modal__close-button' />
+          <button className='games-modal__close-button'>
+            <CloseSVG onClick={closeModal} className='games-modal__close-button-svg' />
+          </button>
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main'>
