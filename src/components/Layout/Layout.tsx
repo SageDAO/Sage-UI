@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import { useAccount, useDisconnect } from 'wagmi';
 import { useSignOutMutation } from '@/store/usersReducer';
 import { animated, useTransition, config } from 'react-spring';
+import SageIconSVG from '@/public/branding/sage-icon.svg';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -72,7 +73,8 @@ export default function Layout({ children, router }: Props) {
         />
         <ToastContainer
           position='bottom-center'
-          autoClose={50000}
+          autoClose={5000}
+          icon={SageIconSVG}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
