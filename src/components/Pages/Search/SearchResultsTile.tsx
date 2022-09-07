@@ -1,6 +1,6 @@
 import { SearchableNftData } from '@/store/nftsReducer';
 import { BaseMedia } from '@/components/Media/BaseMedia';
-import { useRouter } from 'next/router';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 interface Props {
   nft: SearchableNftData;
@@ -25,12 +25,12 @@ function getRandomizedAspectRatio(i: number): ImgAspectRatio {
 }
 
 export default function SearchResultsTile({ nft, i }: Props) {
-  const router = useRouter();
+  const { pushToDrops, pushToCreators } = useSageRoutes();
   const handleClick = async () => {
     if (nft.dId) {
-      router.push(`/drops/${nft.dId}`);
+      pushToDrops(nft.dId);
     } else {
-      router.push(`/creators/${nft.artist}`);
+      pushToCreators(nft.artist);
     }
   };
   const dataAspect = getRandomizedAspectRatio(i);
@@ -39,7 +39,6 @@ export default function SearchResultsTile({ nft, i }: Props) {
       <div className='search-page__grid-item-img'>
         <BaseMedia src={nft.s3Path}></BaseMedia>
       </div>
-
       <div className='search-page__grid-item-info'>
         <h1 className='search-page__grid-item-info-nft-name'>{nft.name}</h1>
         <h1 className='search-page__grid-item-info-artist-name'>by {nft.artist}</h1>

@@ -4,14 +4,14 @@ import { computeDropStatus } from '@/utilities/status';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import Countdown from '@/components/Countdown';
 import useWindowDimensions from '@/hooks/useWindowSize';
-import { useRouter } from 'next/router';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 interface Props {
   upcomingDrops: Awaited<ReturnType<typeof getHomePageData>>['upcomingDrops'];
 }
 
 export default function UpcomingDrops({ upcomingDrops }: Props) {
-  const router = useRouter();
+  const { pushToDrops } = useSageRoutes();
   const { isMobile } = useWindowDimensions();
   if (isMobile) {
     const midPoint: number = Math.floor(upcomingDrops.length / 2);
@@ -26,13 +26,13 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
               <div className='home-page__upcoming-drops-row--mobile'>
                 {row.map((d) => {
                   const src = d.bannerImageS3Path;
-                  async function onClick() {
-                    await router.push(`/drops/${d.id}`);
-                  }
                   const text = `${d.name} by ${d.NftContract.Artist.username}`;
                   const { startTime, status } = computeDropStatus(d);
                   const display =
                     status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
+                  function onClick() {
+                    pushToDrops(d.id);
+                  }
                   return (
                     <div
                       className='home-page__upcoming-drops-tile--mobile'
@@ -73,8 +73,8 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
         if (isIndexEven && nextIndexNull) {
           shouldTileSpanTwoColumns = true;
         }
-        async function onClick() {
-          await router.push(`/drops/${d.id}`);
+        function onClick() {
+          pushToDrops(d.id);
         }
         const text = `${d.name} by ${d.NftContract.Artist.username}`;
         const { startTime, status } = computeDropStatus(d);

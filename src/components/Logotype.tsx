@@ -1,26 +1,25 @@
 import LogotypeSVG from '@/public/branding/sage-logotype.svg';
 import ErrortypeSVG from '@/public/branding/error-logotype.svg';
 import Motto from '@/components/Layout/Motto';
-import { useRouter } from 'next/router';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 interface Props {
-  dataColor?: string;
   isErrorPage?: boolean;
   disableHomeRouting?: boolean;
 }
 
-export default function Logotype({ dataColor, isErrorPage, disableHomeRouting }: Props) {
-  const router = useRouter();
-  const urlIsSingleDropPage: boolean = router.pathname.includes('drops/');
+export default function Logotype({ isErrorPage, disableHomeRouting }: Props) {
+  const { isSingleDropsPage, pushToHome } = useSageRoutes();
+  const dataColor = isSingleDropsPage && 'white';
   return (
     <div className='sage-logotype__wrapper'>
       <div
         className='sage-logotype'
         onClick={() => {
-          !disableHomeRouting && router.push('/');
+          !disableHomeRouting && pushToHome();
         }}
       >
-        <Motto dataColor={urlIsSingleDropPage && 'white'} />
+        <Motto dataColor={dataColor} />
         {isErrorPage ? (
           <ErrortypeSVG data-color={dataColor} className='sage-logotype__svg' />
         ) : (

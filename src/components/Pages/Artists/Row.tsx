@@ -1,7 +1,6 @@
 import { PfpImage } from '@/components/Media/BaseMedia';
-import shortenAddress from '@/utilities/shortenAddress';
+import useSageRoutes from '@/hooks/useSageRoutes';
 import { User } from '@prisma/client';
-import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 }
 
 export default function Row({ artists, shouldStartAsymmetric }: Props) {
-  const router = useRouter();
+  const { pushToCreators } = useSageRoutes();
   const asymmetricStarterElement = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -30,13 +29,13 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
         return (
           <div
             className='artists-page__item'
-            onClick={async () => {
-              await router.push(`/creators/${a.username}`);
+            onClick={() => {
+              pushToCreators(a.username);
             }}
             key={i}
           >
             <div className='artists-page__item-img'>
-              <PfpImage src={a.bannerImageS3Path || a.profilePicture} />
+              <PfpImage src={a.bannerImageS3Path} />
               <h1 className='artists-page__item-img-text'>
                 {/* drop by {a.username || shortenAddress(a.walletAddress)} <br />
                 Sage Curated */}
@@ -54,7 +53,7 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
           <div
             className='artists-page__item'
             onClick={async () => {
-              await router.push(`/creators/${a.username}`);
+              pushToCreators(a.username);
             }}
             key={i}
           >

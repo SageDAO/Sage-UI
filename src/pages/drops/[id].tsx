@@ -80,16 +80,14 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
       <div className='drop-page'>
         <header className='drop-page__header'>
           <div className='drop-page__header-logotype'>
-            <Logotype dataColor='white' />
+            <Logotype />
           </div>
           <section className='drop-page__header-drop-info'>
             <div className='drop-page__header-main-column'>
               <h1 className='drop-page__header-drop-name'>
                 {drop.name} by {artist.username}
               </h1>
-              <p className='drop-page__header-drop-description'>
-							{drop.description}
-              </p>
+              <p className='drop-page__header-drop-description'>{drop.description}</p>
               <div className='drop-page__header-drop-details'>
                 <h1 className='drop-page__header-drop-details-item'>
                   MINTED BY: {artist.username}

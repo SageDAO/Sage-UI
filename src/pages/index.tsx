@@ -4,9 +4,8 @@ import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import Hero from '@/components/Hero';
 import { getHomePageData, getSageMediumData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
-import SageIconSVG from '@/public/icons/sage.svg';
 import UpcomingDrops from '@/components/Pages/Home/UpcomingDrops';
-import { useRouter } from 'next/router';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -16,19 +15,22 @@ interface Props {
 }
 
 function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props) {
-  const router = useRouter();
+  const { pushToCreators, pushToDrops } = useSageRoutes();
   return (
     <div className='home-page' data-cy='home-page'>
       <div className='home-page__main'>
         {featuredDrop && (
           <>
-            <Hero path={`/drops/${featuredDrop.id}`} imgSrc={featuredDrop.bannerImageS3Path} />
+            <Hero
+              bannerOnClick={() => pushToDrops(featuredDrop.id)}
+              imgSrc={featuredDrop.bannerImageS3Path}
+            />
             <div className='home-page__featured-drop-tag-section'>
               <div className='home-page__featured-drop-tag-info'>
                 <span
                   className='home-page__featured-drop-tag-label'
                   onClick={() => {
-                    router.push(`/creators/${featuredDrop.NftContract.Artist.username}`);
+                    pushToCreators(featuredDrop.NftContract.Artist.username);
                   }}
                 >
                   Artwork by | {featuredDrop.NftContract.Artist.username}
@@ -37,9 +39,7 @@ function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props
             </div>
           </>
         )}
-        <h1 className='home-page__statement'>
-          {welcomeMessage}
-        </h1>
+        <h1 className='home-page__statement'>{welcomeMessage}</h1>
         <div className='home-page__upcoming-drops-header'>
           <h1 className='home-page__upcoming-drops-header-left'>drops</h1>
           <div className='home-page__upcoming-drops-header-right'>
@@ -65,7 +65,7 @@ export async function getStaticProps() {
       featuredDrop,
       upcomingDrops,
       mediumData,
-      welcomeMessage
+      welcomeMessage,
     },
     revalidate: 60,
   };
