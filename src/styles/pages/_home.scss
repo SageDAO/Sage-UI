@@ -253,7 +253,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     opacity: 1;
     box-shadow: 0 0 0 99999px m.t('base');
     @include m.desktop-width;
-    aspect-ratio: 600/600;
+    aspect-ratio: 1200/600;
 
     @include b.min-width('small') {
       aspect-ratio: 1200/600;
