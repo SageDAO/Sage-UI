@@ -37,7 +37,7 @@
   padding: 40px;
   height: 100%;
   @include b.min-width('medium') {
-    height: 100%;
+    height: auto;
   }
 }
 
