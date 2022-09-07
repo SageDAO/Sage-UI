@@ -41,8 +41,8 @@ export type CollectedListingNft = Omit<GamePrize, 'dropId' | 'createdAt', 'uri'>
 
 export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   include: {
-    Lotteries: true;
-    Auctions: true;
+    Lotteries: { include: { Nfts: true }};
+    Auctions: { include: { Nft: true }};
     NftContract: {
       include: {
         Artist: true;

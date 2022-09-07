@@ -105,11 +105,7 @@ function UsersTable({ users }: UsersTableProps) {
       },
       {
         Header: 'contract balance',
-        Cell: (cell: any) => (
-          <div>
-            <NftContractBalance user={cell.row.original} />
-          </div>
-        ),
+        Cell: (cell: any) => <NftContractBalance user={cell.row.original} />
       },
     ],
     []

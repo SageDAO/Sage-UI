@@ -30,7 +30,7 @@ export default function NftContractBalance({ user }) {
     return <LoaderSpinner />;
   }
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ justifyContent: 'center', display: 'flex' }}>
       <div style={{ paddingTop: '7px' }}>{balance.balance} ASH</div>
       <div
         style={{

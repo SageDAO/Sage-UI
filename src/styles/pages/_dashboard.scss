@@ -180,9 +180,10 @@
 }
 
 .dashboard__user-details-modal {
-  width: 100%;
-  padding: 25px;
+  margin-top: auto;
+  margin-bottom: auto;
   border-radius: 9px;
+  padding: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -201,6 +202,11 @@
     width: 200px;
     height: 200px;
   }
+}
+
+.dashboard__drop-details-modal {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 /*--------------------------------------------------------------*/

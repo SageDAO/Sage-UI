@@ -44,7 +44,7 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
               </div>
               <div>{pointsBalance} PIXEL balance</div>
               <div style={{ marginTop: '20px' }}>
-                Role: {<span style={{ color: userData?.role == 'ADMIN' ? 'red' : userData?.role == 'ARTIST' ? 'blue' : '' }}>{userData?.role}</span>}
+                Role: {<span style={{ color: userData?.role == 'ADMIN' ? '#22b573' : userData?.role == 'ARTIST' ? '#792e9c' : '' }}>{userData?.role}</span>}
               </div>
               {userData?.role == 'USER' && userData?.username && (
                 <button
