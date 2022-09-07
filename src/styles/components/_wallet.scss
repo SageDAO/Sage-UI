@@ -206,14 +206,15 @@
     transition-duration: 200ms;
   }
   width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @include m.interact {
-    img {
-      transform: scale(1.05);
-    }
-  }
+     }
 }
 
 .wallet__user-pfp-src {
+  aspect-ratio: 1/1;
 }
 
 .wallet__user-metamask-container {
