@@ -12,9 +12,10 @@ interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
   upcomingDrops: Drop_include_GamesAndArtist[];
   mediumData: any;
+  welcomeMessage: string;
 }
 
-function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
+function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props) {
   const router = useRouter();
   return (
     <div className='home-page' data-cy='home-page'>
@@ -37,8 +38,7 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
           </>
         )}
         <h1 className='home-page__statement'>
-          SAGE is a curation system built to lead Web3. Through our selection, we mark value into
-          the future.
+          {welcomeMessage}
         </h1>
         <div className='home-page__upcoming-drops-header'>
           <h1 className='home-page__upcoming-drops-header-left'>drops</h1>
@@ -58,13 +58,14 @@ function home({ featuredDrop, upcomingDrops, mediumData }: Props) {
 }
 
 export async function getStaticProps() {
-  const { featuredDrop, upcomingDrops } = await getHomePageData(prisma);
+  const { featuredDrop, upcomingDrops, welcomeMessage } = await getHomePageData(prisma);
   const mediumData = await getSageMediumData();
   return {
     props: {
       featuredDrop,
       upcomingDrops,
       mediumData,
+      welcomeMessage
     },
     revalidate: 60,
   };

@@ -48,11 +48,16 @@ async function getConfig(res: NextApiResponse) {
 
 async function updateConfig(featuredDropId: number, welcomeMessage: string, res: NextApiResponse) {
   try {
-    await prisma.config.upsert({
-      where: {},
-      create: { featuredDropId, welcomeMessage },
-      update: { featuredDropId, welcomeMessage },
-    });
+    const data = {
+      featuredDropId: featuredDropId != 0 ? featuredDropId : null, 
+      welcomeMessage 
+    };
+    const record = await prisma.config.findMany({});
+    if (record.length > 0) {
+      await prisma.config.update({ where: { id: record[0].id }, data });
+    } else {
+      await prisma.config.create({ data });
+    }
   } catch (e) {
     console.log(e);
   }

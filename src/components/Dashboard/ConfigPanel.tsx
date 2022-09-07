@@ -1,6 +1,7 @@
 import { useGetConfigQuery, useUpdateConfigMutation } from '@/store/dashboardReducer';
 import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import LoaderDots from '../LoaderDots';
 import LoaderSpinner from '../LoaderSpinner';
 
@@ -12,9 +13,11 @@ export function ConfigPanel() {
   const [welcomeMessage, setWelcomeMessage] = useState<string>('');
 
   useEffect(() => {
-    setFeaturedDropId(config.featuredDropId);
-    setWelcomeMessage(config.welcomeMessage);
-  }, []);
+    if (config) {
+      setFeaturedDropId(config.featuredDropId);
+      setWelcomeMessage(config.welcomeMessage);
+    }
+  }, [config]);
 
   const handleFeaturedDropChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFeaturedDropId(Number(e.target.value));
@@ -26,6 +29,7 @@ export function ConfigPanel() {
 
   const handleSaveButtonClick = async () => {
     await updateConfig({ featuredDropId, welcomeMessage });
+    toast.success('Changes successfully saved')
   };
 
   if (isFetchingConfig || isFetchingDrops) {
@@ -35,7 +39,7 @@ export function ConfigPanel() {
   return (
     <div style={{ width: '30%', marginLeft: 'auto', marginRight: 'auto' }}>
       <div className='creations-panel__file-desc-group' style={{ marginTop: '25px' }}>
-        <h1 className='creations-panel__file-desc-label'>featured drop</h1>
+        <h1 className='creations-panel__file-desc-label'>Featured Drop</h1>
         <select
           value={featuredDropId}
           onChange={handleFeaturedDropChange}
@@ -52,7 +56,7 @@ export function ConfigPanel() {
         </select>
       </div>
       <div className='creations-panel__file-desc-group' style={{ marginTop: '25px' }}>
-        <h1 className='creations-panel__file-desc-label'>welcome message</h1>
+        <h1 className='creations-panel__file-desc-label'>Welcome Message</h1>
         <textarea
           value={welcomeMessage}
           onChange={handleWelcomeMessageChange}

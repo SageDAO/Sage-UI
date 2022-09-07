@@ -24,25 +24,21 @@ export async function getSageMediumData() {
 }
 
 export async function getHomePageData(prisma: PrismaClient) {
+  const dropIncludes = { 
+    NftContract: { include: { Artist: true } },
+    Lotteries: true,
+    Auctions: true,
+  };
   let drops: Drop_include_GamesAndArtist[] = await prisma.drop.findMany({
-    orderBy: {
-      approvedAt: 'desc',
-    },
-    include: {
-      NftContract: { include: { Artist: true } },
-      Lotteries: true,
-      Auctions: true,
-    },
-    where: {
-      ...FilterDropApprovedOnly,
-    },
+    where: { ...FilterDropApprovedOnly },
+    include: dropIncludes,
+    orderBy: { approvedAt: 'desc' },
     take: 8,
   });
-
-  const featuredDrop = drops[0];
-  const upcomingDrops = drops;
-
-  return { featuredDrop, upcomingDrops, drops };
+  const config = await prisma.config.findFirst({ include: { FeaturedDrop: { include: dropIncludes } } });
+  const welcomeMessage = config ? config.welcomeMessage : '';
+  const featuredDrop = config && config.FeaturedDrop ? config.FeaturedDrop : drops[0];
+  return { featuredDrop, upcomingDrops: drops, drops, welcomeMessage };
 }
 
 export async function getDropsPageData(prisma: PrismaClient) {
