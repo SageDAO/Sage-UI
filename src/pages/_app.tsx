@@ -7,7 +7,6 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { SessionProvider } from 'next-auth/react';
 import store from '@/store/store';
 import type { AppProps } from 'next/app';
-import MaintenancePage from '@/components/MaintenancePage';
 import Layout from '@/components/Layout/Layout';
 import { createClient, Provider as WagmiProvider, chain } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -15,10 +14,9 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { parameters } from '@/constants/config';
-import { useEffect, useRef, useState } from 'react';
+import {  useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
-import useCursor from '@/hooks/useCursor';
 
 // set up connectors
 const connectors = [
@@ -52,7 +50,6 @@ function App({ Component, pageProps, router }: AppProps) {
   const { theme } = useTheme();
   const [query, setQuery] = useState<string | null>(null);
   const isMaintenanceOn: boolean = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
-  const { cursorEl } = useCursor();
 
   const themeContent: string = theme === 'dark' ? 'black' : 'white';
   return (
@@ -70,7 +67,6 @@ function App({ Component, pageProps, router }: AppProps) {
                 />
                 <meta name='theme-color' content={themeContent} />
               </Head>
-              <div className='cursor' ref={cursorEl}></div>
               {isMaintenanceOn ? (
                 <LandingPage />
               ) : (
