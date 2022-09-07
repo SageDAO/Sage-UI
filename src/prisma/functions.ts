@@ -24,10 +24,10 @@ export async function getSageMediumData() {
 }
 
 export async function getHomePageData(prisma: PrismaClient) {
-  const dropIncludes = { 
+  const dropIncludes = {
     NftContract: { include: { Artist: true } },
-    Lotteries: true,
-    Auctions: true,
+    Lotteries: { include: { Nfts: true } },
+    Auctions: { include: { Nft: true } },
   };
   let drops: Drop_include_GamesAndArtist[] = await prisma.drop.findMany({
     where: { ...FilterDropApprovedOnly },
@@ -35,7 +35,9 @@ export async function getHomePageData(prisma: PrismaClient) {
     orderBy: { approvedAt: 'desc' },
     take: 8,
   });
-  const config = await prisma.config.findFirst({ include: { FeaturedDrop: { include: dropIncludes } } });
+  const config = await prisma.config.findFirst({
+    include: { FeaturedDrop: { include: dropIncludes } },
+  });
   const welcomeMessage = config ? config.welcomeMessage : '';
   const featuredDrop = config && config.FeaturedDrop ? config.FeaturedDrop : drops[0];
   return { featuredDrop, upcomingDrops: drops, drops, welcomeMessage };
