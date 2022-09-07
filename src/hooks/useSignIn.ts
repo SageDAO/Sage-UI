@@ -37,7 +37,7 @@ export default function useSignIn(isOpen: boolean) {
   }
 
   useEffect(() => {
-    const shouldPromptSignIn: boolean = isOpen && isConnected && sessionStatus !== 'authenticated';
+    const shouldPromptSignIn: boolean = isOpen && isConnected && sessionStatus === 'unauthenticated';
     if (shouldPromptSignIn) {
       handleSignInClick();
     }
