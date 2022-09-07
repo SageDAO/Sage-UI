@@ -23,17 +23,24 @@
   @include m.theme() {
     aspect-ratio: 400/120;
     background-color: m.t(base2) !important;
-    color: c.$white !important;
+    color: m.t(contrast) !important;
     border-radius: 0px;
   }
 }
 .Toastify__toast--rtl {
 }
 .Toastify__toast-body {
+  display: flex;
+  gap: 10px;
 }
 
 /** Used to position the icon **/
 .Toastify__toast-icon {
+  // width: 40px;
+  // background-color: red;
+  transform: scale(1.7);
+  display: flex;
+  justify-content: center;
 }
 
 /** handle the notificaiton color and the text color based on the theme **/
@@ -53,8 +60,9 @@
 }
 
 .Toastify__progress-bar {
-	background-color: red !important;
-	margin-bottom: 20px;
+  @include m.theme() {
+    background-color: m.t(contrast) !important;
+  }
 }
 .Toastify__progress-bar--rtl {
 }
@@ -80,21 +88,33 @@
 /** Classes for the close button. Better use your own closeButton **/
 .Toastify__close-button {
   @include m.theme() {
-    background-color: m.t(contrast2);
-    border-radius: 100%;
-    aspect-ratio: 1/1;
-		opacity: 1;
-    width: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    // background-color: m.t(contrast2);
+    // border-radius: 100%;
+    // aspect-ratio: 1/1;
+    // opacity: 1;
+    // width: 30px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
   }
 }
 
 .Toastify__close-button--default {
 }
+
 .Toastify__close-button > svg {
+  @include m.theme() {
+    color: m.t(contrast);
+    // border-radius: 100%;
+    // aspect-ratio: 1/1;
+    // opacity: 1;
+    // width: 30px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+  }
 }
+
 .Toastify__close-button:hover,
 .Toastify__close-button:focus {
 }
