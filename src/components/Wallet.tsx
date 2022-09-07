@@ -50,7 +50,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   }
 
   const showWalletSelection: boolean = Boolean(!isConnected);
-  const showAuthSection: boolean = Boolean(accountData && isSignedIn);
+  const showAuthSection: boolean = Boolean(isConnected && isSignedIn);
 
   async function handleConnectClick(c: Connector<any, any>) {
     try {
