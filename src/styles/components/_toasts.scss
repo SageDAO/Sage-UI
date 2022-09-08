@@ -21,7 +21,7 @@
 /** Classes for the displayed toast **/
 .Toastify__toast {
   @include m.theme() {
-    aspect-ratio: 400/120;
+    aspect-ratio: 500/120;
     background-color: m.t(base2) !important;
     color: m.t(contrast) !important;
     border-radius: 0px;
