@@ -197,8 +197,14 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                   </div>
                 </div>
               )}
-              {!isOpenForBids && !isEnded && (
-                <div className='games-modal__not-yet-open'>Auction not yet open</div>
+              {!isStarted && !isEnded && (
+                <div className='games-modal__upcoming-section'>
+                  <h1 className='games-modal__countdown-label'>Starts in</h1>
+                  <Countdown
+                    endTime={auction.startTime}
+                    className='games-modal__countdown'
+                  ></Countdown>
+                </div>
               )}
               {isOpenForBids && (
                 <>

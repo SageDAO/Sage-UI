@@ -224,16 +224,19 @@
   }
 }
 
+.games-modal__upcoming-section {
+  display: flex;
+  flex-direction: column;
+	align-items: end;
+	margin-left: auto;
+	width: min-content;
+}
+
 .games-modal__countdown {
-  position: absolute;
-  z-index: 999;
-  margin: 10px;
-  bottom: 0;
-  right: 0;
   @include m.theme() {
     background-color: m.t(base);
     color: m.t(accent);
-    // border: 1px solid m.t(accent);
+    border: 1px solid m.t(accent);
     flex: none;
     width: max-content;
     padding: 10px 20px;
@@ -241,18 +244,16 @@
 }
 
 .games-modal__countdown-label {
-  position: absolute;
-  z-index: 999;
-  margin-bottom: 50px;
-  margin-right: 10px;
-  bottom: 0;
-  right: 0;
   @include m.theme() {
+    // position: absolute;
+    z-index: 999;
+    // margin-bottom: 50px;
+    // margin-right: 10px;
     //background-color: m.t(base);
     color: m.t(accent);
     flex: none;
     width: max-content;
-    padding: 10px 20px;
+    padding: 10px 0;
   }
 }
 

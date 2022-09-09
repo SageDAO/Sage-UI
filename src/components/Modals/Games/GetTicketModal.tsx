@@ -203,8 +203,8 @@ function GetTicketModal({
               </div>
 
               {!isStarted && !isEnded && (
-                <div>
-                  <h1 className='games-modal__countdown-label'>starts in </h1>
+                <div className='games-modal__upcoming-section'>
+                  <h1 className='games-modal__countdown-label'>Starts in</h1>
                   <Countdown
                     endTime={lottery.startTime}
                     className='games-modal__countdown'
