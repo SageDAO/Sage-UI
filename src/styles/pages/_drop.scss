@@ -227,7 +227,7 @@
   line-height: 130%;
   letter-spacing: 0.1em;
   // text-transform: uppercase;
-  text-transform: capitalize;
+  // text-transform: capitalize;
   padding: 1px 0 1px 5px;
   @include b.min-width('medium') {
     padding: 5px 0 5px 5px;

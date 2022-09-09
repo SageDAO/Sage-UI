@@ -165,7 +165,7 @@ function GetTicketModal({
         <section className='games-modal__body'>
           <div className='games-modal__main'>
             <div className='games-modal__main-img-container'>
-              {systemType === 'lotteries' ? (
+              {systemType === 'lottery' ? (
                 <LotterySlider
                   nfts={lottery.Nfts}
                   selectedNftIndex={selectedNftIndex}

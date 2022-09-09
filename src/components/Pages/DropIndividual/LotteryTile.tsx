@@ -38,9 +38,9 @@ export default function LotteryTile({
         isOpen={isOpen}
         ticketCount={tickets}
         closeModal={closeModal}
-        systemType={'lotteries'}
+        systemType={'lottery'}
       ></GetTicketModal>
-      <TileHeader systemType={'lotteries'} editionSize={editionSize}></TileHeader>
+      <TileHeader systemType={'lottery'} editionSize={editionSize}></TileHeader>
       <div className='drop-page__grid-item-media-container'>
         <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
         <div className='drop-page__grid-item-img-overlay'></div>

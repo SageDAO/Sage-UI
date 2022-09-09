@@ -1,11 +1,12 @@
 import System, { SystemTypes } from '@/components/Icons/System';
+import useEditionSize from '@/hooks/useEditionSize';
 interface Props {
   editionSize: number;
   systemType: SystemTypes;
 }
+
 export default function TileHeader({ editionSize, systemType }: Props) {
-  const isOneOfOne: boolean = editionSize === 1;
-  const editionsText: string = isOneOfOne ? '1 of 1' : `${systemType} of ${editionSize} Editions`;
+  const { editionsText } = useEditionSize({ editionSize, systemType });
   return (
     <div className='drop-page__grid-item-header'>
       <h1 className='drop-page__grid-item-header-left'>{editionsText}</h1>
