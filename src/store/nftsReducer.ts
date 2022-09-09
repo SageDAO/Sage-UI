@@ -58,21 +58,6 @@ const nftsApi = baseApi.injectEndpoints({
       query: () => `nfts?action=GetListingNftsByOwner`,
       providesTags: ['Nfts'],
     }),
-    fetchOrCreateNftContract: builder.query<string, { artistAddress: string; signer: Signer }>({
-      queryFn: async ({ artistAddress, signer }, { dispatch }, _, fetchWithBQ) => {
-        try {
-          const contractAddress = await _fetchOrCreateNftContract(
-            artistAddress,
-            signer,
-            fetchWithBQ
-          );
-          return { data: contractAddress };
-        } catch (e) {
-          console.log(e);
-          return { data: 'false' };
-        }
-      },
-    }),
     mintSingleNft: builder.mutation<number, MintRequest>({
       queryFn: async (mintRequest, { dispatch }, _, fetchWithBQ) => {
         var nftId = 0;
@@ -380,7 +365,6 @@ export const {
   useGetSearchableNftDataQuery,
   useGetListingNftsByArtistQuery,
   useGetListingNftsByOwnerQuery,
-  useFetchOrCreateNftContractQuery,
   useMintSingleNftMutation,
   useBuyFromSellOfferMutation,
   useSellFromBuyOfferMutation,

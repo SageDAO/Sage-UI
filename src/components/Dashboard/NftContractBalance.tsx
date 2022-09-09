@@ -12,7 +12,7 @@ export default function NftContractBalance({ user }) {
   });
 
   const handleWithdrawClick = async () => {
-    if (confirm(`Confirm full withdrawal?\n\nArtist: ${balance?.artistSplit} ASH\nSage: ${balance?.sageSplit} ASH`)) {
+    if (confirm(`Confirm full withdrawal?\n\nArtist: ${balance?.artistSplit} ASH\SAGE: ${balance?.sageSplit} ASH`)) {
       await withdrawArtistBalance({
         artistContractAddress: user.NftContract?.contractAddress,
         signer: signer as Signer,

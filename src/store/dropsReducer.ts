@@ -1,7 +1,6 @@
 import { ethers, Signer } from 'ethers';
 import {
   DropFull,
-  DropWithArtist,
   Drop_include_GamesAndArtist,
   Splitter_include_Entries,
 } from '@/prisma/types';
@@ -25,7 +24,7 @@ const dropsApi = baseApi.injectEndpoints({
     approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
       queryFn: async ({ dropId, signer }, { dispatch }, _, fetchWithBQ) => {
         try {
-          await deployDrop(dropId, signer, dispatch, fetchWithBQ);
+          await deployDrop(dropId, signer, fetchWithBQ);
           dispatch(dropsApi.util.invalidateTags(['PendingDrops'])); // refetch pending drops
           return { data: true };
         } catch (e) {
@@ -44,7 +43,7 @@ const dropsApi = baseApi.injectEndpoints({
   }),
 });
 
-async function deployDrop(dropId: number, signer: Signer, dispatch: any, fetchWithBQ: any) {
+async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
   inspectDropGamesEndTimes(drop);
   //await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);

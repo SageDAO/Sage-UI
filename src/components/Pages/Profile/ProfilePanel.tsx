@@ -70,7 +70,7 @@ export default function ProfilePanel({ isArtist }: Props) {
       toast.warn('Please provide a valid webpage URL');
       return;
     }
-    if (state.bio.length > 400) {
+    if (state.bio && state.bio.length > 400) {
       toast.warn('Please keep bio to 400 chars (max)');
       return;
     }
@@ -211,8 +211,8 @@ export default function ProfilePanel({ isArtist }: Props) {
               <div className='profile-panel__bio-group'>
                 <h2 className='profile-panel__bio-label'>
                   about section{' '}
-                  <span style={state.bio.length > 400 ? { color: 'red' } : {}}>
-                    ({state.bio.length}/400 chars max)
+                  <span style={state.bio && state.bio.length > 400 ? { color: 'red' } : {}}>
+                    ({state.bio?.length || 0}/400 chars max)
                   </span>
                 </h2>
                 <textarea

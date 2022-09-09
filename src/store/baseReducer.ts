@@ -6,6 +6,7 @@ export const baseApi = createApi({
   tagTypes: [
     'AllUsers',
     'ArtistBalance',
+    'ArtistNftContract',
     'Auction',
     'AuctionState',
     'Config',

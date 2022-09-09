@@ -7,6 +7,11 @@ import LoaderSpinner from '@/components/LoaderSpinner';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
 import { animated, Spring } from 'react-spring';
 import FileInputWithPreview from '@/components/FileInputWithPreview';
+import {
+  useDeployArtistNftContractMutation,
+  useGetArtistNftContractAddressQuery,
+} from '@/store/artistsReducer';
+import { useSession } from 'next-auth/react';
 
 interface State {
   file: File | null;
@@ -29,7 +34,15 @@ const INITIAL_STATE: State = {
 export default function CreationsPanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [mintSingleNft, { isLoading: isMinting }] = useMintSingleNftMutation();
+  const [deployContract, { isLoading: isDeploying }] = useDeployArtistNftContractMutation();
   const { data: signer } = useSigner();
+  const { data: sessionData } = useSession();
+  const { data: artistNftContractAddress } = useGetArtistNftContractAddressQuery(
+    sessionData?.address as string,
+    {
+      skip: !sessionData,
+    }
+  );
 
   function handleTitleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
@@ -64,6 +77,13 @@ export default function CreationsPanel() {
   function handleFileInputChange(file: File | null) {
     setState((prevState) => {
       return { ...prevState, file };
+    });
+  }
+
+  async function handleDeployContractButtonClick() {
+    await deployContract({
+      artistAddress: sessionData?.address as string,
+      signer: signer as Signer,
     });
   }
 
@@ -110,7 +130,7 @@ export default function CreationsPanel() {
           return (
             <animated.h1 style={styles} className='profile-page__tabs-panel-header'>
               creations panel
-              <span className='profile-page__tabs-panel-subheader'>edit your sage profile</span>
+              <span className='profile-page__tabs-panel-subheader'>mint your own artwork</span>
             </animated.h1>
           );
         }}
@@ -120,6 +140,20 @@ export default function CreationsPanel() {
           return (
             <animated.div style={styles} className='creations-panel'>
               <form className='creations-panel__form'>
+                {artistNftContractAddress ? (
+                  <span className='profile-page__tabs-panel-contract-address'>
+                    Your SAGE NFT Contract: {artistNftContractAddress}
+                  </span>
+                ) : (
+                  <button
+                    disabled={isDeploying || isMinting}
+                    className='creations-panel__submit-button'
+                    type='button'
+                    onClick={handleDeployContractButtonClick}
+                  >
+                    {isDeploying || isMinting ? <LoaderSpinner /> : `deploy your SAGE NFT contract`}
+                  </button>
+                )}
                 <div className='creations-panel__file-upload-group'>
                   <FileInputWithPreview onFileChange={handleFileInputChange} />
                   <h1 className='creations-panel__file-upload-label'>
@@ -162,7 +196,7 @@ export default function CreationsPanel() {
                   </select>
                 </div>
                 <div className='creations-panel__file-title-group'>
-                  <h1 className='creations-panel__file-title-label'>artwork price (ash) *</h1>
+                  <h1 className='creations-panel__file-title-label'>artwork price (ASH) *</h1>
                   <input
                     type='number'
                     value={state.price}
@@ -171,12 +205,12 @@ export default function CreationsPanel() {
                   />
                 </div>
                 <button
-                  disabled={isMinting}
+                  disabled={isMinting || isDeploying || !artistNftContractAddress}
                   className='creations-panel__submit-button'
                   type='button'
                   onClick={handleMintButtonClick}
                 >
-                  {isMinting ? <LoaderSpinner /> : `mint artwork`}
+                  {isMinting || isDeploying ? <LoaderSpinner /> : `mint artwork`}
                 </button>
               </form>
             </animated.div>

@@ -262,6 +262,21 @@
   @include panel-subheader;
 }
 
+.profile-page__tabs-panel-contract-address {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 50px;
+  text-align: center;
+  letter-spacing: 0.15em;
+  height: 50px;
+
+  @include m.theme() {
+    border: 1px solid m.t(contrast2);
+    color: m.t(contrast2);
+  }
+}
+
 //---------------------------Profile Panel--------------------------------
 
 .profile-panel {

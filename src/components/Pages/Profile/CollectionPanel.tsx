@@ -34,7 +34,7 @@ export default function CollectionPanel() {
             <animated.h1 style={styles} className='profile-page__tabs-panel-header'>
               collection
               <span className='profile-page__tabs-panel-subheader'>
-                your collection of artworks on sage
+                your collection of artworks on SAGE
               </span>
             </animated.h1>
           );

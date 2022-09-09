@@ -4,6 +4,7 @@ import { getERC20Contract, getNFTContract } from '@/utilities/contracts';
 import { parameters } from '@/constants/config';
 import { playTxSuccessSound } from '@/utilities/sounds';
 import { promiseToast } from '@/utilities/toast';
+import { _fetchOrCreateNftContract } from './nftsReducer';
 
 export interface NftContractBalance {
   balance: string;
@@ -30,6 +31,29 @@ const artistsApi = baseApi.injectEndpoints({
       },
       providesTags: ['ArtistBalance'],
     }),
+    getArtistNftContractAddress: builder.query<string | null, string>({
+      queryFn: async (artistAddress, {}, _, fetchWithBQ) => {
+        const { data: response } = await fetchWithBQ(
+          `drops?action=GetNftContractAddress&address=${artistAddress}`
+        );
+        const data = (response as any).contractAddress;
+        console.log(`getArtistNftContractAddress() :: ${data}`);
+        return { data };
+      },
+      providesTags: ['ArtistNftContract'],
+    }),
+    deployArtistNftContract: builder.mutation<string, { artistAddress: string; signer: Signer }>({
+      queryFn: async ({ artistAddress, signer }, {}, _, fetchWithBQ) => {
+        const artistNftContractAddress = await _fetchOrCreateNftContract(
+          artistAddress,
+          signer,
+          fetchWithBQ
+        );
+        console.log(`deployArtistNftContract() :: ${artistNftContractAddress}`);
+        return { data: artistNftContractAddress };
+      },
+      invalidatesTags: ['ArtistNftContract'],
+    }),
     withdrawArtistBalance: builder.mutation<
       null,
       { artistContractAddress: string; signer: Signer }
@@ -48,4 +72,9 @@ const artistsApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetArtistBalanceQuery, useWithdrawArtistBalanceMutation } = artistsApi;
+export const {
+  useGetArtistBalanceQuery,
+  useGetArtistNftContractAddressQuery,
+  useDeployArtistNftContractMutation,
+  useWithdrawArtistBalanceMutation,
+} = artistsApi;
