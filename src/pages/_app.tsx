@@ -59,7 +59,7 @@ function App({ Component, pageProps, router }: AppProps) {
           <ApolloProvider client={apolloClient}>
             <SearchContext.Provider value={{ query, setQuery }}>
               <Head>
-                <title>Sage Marketplace</title>
+                <title>SAGE</title>
                 <link rel='icon' href='/icons/sage.svg' />
                 <meta
                   name='viewport'

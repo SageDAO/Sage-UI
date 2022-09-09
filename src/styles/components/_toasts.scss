@@ -7,14 +7,19 @@
 /** Used to define the position of the ToastContainer **/
 .Toastify__toast-container--top-left {
 }
+
 .Toastify__toast-container--top-center {
 }
+
 .Toastify__toast-container--top-right {
 }
+
 .Toastify__toast-container--bottom-left {
 }
+
 .Toastify__toast-container--bottom-center {
 }
+
 .Toastify__toast-container--bottom-right {
 }
 
@@ -27,11 +32,13 @@
     border-radius: 0px;
   }
 }
+
 .Toastify__toast--rtl {
 }
+
 .Toastify__toast-body {
   display: flex;
-  gap: 10px;
+  gap: 20px;
 }
 
 /** Used to position the icon **/
@@ -70,20 +77,28 @@
     background-color: m.t(base) !important;
   }
 }
+
 .Toastify__progress-bar--rtl {
 }
+
 .Toastify__progress-bar-theme--light {
 }
+
 .Toastify__progress-bar-theme--dark {
 }
+
 .Toastify__progress-bar--info {
 }
+
 .Toastify__progress-bar--success {
 }
+
 .Toastify__progress-bar--warning {
 }
+
 .Toastify__progress-bar--error {
 }
+
 /** colored notifications share the same progress bar color **/
 .Toastify__progress-bar-theme--colored.Toastify__progress-bar--info,
 .Toastify__progress-bar-theme--colored.Toastify__progress-bar--success,

@@ -1,7 +1,10 @@
+import Logotype from '@/components/Logotype';
+
 export default function howtobuyash() {
   return (
-    <>
-      <div className='howtobuyash-header'>HOW TO BUY ASH</div>
+    <div className='howtobuyash'>
+      <Logotype></Logotype>
+      <div className='howtobuyash-header'>How to buy ASH </div>
       <div className='howtobuyash-text'>
         <p>
           <span className='howtobuyash-bullet'>1.</span> Go to{' '}
@@ -30,6 +33,14 @@ export default function howtobuyash() {
           Uniswap.
         </p>
       </div>
-    </>
+      <div className='howtobuyash-header'>Earning Pixels </div>
+      <div className='howtobuyash-text'>
+        <p>
+          When connecting to the platform, you immediately start
+          earning pixels if you have ASH tokens. You will earn .25 Pixels a day per ASH. This reward
+          is capped at 1000 ASH and will earn you 250 Pixels a day.
+        </p>
+      </div>
+    </div>
   );
 }

@@ -6,7 +6,7 @@ import useSageRoutes from '@/hooks/useSageRoutes';
 import Copyright from '../Branding/Copyright';
 
 export default function Footer() {
-  const { pushToHowToBuyAsh, pushToPrivacyPolicy, pushToTermsOfService } = useSageRoutes();
+  const { pushToHowToBuyAsh, pushToPrivacyPolicy, pushToTermsOfService, pushToSubmissions } = useSageRoutes();
 
   return (
     <div className='footer' data-cy='footer'>
@@ -34,7 +34,7 @@ export default function Footer() {
               <div className='footer__middle-item-header'>contact sage</div>
               <div className='footer__middle-item-content'>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='/creators/submissions'>Artists: Apply</a>
+                  <span onClick={pushToSubmissions}>Artists Apply</span>
                 </h1>
                 <h1 className='footer__middle-item-content-link'>
                   <a href='mailto:contact@sage.art'>Business Inquiry</a>
@@ -48,7 +48,7 @@ export default function Footer() {
               <div className='footer__middle-item-header'>Resources</div>
               <div className='footer__middle-item-content'>
                 <div className='footer__middle-item-content-link'>
-                  <a onClick={pushToHowToBuyAsh}>How to Buy Ash</a>
+                  <a onClick={pushToHowToBuyAsh}>Get ASH & Earn Pixels</a>
                 </div>
 
                 <div className='footer__middle-item-content-link'>
@@ -64,7 +64,7 @@ export default function Footer() {
               <div className='footer__middle-item-header'>press</div>
               <div className='footer__middle-item-content'>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='/press'>Sage Press</a>
+                  <a href='/press'>SAGE Press</a>
                 </h1>
               </div>
             </ul>

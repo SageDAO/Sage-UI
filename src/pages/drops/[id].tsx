@@ -90,7 +90,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                 <i className='drop-page__header-drop-name-italic'>{drop.name},</i> by{' '}
                 {artist.username}
               </h1>
-              <p className='drop-page__header-drop-description'>{drop.description}</p>
+              <p className='drop-page__header-drop-description'>
+							{drop.description}
+              </p>
               <div className='drop-page__header-drop-details'>
                 <h1 className='drop-page__header-drop-details-item'>
                   Minted by: {artist.username}

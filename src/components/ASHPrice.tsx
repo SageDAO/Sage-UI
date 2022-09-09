@@ -1,3 +1,26 @@
+import useSageRoutes from '@/hooks/useSageRoutes';
+import { useEffect, useState } from 'react';
+
+async function getAshPrice() {}
+
 export default function ASHPrice() {
-  return <div className='ash-price'>$ASH: 2000 USD</div>;
+  const [priceUSD, setPriceUSD] = useState<number>(null);
+  const { pushToHowToBuyAsh } = useSageRoutes();
+  useEffect(() => {
+    fetch('https://min-api.cryptocompare.com/data/price?fsym=ASH&tsyms=USD').then((res) => {
+      res.json().then(({ USD }) => {
+        setPriceUSD(USD);
+      });
+    });
+  }, []);
+  return (
+    <div
+      onClick={() => {
+        pushToHowToBuyAsh();
+      }}
+      className='ash-price'
+    >
+      $ASH: {priceUSD} USD
+    </div>
+  );
 }
