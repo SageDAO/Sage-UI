@@ -1,9 +1,9 @@
 import FooterLogoSVG from '@/public/branding/footer-logo.svg';
 import MottoSVG from '@/public/branding/motto.svg';
 import Socials from '@/components/Socials';
-import { useRouter } from 'next/router';
 import { SearchInput } from '../SearchInput';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import Copyright from '../Branding/Copyright';
 
 export default function Footer() {
   const { pushToHowToBuyAsh, pushToPrivacyPolicy, pushToTermsOfService } = useSageRoutes();
@@ -84,7 +84,7 @@ export default function Footer() {
         </div>
         <div className='footer__bottom'>
           <h4 className='footer__copyright'>
-            © 2022 SAGE<sup>TM</sup>. ALL RIGHTS RESERVED.
+            <Copyright />
           </h4>
         </div>
       </div>

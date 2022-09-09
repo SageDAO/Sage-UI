@@ -4,9 +4,9 @@ import Wallet from '@/components/Wallet';
 import { useRouter } from 'next/router';
 import useWindowDimensions from '@/hooks/useWindowSize';
 import Socials from '@/components/Socials';
-import useSignIn from '@/hooks/useSignIn';
 import ASHPrice from '../ASHPrice';
 import MenuToggle from './MenuToggle';
+import Copyright from '../Branding/Copyright';
 
 interface Props extends ModalProps {
   toggleMenu: any;
@@ -79,7 +79,9 @@ export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
           <Socials></Socials>
         </div>
       </section>
-      <h1 className='mobile-menu__copyright'>SAGE™️ - ALL RIGHTS RESERVED 2022</h1>
+      <h1 className='mobile-menu__copyright'>
+        <Copyright></Copyright>
+      </h1>
     </div>
   );
 }
