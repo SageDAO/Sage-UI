@@ -139,7 +139,7 @@ async function getPrizesByUser(walletAddress: User['walletAddress'], response: N
       console.log(e);
     }
   }
-  console.log(`getUnclaimedPrizes(${walletAddress}) :: ${prizeNfts.length}`);
+  console.log(`getPrizesByUser(${walletAddress}) :: ${prizeNfts.length}`);
   response.status(200).json(prizeNfts);
 }
 
@@ -151,6 +151,7 @@ async function getPrizesByUserAndLottery(
   let prizeNfts: GamePrize[] = [];
   if (!walletAddress || walletAddress == '') {
     response.status(200).json(prizeNfts);
+    return;
   }
   try {
     const prizes: PrizeWithNftAndArtist[] | null = await prisma.prizeProof.findMany({
