@@ -8,24 +8,27 @@ export default function submissions() {
       <div className='submissions-page__logotype-container'>
         <Logotype></Logotype>
       </div>
-      <h1 className='submissions-page__header'>Artist Submission.</h1>
+      <h1 className='submissions-page__header'>Artist Submission</h1>
       <section className='submissions-page__guidelines-group'>
-        <h1 className='submissions-page__guidelines-header'>Submissions Guidelines</h1>
+        <h1 className='submissions-page__guidelines-header'>Submission Guidelines</h1>
         <p className='submissions-page__guidelines-text'>
-          Sage is a highly curated platform, we take the application process very seriously that’s
-          the reason we changed the way how artist can apply to be a creator on the sage platform.
+          SAGE is a highly curated platform, we take the application process very seriously that’s
+          the reason we changed the way how artist can apply to be a creator on the SAGE platform.
           Artist should present their works in a pdf format and submit it below. We would like you
-          to take your time to present yourself and your creations.
+          to <span className='submissions-page__emphasis'>take your time</span> to present yourself
+          and your creations.
         </p>
       </section>
       <section className='submissions-page__guidelines-group'>
-        <h1 className='submissions-page__guidelines-header'>Standards Guidelines</h1>
+        <h1 className='submissions-page__guidelines-header'>Standards</h1>
         <p className='submissions-page__guidelines-text'>
-          When it comes to digital art, guidlines are provided so we can make sure not only the
-          quality of the works are up to pair but also the standards of how the works will look and
-          be presented in an exhibition outside of web.This standards are currently what we look for
-          when checking the applications.In terms of animation or 3d rendering artwork we look for a
-          quality of 4k standard and up.
+          When it comes to digital art, we provide specific guidelines regarding technical standards
+          and image resolution. Artists’ works must meet these requirements. We do this not only to
+          ensure that the quality of the work is up to par but also to make certain that the work
+          will meet our expectations of how the featured art will look—and be presented—in an
+          exhibition outside the web. These standards are currently what we look for when checking
+          artists’ applications. In terms of animation or 3D-rendering artwork, we seek a quality
+          standard of 4k and up.
         </p>
       </section>
       <section className='submissions-page__aspect-ratios-section'>
@@ -50,21 +53,13 @@ export default function submissions() {
         </div>
       </section>
       <section className='submissions-page__guidelines-group'>
-        <h1 className='submissions-page__guidelines-header'>some help</h1>
-        <p className='submissions-page__guidelines-text'>
-          Sage is a highly curated platform, we take the application process very seriously that’s
-          the reason we changed the way how artist can apply to be a creator on the sage platform.
-          Artist should present their works in a PDF format and submit it below. We would like you
-          to take your time to present yourself and your creations.
-          <span className='submissions-page__design-icons'>
-            <AdobeIllustratorSVG className='submissions-page__design-icons-svg'></AdobeIllustratorSVG>
-            <IndesignSVG className='submissions-page__design-icons-svg'></IndesignSVG>
-          </span>
-        </p>
+        <span className='submissions-page__design-icons'>
+          <AdobeIllustratorSVG className='submissions-page__design-icons-svg'></AdobeIllustratorSVG>
+          <IndesignSVG className='submissions-page__design-icons-svg'></IndesignSVG>
+        </span>
       </section>
-
       <section className='submissions-page__guidelines-group'>
-        <h1 className='submissions-page__guidelines-header'>how to send application?</h1>
+        <h1 className='submissions-page__guidelines-header'>How to Submit Your Application</h1>
         <p className='submissions-page__guidelines-text'>
           Once ready, please send your application to:
           <a href='mailto:creators@sage.art'> creators@sage.art</a>

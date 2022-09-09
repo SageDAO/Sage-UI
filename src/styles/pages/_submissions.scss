@@ -1,6 +1,14 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/breakpoints' as b;
+
+// UTILS
+.submissions-page__emphasis {
+	// font-style: italic;
+}
+
+// ----------------------------------------------- * //
+
 .submissions-page {
   @include m.page;
   margin-left: auto;
