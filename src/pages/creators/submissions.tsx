@@ -53,12 +53,6 @@ export default function submissions() {
         </div>
       </section>
       <section className='submissions-page__guidelines-group'>
-        <span className='submissions-page__design-icons'>
-          <AdobeIllustratorSVG className='submissions-page__design-icons-svg'></AdobeIllustratorSVG>
-          <IndesignSVG className='submissions-page__design-icons-svg'></IndesignSVG>
-        </span>
-      </section>
-      <section className='submissions-page__guidelines-group'>
         <h1 className='submissions-page__guidelines-header'>How to Submit Your Application</h1>
         <p className='submissions-page__guidelines-text'>
           Once ready, please send your application to:

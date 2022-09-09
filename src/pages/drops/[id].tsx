@@ -16,13 +16,16 @@ import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { reformatDate } from '@/utilities/strings';
 
+//type drop page data
+type DropPageData = Awaited<ReturnType<typeof getIndividualDropsPageData>>;
+
 //determines the type interface received from getStaticProps()
 interface Props {
-  drop: DropType;
-  artist: User;
-  lotteries: Lottery_include_Nft[];
-  drawings: Lottery_include_Nft[];
-  auctions: Auction_include_Nft[];
+  drop: DropPageData;
+  artist: DropPageData['NftContract']['Artist'];
+  lotteries: DropPageData['Lotteries'];
+  drawings: DropPageData['Lotteries'];
+  auctions: DropPageData['Auctions'];
 }
 
 function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
@@ -64,18 +67,17 @@ function computeDropEditionSize({
 }
 
 export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
-  const systems = computeDropSystems({ lotteries, auctions, drawings });
-  const editionSize = computeDropEditionSize({ lotteries, auctions, drawings });
+  const systems = computeDropSystems({ lottery: lotteries, auction: auctions, drawing: drawings });
   const { data: sessionData } = useSession();
   const ticketCountMap = useTicketCount(
     new Array().concat(drawings, lotteries),
     sessionData?.address as string
   );
-
+  const bannerSrc = drop.bannerImageS3Path;
   return (
     <>
       <div className='drop-page__banner-base'>
-        <Image src={drop.bannerImageS3Path} layout='fill' objectFit='cover' />
+        <Image src={bannerSrc} layout='fill' objectFit='cover' />
       </div>
       <div className='drop-page'>
         <header className='drop-page__header'>
@@ -88,7 +90,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                 <i className='drop-page__header-drop-name-italic'>{drop.name},</i> by{' '}
                 {artist.username}
               </h1>
-              <p className='drop-page__header-drop-description'>{drop.description}</p>
+              <p className='drop-page__header-drop-description'>
+							{drop.description}
+              </p>
               <div className='drop-page__header-drop-details'>
                 <h1 className='drop-page__header-drop-details-item'>
                   Minted by: {artist.username}
@@ -139,16 +143,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               );
             })}
             {auctions.map((a) => {
-              return (
-                <AuctionTile
-                  key={a.id}
-                  s3Path={a.Nft.s3Path}
-                  dropName={drop.name}
-                  artist={artist}
-                  editionSize={a.Nft.numberOfEditions}
-                  auction={a}
-                />
-              );
+              return <AuctionTile key={a.id} dropName={drop.name} artist={artist} auction={a} />;
             })}
           </div>
         </section>

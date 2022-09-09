@@ -37,9 +37,9 @@ export default function DrawingTile({
         isOpen={isOpen}
         closeModal={closeModal}
         ticketCount={tickets}
-        systemType='drawings'
+        systemType='drawing'
       ></GetTicketModal>
-      <TileHeader editionSize={editionSize} systemType='drawings'></TileHeader>
+      <TileHeader editionSize={editionSize} systemType='drawing'></TileHeader>
       <div className='drop-page__grid-item-media-container'>
         <BaseMedia className='drop-page__grid-item-media-src' src={imgSrc}></BaseMedia>
         <div className='drop-page__grid-item-media-overlay'></div>

@@ -54,9 +54,6 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                           , by {d.NftContract.Artist.username}
                         </mark>
                         <br />
-                        <mark className='home-page__upcoming-drops-tile-tag-item'>
-                          Curated
-                        </mark>
                       </h3>
                     </div>
                   );
@@ -106,7 +103,6 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                 , by {d.NftContract.Artist.username}
               </mark>
               <br />
-              <mark className='home-page__upcoming-drops-tile-tag-item'>Curated</mark>
             </h1>
           </div>
         );

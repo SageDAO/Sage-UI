@@ -1,14 +1,14 @@
 import { Lottery, Auction } from '@prisma/client';
 import LotterySVG from '@/public/icons/systems/lotteries.svg';
-import AuctionsSVG from '@/public/icons/systems/auctions.svg';
-import DrawingsSVG from '@/public/icons/systems/drawings.svg';
+import AuctionSVG from '@/public/icons/systems/auctions.svg';
+import DrawingSVG from '@/public/icons/systems/drawings.svg';
 
-export type SystemTypes = 'drawings' | 'auctions' | 'lotteries' | 'listings';
+export type SystemTypes = 'drawing' | 'auction' | 'lottery' | 'listing';
 
 type Games = {
-  lotteries?: Lottery[];
-  drawings?: Lottery[];
-  auctions?: Auction[];
+  lottery?: Lottery[];
+  drawing?: Lottery[];
+  auction?: Auction[];
 };
 
 export function computeDropSystems(games: Games): SystemTypes[] {
@@ -28,14 +28,14 @@ interface Props {
 }
 
 export default function System({ type }: Props) {
-  if (type === 'lotteries') {
+  if (type === 'lottery') {
     return <LotterySVG className='systems__svg' />;
   }
-  if (type === 'auctions') {
-    return <AuctionsSVG className='systems__svg' />;
+  if (type === 'auction') {
+    return <AuctionSVG className='systems__svg' />;
   }
-  if (type === 'drawings') {
-    return <DrawingsSVG className='systems__svg' />;
+  if (type === 'drawing') {
+    return <DrawingSVG className='systems__svg' />;
   }
 
   return null;

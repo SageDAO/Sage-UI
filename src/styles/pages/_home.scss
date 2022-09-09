@@ -54,7 +54,7 @@
   font-size: clamp(25px, 3.8vw, 50px);
   line-height: clamp(25px, 1.2em, 64px);
   padding: clamp(30px, 5vw, 120px) 0;
-  // text-transform: capitalize;
+  text-transform: uppercase;
   @include b.min-width('medium') {
     // text-align: center;
   }
@@ -184,7 +184,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   @include m.theme() {
     background-color: m.t(base);
     color: m.t(contrast);
-    padding: 0 4px;
+    padding: 0 8px;
   }
 }
 

@@ -1,26 +1,36 @@
 import Countdown from '@/components/Countdown';
 import { BaseMedia } from '@/components/Media/BaseMedia';
-import PlaceBidModal, { computeAuctionStatus } from '@/components/Modals/Games/PlaceBidModal';
+import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
+import useAuction from '@/hooks/useAuction';
 import useModal from '@/hooks/useModal';
 import { Auction_include_Nft, User } from '@/prisma/types';
-import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
-import { transformTitle } from '@/utilities/strings';
 import React from 'react';
 import TileHeader from './TileHeader';
 
 interface Props {
-  s3Path: string;
   dropName: string;
   artist: User;
-  editionSize: number;
   auction: Auction_include_Nft;
 }
 
-export default function AuctionTile({ artist, dropName, s3Path, editionSize, auction }: Props) {
-  const { data: auctionState } = useGetAuctionStateQuery(auction.id);
+export default function AuctionTile({ artist, dropName, auction }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
 
-  const { isOpenForBids, isEnded, isStarted } = computeAuctionStatus(auction, auctionState!);
+  const {
+    nftPath,
+    auctionFocusText,
+    editionSize,
+    isStarted,
+    isOpenForBids,
+    endTime,
+    startTime,
+    artistName,
+    auctionState,
+    nftName,
+  } = useAuction({
+    auction,
+    artist,
+  });
 
   if (!auctionState) return null;
 
@@ -28,39 +38,34 @@ export default function AuctionTile({ artist, dropName, s3Path, editionSize, auc
     <div onClick={openModal} className='drop-page__grid-item'>
       <PlaceBidModal
         auction={auction}
-        auctionState={auctionState}
         artist={artist}
         dropName={dropName}
         isOpen={isOpen}
         closeModal={closeModal}
       />
-      <TileHeader editionSize={editionSize} systemType='auctions' />
+      <TileHeader editionSize={editionSize} systemType='auction' />
       <div className='drop-page__grid-item-media-container'>
-        <BaseMedia className='drop-page__grid-item-media-src' src={s3Path} />
+        <BaseMedia className='drop-page__grid-item-media-src' src={nftPath} />
         <div className='drop-page__grid-item-media-overlay'></div>
-        <div className='drop-page__grid-item-focus'>
-          {isOpenForBids ? 'place bid' : isEnded ? 'results' : 'starting soon'}
-        </div>
+        <div className='drop-page__grid-item-focus'>{auctionFocusText}</div>
       </div>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
-            {dropName} by {artist.username}
+            {dropName} by {artistName}
           </h1>
-          <h1 className='drop-page__grid-item-info-game-name'>
-            {transformTitle(auction.Nft.name)}
-          </h1>
+          <h1 className='drop-page__grid-item-info-game-name'>{nftName}</h1>
         </div>
         <div className='drop-page__grid-item-info-right'>
           {!isStarted && (
             <Countdown
-              endTime={auction.startTime}
+              endTime={startTime}
               className='drop-page__grid-item-info-countdown'
             ></Countdown>
           )}
           {isOpenForBids && (
             <Countdown
-              endTime={auctionState?.endTime || auction.endTime}
+              endTime={endTime}
               className='drop-page__grid-item-info-countdown'
             ></Countdown>
           )}

@@ -14,7 +14,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { parameters } from '@/constants/config';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
 
@@ -59,7 +59,7 @@ function App({ Component, pageProps, router }: AppProps) {
           <ApolloProvider client={apolloClient}>
             <SearchContext.Provider value={{ query, setQuery }}>
               <Head>
-                <title>SAGE Marketplace</title>
+                <title>SAGE</title>
                 <link rel='icon' href='/icons/sage.svg' />
                 <meta
                   name='viewport'

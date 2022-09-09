@@ -37,8 +37,8 @@ function drops({ drops }: Props) {
             <div className='drops-page__subheader-content'>
               <h1 className='drops-page__subheader-label'>SAGE-Curated live and upcoming drops.</h1>
               <h2 className='drops-page__subheader-info'>
-                SAGE upcoming drops are carefully curated to meet the standards and new structures
-                in NFT assets—a vision in the Crypto space.
+                SAGE drops are carefully curated to meet the standards and new structures
+                in NFT assets.
               </h2>
             </div>
           </div>

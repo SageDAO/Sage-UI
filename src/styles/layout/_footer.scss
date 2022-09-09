@@ -25,7 +25,7 @@
 .footer__top {
   @include footer-section;
   min-height: 150px;
-  @include b.min-width('large') {
+  @include b.min-width('small') {
     min-height: 20vh;
   }
 }
@@ -172,11 +172,11 @@
 
 .footer__bottom {
   @include footer-section;
-  min-height: 150px;
-  @include b.min-width('large') {
+  height: 30px;
+  justify-content: center;
+  @include b.min-width('small') {
     min-height: 20vh;
   }
-  justify-content: center;
 }
 
 .footer__copyright {

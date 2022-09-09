@@ -14,10 +14,10 @@ import BidHistoryTable from '@/components/Games/BidHistoryTable';
 import Countdown from '@/components/Countdown';
 import ArrowRightSVG from '@/public/interactive/arrow-right.svg';
 import { transformTitle } from '@/utilities/strings';
+import useAuction from '@/hooks/useAuction';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
-  auctionState: AuctionState;
   artist: User;
   dropName: string;
 }
@@ -49,11 +49,29 @@ export function computeAuctionStatus(auction: Auction_include_Nft, auctionState:
 }
 
 //@scss : '@/styles/components/_games-modal.scss'
-function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, dropName }: Props) {
+function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props) {
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
-  const { isOpenForBids, isStarted, isEnded } = computeAuctionStatus(auction, auctionState);
+
+  const {
+    nftName,
+    auctionState,
+    nftPath,
+    artistName,
+    isStarted,
+    isEnded,
+    isOpenForBids,
+    editionSize,
+    startTime,
+    endTime,
+    bidLabel,
+    highestBidder,
+    highestBid,
+    nextMinBid,
+    buttonText,
+    description,
+  } = useAuction({ auction, artist });
 
   function toggleBidHistory() {
     setState((prevState) => {
@@ -87,7 +105,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
 
   function handleNewAuctionState() {
     if (!auctionState) return;
-    if (auctionState.nextMinBid != 0) {
+    if (nextMinBid != 0) {
       const nextMinBid = roundNextMinBid(auctionState.nextMinBid);
       setState((prevState) => {
         return {
@@ -101,7 +119,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
 
   function handleStartingBid() {
     if (!auction.minimumPrice) return;
-    if (auctionState?.nextMinBid) return;
+    if (nextMinBid) return;
     setState((prevState) => {
       return {
         ...prevState,
@@ -119,11 +137,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
     handleNewAuctionState();
   }, [auctionState]);
 
-  const statusLabel = auction.winnerAddress
-    ? 'winning bid'
-    : computeAuctionStatus(auction, auctionState)
-    ? 'current highest bid'
-    : 'highest bid';
+  // const statusLabel = auction.winnerAddress
+  //   ? 'winning bid'
+  //   : computeAuctionStatus(auction, auctionState)
+  //   ? 'current highest bid'
+  //   : 'highest bid';
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -137,33 +155,25 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
         <div className='games-modal__body'>
           <section className='games-modal__main'>
             <div className='games-modal__main-img-container'>
-              <BaseMedia src={auction.Nft.s3Path} />
+              <BaseMedia src={nftPath} />
               {!isOpenForBids && (
-                <Countdown
-                  endTime={auction.startTime}
-                  className='games-modal__countdown'
-                ></Countdown>
+                <Countdown endTime={startTime} className='games-modal__countdown'></Countdown>
               )}
               {isOpenForBids && (
-                <Countdown
-                  endTime={auctionState?.endTime}
-                  className='games-modal__countdown'
-                ></Countdown>
+                <Countdown endTime={endTime} className='games-modal__countdown'></Countdown>
               )}
             </div>
             <div className='games-modal__main-content'>
               <div>
                 <h1 className='games-modal__drop-name'>
-                  {transformTitle(dropName)} by {artist.username}
+                  {transformTitle(dropName)} by {artistName}
                 </h1>
-                <h1 className='games-modal__game-name'>{transformTitle(auction.Nft.name)}</h1>
+                <h1 className='games-modal__game-name'>{nftName}</h1>
               </div>
-              <p className='games-modal__game-description'>
-                {auction.Nft.description || 'this artwork has no description provided.'}
-              </p>
+              <p className='games-modal__game-description'>{description}</p>
               <div className='games-modal__system'>
                 <div className='games-modal__system-icon-container'>
-                  <System type='auctions'></System>
+                  <System type='auction'></System>
                 </div>
                 <h1 className='games-modal__system-info'>This is an auction</h1>
               </div>
@@ -172,11 +182,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
                   <div className='games-modal__bid-info-group'>
                     <div className='games-modal__highest-bid'>
                       <h1 className='games-modal__highest-bid-label'>Highest Bid</h1>
-                      <h1 className='games-modal__highest-bid-value'>
-                        {auctionState.highestBidNumber}
-                      </h1>
+                      <h1 className='games-modal__highest-bid-value'>{highestBid}</h1>
                     </div>
-
                     <button
                       onClick={toggleBidHistory}
                       className='games-modal__see-bid-history-button'
@@ -199,7 +206,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
                     onChange={handleBidInputChange}
                     type='number'
                     className='games-modal__bid-input'
-                    min={auctionState?.nextMinBid}
+                    min={nextMinBid}
                     value={state.desiredBidValue}
                   />
                   <button
@@ -207,14 +214,13 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
                     className='games-modal__place-bid-button'
                     onClick={handlePlaceBidClick}
                   >
-                    place bid
+                    {buttonText}
                   </button>
                 </>
               )}
             </div>
           </section>
         </div>
-
         <section className='games-modal__bid-history-section'>
           <BidHistoryTable
             isActive={state.shouldShowBidHistory}
