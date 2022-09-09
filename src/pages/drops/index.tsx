@@ -37,8 +37,8 @@ function drops({ drops }: Props) {
             <div className='drops-page__subheader-content'>
               <h1 className='drops-page__subheader-label'>SAGE-Curated live and upcoming drops.</h1>
               <h2 className='drops-page__subheader-info'>
-                SAGE drops are carefully curated to meet the standards and new structures
-                in NFT assets.
+                SAGE drops are carefully curated to meet the standards and new structures in NFT
+                assets.
               </h2>
             </div>
           </div>
@@ -48,13 +48,8 @@ function drops({ drops }: Props) {
         {drops.map((d) => {
           const { status, startTime } = computeDropStatus(d);
           const counterDisplay = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
-          const buttonDisplay = status === 'Upcoming' ? 'get notifications' : 'View Drop Artworks';
+          const buttonDisplay = 'View Drop Artworks';
           async function buttonHandler() {
-            if (status === 'Upcoming') {
-              //TODO: handle notifications
-              toast.warning('not implemented!');
-              return;
-            }
             await router.push(`/drops/${d.id}`);
           }
           return (
@@ -62,7 +57,7 @@ function drops({ drops }: Props) {
               <div className='drops-page__drop-header'>
                 <h3 className='drops-page__drop-header-title'>
                   <i className='drops-page__drop-header-title-name'>{transformTitle(d.name)}, </i>
-                  by {d.NftContract.Artist.username}
+                  by {transformTitle(d.NftContract.Artist.username)}
                 </h3>
                 {status !== 'Done' && (
                   <div className='drops-page__drop-header-countdown' data-status={status}>

@@ -80,7 +80,7 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
           pushToDrops(d.id);
         }
         const { startTime, status } = computeDropStatus(d);
-        const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
+        const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status.toUpperCase();
         return (
           <div
             data-span2={String(shouldTileSpanTwoColumns)}
@@ -103,6 +103,7 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                 , by {d.NftContract.Artist.username}
               </mark>
               <br />
+              <mark className='home-page__upcoming-drops-tile-tag-item'>Curated</mark>
             </h1>
           </div>
         );
