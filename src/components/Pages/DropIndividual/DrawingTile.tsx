@@ -5,6 +5,7 @@ import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
 import TileHeader from './TileHeader';
 import Countdown from '@/components/Countdown';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props {
   imgSrc: string;
@@ -49,12 +50,14 @@ export default function DrawingTile({
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
-            {dropName} by {artist.username}
+            {transformTitle(dropName)} by {artist.username}
           </h1>
-          <h1 className='drop-page__grid-item-info-game-name'>{drawing.Nfts[0].name}</h1>
+          <h1 className='drop-page__grid-item-info-game-name'>
+            {transformTitle(drawing.Nfts[0].name)}
+          </h1>
           {tickets > 0 && (
             <h1 className='drop-page__grid-item-info-tickets'>
-              you have {tickets} {tickets > 1 ? 'entries' : 'entry'}
+              You have {tickets} {tickets > 1 ? 'entries' : 'entry'}
             </h1>
           )}
         </div>

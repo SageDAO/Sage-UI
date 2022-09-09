@@ -41,6 +41,18 @@ export default function useSageRoutes() {
     await router.push(basePathProfile);
   }
 
+  async function pushToHowToBuyAsh() {
+    await router.push('/howtobuyash');
+  }
+
+  async function pushToPrivacyPolicy() {
+    await router.push('/privacypolicy');
+  }
+
+  async function pushToTermsOfService() {
+    await router.push('/termsofservice');
+  }
+
   const { pathname } = router;
 
   const isProfilePage: boolean = pathname.includes(basePathProfile);
@@ -52,6 +64,9 @@ export default function useSageRoutes() {
     pushToHome,
     pushToSubmissions,
     pushToProfile,
+    pushToHowToBuyAsh,
+    pushToPrivacyPolicy,
+    pushToTermsOfService,
     isProfilePage,
     isSingleDropsPage,
   };

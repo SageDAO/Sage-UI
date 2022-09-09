@@ -1,6 +1,14 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/colors' as c;
 @use '@/styles/abstracts/breakpoints' as b;
+
+// UTILS
+.submissions-page__emphasis {
+	// font-style: italic;
+}
+
+// ----------------------------------------------- * //
+
 .submissions-page {
   @include m.page;
   margin-left: auto;
@@ -100,7 +108,7 @@
   font-size: clamp(8px, 1vw, 12px);
   line-height: 130%;
   letter-spacing: 1px;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 
 .submissions-page__design-icons {

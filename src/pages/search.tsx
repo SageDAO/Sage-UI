@@ -42,9 +42,7 @@ export default function Search() {
       </div>
       <div className='searchresults__header'>
         <div className='searchresults__term'>
-          <div>
-            <SearchInput className='searchresults__input' displayIcon={false} />
-          </div>
+          <SearchInput className='searchresults__input' displayIcon={false} />
         </div>
         <div className='searchresults__text'>
           {isLoading && <LoaderSpinner />}

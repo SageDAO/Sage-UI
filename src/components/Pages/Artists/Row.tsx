@@ -1,5 +1,6 @@
 import { PfpImage } from '@/components/Media/BaseMedia';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import { transformTitle } from '@/utilities/strings';
 import { User } from '@prisma/client';
 import { useEffect, useRef } from 'react';
 
@@ -42,7 +43,7 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
               </h1>
             </div>
             <div className='artists-page__item-content'>
-              <h1 className='artists-page__item-content-header'>{a.username}</h1>
+              <h1 className='artists-page__item-content-header'>{transformTitle(a.username)}</h1>
               <p className='artists-page__item-content-description'>{a.bio}</p>
             </div>
           </div>
@@ -65,7 +66,7 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
               </h1>
             </div>
             <div className='artists-page__item-content'>
-              <h1 className='artists-page__item-content-header'>{a.username}</h1>
+              <h1 className='artists-page__item-content-header'>{transformTitle(a.username)}</h1>
               <p className='artists-page__item-content-description'>{a.bio}</p>
             </div>
           </div>

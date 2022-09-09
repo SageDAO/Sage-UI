@@ -141,7 +141,7 @@
   justify-content: space-between;
   font-style: normal;
   font-weight: 400;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   @include m.text-p5;
   @include m.theme() {
     color: m.t(contrast2);
@@ -150,7 +150,7 @@
 
 @mixin editions-tag {
   @include m.text-p5;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 
 .games-modal__editions-tag--desktop {
@@ -175,7 +175,7 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 100%;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   @include m.theme() {
     color: m.t(contrast);
   }
@@ -212,7 +212,7 @@
   font-weight: 400;
   font-size: 12px;
   line-height: 130%;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   max-width: 90vw;
 
   @include m.theme() {

@@ -3,13 +3,10 @@ import MottoSVG from '@/public/branding/motto.svg';
 import Socials from '@/components/Socials';
 import { useRouter } from 'next/router';
 import { SearchInput } from '../SearchInput';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 export default function Footer() {
-  const router = useRouter();
-  const handleHowToBuyAshClick = (e: any) => {
-    router.push('/howtobuyash');
-    e.preventDefault();
-  };
+  const { pushToHowToBuyAsh, pushToPrivacyPolicy, pushToTermsOfService } = useSageRoutes();
 
   return (
     <div className='footer' data-cy='footer'>
@@ -37,23 +34,29 @@ export default function Footer() {
               <div className='footer__middle-item-header'>contact sage</div>
               <div className='footer__middle-item-content'>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='mailto:contact@sage.art'>apply for artists</a>
+                  <a href='/creators/submissions'>Artists: Apply</a>
                 </h1>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='mailto:contact@sage.art'>business inquiry</a>
+                  <a href='mailto:contact@sage.art'>Business Inquiry</a>
                 </h1>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='mailto:contact@sage.art'>support</a>
+                  <a href='mailto:contact@sage.art'>Support</a>
                 </h1>
               </div>
             </ul>
             <ul className='footer__middle-item'>
-              <div className='footer__middle-item-header'>token + lp</div>
+              <div className='footer__middle-item-header'>Resources</div>
               <div className='footer__middle-item-content'>
                 <div className='footer__middle-item-content-link'>
-                  <a href='/howtobuyash' onClick={handleHowToBuyAshClick}>
-                    how to buy ash
-                  </a>
+                  <a onClick={pushToHowToBuyAsh}>How to Buy Ash</a>
+                </div>
+
+                <div className='footer__middle-item-content-link'>
+                  <a onClick={pushToPrivacyPolicy}>Privacy Policy</a>
+                </div>
+
+                <div className='footer__middle-item-content-link'>
+                  <a onClick={pushToTermsOfService}>Terms of Service</a>
                 </div>
               </div>
             </ul>
@@ -61,7 +64,7 @@ export default function Footer() {
               <div className='footer__middle-item-header'>press</div>
               <div className='footer__middle-item-content'>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='/press'>sage press</a>
+                  <a href='/press'>Sage Press</a>
                 </h1>
               </div>
             </ul>
@@ -80,7 +83,9 @@ export default function Footer() {
           </ul>
         </div>
         <div className='footer__bottom'>
-          <h4 className='footer__copyright'>SAGE<sup>TM</sup> - ALL RIGHTS RESERVED 2022</h4>
+          <h4 className='footer__copyright'>
+            © 2022 SAGE<sup>TM</sup>. ALL RIGHTS RESERVED.
+          </h4>
         </div>
       </div>
     </div>

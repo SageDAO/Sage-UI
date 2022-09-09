@@ -18,29 +18,30 @@
 }
 
 .wallet__header {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: space-between;
-  text-transform: uppercase;
   @include m.theme() {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: space-between;
+    text-transform: uppercase;
     color: m.t(contrast);
-  }
 
-  @include b.min-width('medium') {
+    @include b.min-width('medium') {
+      gap: 30px;
+    }
   }
 }
 
 .wallet__header-prompt {
+  @include m.text-h1;
+  margin-top: 0;
+  margin-bottom: 0;
   font-weight: 400;
-  font-size: clamp(20px, 3vw, 54px);
-  letter-spacing: 0.1em;
-  line-height: 1.3em;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   width: max-content;
-
+  text-transform: none;
   @include m.theme() {
     color: m.t(contrast);
   }
@@ -58,6 +59,7 @@
   font-size: clamp(8px, 1vw, 16px);
   line-height: 130%;
   text-align: center;
+  text-transform: none;
   @include m.theme() {
     color: contrast;
   }
@@ -174,6 +176,8 @@
   display: flex;
   justify-content: center;
   width: min-content;
+  margin-left: auto;
+  margin-right: auto;
 
   @include b.min-width('medium') {
     flex: 1;
@@ -188,6 +192,9 @@
   gap: 10px;
   margin-left: auto;
   margin-right: auto;
+  @include b.min-width('medium') {
+    gap: 70px;
+  }
 }
 
 @mixin connection-circle {
@@ -206,14 +213,15 @@
     transition-duration: 200ms;
   }
   width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @include m.interact {
-    img {
-      transform: scale(1.05);
-    }
   }
 }
 
 .wallet__user-pfp-src {
+  aspect-ratio: 1/1;
 }
 
 .wallet__user-metamask-container {

@@ -21,9 +21,9 @@
 /** Classes for the displayed toast **/
 .Toastify__toast {
   @include m.theme() {
-    aspect-ratio: 400/120;
-    background-color: m.t(base2) !important;
-    color: m.t(contrast) !important;
+    aspect-ratio: 500/120;
+    background-color: m.t(contrast2) !important;
+    color: m.t(base) !important;
     border-radius: 0px;
   }
 }
@@ -46,22 +46,28 @@
 /** handle the notificaiton color and the text color based on the theme **/
 .Toastify__toast-theme--dark {
 }
+
 .Toastify__toast-theme--light {
 }
+
 .Toastify__toast-theme--colored.Toastify__toast--default {
 }
+
 .Toastify__toast-theme--colored.Toastify__toast--info {
 }
+
 .Toastify__toast-theme--colored.Toastify__toast--success {
 }
+
 .Toastify__toast-theme--colored.Toastify__toast--warning {
 }
+
 .Toastify__toast-theme--colored.Toastify__toast--error {
 }
 
 .Toastify__progress-bar {
   @include m.theme() {
-    background-color: m.t(contrast) !important;
+    background-color: m.t(base) !important;
   }
 }
 .Toastify__progress-bar--rtl {
@@ -104,7 +110,7 @@
 
 .Toastify__close-button > svg {
   @include m.theme() {
-    color: m.t(contrast);
+    color: m.t(base);
     // border-radius: 100%;
     // aspect-ratio: 1/1;
     // opacity: 1;

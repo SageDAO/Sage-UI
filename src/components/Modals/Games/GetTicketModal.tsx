@@ -21,6 +21,7 @@ import SageFullLogo from '@/public/branding/sage-full-logo.svg';
 import CloseSVG from '@/public/interactive/close.svg';
 import shortenAddress from '@/utilities/shortenAddress';
 import Countdown from '@/components/Countdown';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -179,12 +180,14 @@ function GetTicketModal({
             </div>
             <div className='games-modal__main-content'>
               <span className='games-modal__drop-name'>
-                {dropName} by {artist.username}
+                {transformTitle(dropName)} by {artist.username}
                 <span className='games-modal__editions-tag--mobile'>
                   {editionsCount} {editionsText}
                 </span>
               </span>
-              <h1 className='games-modal__game-name'>{lottery.Nfts[selectedNftIndex].name}</h1>
+              <h1 className='games-modal__game-name'>
+                {transformTitle(lottery.Nfts[selectedNftIndex].name)}
+              </h1>
               <p className='games-modal__game-description'>
                 {lottery.Nfts[selectedNftIndex].description ||
                   'This artwork has no description provided.'}
@@ -194,7 +197,7 @@ function GetTicketModal({
                   <System type={systemType}></System>
                 </div>
                 <h1 className='games-modal__system-info'>
-                  This is a fair drop mechanic. Buy purchasing one or more entries, you have the
+                  This is a fair drop mechanic. By purchasing one or more entries, you have the
                   opportunity to be selected to mint this NFT.
                 </h1>
               </div>

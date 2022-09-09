@@ -6,6 +6,7 @@ import { getHomePageData, getSageMediumData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import UpcomingDrops from '@/components/Pages/Home/UpcomingDrops';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props {
   featuredDrop: Drop_include_GamesAndArtist;
@@ -33,7 +34,7 @@ function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props
                     pushToCreators(featuredDrop.NftContract.Artist.username);
                   }}
                 >
-                  Artwork by | {featuredDrop.NftContract.Artist.username}
+                  {transformTitle(featuredDrop.name)}, by {featuredDrop.NftContract.Artist.username}
                 </span>
               </div>
             </div>

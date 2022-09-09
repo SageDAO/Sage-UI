@@ -13,6 +13,7 @@ import System from '@/components/Icons/System';
 import BidHistoryTable from '@/components/Games/BidHistoryTable';
 import Countdown from '@/components/Countdown';
 import ArrowRightSVG from '@/public/interactive/arrow-right.svg';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -153,9 +154,9 @@ function PlaceBidModal({ isOpen, closeModal, auction, auctionState, artist, drop
             <div className='games-modal__main-content'>
               <div>
                 <h1 className='games-modal__drop-name'>
-                  {dropName} by {artist.username}
+                  {transformTitle(dropName)} by {artist.username}
                 </h1>
-                <h1 className='games-modal__game-name'>{auction.Nft.name}</h1>
+                <h1 className='games-modal__game-name'>{transformTitle(auction.Nft.name)}</h1>
               </div>
               <p className='games-modal__game-description'>
                 {auction.Nft.description || 'this artwork has no description provided.'}

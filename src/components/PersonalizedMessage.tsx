@@ -10,7 +10,7 @@ export default function PersonalizedMessage() {
   if (sessionStatus === 'authenticated') {
     return (
       <React.Fragment>
-        <span>welcome back! </span>
+        <span>Welcome back! </span>
         <pre></pre>
         <UserHandle />
       </React.Fragment>
@@ -18,11 +18,11 @@ export default function PersonalizedMessage() {
   }
 
   if (isConnected) {
-    return <React.Fragment>Sign In To Continue</React.Fragment>;
+    return null;
   }
 
   if (!isConnected) {
-    return <span>welcome back! </span>;
+    return <span>Welcome back! </span>;
   }
   return <React.Fragment>Error</React.Fragment>;
 }
