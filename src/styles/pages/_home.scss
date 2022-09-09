@@ -22,12 +22,12 @@
   align-items: center;
   display: flex;
   @include m.standard-width;
-  height: 40px;
+  // height: 40px;
   gap: 10px;
 }
 
 .home-page__featured-drop-tag-info {
-  text-transform: uppercase;
+  // text-transform: capitalize;
   display: flex;
   flex-direction: column;
 }
@@ -54,7 +54,7 @@
   font-size: clamp(25px, 3.8vw, 50px);
   line-height: clamp(25px, 1.2em, 64px);
   padding: clamp(30px, 5vw, 120px) 0;
-  text-transform: uppercase;
+  // text-transform: capitalize;
   @include b.min-width('medium') {
     // text-align: center;
   }
@@ -72,7 +72,7 @@
 .home-page__upcoming-drops-header-left {
   font-weight: 900;
   @include m.text-h2;
-  text-transform: uppercase;
+  text-transform: capitalize;
 }
 
 .home-page__upcoming-drops-header-right {
@@ -168,7 +168,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   position: absolute;
   bottom: 0;
   color: c.$white;
-  text-transform: uppercase;
+  text-transform: capitalize;
   & > * {
     @include m.theme() {
       background-color: m.t(accent);
@@ -186,6 +186,10 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     color: m.t(contrast);
     padding: 0 4px;
   }
+}
+
+.home-page__upcoming-drops-tile-tag-item-name {
+  font-style: normal;
 }
 
 .home-page__upcoming-drops-countdown {
@@ -267,7 +271,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 .home-page__event-slide-header {
   @include m.theme() {
     font-weight: 900;
-    text-transform: uppercase;
+    text-transform: capitalize;
     margin-top: 30px;
     display: flex;
     margin-left: auto;

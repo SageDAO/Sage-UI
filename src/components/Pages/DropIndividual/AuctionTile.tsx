@@ -4,6 +4,7 @@ import PlaceBidModal, { computeAuctionStatus } from '@/components/Modals/Games/P
 import useModal from '@/hooks/useModal';
 import { Auction_include_Nft, User } from '@/prisma/types';
 import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
+import { transformTitle } from '@/utilities/strings';
 import React from 'react';
 import TileHeader from './TileHeader';
 
@@ -46,7 +47,9 @@ export default function AuctionTile({ artist, dropName, s3Path, editionSize, auc
           <h1 className='drop-page__grid-item-info-drop-name'>
             {dropName} by {artist.username}
           </h1>
-          <h1 className='drop-page__grid-item-info-game-name'>{auction.Nft.name}</h1>
+          <h1 className='drop-page__grid-item-info-game-name'>
+            {transformTitle(auction.Nft.name)}
+          </h1>
         </div>
         <div className='drop-page__grid-item-info-right'>
           {!isStarted && (

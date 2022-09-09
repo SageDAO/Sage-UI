@@ -97,9 +97,11 @@
   font-weight: 400;
   font-size: clamp(14px, 3vw, 52px);
   line-height: clamp(19px, 1em, 81px);
-  text-transform: uppercase;
-
   color: c.$light;
+}
+
+.drops-page__drop-header-title-name {
+  // font-style: italic;
 }
 
 .drops-page__drop-header-countdown {

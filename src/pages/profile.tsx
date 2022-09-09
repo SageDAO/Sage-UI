@@ -14,9 +14,11 @@ import { useRouter } from 'next/router';
 import { useDisconnect } from 'wagmi';
 import { PfpImage } from '@/components/Media/BaseMedia';
 import useUserNotifications from '@/hooks/useUserNotifications';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 function profile() {
   const router = useRouter();
+  // const { pushToHome } = useSageRoutes();
   const { data: sessionData } = useSession();
   const { data: userData, isFetching: isFetchingUser } = useGetUserQuery(undefined, {
     skip: !sessionData,
@@ -37,10 +39,7 @@ function profile() {
   async function handleSignOut() {
     signOut();
     disconnect();
-  }
-
-  if (!sessionData) {
-    return <div style={{ textAlign: 'center', margin: '150px' }}>sign in to view profile</div>;
+    router.push('/');
   }
 
   if (!userData && isFetchingUser) {
@@ -54,9 +53,7 @@ function profile() {
       <div className='profile-page'>
         <div className='profile-page__left'>
           <SageFullLogoSVG
-            onClick={() => {
-              router.push('/');
-            }}
+            onClick={() => router.push('/')}
             className='profile-page__sage-logo-svg'
           />
           <div className='profile-page__pfp-container'>
@@ -99,19 +96,21 @@ function profile() {
                 );
               }}
             </Tab>
-            <Tab as={React.Fragment}>
-              {({ selected }) => {
-                return (
-                  <button
-                    disabled={!isArtist}
-                    data-active={selected}
-                    className='profile-page__tabs-tab'
-                  >
-                    creations / mint
-                  </button>
-                );
-              }}
-            </Tab>
+            {isArtist && (
+              <Tab as={React.Fragment}>
+                {({ selected }) => {
+                  return (
+                    <button
+                      disabled={!isArtist}
+                      data-active={selected}
+                      className='profile-page__tabs-tab'
+                    >
+                      MINT
+                    </button>
+                  );
+                }}
+              </Tab>
+            )}
             <button onClick={handleSignOut} className='profile-page__tabs-tab'>
               log out
             </button>
@@ -129,9 +128,11 @@ function profile() {
             <Tab.Panel as='div' className='profile-page__tabs-panel'>
               <NotificationsPanel />
             </Tab.Panel>
-            <Tab.Panel as='div' className='profile-page__tabs-panel'>
-              <CreationsPanel />
-            </Tab.Panel>
+            {isArtist && (
+              <Tab.Panel as='div' className='profile-page__tabs-panel'>
+                <CreationsPanel />
+              </Tab.Panel>
+            )}
           </Tab.Panels>
         </div>
       </div>

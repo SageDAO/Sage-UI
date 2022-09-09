@@ -38,6 +38,7 @@
   height: 100%;
   @include b.min-width('medium') {
     height: auto;
+    padding: 0;
   }
 }
 

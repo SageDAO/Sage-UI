@@ -32,6 +32,7 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
+  text-transform: capitalize;
 
   @include m.theme() {
     color: m.t(contrast2);
@@ -43,6 +44,7 @@
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
+  text-transform: capitalize;
 
   @include m.theme() {
     color: m.t(contrast);
@@ -50,7 +52,7 @@
 }
 @mixin input-field {
   min-height: 30px;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   flex: 1;
   @include m.theme() {
     background: c.$white;
@@ -71,6 +73,7 @@
   font-weight: 400;
   font-size: clamp(32px, 8vw, 64px);
   line-height: clamp(48px, 2em, 82px);
+  text-transform: capitalize;
 
   @include m.theme() {
     color: m.t(contrast2);
@@ -90,7 +93,7 @@
 // ------------------------ local mixins ----------------------------------
 
 .profile-page {
-  text-transform: uppercase;
+  // text-transform: uppercase;
   @include m.page;
   flex-direction: row;
   align-items: flex-start;
@@ -203,8 +206,11 @@
 .profile-page__balances {
   max-width: 80vw;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: clamp(20px, 5vw, 160px);
+  @include b.min-width('small') {
+    flex-direction: row;
+  }
 }
 
 .profile-page__balances-points {
@@ -304,7 +310,7 @@
 }
 
 .profile-panel__bio-field {
-  text-transform: uppercase;
+  // text-transform: uppercase;
   border: 1px solid c.$grey;
   background-color: c.$white;
   line-height: 1.6em;

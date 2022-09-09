@@ -1,6 +1,7 @@
 import { SearchableNftData } from '@/store/nftsReducer';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props {
   nft: SearchableNftData;
@@ -40,7 +41,7 @@ export default function SearchResultsTile({ nft, i }: Props) {
         <BaseMedia src={nft.s3Path}></BaseMedia>
       </div>
       <div className='search-page__grid-item-info'>
-        <h1 className='search-page__grid-item-info-nft-name'>{nft.name}</h1>
+        <h1 className='search-page__grid-item-info-nft-name'>{transformTitle(nft.name)}</h1>
         <h1 className='search-page__grid-item-info-artist-name'>by {nft.artist}</h1>
       </div>
     </div>

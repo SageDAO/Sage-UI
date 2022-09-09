@@ -85,15 +85,16 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           <section className='drop-page__header-drop-info'>
             <div className='drop-page__header-main-column'>
               <h1 className='drop-page__header-drop-name'>
-                {drop.name} by {artist.username}
+                <i className='drop-page__header-drop-name-italic'>{drop.name},</i> by{' '}
+                {artist.username}
               </h1>
               <p className='drop-page__header-drop-description'>{drop.description}</p>
               <div className='drop-page__header-drop-details'>
                 <h1 className='drop-page__header-drop-details-item'>
-                  MINTED BY: {artist.username}
+                  Minted by: {artist.username}
                 </h1>
                 <h1 className='drop-page__header-drop-details-item'>
-                  creation date: {reformatDate(drop.createdAt)}
+                  Creation date: {reformatDate(drop.createdAt)}
                 </h1>
               </div>
               <div className='drop-page__header-drop-details-systems'>

@@ -6,6 +6,7 @@ import useModal from '@/hooks/useModal';
 import TileHeader from './TileHeader';
 import LotteryThumbnail from './LotteryThumbnail';
 import Countdown from '@/components/Countdown';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props {
   imgSrc: string;
@@ -50,12 +51,12 @@ export default function LotteryTile({
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
-            {dropName} by {artist.username}
+            {transformTitle(dropName)} by {artist.username}
           </h1>
-          <h1 className='drop-page__grid-item-info-game-name'>{'lottery'}</h1>
+          <h1 className='drop-page__grid-item-info-game-name'>{transformTitle('lottery')}</h1>
           {tickets > 0 && (
             <h1 className='drop-page__grid-item-info-tickets'>
-              you have {tickets} {tickets > 1 ? 'entries' : 'entry'}
+              You have {tickets} {tickets > 1 ? 'entries' : 'entry'}
             </h1>
           )}
         </div>

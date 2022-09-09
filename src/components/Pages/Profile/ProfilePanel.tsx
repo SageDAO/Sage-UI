@@ -106,7 +106,7 @@ export default function ProfilePanel({ isArtist }: Props) {
           return (
             <animated.h1 style={styles} className='profile-page__tabs-panel-header'>
               profile
-              <span className='profile-page__tabs-panel-subheader'>edit your sage profile</span>
+              <span className='profile-page__tabs-panel-subheader'>edit your SAGE profile</span>
             </animated.h1>
           );
         }}

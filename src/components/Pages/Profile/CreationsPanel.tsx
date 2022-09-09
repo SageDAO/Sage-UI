@@ -133,7 +133,7 @@ export default function CreationsPanel() {
                     onChange={handleTitleInputChange}
                     className='creations-panel__file-title-field'
                   />
-                </div>
+                </div>{' '}
                 <div className='creations-panel__file-desc-group'>
                   <h1 className='creations-panel__file-desc-label'>artwork description</h1>
                   <textarea

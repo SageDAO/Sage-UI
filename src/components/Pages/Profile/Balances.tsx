@@ -18,7 +18,7 @@ export default function Balances() {
     <div className='profile-page__balances'>
       <div className='profile-page__balances-token'>
         <h1 className='profile-page__balances-token-value'>
-          {!isNaN(ashBalance) && ashBalance.toFixed(4)}
+          {!isNaN(ashBalance) && ashBalance.toFixed(2)}
         </h1>
         <h1 className='profile-page__balances-points-label'>your ash balance</h1>
       </div>

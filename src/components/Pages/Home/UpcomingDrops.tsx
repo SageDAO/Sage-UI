@@ -5,6 +5,7 @@ import { BaseMedia } from '@/components/Media/BaseMedia';
 import Countdown from '@/components/Countdown';
 import useWindowDimensions from '@/hooks/useWindowSize';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props {
   upcomingDrops: Awaited<ReturnType<typeof getHomePageData>>['upcomingDrops'];
@@ -26,7 +27,7 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
               <div className='home-page__upcoming-drops-row--mobile'>
                 {row.map((d) => {
                   const src = d.bannerImageS3Path;
-                  const text = `${d.name} by ${d.NftContract.Artist.username}`;
+                  // const text = ;
                   const { startTime, status } = computeDropStatus(d);
                   const display =
                     status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
@@ -46,10 +47,15 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                       )}
                       <BaseMedia src={src} />
                       <h3 className='home-page__upcoming-drops-tile-tag'>
-                        <mark className='home-page__upcoming-drops-tile-tag-item'>{text}</mark>
+                        <mark className='home-page__upcoming-drops-tile-tag-item'>
+                          <i className='home-page__upcoming-drops-tile-tag-item-name'>
+                            {transformTitle(d.name)}
+                          </i>
+                          , by {d.NftContract.Artist.username}
+                        </mark>
                         <br />
                         <mark className='home-page__upcoming-drops-tile-tag-item'>
-                          sage curated
+                          Curated
                         </mark>
                       </h3>
                     </div>
@@ -76,7 +82,6 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
         function onClick() {
           pushToDrops(d.id);
         }
-        const text = `${d.name} by ${d.NftContract.Artist.username}`;
         const { startTime, status } = computeDropStatus(d);
         const display = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
         return (
@@ -94,9 +99,14 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
 
             <BaseMedia src={src} />
             <h1 className='home-page__upcoming-drops-tile-tag'>
-              <mark className='home-page__upcoming-drops-tile-tag-item'>{text}</mark>
+              <mark className='home-page__upcoming-drops-tile-tag-item'>
+                <i className='home-page__upcoming-drops-tile-tag-item-name'>
+                  {transformTitle(d.name)}
+                </i>
+                , by {d.NftContract.Artist.username}
+              </mark>
               <br />
-              <mark className='home-page__upcoming-drops-tile-tag-item'>sage curated</mark>
+              <mark className='home-page__upcoming-drops-tile-tag-item'>Curated</mark>
             </h1>
           </div>
         );

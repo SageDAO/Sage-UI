@@ -69,9 +69,9 @@ export default function Wallet({ closeModal, isOpen }: Props) {
           </h1>
           {showWalletSelection && (
             <h1 className='wallet__header-info'>
-              CONNECT TO SAGE THROUGH YOUR WALLET.
+              Connect to SAGE through your wallet.
               <pre />
-              SAGE WILL NEVER ASK FOR YOUR PRIVATE KEYS.
+              SAGE will never ask for your private keys.
             </h1>
           )}
         </section>
@@ -140,7 +140,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
             </section>
           </>
         )}
-              </div>
+      </div>
     </div>
   );
 }

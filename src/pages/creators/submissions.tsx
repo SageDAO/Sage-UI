@@ -66,8 +66,8 @@ export default function submissions() {
       <section className='submissions-page__guidelines-group'>
         <h1 className='submissions-page__guidelines-header'>how to send application?</h1>
         <p className='submissions-page__guidelines-text'>
-          Once ready, please send your application to: 
-          <a href='mailto:creators@sage.art'>creators@sage.art</a>
+          Once ready, please send your application to:
+          <a href='mailto:creators@sage.art'> creators@sage.art</a>
         </p>
       </section>
     </div>

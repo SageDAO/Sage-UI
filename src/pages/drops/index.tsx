@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { getDropsPageData } from '@/prisma/functions';
 import System, { computeDropSystems } from '@/components/Icons/System';
+import { transformTitle } from '@/utilities/strings';
 
 interface Props {
   drops: Awaited<ReturnType<typeof getDropsPageData>>;
@@ -34,9 +35,9 @@ function drops({ drops }: Props) {
         <div className='drops-page__subheader'>
           <div className='drops-page__subheader-top'>
             <div className='drops-page__subheader-content'>
-              <h1 className='drops-page__subheader-label'>sage curated live and upcoming drops.</h1>
+              <h1 className='drops-page__subheader-label'>SAGE curated live and upcoming drops.</h1>
               <h2 className='drops-page__subheader-info'>
-                sage upcoming drops are carefully curated to meet the standards and new structures
+                SAGE upcoming drops are carefully curated to meet the standards and new structures
                 in nft assets. a vision in the crypto space.
               </h2>
             </div>
@@ -59,9 +60,10 @@ function drops({ drops }: Props) {
           return (
             <div key={d.id} className='drops-page__drop'>
               <div className='drops-page__drop-header'>
-                <h1 className='drops-page__drop-header-title'>
-                  {d.name} by {d.NftContract.Artist.username}
-                </h1>
+                <h3 className='drops-page__drop-header-title'>
+                  <i className='drops-page__drop-header-title-name'>{transformTitle(d.name)}, </i>
+                  by {d.NftContract.Artist.username}
+                </h3>
                 {status !== 'Done' && (
                   <div className='drops-page__drop-header-countdown' data-status={status}>
                     {counterDisplay}
