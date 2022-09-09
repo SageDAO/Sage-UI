@@ -11,7 +11,7 @@ export default function TileHeader({ editionSize, systemType }: Props) {
     <div className='drop-page__grid-item-header'>
       <h1 className='drop-page__grid-item-header-left'>{editionsText}</h1>
       <div className='drop-page__grid-item-header-right'>
-        system:
+        System:
         <div className='drop-page__grid-item-systems-icon'>
           <System type={systemType}></System>
         </div>
