@@ -93,10 +93,9 @@
 
 .drops-page__drop-header-title {
   font-style: normal;
-  white-space: nowrap;
   font-weight: 400;
   font-size: clamp(14px, 3vw, 52px);
-  line-height: clamp(19px, 1em, 81px);
+		line-height: 1em;
   color: c.$light;
 }
 
@@ -104,25 +103,35 @@
   // font-style: italic;
 }
 
+.drops-page__drop-header-title-artist {
+  // font-size: clamp(8px, 1vw, 28px);
+  // line-height: clamp(19px, 1em, 81px);
+    font-size: clamp(8px, 1.5vw, 18px);
+    line-height: 130%;
+}
+
 .drops-page__drop-header-countdown {
   @include m.theme() {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-transform: uppercase;
-    aspect-ratio: 466/85;
     width: clamp(30px, 7em, 150px);
-    font-style: normal;
-    font-weight: 300;
-    font-size: clamp(14px, 2.3vw, 30px);
+    font-size: clamp(8px, 1.5vw, 18px);
     line-height: 130%;
-    text-align: center;
     letter-spacing: 0.01em;
-		white-space: nowrap;
+    white-space: nowrap;
     color: c.$white;
     border: 1px solid c.$white;
+    // aspect-ratio: 64/19;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // font-size: clamp(8px, 2vw, 32px);
+    // padding: clamp(3px, 2em, px);
+    padding: 0.2em;
+    height: max-content;
     &[data-status='Live'] {
-      aspect-ratio: 400/85;
+      // aspect-ratio: 400/85;
       color: m.t(accent);
       border: 1px solid m.t(accent);
     }
@@ -143,23 +152,10 @@
   @include m.interact;
   margin-right: auto;
   transition-duration: 200ms;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-  // font-weight: 400;
-  // font-size: clamp(10px, 1.5vw, 16px);
-  // line-height: 130%;
-  // text-align: center;
-  // letter-spacing: 0.1em;
-  // text-transform: uppercase;
-  // aspect-ratio: 600/50;
   @include m.button-base;
   width: 100%;
   @include b.min-width('medium') {
-    // width:
-    // width: min(345px, 20em);
-    // aspect-ratio: 345/50;
-    width: min(365px, 80vw);
+      width: min(365px, 80vw);
   }
 
   @include m.theme {
