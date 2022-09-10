@@ -39,6 +39,10 @@ export default function Nav() {
       routeFunction: pushToDrops,
     },
     {
+      name: 'Creators',
+      routeFunction: pushToCreators,
+    },
+    {
       name: 'Apply',
       routeFunction: pushToSubmissions,
     },

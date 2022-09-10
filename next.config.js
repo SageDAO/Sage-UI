@@ -22,15 +22,6 @@ const nextConfig = {
   },
   staticPageGenerationTimeout: 180,
   swcMinify: false,
-  async redirects() {
-    return [
-      {
-				source: '/creators/:slug*',
-        destination: '/',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;

@@ -7,6 +7,12 @@ import Socials from '@/components/Socials';
 import ASHPrice from '../ASHPrice';
 import MenuToggle from './MenuToggle';
 import Copyright from '../Branding/Copyright';
+import {
+  basePathCreators,
+  basePathDrops,
+  basePathHome,
+  basePathSubmissions,
+} from '@/constants/paths';
 
 interface Props extends ModalProps {
   toggleMenu: any;
@@ -20,15 +26,19 @@ interface NavLink {
 const navLinks: NavLink[] = [
   {
     name: 'Home',
-    url: '/',
+    url: basePathHome,
   },
   {
     name: 'Drops',
-    url: '/drops',
+    url: basePathDrops,
+  },
+  {
+    name: 'Creators',
+    url: basePathCreators,
   },
   {
     name: 'Apply',
-    url: '/creators/submissions',
+    url: basePathSubmissions,
   },
 ];
 
