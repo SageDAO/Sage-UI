@@ -78,10 +78,9 @@
     font-size: 60px;
     line-height: 64px;
     font-weight: bold;
-
     @include m.text-h1;
+    margin-top: 0;
     margin-bottom: 0;
-
   }
 
   &__term {
@@ -91,6 +90,7 @@
     // line-height: 64px;
     // font-weight: bold;
     // display: flex;
+    // margin-top: clamp(24px, 10vw, 111px);
   }
 
   &__text {
@@ -100,6 +100,7 @@
     font-weight: 400;
     font-size: clamp(10px, 1.5vw, 16px);
     line-height: 130%;
+    margin-bottom: clamp(10px, 5vw, 50px);
     // text-transform: uppercase;
     // font-family: Helvetica;
     // font-size: 14px;

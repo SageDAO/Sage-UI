@@ -56,16 +56,14 @@ export default function Search() {
               : 'Your Search Results')}
         </div>
       </div>
-      <div className='drop-page__content' style={{ padding: '50px 0 0' }}>
-        <div
-          className='search-page__grid'
-          style={{ gridTemplateRows: `repeat(${gridRows}, ${rowHeight})` }}
-        >
-          {displayResults &&
-            displayResults.map((nft: SearchableNftData, i: number) => (
-              <SearchResultsTile key={i} nft={nft} i={i} />
-            ))}
-        </div>
+      <div
+        className='search-page__grid'
+        style={{ gridTemplateRows: `repeat(${gridRows}, ${rowHeight})` }}
+      >
+        {displayResults &&
+          displayResults.map((nft: SearchableNftData, i: number) => (
+            <SearchResultsTile key={i} nft={nft} i={i} />
+          ))}
       </div>
       {displayCount < results.length && (
         <button className='searchresults__button' onClick={handleLoadMoreBtnClick}>
