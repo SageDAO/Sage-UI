@@ -1,6 +1,4 @@
 import Logotype from '@/components/Logotype';
-import AdobeIllustratorSVG from '@/public/icons/adobe-illustrator.svg';
-import IndesignSVG from '@/public/icons/indesign.svg';
 
 export default function submissions() {
   return (
