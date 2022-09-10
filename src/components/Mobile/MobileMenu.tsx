@@ -27,10 +27,6 @@ const navLinks: NavLink[] = [
     url: '/drops',
   },
   {
-    name: 'Creators',
-    url: '/creators',
-  },
-  {
     name: 'Apply',
     url: '/creators/submissions',
   },

@@ -4,10 +4,7 @@ const nextConfig = {
   trailingSlash: true,
   reactStrictMode: false,
   images: {
-    domains: [
-      'dev-sage.s3.us-east-2.amazonaws.com',
-      'staging-sage.s3.us-east-2.amazonaws.com',
-    ],
+    domains: ['dev-sage.s3.us-east-2.amazonaws.com', 'staging-sage.s3.us-east-2.amazonaws.com'],
   },
   webpack: (config) => {
     config.module.rules.push({
@@ -24,7 +21,16 @@ const nextConfig = {
     };
   },
   staticPageGenerationTimeout: 180,
-	swcMinify: false
+  swcMinify: false,
+  async redirects() {
+    return [
+      {
+				source: '/creators/:slug*',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
