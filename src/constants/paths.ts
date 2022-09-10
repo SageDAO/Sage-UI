@@ -8,7 +8,7 @@ const basePathHowToBuyAsh = '/howtobuyash';
 const basePathGames = '/games';
 const basePathAuctions = `${basePathGames}/auctions`;
 const basePathLotteries = `${basePathGames}/lotteries`;
-const basePathSubmissions = basePathCreators + '/submissions';
+const basePathSubmissions = '/submissions';
 
 const basePathProfile = '/profile';
 
