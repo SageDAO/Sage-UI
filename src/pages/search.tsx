@@ -31,7 +31,8 @@ export default function Search() {
   };
 
   const { isMobile } = useWindowDimensions();
-  const rowDivisor: number = isMobile ? 3.5 / 2 : 3.5;
+  const desktopDivisor = 4;
+  const rowDivisor: number = isMobile ? desktopDivisor / 2 : desktopDivisor;
   const gridRows: number = Math.floor(displayCount / rowDivisor);
   const rowHeight: string = isMobile ? '32vw' : '16vw';
 
