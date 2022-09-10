@@ -15,14 +15,35 @@
 }
 
 .howtobuyash-text {
-  font-style: normal;
-  font-weight: 600;
-  font-size: clamp(16px, 2.5vw, 20px);
-  line-height: 1.8em;
-  // text-transform: capitalize;
   @include m.standard-width;
   @include b.min-width('medium') {
     @include m.desktop-inner-width;
+  }
+  @include m.text-p1;
+  @include m.theme() {
+    color: m.t(contrast2);
+  }
+}
+
+.howtobuyash__group {
+  @include m.mobile-width;
+  gap: 14px;
+  display: flex;
+  flex-direction: column;
+  @include b.min-width('medium') {
+    @include m.desktop-inner-width;
+  }
+  margin-bottom: clamp(24px, 5vh, 79px);
+}
+
+.howtobuyash__earning-pixels-info {
+  @include m.standard-width;
+  @include b.min-width('medium') {
+    @include m.desktop-inner-width;
+  }
+  @include m.text-p1;
+  @include m.theme() {
+    color: m.t(contrast2);
   }
 }
 
@@ -31,7 +52,9 @@
 }
 
 .howtobuyash-bullet {
-  font-weight: bolder;
-  font-size: clamp(14px, 1.2vw, 20px);
-  margin-right: 10px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(16px, 2.5vw, 20px);
+  line-height: 130%;
+  text-transform: capitalize;
 }
