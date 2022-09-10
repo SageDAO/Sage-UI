@@ -168,9 +168,11 @@ $theme-map: null;
   }
 }
 
+$desktop-width: 1088px;
+
 @mixin desktop-width {
   @include b.min-width('medium') {
-    width: min(1360px, 80vw);
+    width: min($desktop-width, 80vw);
   }
 }
 
@@ -179,11 +181,11 @@ $theme-map: null;
 }
 
 @mixin mobile-width {
-  width: min(1360px, 80vw);
+  width: min($desktop-width, 80vw);
 }
 
 @mixin mobile-width-full {
-  width: min(1360px, 100vw);
+  width: min($desktop-width, 100vw);
 }
 
 @mixin standard-width {
