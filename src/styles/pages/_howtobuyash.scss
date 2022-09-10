@@ -33,7 +33,7 @@
   @include b.min-width('medium') {
     @include m.desktop-inner-width;
   }
-  margin-bottom: clamp(24px, 5vh, 79px);
+  margin-bottom: clamp(8px, 1.5vh, 40px);
 }
 
 .howtobuyash__earning-pixels-info {

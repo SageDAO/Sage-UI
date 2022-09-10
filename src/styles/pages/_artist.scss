@@ -3,9 +3,6 @@
 
 .artist-page {
   @include m.page;
-  width: min(1440px, 80vw);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .artist-page__banner-label {
@@ -15,11 +12,13 @@
   font-weight: 400;
   font-size: 10px;
   line-height: 12px;
+  @include m.standard-width;
 }
 
 .artist-page__artist-section {
   width: 100%;
   margin-top: 38px;
+  @include m.standard-width;
 }
 
 .artist-page__artist-section-flex-x {
@@ -32,12 +31,12 @@
   @include m.theme() {
     height: 80px;
     width: 80px;
-		position: relative;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 100%;
-		overflow: hidden;
+    overflow: hidden;
     // background-color: m.t(contrast);
   }
 }
@@ -121,6 +120,7 @@
   margin-top: 100px;
   display: flex;
   gap: 6px;
+  @include m.standard-width;
 }
 
 .artist-page__bio {
@@ -145,6 +145,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
   width: 100%;
+  @include m.standard-width;
 }
 
 .artist-page__grid-tile {
