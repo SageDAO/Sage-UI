@@ -47,7 +47,12 @@ function drops({ drops }: Props) {
       <section className='drops-page__drops-section'>
         {drops.map((d) => {
           const { status, startTime } = computeDropStatus(d);
-          const counterDisplay = status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
+          const counterDisplay =
+            status === 'Upcoming' ? (
+              <Countdown endTime={startTime} />
+            ) : (
+              <div>{status.toUpperCase()}</div>
+            );
           const buttonDisplay = 'View Drop Artworks';
           async function buttonHandler() {
             await router.push(`/drops/${d.id}`);
@@ -56,8 +61,10 @@ function drops({ drops }: Props) {
             <div key={d.id} className='drops-page__drop'>
               <div className='drops-page__drop-header'>
                 <h3 className='drops-page__drop-header-title'>
-                  <i className='drops-page__drop-header-title-name'>{transformTitle(d.name)}, </i>
-                  by {transformTitle(d.NftContract.Artist.username)}
+                  <i className='drops-page__drop-header-title-name'>
+                    {transformTitle(d.name)}, by {transformTitle(d.NftContract.Artist.username)}
+                  </i>
+                  <span className='drops-page__drop-header-title-artist'></span>
                 </h3>
                 {status !== 'Done' && (
                   <div className='drops-page__drop-header-countdown' data-status={status}>
