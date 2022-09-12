@@ -94,14 +94,17 @@ export async function getIndividualDropsPageData(prisma: PrismaClient, id: numbe
 }
 
 export async function getArtistsPageData(prisma: PrismaClient) {
-  let artists = await prisma.user.findMany({
-    take: 10,
-    where: {
-      ...FilterUserIsArtist,
-    },
+  // find artists who have deployed drops or minted a listing
+  var query = `
+    select distinct "artistAddress" from "Drop" where "approvedAt" is not null
+    union
+    select distinct "artistAddress" from "Nft" where "artistAddress" is not null`;
+  var result = await prisma.$queryRaw(Prisma.raw(query));
+  const artistWallets = (result as any).map((row: any) => ({ walletAddress: row.artistAddress }));
+  return await prisma.user.findMany({
+    where: { OR: artistWallets },
+    take: 20,
   });
-
-  return artists;
 }
 
 export async function getIndividualArtistsPagePaths(prisma: PrismaClient) {
