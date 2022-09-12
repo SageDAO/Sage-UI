@@ -192,6 +192,7 @@ $desktop-width: 1088px;
   @include mobile-width;
 }
 
+
 @mixin text-h1 {
   // font-size: clamp(25px, 7vw, 45px);
   // line-height: 1em;

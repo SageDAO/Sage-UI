@@ -1,8 +1,6 @@
 import useSageRoutes from '@/hooks/useSageRoutes';
 import { useEffect, useState } from 'react';
 
-async function getAshPrice() {}
-
 export default function ASHPrice() {
   const [priceUSD, setPriceUSD] = useState<number>(null);
   const { pushToHowToBuyAsh } = useSageRoutes();

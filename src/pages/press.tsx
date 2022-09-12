@@ -1,32 +1,41 @@
-import { useEffect, useState } from 'react';
-import LoaderDots from '@/components/LoaderDots';
+import Logotype from '@/components/Logotype';
+import IconWhite from '@/public/press/icon-white.svg';
+import IconBlack from '@/public/press/icon-black.svg';
+import LogotypeWhite from '@/public/press/logotype-white.svg';
+import LogotypeBlack from '@/public/press/logotype-black.svg';
 
 export default function press() {
-  return <div className='home-page page'></div>;
-}
-
-// properties: title, pubDate, link, guid, author, thumbnail, description, content, enclosure, categories
-function MediumPost({ post }: any) {
   return (
-    <div style={{ marginTop: '20px', width: '75%' }}>
-      <span style={{ fontSize: '10px' }}>{post.pubDate}</span>
-      <br />
-      <span style={{ fontWeight: 'bold', fontSize: '20px', textTransform: 'uppercase' }}>
-        {post.title}
-      </span>
-      &nbsp; <span style={{ fontWeight: 'lighter', fontSize: '12px' }}>by {post.author}</span>
-      <br />
-      <span
-        style={{ marginTop: '10px' }}
-        dangerouslySetInnerHTML={{ __html: (post.content as string).replaceAll('\n', '<br/>') }}
-      />
-      <hr />
+    <div className='press-page'>
+      <Logotype></Logotype>
+      <div className='press-page__content'>
+        <h1 className='press-page__header'>
+          official press <pre></pre> release resources
+        </h1>
+        <div className='press-page__assets-container'>
+          <div className='press-page__icons-container'>
+            <div className='press-page__icon-white'>
+              <IconWhite />
+            </div>
+            <div className='press-page__icon-black'>
+              <IconBlack />
+            </div>
+          </div>
+          <div className='press-page__logotypes-container'>
+            <div className='press-page__logotype-white'>
+              <LogotypeWhite />
+            </div>
+            <div className='press-page__logotype-black'>
+              <LogotypeBlack />
+            </div>
+          </div>
+        </div>
+        <h3 className='press-page__subheader'>sage logotype and icon</h3>
+        <p className='press-page__subheader-info'>
+          Use this logotypes for any press releases or articles that is about SAGE. Please note SAGE
+          is trademarked logo and using this logotype is not permitted  outside press releases
+        </p>
+      </div>
     </div>
   );
 }
-
-const htmlDecode = (input: string) => {
-  var e = document.createElement('div');
-  e.innerHTML = input;
-  return e.childNodes[0].nodeValue;
-};

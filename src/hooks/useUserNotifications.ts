@@ -7,7 +7,7 @@ import { GamePrize } from '@/prisma/types';
 
 function getUnclaimedNfts(prizeNfts: GamePrize[]) {
   return prizeNfts.filter((gamePrize) => {
-    return gamePrize?.claimedAt === null;
+    return gamePrize?.claimedAt == null;
   });
 }
 
