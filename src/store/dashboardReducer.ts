@@ -35,11 +35,11 @@ const dashboardApi = baseApi.injectEndpoints({
       providesTags: ['Config'],
     }),
     promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
-      queryFn: async ({ walletAddress, signer }, { dispatch }, extraOptions, fetchWithBQ) => {
+      queryFn: async ({ walletAddress, signer }, {}, _, fetchWithBQ) => {
         const contract = await getStorageContract(signer);
-        const tx = await contract.setBool(
-          ethers.utils.solidityKeccak256(['string', 'address'], ['role.artist', walletAddress]),
-          true
+        const tx = await contract.grantRole(
+          ethers.utils.solidityKeccak256(['string'], ['role.artist']),
+          walletAddress
         );
         await tx.wait();
         await fetchWithBQ(`user?action=PromoteToArtist&address=${walletAddress}`);
@@ -48,12 +48,7 @@ const dashboardApi = baseApi.injectEndpoints({
       invalidatesTags: ['AllUsers'],
     }),
     updateConfig: builder.mutation<null, { featuredDropId: Number; welcomeMessage: string }>({
-      queryFn: async (
-        { featuredDropId, welcomeMessage },
-        { dispatch },
-        extraOptions,
-        fetchWithBQ
-      ) => {
+      queryFn: async ({ featuredDropId, welcomeMessage }, {}, _, fetchWithBQ) => {
         await fetchWithBQ({
           url: 'config',
           method: 'PATCH',

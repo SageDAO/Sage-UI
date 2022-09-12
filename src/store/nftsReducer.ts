@@ -15,6 +15,7 @@ import { Offer } from '@prisma/client';
 import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
 import { registerMarketplaceSale } from '@/utilities/sales';
+import { parameters } from '@/constants/config';
 
 export interface MintRequest {
   name: string;
@@ -44,6 +45,8 @@ export interface SearchableNftData {
   dName?: string; // dropName
 }
 
+const { CHAIN_ID } = parameters;
+
 const nftsApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -59,7 +62,7 @@ const nftsApi = baseApi.injectEndpoints({
       providesTags: ['Nfts'],
     }),
     mintSingleNft: builder.mutation<number, MintRequest>({
-      queryFn: async (mintRequest, { dispatch }, _, fetchWithBQ) => {
+      queryFn: async (mintRequest, {}, _, fetchWithBQ) => {
         var nftId = 0;
         try {
           const endpoint = '/api/dropUploadEndpoint/';
@@ -98,7 +101,7 @@ const nftsApi = baseApi.injectEndpoints({
       invalidatesTags: ['Nfts'],
     }),
     buyFromSellOffer: builder.mutation<boolean, { offer: Offer; signer: Signer }>({
-      queryFn: async ({ offer, signer }, { dispatch }, _, fetchWithBQ) => {
+      queryFn: async ({ offer, signer }, {}, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
         const weiPrice = ethers.utils.parseEther(offer.price.toString());
         try {
@@ -120,6 +123,7 @@ const nftsApi = baseApi.injectEndpoints({
             weiPrice,
             offer.nftId,
             offer.expiresAt,
+            CHAIN_ID,
             offer.signedOffer
           );
           promiseToast(tx, `You've bought an NFT!`);
@@ -143,12 +147,12 @@ const nftsApi = baseApi.injectEndpoints({
       invalidatesTags: ['Nfts'],
     }),
     sellFromBuyOffer: builder.mutation<boolean, { offer: Offer; signer: Signer }>({
-      queryFn: async ({ offer, signer }, { dispatch }, _, fetchWithBQ) => {
+      queryFn: async ({ offer, signer }, {}, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
         const weiPrice = ethers.utils.parseEther(offer.price.toString());
         try {
           console.log(
-            `sellFromBuyOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${offer.nftId}, ${offer.expiresAt}, ${offer.signedOffer})`
+            `sellFromBuyOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${offer.nftId}, ${offer.expiresAt}, ${CHAIN_ID}, ${offer.signedOffer})`
           );
           const tx = await marketplaceContract.sellFromBuyOffer(
             offer.signer,
@@ -156,6 +160,7 @@ const nftsApi = baseApi.injectEndpoints({
             weiPrice,
             offer.nftId,
             offer.expiresAt,
+            CHAIN_ID,
             offer.signedOffer
           );
           promiseToast(tx, `You've sold an NFT!`);
@@ -177,7 +182,7 @@ const nftsApi = baseApi.injectEndpoints({
       invalidatesTags: ['Nfts'],
     }),
     createBuyOffer: builder.mutation<null, OfferRequest>({
-      queryFn: async (offer, { dispatch }, _, fetchWithBQ) => {
+      queryFn: async (offer, {}, _, fetchWithBQ) => {
         try {
           const weiAmount = ethers.utils.parseEther(offer.amount.toString());
           const marketplaceContract = await getMarketplaceContract(offer.signer);
@@ -314,13 +319,13 @@ async function signOffer(
   const expiresAt = Math.floor(oneWeekFromNow.getTime() / 1000);
   const signerAddress = await signer.getAddress();
   const message = ethers.utils.defaultAbiCoder.encode(
-    ['address', 'address', 'uint256', 'uint256', 'uint256', 'bool'],
-    [signerAddress, nftContractAddress, weiPrice, nftId, expiresAt, isSellOffer]
+    ['address', 'address', 'uint256', 'uint256', 'uint256', 'uint256', 'bool'],
+    [signerAddress, nftContractAddress, weiPrice, nftId, expiresAt, CHAIN_ID, isSellOffer]
   );
   const encodedMessage = ethers.utils.keccak256(message);
   const signedOffer = await signer.signMessage(ethers.utils.arrayify(encodedMessage));
   console.log(
-    `signOffer(${signerAddress}, ${nftContractAddress}, ${weiPrice}, ${nftId}, ${expiresAt}, ${isSellOffer}) :: ${signedOffer}`
+    `signOffer(${signerAddress}, ${nftContractAddress}, ${weiPrice}, ${nftId}, ${expiresAt}, ${CHAIN_ID}, ${isSellOffer}) :: ${signedOffer}`
   );
   return { signedOffer, expiresAt };
 }

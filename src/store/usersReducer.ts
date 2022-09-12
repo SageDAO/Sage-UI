@@ -70,7 +70,7 @@ const usersApi = baseApi.injectEndpoints({
       },
     }),
     updateArtist: builder.mutation<null, { user: SafeUserUpdate; bannerFile: File }>({
-      queryFn: async ({ user, bannerFile }, { dispatch }, extraOptions, fetchWithBQ) => {
+      queryFn: async ({ user, bannerFile }, { dispatch }) => {
         const endpoint = '/api/dropUploadEndpoint/';
         const s3Path = await uploadFileToS3Bucket(
           endpoint,
@@ -84,7 +84,7 @@ const usersApi = baseApi.injectEndpoints({
       },
     }),
     updateUser: builder.mutation<null, SafeUserUpdate>({
-      queryFn: async (user, { dispatch }, extraOptions, fetchWithBQ) => {
+      queryFn: async (user, {}, _, fetchWithBQ) => {
         try {
           const result = await fetchWithBQ({
             url: 'user',

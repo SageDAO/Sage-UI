@@ -43,7 +43,7 @@ const prizesApi = baseApi.injectEndpoints({
       providesTags: ['Prizes'],
     }),
     claimLotteryPrize: builder.mutation<Date, ClaimPrizeRequest>({
-      queryFn: async (args, {}, _extraOptions, _fetchWithBQ) => {
+      queryFn: async (args, {}, _, fetchWithBQ) => {
         try {
           const contract = await getLotteryContract(args.signer);
           var tx = await contract.claimPrize(
@@ -56,7 +56,7 @@ const prizesApi = baseApi.injectEndpoints({
           promiseToast(tx, `NFT claimed and moved to your collection!`);
           await tx.wait();
           var claimedAt = await updateDbPrizeClaimedDate(
-            _fetchWithBQ,
+            fetchWithBQ,
             args.lotteryId,
             args.walletAddress,
             args.nftId
@@ -66,7 +66,7 @@ const prizesApi = baseApi.injectEndpoints({
           const errMsg = extractErrorMessage(e);
           if (errMsg == 'Participant already claimed prize') {
             var claimedAt = await updateDbPrizeClaimedDate(
-              _fetchWithBQ,
+              fetchWithBQ,
               args.lotteryId,
               args.walletAddress,
               args.nftId

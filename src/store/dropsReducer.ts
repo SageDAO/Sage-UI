@@ -1,9 +1,5 @@
 import { ethers, Signer } from 'ethers';
-import {
-  DropFull,
-  Drop_include_GamesAndArtist,
-  Splitter_include_Entries,
-} from '@/prisma/types';
+import { DropFull, Drop_include_GamesAndArtist, Splitter_include_Entries } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { getAuctionContract, getLotteryContract } from '@/utilities/contracts';
 import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
@@ -34,11 +30,11 @@ const dropsApi = baseApi.injectEndpoints({
       },
     }),
     deleteDrop: builder.mutation<null, number>({
-      queryFn: async(dropId, { dispatch }, _, fetchWithBQ) => {
+      queryFn: async (dropId, {}, _, fetchWithBQ) => {
         await fetchWithBQ(`drops?action=DeleteDrop&id=${dropId}`);
         return { data: null };
       },
-      invalidatesTags: ['PendingDrops']
+      invalidatesTags: ['PendingDrops'],
     }),
   }),
 });
@@ -229,8 +225,8 @@ async function createLotteries(
       `LotteryContract.createLottery(${l.id}, ${
         l.costPerTicketPoints
       }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${artistNftContractAddress}, ${
-        l.isRefundable
-      }, ${l.maxTickets || 0}, ${l.maxTicketsPerUser || 0}, ${lowestId}, ${highestId})`
+        l.maxTickets || 0
+      }, ${l.maxTicketsPerUser || 0}, ${lowestId}, ${highestId})`
     );
     const tx = await lotteryContract.createLottery(
       l.id,
@@ -239,7 +235,6 @@ async function createLotteries(
       startTime,
       endTime,
       artistNftContractAddress,
-      l.isRefundable,
       l.maxTickets || 0,
       l.maxTicketsPerUser || 0,
       lowestId,

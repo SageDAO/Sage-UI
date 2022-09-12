@@ -26,7 +26,7 @@ export const pointsApi = baseApi.injectEndpoints({
       providesTags: ['UserPoints'],
     }),
     getPointsBalanceByUser: builder.query<string, string>({
-      queryFn: async (walletAddress, { dispatch }, _extraOptions, fetchWithBQ) => {
+      queryFn: async (walletAddress, {}, _extraOptions, fetchWithBQ) => {
         const { data } = await fetchWithBQ(`points?address=${walletAddress}`);
         const pointsEarned = BigInt((data as any).totalPointsEarned);
         const userAddress = (data as EarnedPoints).address;
