@@ -20,7 +20,7 @@ export default function useAuction({ auction, artist }: Args) {
   const nftName = transformTitle(auction.Nft.name);
   const artistName = transformTitle(artist.username);
   const editionSize = auction.Nft.numberOfEditions;
-  const nftPath = auction.Nft.s3Path;
+  const nftPath = auction.Nft.s3PathOptimized;
   const bidLabel = auction.winnerAddress
     ? 'winning bid'
     : !isEnded

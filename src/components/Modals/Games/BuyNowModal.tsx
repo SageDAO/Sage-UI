@@ -42,7 +42,7 @@ export default function BuyNowModal({ isOpen, closeModal, artist, nft, offer }: 
         </section>
         <section className='games-modal__body'>
           <div className='games-modal__main-img-container'>
-            <BaseMedia src={nft.s3Path} isZoomable={true} />
+            <BaseMedia src={nft.s3PathOptimized} isZoomable={true} />
           </div>
           <div className='games-modal__main-content'>
             <div>

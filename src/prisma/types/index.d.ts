@@ -85,6 +85,7 @@ export type GamePrize = {
   artistUsername: User['username'];
   artistProfilePicture: User['profilePicture'];
   s3Path: Nft['s3Path'];
+  s3PathOptimized: Nft['s3PathOptimized'];
   claimedAt?: PrizeProof['claimedAt'];
 };
 

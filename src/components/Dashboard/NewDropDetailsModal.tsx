@@ -47,7 +47,7 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
                         {lottery.Nfts.map((nft, i) => {
                           return (
                             <td key={i} style={{ padding: '10px' }}>
-                              <img src={nft.s3Path} width={150} />
+                              <img src={nft.s3PathOptimized} width={150} />
                               <br />
                               Name: {nft.name}
                               <br />
@@ -83,7 +83,7 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
                   Min Price: {auction.minimumPrice} ASH
                   <br />
                   <br />
-                  <img src={auction.Nft.s3Path} width={150} />
+                  <img src={auction.Nft.s3PathOptimized} width={150} />
                   <br />
                   Name: {auction.Nft.name}
                   <br />

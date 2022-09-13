@@ -64,7 +64,7 @@ export default function ListingTile({ nft, artist }: Props) {
         />
       )}
       <div className='artist-page__grid-tile-media'>
-        <BaseMedia src={nft.s3Path} />
+        <BaseMedia src={nft.s3PathOptimized} />
       </div>
       <div className='artist-page__grid-tile-info'>
         <div className='artist-page__grid-tile-info-left'>

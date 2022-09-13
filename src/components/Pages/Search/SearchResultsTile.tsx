@@ -38,7 +38,7 @@ export default function SearchResultsTile({ nft, i }: Props) {
   return (
     <div className='search-page__grid-item' data-aspect={dataAspect} onClick={handleClick}>
       <div onClick={handleClick} className='search-page__grid-item-img'>
-        <BaseMedia className='search-page__grid-item-img' src={nft.s3Path}></BaseMedia>
+        <BaseMedia className='search-page__grid-item-img' src={nft.s3PathOptimized}></BaseMedia>
       </div>
       <div className='search-page__grid-item-info'>
         <h1 className='search-page__grid-item-info-nft-name'>{transformTitle(nft.name)}</h1>

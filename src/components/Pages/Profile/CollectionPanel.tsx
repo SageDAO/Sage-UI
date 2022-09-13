@@ -49,12 +49,12 @@ export default function CollectionPanel() {
                 {!myNfts.length && 'a little bit empty...'}
                 {myNfts &&
                   myNfts?.map((nft: GamePrize | CollectedListingNft) => {
-                    if (!nft?.s3Path) return null;
+                    if (!nft?.s3PathOptimized) return null;
 										// if ()
                     return (
                       <div key={nft.nftId} className='collection-panel__tile'>
                         <div className='collection-panel__img-container'>
-                          <BaseMedia src={nft.s3Path} isZoomable={true}></BaseMedia>
+                          <BaseMedia src={nft.s3PathOptimized} isZoomable={true}></BaseMedia>
                         </div>
                         <div className='collection-panel__tile-header'>
                           by {nft.artistUsername}

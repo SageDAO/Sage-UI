@@ -73,7 +73,7 @@ export default function Notifications() {
                               <td className='notifications-panel__td--creation'>
                                 <div className='notifications-panel__td-media-container'>
                                   <BaseMedia
-                                    src={nft.s3Path}
+                                    src={nft.s3PathOptimized}
                                     className='notifications-panel__td-media'
                                   ></BaseMedia>
                                 </div>

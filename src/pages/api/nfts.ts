@@ -45,7 +45,7 @@ async function getSearchableNftData(response: NextApiResponse) {
     const result = Array<SearchableNftData>();
     const nfts = await prisma.nft.findMany({
       where: { isHidden: false },
-      distinct: ['s3Path'],
+      distinct: ['s3PathOptimized'],
       include: {
         Auction: { include: { Drop: { include: { NftContract: { include: { Artist: true } } } } } },
         Lottery: { include: { Drop: { include: { NftContract: { include: { Artist: true } } } } } },
@@ -58,7 +58,7 @@ async function getSearchableNftData(response: NextApiResponse) {
       result.push({
         name: n.name,
         tags: n.tags,
-        s3Path: n.s3Path,
+        s3PathOptimized: n.s3PathOptimized,
         artist:
           n.NftContract?.Artist.username! ||
           n.Auction?.Drop.NftContract.Artist.username! ||
@@ -223,5 +223,6 @@ function flatten(nft: Nft, artist: User): CollectedListingNft {
     artistUsername: artist.username!,
     artistProfilePicture: artist.profilePicture!,
     s3Path: nft.s3Path,
+    s3PathOptimized: nft.s3PathOptimized,
   };
 }
