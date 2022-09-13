@@ -120,7 +120,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               return (
                 <LotteryTile
                   key={l.id}
-                  imgSrc={l.Nfts[0].s3Path}
+                  imgSrc={l.Nfts[0].s3PathOptimized}
                   dropName={drop.name}
                   artist={artist}
                   editionSize={computeEditionSize(l.Nfts)}
@@ -133,7 +133,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               return (
                 <DrawingTile
                   key={d.id}
-                  imgSrc={d.Nfts[0].s3Path}
+                  imgSrc={d.Nfts[0].s3PathOptimized}
                   dropName={drop.name}
                   artist={artist}
                   editionSize={d.Nfts[0].numberOfEditions}

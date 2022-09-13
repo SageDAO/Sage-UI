@@ -39,7 +39,7 @@ export interface OfferRequest {
 export interface SearchableNftData {
   name: string;
   tags: string;
-  s3Path: string;
+  s3PathOptimized: string;
   artist: string; // username
   dId?: number; // dropId
   dName?: string; // dropName

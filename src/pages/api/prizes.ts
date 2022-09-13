@@ -15,6 +15,7 @@ function flatten(dbPrize: PrizeWithNftAndArtist): GamePrize {
     artistUsername: dbPrize.Nft.Lottery?.Drop.NftContract.Artist.username!,
     artistProfilePicture: dbPrize.Nft.Lottery?.Drop.NftContract.Artist.profilePicture!,
     s3Path: dbPrize.Nft.s3Path,
+    s3PathOptimized: dbPrize.Nft.s3PathOptimized,
     claimedAt: dbPrize.claimedAt || undefined,
   };
 }
