@@ -5,7 +5,6 @@ import { useSigner } from 'wagmi';
 import { Signer } from 'ethers';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { MintRequest, useMintSingleNftMutation } from '@/store/nftsReducer';
-import { animated, Spring } from 'react-spring';
 import FileInputWithPreview from '@/components/FileInputWithPreview';
 import {
   useDeployArtistNftContractMutation,
@@ -125,98 +124,83 @@ export default function CreationsPanel() {
 
   return (
     <Fragment>
-      <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
-        {(styles) => {
-          return (
-            <animated.h1 style={styles} className='profile-page__tabs-panel-header'>
-              creations panel
-              <span className='profile-page__tabs-panel-subheader'>mint your own artwork</span>
-            </animated.h1>
-          );
-        }}
-      </Spring>
-      <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
-        {(styles) => {
-          return (
-            <animated.div style={styles} className='creations-panel'>
-              <form className='creations-panel__form'>
-                {artistNftContractAddress ? (
-                  <span className='profile-page__tabs-panel-contract-address'>
-                    Your SAGE NFT Contract: {artistNftContractAddress}
-                  </span>
-                ) : (
-                  <button
-                    disabled={isDeploying || isMinting}
-                    className='creations-panel__submit-button'
-                    type='button'
-                    onClick={handleDeployContractButtonClick}
-                  >
-                    {isDeploying || isMinting ? <LoaderSpinner /> : `deploy your SAGE NFT contract`}
-                  </button>
-                )}
-                <div className='creations-panel__file-upload-group'>
-                  <FileInputWithPreview onFileChange={handleFileInputChange} />
-                  <h1 className='creations-panel__file-upload-label'>
-                    ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF and MP4 )
-                  </h1>
-                </div>
-                <div className='creations-panel__file-title-group'>
-                  <h1 className='creations-panel__file-title-label'>artwork title *</h1>
-                  <input
-                    value={state.title}
-                    onChange={handleTitleInputChange}
-                    className='creations-panel__file-title-field'
-                  />
-                </div>{' '}
-                <div className='creations-panel__file-desc-group'>
-                  <h1 className='creations-panel__file-desc-label'>artwork description</h1>
-                  <textarea
-                    value={state.description}
-                    onChange={handleDescriptionInputChange}
-                    className='creations-panel__file-desc-field'
-                    maxLength={500}
-                  />
-                </div>
-                <div className='creations-panel__file-title-group'>
-                  <h1 className='creations-panel__file-title-label'>tags</h1>
-                  <input
-                    value={state.tags}
-                    onChange={handleTagsInputChange}
-                    className='creations-panel__file-title-field'
-                  />
-                </div>
-                <div className='creations-panel__file-title-group'>
-                  <h1 className='creations-panel__file-title-label'>pricing type *</h1>
-                  <select
-                    onChange={handlePriceTypeChange}
-                    className='creations-panel__file-title-field'
-                  >
-                    <option value='true'>fixed price</option>
-                    <option value='false'>minimum price</option>
-                  </select>
-                </div>
-                <div className='creations-panel__file-title-group'>
-                  <h1 className='creations-panel__file-title-label'>artwork price (ASH) *</h1>
-                  <input
-                    type='number'
-                    value={state.price}
-                    onChange={handlePriceInputChange}
-                    className='creations-panel__file-title-field'
-                  />
-                </div>
-                <button
-                  disabled={isMinting || isDeploying || !artistNftContractAddress}
-                  className='creations-panel__submit-button'
-                  type='button'
-                  onClick={handleMintButtonClick}
-                >
-                  {isMinting || isDeploying ? <LoaderSpinner /> : `mint artwork`}
-                </button>
-              </form>
-            </animated.div>
-          );
-        }}
-      </Spring>
+      <h1 className='profile-page__tabs-panel-header'>
+        creations panel
+        <span className='profile-page__tabs-panel-subheader'>mint your own artwork</span>
+      </h1>
+      <div className='creations-panel'>
+        <form className='creations-panel__form'>
+          {artistNftContractAddress ? (
+            <span className='profile-page__tabs-panel-contract-address'>
+              Your SAGE NFT Contract: {artistNftContractAddress}
+            </span>
+          ) : (
+            <button
+              disabled={isDeploying || isMinting}
+              className='creations-panel__submit-button'
+              type='button'
+              onClick={handleDeployContractButtonClick}
+            >
+              {isDeploying || isMinting ? <LoaderSpinner /> : `deploy your SAGE NFT contract`}
+            </button>
+          )}
+          <div className='creations-panel__file-upload-group'>
+            <FileInputWithPreview onFileChange={handleFileInputChange} />
+            <h1 className='creations-panel__file-upload-label'>
+              ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF and MP4 )
+            </h1>
+          </div>
+          <div className='creations-panel__file-title-group'>
+            <h1 className='creations-panel__file-title-label'>artwork title *</h1>
+            <input
+              value={state.title}
+              onChange={handleTitleInputChange}
+              className='creations-panel__file-title-field'
+            />
+          </div>{' '}
+          <div className='creations-panel__file-desc-group'>
+            <h1 className='creations-panel__file-desc-label'>artwork description</h1>
+            <textarea
+              value={state.description}
+              onChange={handleDescriptionInputChange}
+              className='creations-panel__file-desc-field'
+              maxLength={500}
+            />
+          </div>
+          <div className='creations-panel__file-title-group'>
+            <h1 className='creations-panel__file-title-label'>tags</h1>
+            <input
+              value={state.tags}
+              onChange={handleTagsInputChange}
+              className='creations-panel__file-title-field'
+            />
+          </div>
+          <div className='creations-panel__file-title-group'>
+            <h1 className='creations-panel__file-title-label'>pricing type *</h1>
+            <select onChange={handlePriceTypeChange} className='creations-panel__file-title-field'>
+              <option value='true'>fixed price</option>
+              <option value='false'>minimum price</option>
+            </select>
+          </div>
+          <div className='creations-panel__file-title-group'>
+            <h1 className='creations-panel__file-title-label'>artwork price (ASH) *</h1>
+            <input
+              type='number'
+              value={state.price}
+              onChange={handlePriceInputChange}
+              className='creations-panel__file-title-field'
+            />
+          </div>
+          <button
+            disabled={isMinting || isDeploying || !artistNftContractAddress}
+            className='creations-panel__submit-button'
+            type='button'
+            onClick={handleMintButtonClick}
+          >
+            {isMinting || isDeploying ? <LoaderSpinner /> : `mint artwork`}
+          </button>
+        </form>
+      </div>
     </Fragment>
   );
 }

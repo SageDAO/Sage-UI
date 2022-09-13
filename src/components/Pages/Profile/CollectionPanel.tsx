@@ -5,7 +5,6 @@ import LoaderDots from '@/components/LoaderDots';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useSession } from 'next-auth/react';
 import { useGetListingNftsByOwnerQuery } from '@/store/nftsReducer';
-import { animated, Spring } from 'react-spring';
 
 export default function CollectionPanel() {
   const { data: sessionData } = useSession();
@@ -28,46 +27,33 @@ export default function CollectionPanel() {
 
   return (
     <>
-      <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
-        {(styles) => {
-          return (
-            <animated.h1 style={styles} className='profile-page__tabs-panel-header'>
-              collection
-              <span className='profile-page__tabs-panel-subheader'>
-                your collection of artworks on SAGE
-              </span>
-            </animated.h1>
-          );
-        }}
-      </Spring>
-
-      <Spring to={{ translateX: 0 }} from={{ translateX: -100 }}>
-        {(styles) => {
-          return (
-            <animated.div style={styles} className='collection-panel'>
-              <div className='collection-panel__grid'>
-                {!myNfts.length && 'a little bit empty...'}
-                {myNfts &&
-                  myNfts?.map((nft: GamePrize | CollectedListingNft) => {
-                    if (!nft?.s3PathOptimized) return null;
-										// if ()
-                    return (
-                      <div key={nft.nftId} className='collection-panel__tile'>
-                        <div className='collection-panel__img-container'>
-                          <BaseMedia src={nft.s3PathOptimized} isZoomable={true}></BaseMedia>
-                        </div>
-                        <div className='collection-panel__tile-header'>
-                          by {nft.artistUsername}
-                          <h1 className='collection-panel__tile-name'>{nft.nftName}</h1>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </animated.div>
-          );
-        }}
-      </Spring>
+      <h1 className='profile-page__tabs-panel-header'>
+        collection
+        <span className='profile-page__tabs-panel-subheader'>
+          your collection of artworks on SAGE
+        </span>
+      </h1>
+      <div className='collection-panel'>
+        <div className='collection-panel__grid'>
+          {!myNfts.length && 'a little bit empty...'}
+          {myNfts &&
+            myNfts?.map((nft: GamePrize | CollectedListingNft) => {
+              if (!nft?.s3PathOptimized) return null;
+              // if ()
+              return (
+                <div key={nft.nftId} className='collection-panel__tile'>
+                  <div className='collection-panel__img-container'>
+                    <BaseMedia src={nft.s3PathOptimized} isZoomable={true}></BaseMedia>
+                  </div>
+                  <div className='collection-panel__tile-header'>
+                    by {nft.artistUsername}
+                    <h1 className='collection-panel__tile-name'>{nft.nftName}</h1>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      </div>
     </>
   );
 }
