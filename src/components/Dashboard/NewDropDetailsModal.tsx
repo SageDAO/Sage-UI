@@ -53,8 +53,6 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
                               <br />
                               Editions: {nft.numberOfEditions}
                               <br />
-                              Tags: {nft.tags}
-                              <br />
                               Description: {nft.description}
                               <br />
                             </td>
@@ -86,8 +84,6 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
                   <img src={auction.Nft.s3PathOptimized} width={150} />
                   <br />
                   Name: {auction.Nft.name}
-                  <br />
-                  Tags: {auction.Nft.tags}
                   <br />
                   Description: {auction.Nft.description}
                   <br />

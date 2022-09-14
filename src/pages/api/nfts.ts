@@ -57,7 +57,7 @@ async function getSearchableNftData(response: NextApiResponse) {
       if (n.Lottery && !n.Lottery.Drop.approvedAt) continue;
       result.push({
         name: n.name,
-        tags: n.tags,
+        // tags: n.tags,
         s3PathOptimized: n.s3PathOptimized,
         artist:
           n.NftContract?.Artist.username! ||

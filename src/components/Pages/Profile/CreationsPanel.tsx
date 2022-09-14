@@ -16,7 +16,7 @@ interface State {
   file: File | null;
   title: string;
   description: string;
-  tags: string;
+  //tags: string;
   price: string;
   isFixedPrice: boolean;
 }
@@ -25,7 +25,7 @@ const INITIAL_STATE: State = {
   file: null,
   title: '',
   description: '',
-  tags: '',
+  //tags: '',
   price: '',
   isFixedPrice: true,
 };
@@ -61,11 +61,11 @@ export default function CreationsPanel() {
     });
   }
 
-  function handleTagsInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setState((prevState) => {
-      return { ...prevState, tags: e.target.value };
-    });
-  }
+  // function handleTagsInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   setState((prevState) => {
+  //     return { ...prevState, tags: e.target.value };
+  //   });
+  // }
 
   function handleDescriptionInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setState((prevState) => {
@@ -108,7 +108,7 @@ export default function CreationsPanel() {
     const result = await mintSingleNft({
       name: state.title,
       description: state.description,
-      tags: state.tags,
+      //tags: state.tags,
       price: parseFloat(state.price),
       isFixedPrice: state.isFixedPrice,
       file: state.file,
@@ -167,14 +167,14 @@ export default function CreationsPanel() {
               maxLength={500}
             />
           </div>
-          <div className='creations-panel__file-title-group'>
+          {/* <div className='creations-panel__file-title-group'>
             <h1 className='creations-panel__file-title-label'>tags</h1>
             <input
               value={state.tags}
               onChange={handleTagsInputChange}
               className='creations-panel__file-title-field'
             />
-          </div>
+          </div> */}
           <div className='creations-panel__file-title-group'>
             <h1 className='creations-panel__file-title-label'>pricing type *</h1>
             <select onChange={handlePriceTypeChange} className='creations-panel__file-title-field'>

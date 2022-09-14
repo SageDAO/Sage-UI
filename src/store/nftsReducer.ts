@@ -20,7 +20,7 @@ import { parameters } from '@/constants/config';
 export interface MintRequest {
   name: string;
   description: string;
-  tags: string;
+  //tags: string;
   price: number;
   isFixedPrice: boolean;
   file: File;
@@ -38,7 +38,7 @@ export interface OfferRequest {
 
 export interface SearchableNftData {
   name: string;
-  tags: string;
+  // tags: string;
   s3PathOptimized: string;
   artist: string; // username
   dId?: number; // dropId
@@ -256,7 +256,7 @@ async function dbInsertNft(
       artistAddress,
       name: mintRequest.name,
       description: mintRequest.description,
-      tags: mintRequest.tags,
+      //tags: mintRequest.tags,
       price: mintRequest.price,
       s3Path,
       metadataPath,

@@ -223,7 +223,7 @@ async function insertAuction(data: any, response: NextApiResponse) {
           create: {
             name: data.name,
             description: data.description || '',
-            tags: data.tags || '',
+            // tags: data.tags || '',
             numberOfEditions: 1,
             metadataPath: data.metadataPath,
             s3Path: data.s3Path,
@@ -246,7 +246,7 @@ async function insertNft(data: any, response: NextApiResponse) {
       data: {
         name: data.name,
         description: data.description || '',
-        tags: data.tags || '',
+        // tags: data.tags || '',
         numberOfEditions: toNumber(data.numberOfEditions),
         metadataPath: data.metadataPath,
         s3Path: data.s3Path,

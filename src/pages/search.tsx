@@ -83,7 +83,7 @@ function performSearch(data: SearchableNftData[], query: string): SearchableNftD
     return (
       item.artist.toLowerCase().indexOf(query) != -1 ||
       item.name.toLowerCase().indexOf(query) != -1 ||
-      item.tags.toLowerCase().indexOf(query) != -1 ||
+      // item.tags.toLowerCase().indexOf(query) != -1 ||
       (item.dName && item.dName.toLowerCase().indexOf(query) != -1)
     );
   });
