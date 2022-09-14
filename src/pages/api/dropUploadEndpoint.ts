@@ -27,15 +27,18 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     query: { action },
   } = request;
   switch (action) {
+    case 'GetArtistNftContractAddress':
+      await getArtistNftContractAddress(String(request.query.artistAddress), response);
+      break;
     case 'CreateS3SignedUrl':
       await createS3SignedUrl(
-        request.query.bucket as string,
-        request.query.filename as string,
+        String(request.query.bucket),
+        String(request.query.filename),
         response
       );
       break;
     case 'CopyFromS3toArweave':
-      await copyFromS3toArweave(request.query.s3Path as string, response);
+      await copyFromS3toArweave(String(request.query.s3Path), response);
       break;
     case 'UploadNftMetadataToArweave':
       await uploadNftMetadataToArweave(request.body, response);
@@ -67,6 +70,14 @@ async function setupCors(request: NextApiRequest, response: NextApiResponse) {
     origin: '*',
     optionsSuccessStatus: 200,
   });
+}
+
+async function getArtistNftContractAddress(artistAddress: string, response: NextApiResponse) {
+  const result = await prisma.nftContract.findUnique({
+    where: { artistAddress }
+  });
+  const nftContractAddress = result ? result.contractAddress : null;
+  response.json({nftContractAddress});
 }
 
 /**
