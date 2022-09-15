@@ -55,7 +55,7 @@ function App({ Component, pageProps, router }: AppProps) {
   return (
     <ReduxProvider store={store}>
       <WagmiProvider client={wagmiClient}>
-        <SessionProvider session={pageProps.session} refetchInterval={0}>
+        <SessionProvider refetchInterval={0}>
           <ApolloProvider client={apolloClient}>
             <SearchContext.Provider value={{ query, setQuery }}>
               <Head>

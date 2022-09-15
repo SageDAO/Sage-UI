@@ -2,7 +2,6 @@ import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } fro
 import prisma from '@/prisma/client';
 import { Drop as DropType, Lottery, Nft, User } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
-import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';
@@ -11,10 +10,10 @@ import System, { computeDropSystems } from '@/components/Icons/System';
 import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
 import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
-import SageLogoSVG from '@/public/icons/sage.svg';
-import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { reformatDate } from '@/utilities/strings';
+import useDrop from '@/hooks/useDrop';
+import { BaseMedia } from '@/components/Media/BaseMedia';
 
 //type drop page data
 type DropPageData = Awaited<ReturnType<typeof getIndividualDropsPageData>>;
@@ -48,36 +47,22 @@ function computeEditionSize(nfts: Nft[]) {
   return editionSize;
 }
 
-function computeDropEditionSize({
-  drawings,
-  auctions,
-  lotteries,
-}: Pick<Props, 'drawings' | 'auctions' | 'lotteries'>) {
-  let dropEditionSize: number = 0;
-  drawings.forEach((d) => {
-    dropEditionSize += computeEditionSize(d.Nfts);
-  });
-  lotteries.forEach((l) => {
-    dropEditionSize += computeEditionSize(l.Nfts);
-  });
-  auctions.forEach((a) => {
-    dropEditionSize += computeEditionSize([a.Nft]);
-  });
-  return dropEditionSize;
-}
-
 export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
-  const systems = computeDropSystems({ lottery: lotteries, auction: auctions, drawing: drawings });
+  const { systemTypes, bannerImgSrc, dropName, dropDescription, artistName, createdAt } = useDrop({
+    drop,
+    Auctions: auctions,
+    Lotteries: drawings,
+    artist,
+  });
   const { data: sessionData } = useSession();
   const ticketCountMap = useTicketCount(
     new Array().concat(drawings, lotteries),
     sessionData?.address as string
   );
-  const bannerSrc = drop.bannerImageS3Path;
   return (
     <>
       <div className='drop-page__banner-base'>
-        <Image src={bannerSrc} layout='fill' objectFit='cover' />
+        <BaseMedia src={bannerImgSrc} />
       </div>
       <div className='drop-page'>
         <header className='drop-page__header'>
@@ -87,23 +72,16 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
           <section className='drop-page__header-drop-info'>
             <div className='drop-page__header-main-column'>
               <h1 className='drop-page__header-drop-name'>
-                <i className='drop-page__header-drop-name-italic'>{drop.name},</i> by{' '}
-                {artist.username}
+                <i className='drop-page__header-drop-name-italic'>{dropName},</i> by {artistName}
               </h1>
-              <p className='drop-page__header-drop-description'>
-							{drop.description}
-              </p>
+              <p className='drop-page__header-drop-description'>{dropDescription}</p>
               <div className='drop-page__header-drop-details'>
-                <h1 className='drop-page__header-drop-details-item'>
-                  Minted by: {artist.username}
-                </h1>
-                <h1 className='drop-page__header-drop-details-item'>
-                  Creation date: {reformatDate(drop.createdAt)}
-                </h1>
+                <h1 className='drop-page__header-drop-details-item'>Minted by: {artistName}</h1>
+                <h1 className='drop-page__header-drop-details-item'>Creation date: {createdAt}</h1>
               </div>
               <div className='drop-page__header-drop-details-systems'>
                 Systems in this drop:
-                {systems.map((type) => {
+                {systemTypes.map((type) => {
                   return (
                     <div key={type} className='drop-page__systems-icon'>
                       <System type={type}></System>

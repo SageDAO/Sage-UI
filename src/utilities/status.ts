@@ -1,18 +1,24 @@
 import { Lottery as LotteryType, Auction as AuctionType } from '@prisma/client';
-import { Drop_include_GamesAndArtist } from '@/prisma/types';
+import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 
 type Game = Partial<LotteryType> | Partial<AuctionType>;
 
 type Status = 'Done' | 'Live' | 'Unknown' | 'Upcoming' | 'Settled';
 
-export function computeDropStatus({ Lotteries, Auctions }: Drop_include_GamesAndArtist) {
+export function computeDropStatus({
+  Lotteries,
+  Auctions,
+}: {
+  Lotteries: Lottery_include_Nft[];
+  Auctions: Auction_include_Nft[];
+}) {
   let games: Game[];
   let startTime: number;
   let endTime: number;
   let status: Status = 'Unknown';
-  games = [...Lotteries!, ...Auctions!];
+  games = [...Lotteries, ...Auctions];
   games.sort((a: any, b: any) => +a.startTime - +b.startTime);
-  startTime = +games[0].startTime!;
+  startTime = +games[0].startTime;
   games.sort((a: any, b: any) => +b.endTime + a.endTime);
   endTime = +games[0].endTime!;
   //TODO: status countdown

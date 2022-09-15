@@ -6,6 +6,7 @@ import Countdown from '@/components/Countdown';
 import useWindowDimensions from '@/hooks/useWindowSize';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import { transformTitle } from '@/utilities/strings';
+import useDrop, { UseDropArgs } from '@/hooks/useDrop';
 
 interface Props {
   upcomingDrops: Awaited<ReturnType<typeof getHomePageData>>['upcomingDrops'];
@@ -26,39 +27,13 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
             <div key={i} className='home-page__upcoming-drops-grid--mobile'>
               <div className='home-page__upcoming-drops-row--mobile'>
                 {row.map((d) => {
-                  const src = d.bannerImageS3Path;
-                  // const text = ;
-                  const { startTime, status } = computeDropStatus(d);
-                  const display =
-                    status === 'Upcoming' ? <Countdown endTime={startTime} /> : status;
-                  function onClick() {
-                    pushToDrops(d.id);
-                  }
                   return (
-                    <div
-                      className='home-page__upcoming-drops-tile--mobile'
-                      key={d.id}
-                      onClick={onClick}
-                    >
-                      {status !== 'Done' && (
-                        <div className='home-page__upcoming-drops-countdown' data-status={status}>
-                          {display}
-                        </div>
-                      )}
-                      <BaseMedia src={src} />
-                      <h3 className='home-page__upcoming-drops-tile-tag'>
-                        <mark className='home-page__upcoming-drops-tile-tag-item'>
-                          <i className='home-page__upcoming-drops-tile-tag-item-name'>
-                            {transformTitle(d.name)}
-                          </i>
-                          , by {d.NftContract.Artist.username}
-                        </mark>
-                        <br />
-                        <mark className='home-page__upcoming-drops-tile-tag-item'>
-                          SAGE-Curated
-                        </mark>
-                      </h3>
-                    </div>
+                    <UpcomingDropsTile
+                      Lotteries={d.Lotteries}
+                      Auctions={d.Auctions}
+                      drop={d}
+                      artist={d.NftContract.Artist}
+                    />
                   );
                 })}
               </div>
@@ -112,6 +87,38 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+interface UpcomingDropsTileProps extends UseDropArgs {}
+
+function UpcomingDropsTile(props: UpcomingDropsTileProps) {
+  const {
+    goToDropOnClick,
+    status: dropStatus,
+    statusDisplay,
+    bannerImgSrc,
+    startTime,
+    artistName,
+    dropName,
+  } = useDrop(props);
+  return (
+    <div className='home-page__upcoming-drops-tile--mobile' onClick={goToDropOnClick}>
+      {dropStatus !== 'Done' && (
+        <div className='home-page__upcoming-drops-countdown' data-status={dropStatus}>
+          {dropStatus === 'Upcoming' ? <Countdown endTime={startTime} /> : statusDisplay}
+        </div>
+      )}
+      <BaseMedia src={bannerImgSrc} />
+      <h3 className='home-page__upcoming-drops-tile-tag'>
+        <mark className='home-page__upcoming-drops-tile-tag-item'>
+          <i className='home-page__upcoming-drops-tile-tag-item-name'>{dropName}</i>, by{' '}
+          {artistName}
+        </mark>
+        <br />
+        <mark className='home-page__upcoming-drops-tile-tag-item'>SAGE-Curated</mark>
+      </h3>
     </div>
   );
 }
