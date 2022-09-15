@@ -100,6 +100,10 @@
 
 .artists-page__item-img {
   position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   aspect-ratio: 466/475;
   width: 100%;
   // height: 475px;
