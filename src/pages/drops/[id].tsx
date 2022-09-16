@@ -1,6 +1,6 @@
 import { GetStaticPropsContext, GetStaticPathsResult, GetStaticPropsResult } from 'next';
 import prisma from '@/prisma/client';
-import { Drop as DropType, Lottery, Nft, User } from '@prisma/client';
+import { Nft } from '@prisma/client';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
@@ -100,8 +100,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                   key={l.id}
                   imgSrc={l.Nfts[0].s3PathOptimized}
                   dropName={dropName}
-                  artist={artist}
-                  editionSize={computeEditionSize(l.Nfts)}
+                  artistName={artistName}
                   lottery={l}
                   tickets={ticketCountMap ? ticketCountMap[l.id] : 0}
                 />
@@ -111,10 +110,8 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               return (
                 <DrawingTile
                   key={d.id}
-                  imgSrc={d.Nfts[0].s3PathOptimized}
                   dropName={drop.name}
-                  artist={artist}
-                  editionSize={d.Nfts[0].numberOfEditions}
+                  artistName={artistName}
                   drawing={d}
                   tickets={ticketCountMap ? ticketCountMap[d.id] : 0}
                 />

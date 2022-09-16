@@ -1,60 +1,47 @@
 import { BaseMedia } from '@/components/Media/BaseMedia';
-import { Lottery_include_Nft, User } from '@/prisma/types';
+import { Lottery_include_Nft } from '@/prisma/types';
 import React from 'react';
 import GetTicketModal from '@/components/Modals/Games/GetTicketModal';
 import useModal from '@/hooks/useModal';
 import TileHeader from './TileHeader';
 import Countdown from '@/components/Countdown';
-import { transformTitle } from '@/utilities/strings';
+import useLottery from '@/hooks/useLottery';
 
 interface Props {
-  imgSrc: string;
   dropName: string;
-  artist: User;
-  editionSize: number;
+  artistName: string;
   drawing: Lottery_include_Nft;
   tickets: number;
 }
-export default function DrawingTile({
-  artist,
-  dropName,
-  imgSrc,
-  editionSize,
-  drawing,
-  tickets,
-}: Props) {
+export default function DrawingTile({ artistName, dropName, drawing, tickets }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
-  const now = new Date();
-  const isStarted = new Date(drawing.startTime) < now;
-  const isEnded = new Date(drawing.endTime) < now;
-  const isLive = isStarted && !isEnded;
+  const { isStarted, isLive, mediaSrc, selectedNftName, selectedNftEditionsCount } = useLottery({
+    lottery: drawing,
+    nfts: drawing.Nfts,
+  });
   return (
     <div onClick={openModal} className='drop-page__grid-item'>
       <GetTicketModal
         lottery={drawing}
         dropName={dropName}
-        artist={artist}
+        artistName={artistName}
         isOpen={isOpen}
         closeModal={closeModal}
         ticketCount={tickets}
         systemType='drawing'
       ></GetTicketModal>
-      <TileHeader editionSize={editionSize} systemType='drawing'></TileHeader>
+      <TileHeader editionSize={selectedNftEditionsCount} systemType='drawing'></TileHeader>
       <div className='drop-page__grid-item-media-container'>
-        <BaseMedia className='drop-page__grid-item-media-src' src={imgSrc}></BaseMedia>
+        <BaseMedia className='drop-page__grid-item-media-src' src={mediaSrc}></BaseMedia>
         <div className='drop-page__grid-item-media-overlay'></div>
-        <div className='drop-page__grid-item-focus'>
-          {drawing.endTime.getTime() > new Date().getTime() ? 'enter drawing' : 'results'}
-        </div>
+        <div className='drop-page__grid-item-focus'>{isLive ? 'enter drawing' : 'results'}</div>
       </div>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
-            {transformTitle(dropName)} by {artist.username}
+            {dropName} by {artistName}
           </h1>
-          <h1 className='drop-page__grid-item-info-game-name'>
-            {transformTitle(drawing.Nfts[0].name)}
-          </h1>
+          <h1 className='drop-page__grid-item-info-game-name'>{selectedNftName}</h1>
           {tickets > 0 && (
             <h1 className='drop-page__grid-item-info-tickets'>
               You have {tickets} {tickets > 1 ? 'entries' : 'entry'}

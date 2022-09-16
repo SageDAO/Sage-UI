@@ -1,5 +1,5 @@
 import { parameters } from '../constants/config';
-import { ArtistSales, Drop_include_GamesAndArtist } from '@/prisma/types';
+import { ArtistSales, Drop_include_GamesAndArtist, User } from '@/prisma/types';
 import { PrismaClient, Prisma, Role } from '@prisma/client';
 import { BigNumber } from 'ethers';
 
@@ -100,7 +100,9 @@ export async function getArtistsPageData(prisma: PrismaClient) {
     union
     select distinct "artistAddress" from "Nft" where "artistAddress" is not null`;
   var result = await prisma.$queryRaw(Prisma.raw(query));
-  const artistWallets = (result as any).map((row: any) => ({ walletAddress: row.artistAddress }));
+  const artistWallets = (result as any).map((row: any) => ({
+    walletAddress: row.artistAddress,
+  }));
   return await prisma.user.findMany({
     where: { OR: artistWallets },
     take: 20,

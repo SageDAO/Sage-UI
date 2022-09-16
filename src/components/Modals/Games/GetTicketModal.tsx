@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
-import { User } from '@prisma/client';
 import { Lottery_include_Nft } from '@/prisma/types';
 import {
   BuyTicketRequest,
@@ -25,7 +24,7 @@ import { transformTitle } from '@/utilities/strings';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
-  artist: User;
+  artistName: string;
   dropName: string;
   ticketCount: number;
   systemType: SystemTypes;
@@ -49,7 +48,7 @@ function GetTicketModal({
   dropName,
   closeModal,
   lottery,
-  artist,
+  artistName,
   ticketCount,
   systemType,
 }: Props) {
@@ -180,7 +179,7 @@ function GetTicketModal({
             </div>
             <div className='games-modal__main-content'>
               <span className='games-modal__drop-name'>
-                {transformTitle(dropName)} by {artist.username}
+                {dropName} by {artistName}
                 <span className='games-modal__editions-tag--mobile'>
                   {editionsCount} {editionsText}
                 </span>

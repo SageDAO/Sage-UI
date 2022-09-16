@@ -12,33 +12,28 @@ import useLottery from '@/hooks/useLottery';
 interface Props {
   imgSrc: string;
   dropName: string;
-  artist: User;
-  editionSize: number;
+  artistName: string;
   lottery: Lottery_include_Nft;
   tickets: number;
 }
-export default function LotteryTile({
-  artist,
-  dropName,
-  imgSrc,
-  editionSize,
-  lottery,
-  tickets,
-}: Props) {
+export default function LotteryTile({ artistName, dropName, lottery, tickets }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
-  const { isStarted, startTime, endTime, isEnded } = useLottery({ lottery, nfts: lottery.Nfts });
+  const { isStarted, selectedNftEditionsCount, startTime, endTime, isEnded } = useLottery({
+    lottery,
+    nfts: lottery.Nfts,
+  });
   return (
     <div className='drop-page__grid-item' onClick={openModal}>
       <GetTicketModal
         lottery={lottery}
         dropName={dropName}
-        artist={artist}
+        artistName={artistName}
         isOpen={isOpen}
         ticketCount={tickets}
         closeModal={closeModal}
         systemType={'lottery'}
       ></GetTicketModal>
-      <TileHeader systemType={'lottery'} editionSize={editionSize}></TileHeader>
+      <TileHeader systemType={'lottery'} editionSize={selectedNftEditionsCount}></TileHeader>
       <div className='drop-page__grid-item-media-container'>
         <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
         <div className='drop-page__grid-item-img-overlay'></div>
@@ -47,7 +42,7 @@ export default function LotteryTile({
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
-            {dropName} by {artist.username}
+            {dropName} by {artistName}
           </h1>
           <h1 className='drop-page__grid-item-info-game-name'>{transformTitle('lottery')}</h1>
           {tickets > 0 && (
