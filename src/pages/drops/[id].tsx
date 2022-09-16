@@ -99,7 +99,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                 <LotteryTile
                   key={l.id}
                   imgSrc={l.Nfts[0].s3PathOptimized}
-                  dropName={drop.name}
+                  dropName={dropName}
                   artist={artist}
                   editionSize={computeEditionSize(l.Nfts)}
                   lottery={l}

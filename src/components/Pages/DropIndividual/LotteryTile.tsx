@@ -7,6 +7,7 @@ import TileHeader from './TileHeader';
 import LotteryThumbnail from './LotteryThumbnail';
 import Countdown from '@/components/Countdown';
 import { transformTitle } from '@/utilities/strings';
+import useLottery from '@/hooks/useLottery';
 
 interface Props {
   imgSrc: string;
@@ -25,10 +26,7 @@ export default function LotteryTile({
   tickets,
 }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
-  const now = new Date();
-  const isStarted = new Date(lottery.startTime) < now;
-  const isEnded = new Date(lottery.endTime) < now;
-  const isLive = isStarted && !isEnded;
+  const { isStarted, startTime, endTime, isEnded } = useLottery({ lottery, nfts: lottery.Nfts });
   return (
     <div className='drop-page__grid-item' onClick={openModal}>
       <GetTicketModal
@@ -44,14 +42,12 @@ export default function LotteryTile({
       <div className='drop-page__grid-item-media-container'>
         <LotteryThumbnail lottery={lottery}></LotteryThumbnail>
         <div className='drop-page__grid-item-img-overlay'></div>
-        <div className='drop-page__grid-item-focus'>
-          {lottery.endTime.getTime() > new Date().getTime() ? 'enter lottery' : 'results'}
-        </div>
+        <div className='drop-page__grid-item-focus'>{isEnded ? 'enter lottery' : 'results'}</div>
       </div>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
-            {transformTitle(dropName)} by {artist.username}
+            {dropName} by {artist.username}
           </h1>
           <h1 className='drop-page__grid-item-info-game-name'>{transformTitle('lottery')}</h1>
           {tickets > 0 && (
@@ -63,13 +59,13 @@ export default function LotteryTile({
         <div className='drop-page__grid-item-info-right'>
           {isStarted && (
             <Countdown
-              endTime={lottery.endTime}
+              endTime={endTime}
               className='drop-page__grid-item-info-countdown'
             ></Countdown>
           )}
           {!isStarted && (
             <Countdown
-              endTime={lottery.startTime}
+              endTime={startTime}
               className='drop-page__grid-item-info-countdown'
             ></Countdown>
           )}
