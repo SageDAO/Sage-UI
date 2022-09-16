@@ -71,9 +71,7 @@ const usersApi = baseApi.injectEndpoints({
     }),
     updateArtist: builder.mutation<null, { user: SafeUserUpdate; bannerFile: File }>({
       queryFn: async ({ user, bannerFile }, { dispatch }) => {
-        const endpoint = '/api/dropUploadEndpoint/';
         const s3Path = await uploadFileToS3Bucket(
-          endpoint,
           createBucketName(),
           bannerFile.name.toLocaleLowerCase(),
           bannerFile

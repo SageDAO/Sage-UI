@@ -223,7 +223,6 @@ const nftsApi = baseApi.injectEndpoints({
 async function uploadToAwsAndArweave(mintRequest: MintRequest, endpoint: string) {
   console.log(`uploadToAwsAndArweave() :: Uploading media to AWS S3...`);
   const s3Path = await uploadFileToS3Bucket(
-    endpoint,
     createBucketName(),
     mintRequest.file.name,
     mintRequest.file

@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import aws from 'aws-sdk';
 import NextCors from 'nextjs-cors';
 import prisma from '@/prisma/client';
 import { Role } from '@prisma/client';
@@ -8,6 +7,7 @@ import { JWKInterface } from 'arweave/node/lib/wallet';
 import Transaction from 'arweave/node/lib/transaction';
 import { computePrimes } from 'jwk-rsa-compute-primes';
 import { getSession } from 'next-auth/react';
+import { createS3SignedUrl } from '@/utilities/awsS3';
 
 const arweaveJwk = computePrimes(JSON.parse(process.env.ARWEAVE_JSON_JWK || ''));
 
@@ -31,7 +31,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       await getArtistNftContractAddress(String(request.query.artistAddress), response);
       break;
     case 'CreateS3SignedUrl':
-      await createS3SignedUrl(
+      await getS3SignedUrl(
         String(request.query.bucket),
         String(request.query.filename),
         response
@@ -80,28 +80,8 @@ async function getArtistNftContractAddress(artistAddress: string, response: Next
   response.json({nftContractAddress});
 }
 
-/**
- * https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrl-property
- */
-async function createS3SignedUrl(dropBucket: string, filename: string, response: NextApiResponse) {
-  const region = 'us-east-2';
-  aws.config.update({
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_SAGE || '',
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY_SAGE || '',
-    },
-    signatureVersion: 'v4',
-    region,
-  });
-  const s3 = new aws.S3();
-  var params = {
-    Bucket: `${process.env.S3_BUCKET}/${dropBucket}`,
-    Key: filename,
-    Expires: 60,
-    ACL: 'public-read',
-  };
-  const uploadUrl = s3.getSignedUrl('putObject', params);
-  const getUrl = `https://${process.env.S3_BUCKET}.s3.${region}.amazonaws.com/${dropBucket}/${filename}`;
+async function getS3SignedUrl(bucket: string, filename: string, response: NextApiResponse) {
+  const { uploadUrl, getUrl } = createS3SignedUrl(bucket, filename);
   response.json({ uploadUrl, getUrl });
 }
 
