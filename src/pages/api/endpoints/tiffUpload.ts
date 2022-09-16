@@ -17,7 +17,7 @@ const upload = multer({
   // limits: { fileSize: 1024 * 1024 },
 });
 
-export default async (req: RequestWithFile, res: NextApiResponse) => {
+async function handler(req: RequestWithFile, res: NextApiResponse) {
   await setupCors(req, res);
   try {
     await runMiddleware(req, res, upload.single('file'));
@@ -57,3 +57,5 @@ async function setupCors(request: NextApiRequest, response: NextApiResponse) {
     optionsSuccessStatus: 200,
   });
 }
+
+export default handler;
