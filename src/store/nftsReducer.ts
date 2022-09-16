@@ -65,7 +65,7 @@ const nftsApi = baseApi.injectEndpoints({
       queryFn: async (mintRequest, {}, _, fetchWithBQ) => {
         var nftId = 0;
         try {
-          const endpoint = '/api/dropUploadEndpoint/';
+          const endpoint = '/api/endpoints/dropUpload/';
           const artistAddress = await mintRequest.signer.getAddress();
           const nftContractAddress = await _fetchOrCreateNftContract(
             artistAddress,
@@ -93,7 +93,7 @@ const nftsApi = baseApi.injectEndpoints({
           console.log(e);
           if (nftId && nftId != 0) {
             console.log(`mintSingleNft() :: Deleting NFT...`);
-            await fetchWithBQ(`dropUploadEndpoint?action=DeleteNft&id=${nftId}`);
+            await fetchWithBQ(`endpoints/dropUpload?action=DeleteNft&id=${nftId}`);
           }
           return { data: 0 };
         }
@@ -249,7 +249,7 @@ async function dbInsertNft(
 ) {
   console.log(`dbInsertNft() :: Creating database record...`);
   const { data } = await fetchWithBQ({
-    url: `dropUploadEndpoint?action=InsertNft`,
+    url: `endpoints/dropUpload?action=InsertNft`,
     method: 'POST',
     body: {
       artistAddress,
