@@ -13,13 +13,13 @@ export default function WrongNetworkModal({
   switchToCorrectNetwork,
   isLoading,
 }: Props) {
-  const network = useNetwork();
+  const { chain: activeChain } = useNetwork();
   return (
     <BaseModal isOpen={isOpen} closeModal={closeModal} title='Wrong Network'>
       <div className='wrong-network-modal'>
-        <h1>You are on {network.activeChain?.name}</h1>
+        <h1>You are on {activeChain?.name}</h1>
         <h1>Switch to {parameters.NETWORK_NAME}</h1>
-				<h1>to use the App</h1>
+        <h1>to use the App</h1>
         <button
           disabled={isLoading}
           className='wrong-network-modal__button'

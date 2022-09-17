@@ -1,6 +1,6 @@
-import { useGetLotteryQuery, useGetLotteryWinnersQuery } from '@/store/lotteriesReducer';
+import { useGetLotteryWinnersQuery } from '@/store/lotteriesReducer';
 import { transformTitle } from '@/utilities/strings';
-import { Drop, Lottery, Nft, User } from '@prisma/client';
+import { Lottery, Nft } from '@prisma/client';
 
 interface UseLotteryArgs {
   lottery: Lottery;

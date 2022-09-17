@@ -1,26 +1,23 @@
-import { useNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { parameters } from '@/constants/config';
 import { toast } from 'react-toastify';
 import useModal from './useModal';
-import { switchNetwork } from '@wagmi/core';
 
 export default function useWatchNetwork() {
   const [isLoading, setIsLoading] = useState(false);
-  const { activeChain } = useNetwork();
+  const { chain: activeChain } = useNetwork();
   const {
     isOpen: isNetworkModalOpen,
     openModal: openNetworkModal,
     closeModal: closeNetworkModal,
   } = useModal();
 
+  const { chains, error, pendingChainId, switchNetwork } = useSwitchNetwork();
+
   function switchToCorrectNetwork() {
     setIsLoading(true);
-    switchNetwork({ chainId: +parameters.CHAIN_ID })
-      .catch((e) => {
-        console.error(e);
-      })
-      .finally(() => setIsLoading(false));
+    switchNetwork(+parameters.CHAIN_ID);
   }
 
   function handleIncorrectNetwork() {
@@ -39,7 +36,7 @@ export default function useWatchNetwork() {
       toast.update('networkChange', {
         type: 'success',
         autoClose: 3000,
-        render: `Switched to ${parameters.NETWORK_NAME}`,
+        render: `Switched to ${String(parameters.NETWORK_NAME)}`,
       });
       closeNetworkModal();
     }

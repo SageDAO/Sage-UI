@@ -5,16 +5,15 @@ import Nav from '@/components/Layout/Nav';
 import Footer from '@/components/Layout/Footer';
 import useWatchNetwork from '@/hooks/useWatchNetwork';
 import WrongNetworkModal from '@/components/Modals/WrongNetworkModal';
-import React, { useEffect, useRef } from 'react';
-import HiddenMenu from './HiddenMenu';
+import React, { useEffect } from 'react';
 import MobileMenu from '@/components/Mobile/MobileMenu';
 import MenuToggle from '@/components/Mobile/MenuToggle';
 import useModal from '@/hooks/useModal';
-import { useSession } from 'next-auth/react';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useDisconnect } from 'wagmi';
 import { useSignOutMutation } from '@/store/usersReducer';
-import { animated, useTransition, config } from 'react-spring';
 import SageIconSVG from '@/public/branding/sage-icon.svg';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -22,80 +21,66 @@ type Props = {
 };
 
 export default function Layout({ children, router }: Props) {
+  const { isSignedIn, isWalletConnected, walletAddress, sessionData } = useSAGEAccount();
+  const { pushToHome } = useSageRoutes();
   const {
     isNetworkModalOpen,
     closeNetworkModal,
     switchToCorrectNetwork,
     isLoading: isChangingNetwork,
   } = useWatchNetwork();
-
-  const layoutEl = useRef<HTMLDivElement>(null);
-
-  const { data: sessionData } = useSession();
-  const { data: wagmiData } = useAccount();
   const [signOut] = useSignOutMutation();
   const { disconnect } = useDisconnect();
-
-  const transitions = useTransition(router.pathname, {
-    from: { translateY: 100 },
-    enter: { translateY: 0 },
-    config: config.default,
-    exitBeforeEnter: true,
-  });
-
   useEffect(() => {
-    if (sessionData && wagmiData && sessionData.address != wagmiData.address) {
+    if (isSignedIn && isWalletConnected && sessionData.address != walletAddress) {
       signOut();
       disconnect();
-      router.push('/');
+      pushToHome();
     }
-  }, [sessionData, wagmiData]);
-
+  }, [isSignedIn, sessionData, walletAddress, isWalletConnected]);
   const {
     closeModal: closeMobileMenu,
     isOpen: isMobileMenuOpen,
     toggleModal: toggleMobileMenu,
   } = useModal(true);
 
-  return transitions((props, item) => {
-    return (
-      <React.Fragment>
-        <MobileMenu
+  return (
+    <React.Fragment>
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        toggleMenu={toggleMobileMenu}
+        closeModal={closeMobileMenu}
+      ></MobileMenu>
+      <WrongNetworkModal
+        isOpen={isNetworkModalOpen}
+        closeModal={closeNetworkModal}
+        switchToCorrectNetwork={switchToCorrectNetwork}
+        isLoading={isChangingNetwork}
+      />
+      <ToastContainer
+        position='bottom-center'
+        autoClose={5000}
+        icon={SageIconSVG}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        limit={3}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        data-cy='toast-container'
+      />
+      <div key={router.route} className='layout'>
+        <Nav />
+        <MenuToggle
+          isDynamicColors={true}
           isOpen={isMobileMenuOpen}
-          toggleMenu={toggleMobileMenu}
-          closeModal={closeMobileMenu}
-        ></MobileMenu>
-        <WrongNetworkModal
-          isOpen={isNetworkModalOpen}
-          closeModal={closeNetworkModal}
-          switchToCorrectNetwork={switchToCorrectNetwork}
-          isLoading={isChangingNetwork}
+          toggleMobileMenu={toggleMobileMenu}
         />
-        <ToastContainer
-          position='bottom-center'
-          autoClose={5000}
-          icon={SageIconSVG}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          limit={3}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          data-cy='toast-container'
-        />
-        <div ref={layoutEl} key={router.route} className='layout'>
-          <Nav />
-          <MenuToggle
-            isDynamicColors={true}
-            isOpen={isMobileMenuOpen}
-            toggleMobileMenu={toggleMobileMenu}
-          />
-          {children}
-          <Footer></Footer>
-        </div>
-      </React.Fragment>
-    );
-  });
+        {children}
+        <Footer></Footer>
+      </div>
+    </React.Fragment>
+  );
 }

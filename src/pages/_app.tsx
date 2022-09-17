@@ -8,36 +8,40 @@ import { SessionProvider } from 'next-auth/react';
 import store from '@/store/store';
 import type { AppProps } from 'next/app';
 import Layout from '@/components/Layout/Layout';
-import { createClient, Provider as WagmiProvider, chain } from 'wagmi';
+import { createClient, WagmiConfig, chain, configureChains, defaultChains } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { publicProvider } from 'wagmi/providers/public';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { parameters } from '@/constants/config';
 import { useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
+import { infuraProvider } from 'wagmi/providers/infura';
 
 // set up connectors
+
+const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+  infuraProvider({ apiKey: process.env.INFURA_ID }),
+  publicProvider(),
+]);
 const connectors = [
   new InjectedConnector({
-    chains: [chain.mainnet, chain.rinkeby],
+    chains,
   }),
   new WalletConnectConnector({
+    chains,
     options: {
       qrcode: true,
-    },
-  }),
-  new CoinbaseWalletConnector({
-    options: {
-      appName: 'sage',
     },
   }),
 ];
 
 const wagmiClient = createClient({
   connectors,
-  autoConnect: true,
+  provider,
+  webSocketProvider,
 });
 
 const { SUBGRAPH_URL } = parameters;
@@ -54,7 +58,7 @@ function App({ Component, pageProps, router }: AppProps) {
   const themeContent: string = theme === 'dark' ? 'black' : 'white';
   return (
     <ReduxProvider store={store}>
-      <WagmiProvider client={wagmiClient}>
+      <WagmiConfig client={wagmiClient}>
         <SessionProvider refetchInterval={0}>
           <ApolloProvider client={apolloClient}>
             <SearchContext.Provider value={{ query, setQuery }}>
@@ -77,7 +81,7 @@ function App({ Component, pageProps, router }: AppProps) {
             </SearchContext.Provider>
           </ApolloProvider>
         </SessionProvider>
-      </WagmiProvider>
+      </WagmiConfig>
     </ReduxProvider>
   );
 }

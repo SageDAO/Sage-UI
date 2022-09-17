@@ -1,24 +1,13 @@
 import { PfpImage } from './Media/BaseMedia';
-import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
-import {
-  useConnect,
-  useAccount,
-  useSignMessage,
-  useNetwork,
-  useDisconnect,
-  Connector,
-  useBalance,
-} from 'wagmi';
+import { useConnect } from 'wagmi';
 import { Props as ModalProps } from '@/components/Modals';
-import { useSession } from 'next-auth/react';
-import { useGetUserQuery, useSignInMutation, useSignOutMutation } from '@/store/usersReducer';
 import Image from 'next/image';
-import { parameters } from '@/constants/config';
-import { useRouter } from 'next/router';
 import PersonalizedMessage from './PersonalizedMessage';
 import useSignIn from '@/hooks/useSignIn';
 import WalletConnectSVG from '@/public/icons/walletconnect.svg';
 import MetamaskSVG from '@/public/icons/metamask.svg';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 interface Props {
   closeModal?: ModalProps['closeModal'];
@@ -26,40 +15,20 @@ interface Props {
 }
 
 export default function Wallet({ closeModal, isOpen }: Props) {
-  const { data: accountData } = useAccount();
-  const { disconnect } = useDisconnect();
-  const { data: sessionData, status: sessionStatus } = useSession();
-  const { data: userData } = useGetUserQuery(undefined, {
-    skip: !sessionData,
-  });
-  const { connectors, connectAsync, activeConnector, isConnecting, isConnected } = useConnect();
-  const { data: pointsBalance } = useGetPointsBalanceQuery(undefined, {
-    skip: !sessionData,
-  });
-  const { data: walletBalance } = useBalance({
-    token: parameters.ASHTOKEN_ADDRESS,
-    addressOrName: sessionData?.address as string,
-  });
-  const ashBalance = Number(walletBalance?.formatted);
-  const isSignedIn = sessionStatus === 'authenticated';
-  const router = useRouter();
-
-  async function goToProfile() {
-    await router.push('/profile');
-    if (closeModal) closeModal();
-  }
-
-  const showWalletSelection: boolean = Boolean(!isConnected);
-  const showAuthSection: boolean = Boolean(isConnected && isSignedIn);
-
-  async function handleConnectClick(c: Connector<any, any>) {
-    try {
-      await connectAsync(c);
-    } catch {}
-  }
-
+  const {
+    isSignedIn,
+    isWalletConnected,
+    isWalletConnecting,
+    userData,
+    ashBalanceDisplay,
+    pointsBalanceDisplay,
+    connect,
+    connectors,
+  } = useSAGEAccount();
+  const { pushToProfile } = useSageRoutes();
+  const showWalletSelection: boolean = Boolean(!isWalletConnected);
+  const showAuthSection: boolean = Boolean(isWalletConnected && isSignedIn);
   useSignIn(isOpen);
-
   return (
     <div className='wallet'>
       <div className='wallet__user-section-wrapper'>
@@ -77,34 +46,33 @@ export default function Wallet({ closeModal, isOpen }: Props) {
         </section>
         {showWalletSelection && (
           <section className='wallet__wallets '>
-            <button
-              className='wallet__wallet-item wallet__metamask'
-              disabled={isConnecting}
-              data-loading={isConnecting && 'true'}
-              onClick={async () => {
-                const c = connectors[0];
-                handleConnectClick(c);
-              }}
-            >
-              <MetamaskSVG className='wallet__wallet-icon' />
-            </button>
-            <button
-              className='wallet__wallet-item'
-              disabled={isConnecting}
-              data-loading={isConnecting && 'true'}
-              onClick={async () => {
-                const c = connectors[1];
-                handleConnectClick(c);
-              }}
-            >
-              <WalletConnectSVG className='wallet__wallet-icon' />
-            </button>
+            {connectors.map((c) => {
+              function onClick() {
+                connect({ connector: c });
+              }
+              return (
+                <button
+                  className={`wallet__wallet-item ${
+                    c.name == 'MetaMask' ? 'wallet__metamask' : 'wallet__wallet-connect'
+                  }`}
+                  disabled={isWalletConnecting}
+                  data-loading={isWalletConnecting && 'true'}
+                  onClick={onClick}
+                >
+                  {c.name == 'MetaMask' ? (
+                    <MetamaskSVG className='wallet__wallet-icon' />
+                  ) : (
+                    <WalletConnectSVG className='wallet__wallet-icon' />
+                  )}
+                </button>
+              );
+            })}
           </section>
         )}
         {showAuthSection && (
           <>
             <section className='wallet__user-section'>
-              <div className='wallet__user-pfp-container' onClick={goToProfile}>
+              <div className='wallet__user-pfp-container' onClick={pushToProfile}>
                 <PfpImage
                   className='wallet__user-pfp-src'
                   src={userData?.profilePicture}
@@ -126,14 +94,12 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                   <span>pixel balance: </span>
                 </h1>
                 <h1 className='wallet__points-balance'>
-                  <span className='wallet__points-value'>
-                    {!isNaN(ashBalance) && ashBalance.toFixed(2)}
-                  </span>
-                  <span className='wallet__points-value'>{Number(pointsBalance).toFixed(2)}</span>
+                  <span className='wallet__points-value'>{ashBalanceDisplay}</span>
+                  <span className='wallet__points-value'>{pointsBalanceDisplay}</span>
                 </h1>
               </div>
               {isSignedIn && (
-                <button onClick={goToProfile} className='wallet__interact-button'>
+                <button onClick={pushToProfile} className='wallet__interact-button'>
                   PROFILE
                 </button>
               )}

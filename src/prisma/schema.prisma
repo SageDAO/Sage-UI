@@ -55,7 +55,7 @@ model Auction {
   startTime             DateTime
   endTime               DateTime
   isLive                Boolean    @default(false) 
-  nftId                 Int 
+  nftId                 Int         @unique
   winnerAddress         String?     @db.Char(42)
   claimedAt             DateTime?
   contractAddress       String?   @db.Char(42)
@@ -217,7 +217,7 @@ enum OfferState {
 
 model Config {
   id              Int    @id @default(autoincrement())
-  featuredDropId  Int?
+  featuredDropId  Int?   @unique
   FeaturedDrop    Drop?  @relation("ConfigFeaturedDrop", fields:[featuredDropId], references:[id])
   welcomeMessage  String
 }

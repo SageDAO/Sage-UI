@@ -1,29 +1,15 @@
-import { parameters } from '@/constants/config';
-import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
-import { useGetUserQuery } from '@/store/usersReducer';
-import { useBalance } from 'wagmi';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
 
 export default function Balances() {
-  const { data: userData } = useGetUserQuery();
-  const { data: pointsBalance } = useGetPointsBalanceQuery(undefined, {
-    skip: !userData,
-  });
-  const { data: walletBalance } = useBalance({
-    token: parameters.ASHTOKEN_ADDRESS,
-    addressOrName: userData?.walletAddress,
-  });
-  const ashBalance = Number(walletBalance?.formatted);
-
+  const { pointsBalanceDisplay, ashBalanceDisplay } = useSAGEAccount();
   return (
     <div className='profile-page__balances'>
       <div className='profile-page__balances-token'>
-        <h1 className='profile-page__balances-token-value'>
-          {!isNaN(ashBalance) && ashBalance.toFixed(2)}
-        </h1>
+        <h1 className='profile-page__balances-token-value'>{ashBalanceDisplay}</h1>
         <h1 className='profile-page__balances-points-label'>your ash balance</h1>
       </div>
       <div className='profile-page__balances-points'>
-        <h1 className='profile-page__balances-points-value'>{pointsBalance}</h1>
+        <h1 className='profile-page__balances-points-value'>{pointsBalanceDisplay}</h1>
         <h1 className='profile-page__balances-points-label'>your pixel balance</h1>
       </div>
     </div>

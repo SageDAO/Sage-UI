@@ -2,7 +2,6 @@ import useModal from '@/hooks/useModal';
 import { useSession } from 'next-auth/react';
 import AccountModal from '@/components/Modals/AccountModal';
 import { useAccount } from 'wagmi';
-import useSignIn from '@/hooks/useSignIn';
 
 export default function Connect() {
   const {
@@ -12,11 +11,11 @@ export default function Connect() {
   } = useModal();
 
   const { status: sessionStatus } = useSession();
-  const { data: accountData } = useAccount();
+  const { isConnected } = useAccount();
   let buttonText: string = 'connect';
   let buttonClass: string = 'connect';
 
-  if (accountData) {
+  if (isConnected) {
     if (sessionStatus === 'authenticated') {
       return null;
     }
@@ -25,8 +24,6 @@ export default function Connect() {
       buttonText = 'sign in';
     }
   }
-
-  // useSignIn(isAccountModalOpen);
 
   return (
     <button className={buttonClass} onClick={openAccountModal}>

@@ -1,12 +1,10 @@
-import { useSession } from 'next-auth/react';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
 import React from 'react';
-import { useConnect } from 'wagmi';
 import UserHandle from './UserHandle';
 export default function PersonalizedMessage() {
-  const { status: sessionStatus } = useSession();
-  const { isConnected } = useConnect();
+  const { isSignedIn, isWalletConnected } = useSAGEAccount();
 
-  if (sessionStatus === 'authenticated') {
+  if (isSignedIn) {
     return (
       <React.Fragment>
         <span>Welcome back! </span>
@@ -16,11 +14,11 @@ export default function PersonalizedMessage() {
     );
   }
 
-  if (isConnected) {
+  if (isWalletConnected) {
     return null;
   }
 
-  if (!isConnected) {
+  if (!isWalletConnected) {
     return <span>Welcome! </span>;
   }
   return <React.Fragment>Error</React.Fragment>;
