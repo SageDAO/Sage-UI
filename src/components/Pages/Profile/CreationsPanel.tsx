@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 
 interface State {
   file: File | null;
+  s3PathOptimized: string | null;
   title: string;
   description: string;
   //tags: string;
@@ -23,6 +24,7 @@ interface State {
 
 const INITIAL_STATE: State = {
   file: null,
+  s3PathOptimized: null,
   title: '',
   description: '',
   //tags: '',
@@ -79,6 +81,12 @@ export default function CreationsPanel() {
     });
   }
 
+  function handleGeneratePreview(s3PathOptimized: string | null) {
+    setState((prevState) => {
+      return { ...prevState, s3PathOptimized };
+    });
+  }
+
   async function handleDeployContractButtonClick() {
     await deployContract({
       artistAddress: sessionData?.address as string,
@@ -112,6 +120,7 @@ export default function CreationsPanel() {
       price: parseFloat(state.price),
       isFixedPrice: state.isFixedPrice,
       file: state.file,
+      s3PathOptimized: state.s3PathOptimized,
       signer: signer as Signer,
     } as MintRequest);
     const nftId = parseInt((result as any).data);
@@ -145,9 +154,12 @@ export default function CreationsPanel() {
             </button>
           )}
           <div className='creations-panel__file-upload-group'>
-            <FileInputWithPreview onFileChange={handleFileInputChange} />
+            <FileInputWithPreview
+              onFileChange={handleFileInputChange}
+              onGeneratePreview={handleGeneratePreview}
+            />
             <h1 className='creations-panel__file-upload-label'>
-              ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF and MP4 )
+              ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF, TIFF and MP4 )
             </h1>
           </div>
           <div className='creations-panel__file-title-group'>

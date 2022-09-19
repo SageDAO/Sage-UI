@@ -213,8 +213,9 @@ export default function ProfilePanel({ isArtist }: Props) {
         </div>
         {isArtist && (
           <FileInputWithPreview
-            onFileChange={handleFileInputChange}
             initialPreview={data.bannerImageS3Path}
+            acceptedTypes={['image/png', 'image/jpeg']}
+            onFileChange={handleFileInputChange}
           />
         )}
         <button
