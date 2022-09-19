@@ -7,8 +7,14 @@ const usdFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 
-export default function ranking({ salesData }: { salesData: Map<string, ArtistSales> }) {
-  const displayData = Array.from(salesData.values()).sort((a, b) => b.amountTotalUSD - a.amountTotalUSD);
+interface Props {
+  salesData: Map<string, ArtistSales>;
+}
+
+export default function ranking({ salesData }: Props) {
+  const displayData = Array.from(salesData.values()).sort(
+    (a, b) => b.amountTotalUSD - a.amountTotalUSD
+  );
   return (
     <div className='ranking-page'>
       <h1 className='ranking-page__header'>Top Artists</h1>
