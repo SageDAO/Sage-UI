@@ -22,8 +22,8 @@ export default function useSAGEAccount() {
     addressOrName: walletAddress,
   });
   const ashBalance = Number(walletBalance?.formatted);
-  const ashBalanceDisplay = ashBalance.toFixed(2);
-  const pointsBalanceDisplay = Number(pointsBalance).toFixed(2);
+  const ashBalanceDisplay = isNaN(ashBalance) ? '' : ashBalance.toFixed(2);
+  const pointsBalanceDisplay = isNaN(Number(pointsBalance)) ? '' : Number(pointsBalance).toFixed(2);
 
   return {
     isSignedIn,
