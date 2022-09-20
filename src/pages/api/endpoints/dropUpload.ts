@@ -7,7 +7,7 @@ import { JWKInterface } from 'arweave/node/lib/wallet';
 import Transaction from 'arweave/node/lib/transaction';
 import { computePrimes } from 'jwk-rsa-compute-primes';
 import { getSession } from 'next-auth/react';
-import { createS3SignedUrl } from '@/utilities/awsS3';
+import { createS3SignedUrl } from '@/utilities/awsS3-server';
 
 const arweaveJwk = computePrimes(JSON.parse(process.env.ARWEAVE_JSON_JWK || ''));
 

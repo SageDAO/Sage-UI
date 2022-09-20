@@ -4,7 +4,7 @@ import type { SafeUserUpdate } from '@/prisma/types';
 import { signIn, signOut } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
 import { baseApi } from './baseReducer';
-import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3';
+import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3-client';
 // import {
 //   playLikeDropSound,
 //   playUnlikeDropSound,
@@ -71,7 +71,9 @@ const usersApi = baseApi.injectEndpoints({
     }),
     updateArtist: builder.mutation<null, { user: SafeUserUpdate; bannerFile: File }>({
       queryFn: async ({ user, bannerFile }, { dispatch }) => {
+        const endpoint = '/api/endpoints/dropUpload/';
         const s3Path = await uploadFileToS3Bucket(
+          endpoint,
           createBucketName(),
           bannerFile.name.toLocaleLowerCase(),
           bannerFile

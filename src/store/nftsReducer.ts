@@ -6,7 +6,7 @@ import {
   getNFTContract,
   getNftFactoryContract,
 } from '@/utilities/contracts';
-import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3';
+import { createBucketName, uploadFileToS3Bucket } from '@/utilities/awsS3-client';
 import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave';
 import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { toast } from 'react-toastify';
@@ -224,6 +224,7 @@ const nftsApi = baseApi.injectEndpoints({
 async function uploadToAwsAndArweave(mintRequest: MintRequest, endpoint: string) {
   console.log(`uploadToAwsAndArweave() :: Uploading media to AWS S3...`);
   const s3Path = await uploadFileToS3Bucket(
+    endpoint,
     createBucketName(),
     mintRequest.file.name,
     mintRequest.file

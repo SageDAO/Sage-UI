@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import multer from 'multer';
 import sharp from 'sharp';
-import { uploadBufferToS3Bucket } from '@/utilities/awsS3';
+import { uploadBufferToS3Bucket } from '@/utilities/awsS3-server';
 import NextCors from 'nextjs-cors';
 
 const OPTIMIZED_WIDTH = 487;
