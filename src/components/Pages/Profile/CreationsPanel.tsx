@@ -35,15 +35,13 @@ const INITIAL_STATE: State = {
 export default function CreationsPanel() {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [mintSingleNft, { isLoading: isMinting }] = useMintSingleNftMutation();
-  const [deployContract, { isLoading: isDeploying }] = useDeployArtistNftContractMutation();
+  const [deployContract, { isLoading: isDeployingContract }] = useDeployArtistNftContractMutation();
   const { data: signer } = useSigner();
   const { data: sessionData } = useSession();
-  const { data: artistNftContractAddress } = useGetArtistNftContractAddressQuery(
-    sessionData?.address as string,
-    {
+  const { data: artistNftContractAddress, isLoading: isLoadingContract } =
+    useGetArtistNftContractAddressQuery(sessionData?.address as string, {
       skip: !sessionData,
-    }
-  );
+    });
 
   function handleTitleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setState((prevState) => {
@@ -145,12 +143,16 @@ export default function CreationsPanel() {
             </span>
           ) : (
             <button
-              disabled={isDeploying || isMinting}
+              disabled={isLoadingContract || isDeployingContract || isMinting}
               className='creations-panel__submit-button'
               type='button'
               onClick={handleDeployContractButtonClick}
             >
-              {isDeploying || isMinting ? <LoaderSpinner /> : `deploy your SAGE NFT contract`}
+              {isLoadingContract || isDeployingContract || isMinting ? (
+                <LoaderSpinner />
+              ) : (
+                `deploy your SAGE NFT contract`
+              )}
             </button>
           )}
           <div className='creations-panel__file-upload-group'>
@@ -204,12 +206,12 @@ export default function CreationsPanel() {
             />
           </div>
           <button
-            disabled={isMinting || isDeploying || !artistNftContractAddress}
+            disabled={isMinting || isDeployingContract || !artistNftContractAddress}
             className='creations-panel__submit-button'
             type='button'
             onClick={handleMintButtonClick}
           >
-            {isMinting || isDeploying ? <LoaderSpinner /> : `mint artwork`}
+            {isMinting || isDeployingContract ? <LoaderSpinner /> : `mint artwork`}
           </button>
         </form>
       </div>
