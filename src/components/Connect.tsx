@@ -1,7 +1,7 @@
 import useModal from '@/hooks/useModal';
 import { useSession } from 'next-auth/react';
 import AccountModal from '@/components/Modals/AccountModal';
-import { useAccount } from 'wagmi';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
 
 export default function Connect() {
   const {
@@ -11,11 +11,11 @@ export default function Connect() {
   } = useModal();
 
   const { status: sessionStatus } = useSession();
-  const { isConnected } = useAccount();
+  const {isWalletConnected} = useSAGEAccount();
   let buttonText: string = 'connect';
   let buttonClass: string = 'connect';
 
-  if (isConnected) {
+  if (isWalletConnected) {
     if (sessionStatus === 'authenticated') {
       return null;
     }

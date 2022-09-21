@@ -103,11 +103,15 @@
   }
 }
 
-.wallet__metamask {
+.wallet__MetaMask {
   display: none;
   @include b.min-width('medium') {
     display: flex;
   }
+}
+
+
+.wallet__WalletConnect {
 }
 
 .wallet__wallet-icon {

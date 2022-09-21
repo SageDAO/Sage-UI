@@ -29,6 +29,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   const showWalletSelection: boolean = Boolean(!isWalletConnected);
   const showAuthSection: boolean = Boolean(isWalletConnected && isSignedIn);
   useSignIn(isOpen);
+
   return (
     <div className='wallet'>
       <div className='wallet__user-section-wrapper'>
@@ -50,11 +51,12 @@ export default function Wallet({ closeModal, isOpen }: Props) {
               function onClick() {
                 connect({ connector: c });
               }
+							const className = `wallet__wallet-item wallet__${c.name}`
+							if  (!c.ready) return null;
               return (
                 <button
-                  className={`wallet__wallet-item ${
-                    c.name == 'MetaMask' ? 'wallet__metamask' : 'wallet__wallet-connect'
-                  }`}
+                  className={className}
+									key={c.name}
                   disabled={isWalletConnecting}
                   data-loading={isWalletConnecting && 'true'}
                   onClick={onClick}
