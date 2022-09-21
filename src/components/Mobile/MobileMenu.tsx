@@ -53,7 +53,7 @@ export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
       <MenuToggle isOpen={isOpen} toggleMobileMenu={toggleMenu} />
       <div className='mobile-menu__ash-price-container-wrapper'>
         <div className='mobile-menu__ash-price-container'>
-          <ASHPrice />
+          <ASHPrice callback={closeModal} />
         </div>
       </div>
       <div className='mobile-menu__logotype'>
