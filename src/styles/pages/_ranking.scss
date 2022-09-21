@@ -7,22 +7,21 @@
   margin-left: auto;
   margin-right: auto;
 
-
-  &__header {
-    margin-top: clamp(12px, 5vw, 50px);
-    font-weight: 400;
-    font-size: clamp(20px, 5vw, 50px);
-    line-height: clamp(24px, 1em, 60px);
-    @include m.standard-width;
-    @include m.theme() {
-      color: m.t(contrast);
-    }
-    text-transform: uppercase;
-    text-align: left;
-    @include b.min-width('medium') {
-      text-align: center;
-    }
-  }
+  // &__header {
+  //   margin-top: clamp(12px, 5vw, 50px);
+  //   font-weight: 400;
+  //   font-size: clamp(20px, 5vw, 50px);
+  //   line-height: clamp(24px, 1em, 60px);
+  //   @include m.standard-width;
+  //   @include m.theme() {
+  //     color: m.t(contrast);
+  //   }
+  //   text-transform: uppercase;
+  //   text-align: left;
+  //   @include b.min-width('medium') {
+  //     text-align: center;
+  //   }
+  // }
 
   &__table {
     margin-top: clamp(10px, 3vw, 40px);
@@ -44,4 +43,29 @@
       text-align: center;
     }
   }
+}
+
+.ranking-page__header {
+  @include m.text-h1;
+  @include m.desktop-width;
+  margin-bottom: 26px;
+  text-align: left;
+}
+
+.ranking-page__subheader {
+  @include m.text-p3;
+  @include m.desktop-width;
+  text-align: left;
+}
+
+.ranking-page__main-section {
+	margin-top: 56px;
+	@include m.desktop-width;
+}
+
+.ranking-page__grid {
+  display: grid;
+  background-color: red;
+  width: 100%;
+  height: 500px;
 }

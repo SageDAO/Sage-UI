@@ -1,3 +1,4 @@
+import Logotype from '@/components/Logotype';
 import prisma from '@/prisma/client';
 import { getArtistsSalesData } from '@/prisma/functions';
 import { ArtistSales } from '@/prisma/types';
@@ -17,7 +18,14 @@ export default function ranking({ salesData }: Props) {
   );
   return (
     <div className='ranking-page'>
-      <h1 className='ranking-page__header'>Top Artists</h1>
+      <Logotype />
+      <h1 className='ranking-page__header'>
+        Top Creators On <pre /> The Blockchain
+      </h1>
+      <span className='ranking-page__subheader'>Based On Global Sales Data</span>
+      <section className='ranking-page__main-section'>
+        <div className='ranking-page__grid'></div>
+      </section>
       <table className='ranking-page__table'>
         <thead>
           <tr>

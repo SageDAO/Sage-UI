@@ -201,7 +201,7 @@ $desktop-width: 1088px;
   // text-transform: capitalize;
   font-weight: 900;
   font-size: clamp(20px, 5vw, 50px);
-  line-height: clamp(24px, 1em, 60px);
+  line-height: clamp(24px, 1.2em, 60px);
 }
 
 @mixin text-h2 {
