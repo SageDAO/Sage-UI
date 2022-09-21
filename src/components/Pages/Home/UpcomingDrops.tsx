@@ -16,16 +16,26 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
   const { pushToDrops } = useSageRoutes();
   const { isMobile } = useWindowDimensions();
   if (isMobile) {
-    const midPoint: number = Math.floor(upcomingDrops.length / 2);
-    const rowData1 = upcomingDrops.slice(0, midPoint);
-    const rowData2 = upcomingDrops.slice(midPoint, upcomingDrops.length);
-    const rows = new Array(rowData1, rowData2);
+    // const midPoint: number = Math.floor(upcomingDrops.length / 2);
+    // const rowData1 = upcomingDrops.slice(0, midPoint);
+    // const rowData2 = upcomingDrops.slice(midPoint, upcomingDrops.length);
+    const rows = new Array(upcomingDrops);
     return (
       <React.Fragment>
         {rows.map((row, i: number) => {
           return (
             <div key={i} className='home-page__upcoming-drops-grid--mobile'>
               <div className='home-page__upcoming-drops-row--mobile'>
+                {row.map((d) => {
+                  return (
+                    <UpcomingDropsTile
+                      Lotteries={d.Lotteries}
+                      Auctions={d.Auctions}
+                      drop={d}
+                      artist={d.NftContract.Artist}
+                    />
+                  );
+                })}
                 {row.map((d) => {
                   return (
                     <UpcomingDropsTile
@@ -43,6 +53,7 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
       </React.Fragment>
     );
   }
+
   return (
     <div className='home-page__upcoming-drops-grid'>
       {upcomingDrops.map((d, i: number) => {

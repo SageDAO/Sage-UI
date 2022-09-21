@@ -85,17 +85,31 @@ $menu-toggle-z: $menu-z + 1;
 
 // -------------------------------- Menu Toggle ---------------------------
 
-.mobile-menu__toggle {
+.mobile-nav {
+  top: 40px;
+	left: 10vw;
+	right: 10vw;
+  z-index: $menu-toggle-z;
   position: absolute;
+	display: flex;
+	justify-content: space-between;
+	@include m.mobile-width;
+}
+
+.mobile-nav__search {
+	border-bottom: 1px solid white;
+	width: 250px;
+	position: relative;
+}
+
+.mobile-menu__toggle {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  right: 40px;
-  top: 40px;
+  margin-left: auto;
   @include m.interact;
   transition-duration: 1000ms;
-  z-index: $menu-toggle-z;
 }
 
 .mobile-menu__toggle-inner {

@@ -118,9 +118,11 @@
 
 .home-page__upcoming-drops-row--mobile {
   margin-left: 10vw;
+  margin-right: 10vw;
   color: red;
   display: flex;
-  gap: 10px;
+  // gap: 10px;
+  gap: 5vw;
   flex: none;
   min-width: 100vw;
 }
@@ -130,8 +132,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 
 @mixin upcoming-drops-tile {
   @include m.interact;
-  aspect-ratio: 1/1;
+  width: 80vw;
   transition-duration: 300ms;
+  aspect-ratio: 1/1;
   transition-timing-function: ease-out;
   position: relative;
   &[data-span2='true'] {
@@ -139,13 +142,14 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     grid-column: span 2 / span 2;
   }
   @include b.min-width('medium') {
+    width: 100%;
     aspect-ratio: 828/600;
   }
 }
 
 .home-page__upcoming-drops-tile--mobile {
   @include upcoming-drops-tile;
-  height: 300px;
+  height: 600px;
 }
 
 .home-page__upcoming-drops-tile {
@@ -200,7 +204,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     z-index: $tile-info-z;
     font-weight: 600;
     font-size: clamp(10px, 1vw, 16px);
-		aspect-ratio: 121/36.37;
+    aspect-ratio: 121/36.37;
     letter-spacing: 1px;
     top: 20px;
     left: 20px;
