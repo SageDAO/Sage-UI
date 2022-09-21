@@ -4,8 +4,12 @@
 @use '@/styles/abstracts/breakpoints' as b;
 .home-page {
   @include m.page;
+  padding-top: 0;
   width: 100%;
   align-items: center;
+  @include b.min-width('medium') {
+    padding: 80px 0 60px;
+  }
 }
 
 .home-page__main {

@@ -7,9 +7,13 @@
   flex-direction: column;
   justify-content: flex-end;
   aspect-ratio: 322/380;
-  @include m.standard-width;
+  padding: 97px 0 0px;
+  // @include m.standard-width;
+  // background-color: blue;
+  width: 100vw;
   @include b.min-width('medium') {
-    // aspect-ratio: none;
+    aspect-ratio: none;
+    padding: 0;
     height: 690px;
     @include m.desktop-width;
   }
@@ -22,7 +26,7 @@
   position: absolute;
   transition-duration: 300ms;
   width: 100%;
-  aspect-ratio: 325/311;
+	height: 100%;
   @include b.min-width('medium') {
     height: 539px;
   }

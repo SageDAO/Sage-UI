@@ -3,6 +3,10 @@
 
 .artist-page {
   @include m.page;
+  padding-top: 0;
+  @include b.min-width('medium') {
+    padding: 80px 0 60px;
+  }
 }
 
 .artist-page__banner-label {
