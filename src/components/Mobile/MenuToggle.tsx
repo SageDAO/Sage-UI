@@ -2,18 +2,15 @@ import useModal from '@/hooks/useModal';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import useWindowDimensions from '@/hooks/useWindowSize';
 
-import { SearchInput } from '@/components/SearchInput';
 
 interface Props {
   toggleMobileMenu: ReturnType<typeof useModal>['toggleModal'];
   isOpen: boolean;
   isDynamicColors?: boolean;
-  hideSearch?: boolean;
 }
 
 export default function MenuToggle({
   toggleMobileMenu,
-  hideSearch,
   isOpen,
   isDynamicColors,
 }: Props) {
@@ -23,13 +20,7 @@ export default function MenuToggle({
   if (isMobile) {
     return (
       <div className='mobile-nav'>
-        {!hideSearch && (
-          <div className='mobile-nav__search'>
-            <div className='searchform'>
-              <SearchInput placeholder={'search'} displayIcon={true} className='searchform__input'></SearchInput>
-            </div>
-          </div>
-        )}
+        
         <div onClick={toggleMobileMenu} className='mobile-menu__toggle'>
           <div className='mobile-menu__toggle-inner'>
             <div
