@@ -29,7 +29,7 @@
     "@types/react-table": "^7.7.9",
     "@types/sharp": "^0.30.5",
     "arweave": "^1.11.4",
-    "aws-sdk": "^2.1022.0",
+    "aws-sdk": "^2.1221.0",
     "babel-plugin-superjson-next": "^0.4.2",
     "cypress": "^10.2.0",
     "dotenv": "^10.0.0",

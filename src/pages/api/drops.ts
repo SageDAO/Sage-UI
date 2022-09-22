@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import prisma from '@/prisma/client';
 import { Prisma } from '@prisma/client';
+import { readPresetDropsFromS3 } from '@/utilities/awsS3-server';
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -25,6 +26,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'GetNftContractAddress':
       await getNftContractAddress(address as string, response);
+      break;
+    case 'GetPresetDrops':
+      await getPresetDrops(response);
       break;
     case 'UpdateNftContractAddress':
       await updateNftContractAddress(
@@ -128,6 +132,12 @@ async function getNftContractAddress(artistAddress: string, response: NextApiRes
     console.log({ e });
     response.status(500);
   }
+}
+
+async function getPresetDrops(response: NextApiResponse) {
+  const drops = await readPresetDropsFromS3();
+  console.log(`getPresetDrops() :: ${drops.length} items`);
+  response.json(drops);
 }
 
 async function updateNftContractAddress(

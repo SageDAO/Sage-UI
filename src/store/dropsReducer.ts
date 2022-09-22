@@ -6,6 +6,13 @@ import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.j
 import { _fetchOrCreateNftContract } from './nftsReducer';
 import { baseApi } from './baseReducer';
 
+export interface PresetDrop {
+  artistAddress: string;
+  dropName: string;
+  bannerS3Path: string;
+  nfts: string[]; // s3 paths
+}
+
 const dropsApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -16,6 +23,9 @@ const dropsApi = baseApi.injectEndpoints({
     getDropsPendingApproval: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetDropsPendingApproval`,
       providesTags: ['PendingDrops'],
+    }),
+    getPresetDrops: builder.query<[], void>({
+      query: () => `drops?action=GetPresetDrops`,
     }),
     approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
       queryFn: async ({ dropId, signer }, { dispatch }, _, fetchWithBQ) => {
@@ -255,6 +265,7 @@ async function updateDbApprovedDateAndIsLiveFlags(drop: DropFull, fetchWithBQ: a
 export const {
   useGetApprovedDropsQuery,
   useGetDropsPendingApprovalQuery,
+  useGetPresetDropsQuery,
   useApproveAndDeployDropMutation,
   useDeleteDropMutation,
 } = dropsApi;

@@ -80,8 +80,8 @@ async function getArtistNftContractAddress(artistAddress: string, response: Next
   response.json({nftContractAddress});
 }
 
-async function getS3SignedUrl(bucket: string, filename: string, response: NextApiResponse) {
-  const { uploadUrl, getUrl } = createS3SignedUrl(bucket, filename);
+async function getS3SignedUrl(folder: string, filename: string, response: NextApiResponse) {
+  const { uploadUrl, getUrl } = createS3SignedUrl(folder, filename);
   response.json({ uploadUrl, getUrl });
 }
 
