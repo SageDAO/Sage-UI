@@ -1,5 +1,5 @@
 import { PresetDrop } from '@/store/dropsReducer';
-import aws from 'aws-sdk/dist/aws-sdk-react-native';
+import aws from 'aws-sdk';
 
 const AWS_REGION = 'us-east-2';
 
@@ -48,14 +48,7 @@ export async function uploadBufferToS3(
 
 export async function readPresetDropsFromS3(): Promise<PresetDrop[]> {
   var presetDrops = [];
-  const s3 = new aws.S3({
-    maxRetries: 3,
-    retryDelayOptions: 1000,
-    httpOptions: {
-      connectTimeout: 2 * 1000,
-      timeout: 5 * 1000,
-    },
-  });
+  const s3 = new aws.S3();
   var listParams = {
     Bucket: 'staging-sage',
     Prefix: 'presets',

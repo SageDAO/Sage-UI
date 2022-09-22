@@ -16,6 +16,15 @@ export interface PresetDrop {
 const dropsApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
+    createPresetDrops: builder.mutation<
+      boolean,
+      { presetDrops: PresetDrop[]; durationHours: number }
+    >({
+      queryFn: async ({ presetDrops, durationHours }, {}, _, fetchWithBQ) => {
+        await createPresetDrops(presetDrops, durationHours);
+        return { data: false };
+      },
+    }),
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetApprovedDrops`,
       providesTags: ['PendingDrops'],
@@ -48,6 +57,10 @@ const dropsApi = baseApi.injectEndpoints({
     }),
   }),
 });
+
+async function createPresetDrops(presetDrops: PresetDrop[], durationHours: number) {
+
+}
 
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
@@ -267,5 +280,6 @@ export const {
   useGetDropsPendingApprovalQuery,
   useGetPresetDropsQuery,
   useApproveAndDeployDropMutation,
+  useCreatePresetDropsMutation,
   useDeleteDropMutation,
 } = dropsApi;
