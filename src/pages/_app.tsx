@@ -39,6 +39,7 @@ const connectors = [
 ];
 
 const wagmiClient = createClient({
+  autoConnect: true,
   connectors,
   provider,
   webSocketProvider,
