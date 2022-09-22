@@ -173,5 +173,6 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
       item.highestSaleUSD = row.amount;
     }
   }
+
   return salesData;
 }
