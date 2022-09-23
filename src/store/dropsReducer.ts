@@ -21,8 +21,8 @@ const dropsApi = baseApi.injectEndpoints({
       { presetDrops: PresetDrop[]; durationHours: number }
     >({
       queryFn: async ({ presetDrops, durationHours }, {}, _, fetchWithBQ) => {
-        await createPresetDrops(presetDrops, durationHours);
-        return { data: false };
+        await createPresetDrops(presetDrops, durationHours, fetchWithBQ);
+        return { data: true };
       },
     }),
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
@@ -58,8 +58,66 @@ const dropsApi = baseApi.injectEndpoints({
   }),
 });
 
-async function createPresetDrops(presetDrops: PresetDrop[], durationHours: number) {
+function addHours(numOfHours: number, date = new Date()) {
+  date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
+  return date;
+}
 
+async function createPresetDrops(
+  presetDrops: PresetDrop[],
+  durationHours: number,
+  fetchWithBQ: any
+) {
+  const startDate = addHours(0.5);
+  const endDate = addHours(durationHours);
+  for (const drop of presetDrops) {
+    // TODO check if address belongs to 'ARTIST' role
+    const { data } = await fetchWithBQ({
+      url: `drops?action=InsertDrop`,
+      method: 'POST',
+      body: {
+        artistWallet: drop.artistAddress,
+        name: drop.dropName,
+        bannerImageS3Path: drop.bannerS3Path,
+      },
+    });
+    const dropId = (data as any).dropId as number;
+    for (const nft of drop.nfts) {
+      if (Math.random() > 0.5) {
+        // Auction
+        // const { data } = await fetchWithBQ({
+        //   url: `drops?action=InsertAuction`,
+        //   method: 'POST',
+        //   body: {
+        //     dropId,
+        //     minimumPrice: Math.floor(Math.random() * 101)
+        //     bannerImageS3Path: drop.bannerS3Path,
+        //   },
+        // });
+
+        // data: {
+        //   Drop: { connect: { id: Number(data.dropId) } },
+        //   minimumPrice: data.minPrice,
+        //   startTime: new Date(Number(data.startDate) * 1000),
+        //   endTime: new Date(Number(data.endDate) * 1000),
+        //   Nft: {
+        //     create: {
+        //       name: data.name,
+        //       description: data.description || '',
+        //       // tags: data.tags || '',
+        //       numberOfEditions: 1,
+        //       metadataPath: data.metadataPath,
+        //       s3Path: data.s3Path,
+        //       s3PathOptimized: data.s3PathOptimized || data.s3Path,
+        //     },
+        //   },
+        // },
+
+      } else {
+        // Drawing
+      }
+    }
+  }
 }
 
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
@@ -76,8 +134,8 @@ async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   if (artistNftContractAddress == ethers.constants.AddressZero) {
     throw new Error('Unable to deploy a new artist NFT contract');
   }
-  await createAuctions(drop, artistNftContractAddress, signer, fetchWithBQ);
-  await createLotteries(drop, artistNftContractAddress, signer, fetchWithBQ);
+  await deployAuctions(drop, artistNftContractAddress, signer, fetchWithBQ);
+  await deployLotteries(drop, artistNftContractAddress, signer, fetchWithBQ);
   await updateDbApprovedDateAndIsLiveFlags(drop, fetchWithBQ);
 }
 
@@ -152,19 +210,16 @@ async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer
 async function createNftCollection(drop: DropFull, signer: Signer) {
   // const nftContract = await getNFTContract(signer);
   // const collectionExists = await nftContract.collectionExists(drop.id);
-
   // if (collectionExists) {
   //   console.log(`createNftCollection() :: Collection already exists for drop ${drop.id}`);
   //   return;
   // }
-
   // const royaltyAddress = drop.secondarySplitterId
   //   ? drop.SecondarySplitter?.splitterAddress
   //   : drop.artistAddress;
   // const primarySalesDestination = drop.primarySplitterId
   //   ? drop.PrimarySplitter?.splitterAddress
   //   : drop.artistAddress;
-
   // // percentage in basis points (2.00% = 200)
   // const royaltyPercentageBasisPoints = Math.floor(drop.royaltyPercentage * 100);
   // const dropBaseUrl = `https://arweave.net/${drop.dropMetadataCid}/`;
@@ -179,10 +234,10 @@ async function createNftCollection(drop: DropFull, signer: Signer) {
   //   primarySalesDestination!
   // );
   // await tx.wait();
-  console.log('createNftCollection() :: Collection created');
+  // console.log('createNftCollection() :: Collection created');
 }
 
-async function createAuctions(
+async function deployAuctions(
   drop: DropFull,
   artistNftContractAddress: string,
   signer: Signer,
@@ -193,7 +248,7 @@ async function createAuctions(
   for (const auction of drop.Auctions) {
     if (auction.contractAddress) {
       console.log(
-        `createAuctions() :: Auction ${auction.id} has already been deployed to ${auction.contractAddress}`
+        `deployAuctions() :: Auction ${auction.id} has already been deployed to ${auction.contractAddress}`
       );
       continue;
     }
@@ -203,7 +258,7 @@ async function createAuctions(
     const minimumPrice = ethers.utils.parseEther(auction.minimumPrice!);
 
     console.log(
-      `createAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath}`
+      `deployAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath}`
     );
     const tx = await auctionContract.createAuction(
       auction.id,
@@ -221,7 +276,7 @@ async function createAuctions(
   }
 }
 
-async function createLotteries(
+async function deployLotteries(
   drop: DropFull,
   artistNftContractAddress: string,
   signer: Signer,
@@ -232,7 +287,7 @@ async function createLotteries(
   for (const l of drop.Lotteries) {
     if (l.contractAddress) {
       console.log(
-        `createLotteries() :: Lottery ${l.id} has already been deployed to ${l.contractAddress}`
+        `deployLotteries() :: Lottery ${l.id} has already been deployed to ${l.contractAddress}`
       );
       continue;
     }

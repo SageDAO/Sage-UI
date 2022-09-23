@@ -8,10 +8,10 @@ const configuration: Configuration = {
   dev: {
     CHAIN_ID: '4',
     NETWORK_NAME: 'rinkeby',
-    SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.9',
+    SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.10',
     MEDIUM_URL: 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@SAGE_WEB3',
-    LOTTERY_ADDRESS: '0xA96900a0821F8EFD0C15110b33c94a8846255988',
-    AUCTION_ADDRESS: '0xCCB63b3847056775F66DbB7eD283154a82457a65',
+    LOTTERY_ADDRESS: '0xc057dd2Dc853CCd555902231EE5669279EF27906',
+    AUCTION_ADDRESS: '0x18034a13fA7a0BD3a4aC9C5c39DE8480Db5791d7',
     REWARDS_ADDRESS: '0x75B9c97456Cf1921078d6f5b6DbD0AC4Ddf4237F',
     ASHTOKEN_ADDRESS: '0xd7315632731b7be8c618dE4374433f7C7E37A1D8', // MOCK Contract
     NFTFACTORY_ADDRESS: '0x0AF81caAB2C4E199DeBe4906D0B30cc5E5ed949C',
