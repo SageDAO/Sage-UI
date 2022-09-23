@@ -1,9 +1,16 @@
-import { PresetDrop, useGetPresetDropsQuery } from '@/store/dropsReducer';
+import {
+  PresetDrop,
+  useCreatePresetDropsMutation,
+  useGetPresetDropsQuery,
+} from '@/store/dropsReducer';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import LoaderDots from '../LoaderDots';
+import LoaderSpinner from '../LoaderSpinner';
 
 export default function PresetDropsPanel() {
   const { data: presetDrops, isLoading, isError } = useGetPresetDropsQuery();
+  const [createPresetDrops, { isLoading: isCreating }] = useCreatePresetDropsMutation();
   const [duration, setDuration] = useState<number>(24);
   const selectedDrops = [];
 
@@ -23,11 +30,13 @@ export default function PresetDropsPanel() {
     setDuration(Number(val));
   };
 
-  const handleCreateDropsButtonClick = () => {
+  const handleCreateDropsButtonClick = async () => {
     if (selectedDrops.length == 0) {
       alert('Select one or more drops!');
       return;
     }
+    await createPresetDrops({ presetDrops: selectedDrops, durationHours: duration });
+    toast.success(`Created ${selectedDrops.length} new drop(s)!`);
   };
 
   if (isLoading) {
@@ -81,8 +90,12 @@ export default function PresetDropsPanel() {
         </select>
         <br />
         <br />
-        <button className='games-modal__place-bid-button' onClick={handleCreateDropsButtonClick}>
-          create selected drops
+        <button
+          disabled={isCreating}
+          className='games-modal__place-bid-button'
+          onClick={handleCreateDropsButtonClick}
+        >
+          {isCreating ? <LoaderSpinner /> : 'create selected drops'}
         </button>
       </div>
     </>

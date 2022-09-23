@@ -24,6 +24,7 @@ const dropsApi = baseApi.injectEndpoints({
         await createPresetDrops(presetDrops, durationHours, fetchWithBQ);
         return { data: true };
       },
+      invalidatesTags: ['PendingDrops'],
     }),
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetApprovedDrops`,
@@ -68,53 +69,74 @@ async function createPresetDrops(
   durationHours: number,
   fetchWithBQ: any
 ) {
-  const startDate = addHours(0.5);
-  const endDate = addHours(durationHours);
-  for (const drop of presetDrops) {
+  const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
+  const startDate = Math.floor(addHours(0.5).getTime() / 1000);
+  const endDate = Math.floor(addHours(durationHours).getTime() / 1000);
+  for (const presetDrop of presetDrops) {
     // TODO check if address belongs to 'ARTIST' role
-    const { data } = await fetchWithBQ({
-      url: `drops?action=InsertDrop`,
+    const { data: dropResult } = await fetchWithBQ({
+      url: `endpoints/dropUpload?action=InsertDrop`,
       method: 'POST',
       body: {
-        artistWallet: drop.artistAddress,
-        name: drop.dropName,
-        bannerImageS3Path: drop.bannerS3Path,
+        artistWallet: presetDrop.artistAddress,
+        name: presetDrop.dropName,
+        bannerImageS3Path: presetDrop.bannerS3Path,
       },
     });
-    const dropId = (data as any).dropId as number;
-    for (const nft of drop.nfts) {
+    const dropId = (dropResult as any).dropId as number;
+    console.log(`createPresetDrops() :: Added drop ${dropId}`);
+    for (const nftS3Path of presetDrop.nfts) {
       if (Math.random() > 0.5) {
         // Auction
-        // const { data } = await fetchWithBQ({
-        //   url: `drops?action=InsertAuction`,
-        //   method: 'POST',
-        //   body: {
-        //     dropId,
-        //     minimumPrice: Math.floor(Math.random() * 101)
-        //     bannerImageS3Path: drop.bannerS3Path,
-        //   },
-        // });
-
-        // data: {
-        //   Drop: { connect: { id: Number(data.dropId) } },
-        //   minimumPrice: data.minPrice,
-        //   startTime: new Date(Number(data.startDate) * 1000),
-        //   endTime: new Date(Number(data.endDate) * 1000),
-        //   Nft: {
-        //     create: {
-        //       name: data.name,
-        //       description: data.description || '',
-        //       // tags: data.tags || '',
-        //       numberOfEditions: 1,
-        //       metadataPath: data.metadataPath,
-        //       s3Path: data.s3Path,
-        //       s3PathOptimized: data.s3PathOptimized || data.s3Path,
-        //     },
-        //   },
-        // },
-
+        const { data: auctionResult } = await fetchWithBQ({
+          url: `endpoints/dropUpload?action=InsertAuction`,
+          method: 'POST',
+          body: {
+            dropId,
+            minPrice: '1',
+            bannerImageS3Path: presetDrop.bannerS3Path,
+            startDate,
+            endDate,
+            name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
+            metadataPath,
+            s3Path: nftS3Path,
+            s3PathOptimized: nftS3Path,
+          },
+        });
+        const auctionId = (auctionResult as any).auctionId as number;
+        console.log(`createPresetDrops() :: Added auction ${auctionId} to drop ${dropId}`);
       } else {
         // Drawing
+        const { data: drawingResult } = await fetchWithBQ({
+          url: `endpoints/dropUpload?action=InsertDrawing`,
+          method: 'POST',
+          body: {
+            dropId,
+            ticketCostTokens: Math.random() > 0.5 ? 5 : 10,
+            ticketCostPoints: Math.random() > 0.5 ? 0 : 1,
+            maxTickets: 0,
+            maxTicketsPerUser: 0,
+            startDate,
+            endDate,
+          },
+        });
+        const drawingId = (drawingResult as any).drawingId as number;
+        console.log(`createPresetDrops() :: Added drawing ${drawingId} to drop ${dropId}`);
+        const { data: nftResult } = await fetchWithBQ({
+          url: `endpoints/dropUpload?action=InsertNft`,
+          method: 'POST',
+          body: {
+            dropId,
+            drawingId,
+            name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
+            numberOfEditions: 1,
+            metadataPath,
+            s3Path: nftS3Path,
+            s3PathOptimized: nftS3Path,
+          },
+        });
+        const nftId = (nftResult as any).nftId as number;
+        console.log(`createPresetDrops() :: Added nft ${nftId} to drawing ${drawingId}`);
       }
     }
   }

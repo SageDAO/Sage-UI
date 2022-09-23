@@ -254,7 +254,7 @@ async function insertNft(data: any, response: NextApiResponse) {
     } else if (data.drawingId) {
       insertData.data.Lottery = { connect: { id: data.drawingId } };
     }
-    if (data.artistAddress) {
+    if (data.artistAddress) { // Artist listing
       insertData.data.NftContract = { connect: { artistAddress: data.artistAddress } };
     }
     var record = await prisma.nft.create(insertData);
