@@ -16,16 +16,15 @@ export interface PresetDrop {
 const dropsApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    createPresetDrops: builder.mutation<
-      boolean,
-      { presetDrops: PresetDrop[]; durationHours: number }
-    >({
-      queryFn: async ({ presetDrops, durationHours }, {}, _, fetchWithBQ) => {
-        await createPresetDrops(presetDrops, durationHours, fetchWithBQ);
-        return { data: true };
-      },
-      invalidatesTags: ['PendingDrops'],
-    }),
+    createPresetDrops: builder.mutation<null, { presetDrops: PresetDrop[]; durationHours: number }>(
+      {
+        queryFn: async ({ presetDrops, durationHours }, {}, _, fetchWithBQ) => {
+          await createPresetDrops(presetDrops, durationHours, fetchWithBQ);
+          return { data: null };
+        },
+        invalidatesTags: ['PendingDrops'],
+      }
+    ),
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetApprovedDrops`,
       providesTags: ['PendingDrops'],
@@ -50,10 +49,11 @@ const dropsApi = baseApi.injectEndpoints({
       },
     }),
     deleteDrop: builder.mutation<null, number>({
-      queryFn: async (dropId, {}, _, fetchWithBQ) => {
-        await fetchWithBQ(`drops?action=DeleteDrop&id=${dropId}`);
-        return { data: null };
-      },
+      query: (dropId) => `drops?action=DeleteDrop&id=${dropId}`,
+      invalidatesTags: ['PendingDrops'],
+    }),
+    deleteDrops: builder.mutation<null, void>({
+      query: () => `drops?action=DeleteDrops`,
       invalidatesTags: ['PendingDrops'],
     }),
   }),
@@ -359,4 +359,5 @@ export const {
   useApproveAndDeployDropMutation,
   useCreatePresetDropsMutation,
   useDeleteDropMutation,
+  useDeleteDropsMutation,
 } = dropsApi;

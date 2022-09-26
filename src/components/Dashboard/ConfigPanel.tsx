@@ -1,5 +1,5 @@
 import { useGetConfigQuery, useUpdateConfigMutation } from '@/store/dashboardReducer';
-import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
+import { useDeleteDropsMutation, useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import LoaderDots from '../LoaderDots';
@@ -9,6 +9,7 @@ export function ConfigPanel() {
   const { data: drops, isFetching: isFetchingDrops } = useGetApprovedDropsQuery();
   const { data: config, isFetching: isFetchingConfig } = useGetConfigQuery();
   const [updateConfig, { isLoading: isUpdatingConfig }] = useUpdateConfigMutation();
+  const [deleteDrops, { isLoading: isWiping }] = useDeleteDropsMutation();
   const [featuredDropId, setFeaturedDropId] = useState<number>(0);
   const [welcomeMessage, setWelcomeMessage] = useState<string>('');
 
@@ -32,6 +33,14 @@ export function ConfigPanel() {
     toast.success('Changes successfully saved')
   };
 
+  const handleWipeButtonClick = async () => {
+    const text = prompt('Write WIPE to confirm permanently deleting all drops & NFT data');
+    if (text && text.toUpperCase() == 'WIPE') {
+      await deleteDrops();
+      toast.success('Drops & NFTs permanently deleted')
+    }
+  };
+  
   if (isFetchingConfig || isFetchingDrops) {
     return <LoaderDots />;
   }
@@ -72,6 +81,16 @@ export function ConfigPanel() {
           onClick={handleSaveButtonClick}
         >
           {isUpdatingConfig ? <LoaderSpinner /> : `save changes`}
+        </button>
+      </div>
+      <div className='creations-panel__file-desc-group' style={{ marginTop: '125px' }}>
+        <button
+          disabled={isWiping}
+          className='dashboard__wipe-button'
+          type='button'
+          onClick={handleWipeButtonClick}
+        >
+          {isWiping ? <LoaderSpinner /> : `wipe drop data (!)`}
         </button>
       </div>
     </div>
