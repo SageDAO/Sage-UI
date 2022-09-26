@@ -18,12 +18,14 @@ function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props
   return (
     <div className='home-page' data-cy='home-page'>
       <div className='home-page__main'>
-        <FeaturedDrop
-          drop={featuredDrop}
-          artist={featuredDrop.NftContract.Artist}
-          Lotteries={featuredDrop.Lotteries}
-          Auctions={featuredDrop.Auctions}
-        ></FeaturedDrop>
+        {featuredDrop && (
+          <FeaturedDrop
+            drop={featuredDrop}
+            artist={featuredDrop.NftContract.Artist}
+            Lotteries={featuredDrop.Lotteries}
+            Auctions={featuredDrop.Auctions}
+          ></FeaturedDrop>
+        )}
         <h1 className='home-page__statement'>{welcomeMessage}</h1>
         <div className='home-page__upcoming-drops-header'>
           <h1 className='home-page__upcoming-drops-header-left'>drops</h1>
