@@ -9,6 +9,7 @@ export interface ArtistSales {
   nftCountTotal: number;
   amountTotalUSD: number;
   highestSaleUSD: number;
+	profilePicture: string;
 }
 
 export type Auction_include_DropNftArtist = Prisma.AuctionGetPayload<{
