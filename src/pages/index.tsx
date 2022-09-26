@@ -4,7 +4,6 @@ import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { getHomePageData, getSageMediumData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import UpcomingDrops from '@/components/Pages/Home/UpcomingDrops';
-import useSageRoutes from '@/hooks/useSageRoutes';
 import FeaturedDrop from '@/components/Pages/Home/FeaturedDrop';
 
 interface Props {
