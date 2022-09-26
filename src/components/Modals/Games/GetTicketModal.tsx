@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
 import { useSigner } from 'wagmi';
-import { toast } from 'react-toastify';
 import { Lottery_include_Nft } from '@/prisma/types';
 import {
   BuyTicketRequest,
@@ -125,13 +124,7 @@ function GetTicketModal({
     const getPricePoints = (): bigint => {
       return BigInt(lottery.costPerTicketPoints);
     };
-
     const pricePoints = getPricePoints();
-
-    if (!earnedPoints) {
-      toast.error('Points info unavailable');
-      return;
-    }
 
     try {
       const request: BuyTicketRequest = {

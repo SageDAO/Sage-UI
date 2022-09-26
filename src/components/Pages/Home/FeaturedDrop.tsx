@@ -11,6 +11,7 @@ function FeaturedDrop({ drop, artist, Lotteries, Auctions }: Props) {
     Lotteries,
     Auctions,
   });
+	if (!drop) return null;
   return (
     <>
       <Hero bannerOnClick={goToDropOnClick} imgSrc={bannerImgSrc} />
