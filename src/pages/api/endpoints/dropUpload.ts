@@ -90,6 +90,7 @@ async function copyFromS3toArweave(s3Path: string, response: NextApiResponse) {
   try {
     const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
     balance = await arweave.wallets.getBalance(walletAddress);
+    balance = arweave.ar.winstonToAr(balance);
     const fileContent = await fetchFileContent(s3Path);
     const filename = s3Path.split('/').pop() as string;
     const tx = await sendArweaveTransaction(
@@ -135,7 +136,8 @@ async function uploadNftMetadataToArweave(nftMetadataFile: any, response: NextAp
     arweaveJwk
   );
   const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
-  const balance = await arweave.wallets.getBalance(walletAddress);
+  var balance = await arweave.wallets.getBalance(walletAddress);
+  balance = arweave.ar.winstonToAr(balance);
   response.json({ id: tx.id, balance });
 }
 
