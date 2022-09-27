@@ -189,8 +189,9 @@ function GetTicketModal({
                   <System type={systemType}></System>
                 </div>
                 <h1 className='games-modal__system-info'>
-                  This is a fair drop mechanic. By purchasing one or more entries, you have the
-                  opportunity to be selected to mint this NFT.
+                  This is a fair drop mechanic. By purchasing one or more tickets for this drop,
+                  you have the opportunity to be selected to buy this NFT. Losing tickets will be
+                  refunded.
                 </h1>
               </div>
 
