@@ -4,115 +4,118 @@
 .accountmodal {
   display: flex;
   flex-direction: column;
-
-  width: 710px;
-  height: 527px;
+  padding: 20px 0;
+	align-items: center;
+	width: 100%;
+  // width: 710px;
+  // height: 527px;
+	// background-color: red;
 }
 
-.accountmodal__header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.accountmodal__header-sage-logo {
-  position: relative;
-  width: 183px;
-  height: 50px;
-  aspect-ratio: 183/50;
-}
-
-.accountmodal__header-info {
-  text-transform: uppercase;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 130%;
-  width: 345px;
-}
-
-.accountmodal__header-close-button {
-  @include m.interact;
-  position: relative;
-  width: 30px;
-  height: 30px;
-}
-
-.accountmodal__wallets {
-  display: flex;
-  flex: 1;
-}
-
-.accountmodal__wallet-item {
-  @include m.interact {
-    transform: scale(1.04);
-  }
-  background-color: transparent;
-  cursor: pointer;
-  transition-duration: 30ms;
-  width: 50%;
-  height: 100%;
-  gap: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  &:disabled {
-    pointer-events: none;
-    filter: brightness(0.6);
-  }
-}
-
-.accountmodal__wallet-icon {
-  // width: 120px;
-  // height: 120px;
-  // position: relative;
-}
-
-.accountmodal__wallet-name {
-  text-transform: uppercase;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 130%;
-  text-align: center;
-  @include m.theme() {
-    color: m.t(contrast);
-  }
-}
-
-.accountmodal__auth {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.accountmodal__auth-ethereum-icon {
-  width: 20px;
-  height: 30px;
-}
-
-// @mixin auth-button {
-//   @include m.interact {
-//   }
-//   background: transparent;
-//   align-items: center;
-//   gap: 10px;
+// .accountmodal__header {
 //   display: flex;
+//   flex-direction: row;
+//   justify-content: space-between;
+// }
+
+// .accountmodal__header-sage-logo {
+//   position: relative;
+//   width: 183px;
+//   height: 50px;
+//   aspect-ratio: 183/50;
+// }
+
+// .accountmodal__header-info {
+//   text-transform: uppercase;
+//   font-style: normal;
+//   font-weight: 400;
+//   font-size: 16px;
+//   line-height: 130%;
+//   width: 345px;
+// }
+
+// .accountmodal__header-close-button {
+//   @include m.interact;
+//   position: relative;
+//   width: 30px;
+//   height: 30px;
+// }
+
+// .accountmodal__wallets {
+//   display: flex;
+//   flex: 1;
+// }
+
+// .accountmodal__wallet-item {
+//   @include m.interact {
+//     transform: scale(1.04);
+//   }
+//   background-color: transparent;
 //   cursor: pointer;
-//   transition-duration: 200ms;
+//   transition-duration: 30ms;
+//   width: 50%;
+//   height: 100%;
+//   gap: 30px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   flex-direction: column;
+//   &:disabled {
+//     pointer-events: none;
+//     filter: brightness(0.6);
+//   }
+// }
+
+// .accountmodal__wallet-icon {
+//   // width: 120px;
+//   // height: 120px;
+//   // position: relative;
+// }
+
+// .accountmodal__wallet-name {
+//   text-transform: uppercase;
+//   font-style: normal;
+//   font-weight: 400;
+//   font-size: 16px;
+//   line-height: 130%;
+//   text-align: center;
 //   @include m.theme() {
 //     color: m.t(contrast);
-//     border: 1px solid m.t(contrast);
 //   }
-//   padding: 10px 20px;
 // }
 
-// .accountmodal__auth-sign-in-button {
-//   @include auth-button;
+// .accountmodal__auth {
+//   flex: 1;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
 // }
 
-// .accountmodal__auth-sign-out-button {
-//   @include auth-button;
+// .accountmodal__auth-ethereum-icon {
+//   width: 20px;
+//   height: 30px;
 // }
+
+// // @mixin auth-button {
+// //   @include m.interact {
+// //   }
+// //   background: transparent;
+// //   align-items: center;
+// //   gap: 10px;
+// //   display: flex;
+// //   cursor: pointer;
+// //   transition-duration: 200ms;
+// //   @include m.theme() {
+// //     color: m.t(contrast);
+// //     border: 1px solid m.t(contrast);
+// //   }
+// //   padding: 10px 20px;
+// // }
+
+// // .accountmodal__auth-sign-in-button {
+// //   @include auth-button;
+// // }
+
+// // .accountmodal__auth-sign-out-button {
+// //   @include auth-button;
+// // }

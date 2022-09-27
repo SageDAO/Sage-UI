@@ -174,8 +174,11 @@
   @include footer-section;
   height: 30px;
   justify-content: center;
+  // min-height: 20vh;
+	margin-bottom: 8vh;
   @include b.min-width('small') {
     min-height: 20vh;
+	margin-bottom: 0;
   }
 }
 

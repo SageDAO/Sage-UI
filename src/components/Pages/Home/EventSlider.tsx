@@ -35,6 +35,7 @@ export default function EventSlider({ mediumData }: Props) {
 
   return (
     <section className='home-page__events-section'>
+      <h3 className='home-page__event-slide-header'>news</h3>
       <div className='home-page__events'>
         {state.items.map((item, i: number) => {
           return (
@@ -49,7 +50,7 @@ export default function EventSlider({ mediumData }: Props) {
                     return `${src}?w=${width}&q=${quality || 75}`;
                   }}
                 />
-                <h3 className='home-page__event-slide-header'>news</h3>
+                <h3 className='home-page__event-slide-header'></h3>
                 <div className='home-page__events-slide-middle'>
                   <Image
                     src={item.thumbnail}
@@ -61,6 +62,7 @@ export default function EventSlider({ mediumData }: Props) {
                     }}
                   />
                 </div>
+
                 <div className='home-page__event-slide-content'>
                   <h1 className='home-page__event-slide-content-title'>{item.title}</h1>
                   <div className='home-page__event-slide-content-group'>
