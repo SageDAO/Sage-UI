@@ -82,6 +82,7 @@ export default function PresetDropsPanel() {
       >
         Drop duration:{' '}
         <select value={duration} onChange={handleDurationSelectChange}>
+          <option value='1'>1 hour</option>
           <option value='24'>24 hours</option>
           <option value='48'>48 hours</option>
           <option value='168'>1 week</option>
