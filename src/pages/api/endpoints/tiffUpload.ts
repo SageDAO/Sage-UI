@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import multer from 'multer';
 import sharp from 'sharp';
-import { uploadBufferToS3Bucket } from '@/utilities/awsS3-server';
+import { uploadBufferToS3 } from '@/utilities/awsS3-server';
 import NextCors from 'nextjs-cors';
 
 const OPTIMIZED_WIDTH = 487;
@@ -23,10 +23,10 @@ async function handler(req: RequestWithFile, res: NextApiResponse) {
     await runMiddleware(req, res, upload.single('file'));
     const tiffBuffer: Buffer = Buffer.from(req.file.buffer);
     const jpegBuffer: Buffer = await sharp(tiffBuffer).jpeg().resize(OPTIMIZED_WIDTH).toBuffer();
-    const bucket = 'optimized';
+    const folder = 'optimized';
     const filename = `${Date.now().toString()}.jpg`;
-    const s3PathOptimized = await uploadBufferToS3Bucket(
-      bucket,
+    const s3PathOptimized = await uploadBufferToS3(
+      folder,
       filename,
       'image/jpeg',
       jpegBuffer

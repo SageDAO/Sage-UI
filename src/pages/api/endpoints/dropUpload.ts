@@ -80,8 +80,8 @@ async function getArtistNftContractAddress(artistAddress: string, response: Next
   response.json({nftContractAddress});
 }
 
-async function getS3SignedUrl(bucket: string, filename: string, response: NextApiResponse) {
-  const { uploadUrl, getUrl } = createS3SignedUrl(bucket, filename);
+async function getS3SignedUrl(folder: string, filename: string, response: NextApiResponse) {
+  const { uploadUrl, getUrl } = createS3SignedUrl(folder, filename);
   response.json({ uploadUrl, getUrl });
 }
 
@@ -90,6 +90,7 @@ async function copyFromS3toArweave(s3Path: string, response: NextApiResponse) {
   try {
     const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
     balance = await arweave.wallets.getBalance(walletAddress);
+    balance = arweave.ar.winstonToAr(balance);
     const fileContent = await fetchFileContent(s3Path);
     const filename = s3Path.split('/').pop() as string;
     const tx = await sendArweaveTransaction(
@@ -135,7 +136,8 @@ async function uploadNftMetadataToArweave(nftMetadataFile: any, response: NextAp
     arweaveJwk
   );
   const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
-  const balance = await arweave.wallets.getBalance(walletAddress);
+  var balance = await arweave.wallets.getBalance(walletAddress);
+  balance = arweave.ar.winstonToAr(balance);
   response.json({ id: tx.id, balance });
 }
 
@@ -254,7 +256,7 @@ async function insertNft(data: any, response: NextApiResponse) {
     } else if (data.drawingId) {
       insertData.data.Lottery = { connect: { id: data.drawingId } };
     }
-    if (data.artistAddress) {
+    if (data.artistAddress) { // Artist listing
       insertData.data.NftContract = { connect: { artistAddress: data.artistAddress } };
     }
     var record = await prisma.nft.create(insertData);

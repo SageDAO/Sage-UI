@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import prisma from '@/prisma/client';
 import { Prisma } from '@prisma/client';
+import { readPresetDropsFromS3 } from '@/utilities/awsS3-server';
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -25,6 +26,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'GetNftContractAddress':
       await getNftContractAddress(address as string, response);
+      break;
+    case 'GetPresetDrops':
+      await getPresetDrops(response);
       break;
     case 'UpdateNftContractAddress':
       await updateNftContractAddress(
@@ -50,6 +54,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'DeleteDrop':
       await deleteDrop(Number(id), response);
+      break;
+    case 'DeleteDrops':
+      await deleteDrops(response);
       break;
     default:
       response.status(500);
@@ -128,6 +135,12 @@ async function getNftContractAddress(artistAddress: string, response: NextApiRes
     console.log({ e });
     response.status(500);
   }
+}
+
+async function getPresetDrops(response: NextApiResponse) {
+  const drops = await readPresetDropsFromS3();
+  console.log(`getPresetDrops() :: ${drops.length} items`);
+  response.json(drops);
 }
 
 async function updateNftContractAddress(
@@ -264,7 +277,7 @@ async function deleteDrop(id: number, response: NextApiResponse) {
     where: { id },
     include: {
       Auctions: { include: { Nft: true } },
-      Lotteries: { include: { Nfts: true } }
+      Lotteries: { include: { Nfts: true } },
     },
   });
   if (drop?.approvedAt) {
@@ -272,16 +285,32 @@ async function deleteDrop(id: number, response: NextApiResponse) {
     return;
   }
   for (const a of drop?.Auctions!) {
-    await prisma.auction.delete({ where: { id: a.id }});
-    await prisma.nft.delete({ where: { id: a.nftId }});
+    await prisma.auction.delete({ where: { id: a.id } });
+    await prisma.nft.delete({ where: { id: a.nftId } });
   }
   for (const l of drop?.Lotteries!) {
     for (const n of l.Nfts) {
-      await prisma.nft.delete({ where: { id: n.id }});
+      await prisma.nft.delete({ where: { id: n.id } });
     }
-    await prisma.lottery.delete({ where: { id: l.id }});
+    await prisma.lottery.delete({ where: { id: l.id } });
   }
-  await prisma.drop.delete({ where: { id }});
+  await prisma.drop.delete({ where: { id } });
+}
+
+async function deleteDrops(response: NextApiResponse) {
+  console.log(`deleteDrops()`);
+  if (process.env.NEXT_PUBLIC_APP_MODE == 'production') {
+    throw new Error('Web wiping of drop data not allowed in production');
+  }
+  await prisma.config.updateMany({ where: {}, data: { featuredDropId: null } });
+  await prisma.saleEvent.deleteMany();
+  await prisma.prizeProof.deleteMany();
+  await prisma.offer.deleteMany();
+  await prisma.auction.deleteMany();
+  await prisma.nft.deleteMany();
+  await prisma.lottery.deleteMany();
+  await prisma.nft.deleteMany();
+  await prisma.drop.deleteMany();
 }
 
 export default handler;

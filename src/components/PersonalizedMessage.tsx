@@ -1,9 +1,9 @@
 import useSAGEAccount from '@/hooks/useSAGEAccount';
 import React from 'react';
 import UserHandle from './UserHandle';
-export default function PersonalizedMessage() {
-  const { isSignedIn, isWalletConnected } = useSAGEAccount();
 
+export default function PersonalizedMessage() {
+  const { isSignedIn } = useSAGEAccount();
   if (isSignedIn) {
     return (
       <React.Fragment>
@@ -14,12 +14,9 @@ export default function PersonalizedMessage() {
     );
   }
 
-  if (isWalletConnected) {
-    return null;
-  }
 
-  if (!isWalletConnected) {
-    return <span>Welcome! </span>;
-  }
-  return <React.Fragment>Error</React.Fragment>;
+
+
+
+  return <React.Fragment>Welcome!</React.Fragment>;
 }

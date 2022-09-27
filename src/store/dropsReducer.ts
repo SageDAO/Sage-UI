@@ -6,9 +6,25 @@ import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.j
 import { _fetchOrCreateNftContract } from './nftsReducer';
 import { baseApi } from './baseReducer';
 
+export interface PresetDrop {
+  artistAddress: string;
+  dropName: string;
+  bannerS3Path: string;
+  nfts: string[]; // s3 paths
+}
+
 const dropsApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
+    createPresetDrops: builder.mutation<null, { presetDrops: PresetDrop[]; durationHours: number }>(
+      {
+        queryFn: async ({ presetDrops, durationHours }, {}, _, fetchWithBQ) => {
+          await createPresetDrops(presetDrops, durationHours, fetchWithBQ);
+          return { data: null };
+        },
+        invalidatesTags: ['PendingDrops'],
+      }
+    ),
     getApprovedDrops: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetApprovedDrops`,
       providesTags: ['PendingDrops'],
@@ -16,6 +32,9 @@ const dropsApi = baseApi.injectEndpoints({
     getDropsPendingApproval: builder.query<Drop_include_GamesAndArtist[], void>({
       query: () => `drops?action=GetDropsPendingApproval`,
       providesTags: ['PendingDrops'],
+    }),
+    getPresetDrops: builder.query<[], void>({
+      query: () => `drops?action=GetPresetDrops`,
     }),
     approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
       queryFn: async ({ dropId, signer }, { dispatch }, _, fetchWithBQ) => {
@@ -30,14 +49,98 @@ const dropsApi = baseApi.injectEndpoints({
       },
     }),
     deleteDrop: builder.mutation<null, number>({
-      queryFn: async (dropId, {}, _, fetchWithBQ) => {
-        await fetchWithBQ(`drops?action=DeleteDrop&id=${dropId}`);
-        return { data: null };
-      },
+      query: (dropId) => `drops?action=DeleteDrop&id=${dropId}`,
+      invalidatesTags: ['PendingDrops'],
+    }),
+    deleteDrops: builder.mutation<null, void>({
+      query: () => `drops?action=DeleteDrops`,
       invalidatesTags: ['PendingDrops'],
     }),
   }),
 });
+
+function addHours(numOfHours: number, date = new Date()) {
+  date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
+  return date;
+}
+
+async function createPresetDrops(
+  presetDrops: PresetDrop[],
+  durationHours: number,
+  fetchWithBQ: any
+) {
+  const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
+  const startDate = Math.floor(addHours(0.5).getTime() / 1000);
+  const endDate = Math.floor(addHours(durationHours).getTime() / 1000);
+  for (const presetDrop of presetDrops) {
+    // TODO check if address belongs to 'ARTIST' role
+    const { data: dropResult } = await fetchWithBQ({
+      url: `endpoints/dropUpload?action=InsertDrop`,
+      method: 'POST',
+      body: {
+        artistWallet: presetDrop.artistAddress,
+        name: presetDrop.dropName,
+        bannerImageS3Path: presetDrop.bannerS3Path,
+      },
+    });
+    const dropId = (dropResult as any).dropId as number;
+    console.log(`createPresetDrops() :: Added drop ${dropId}`);
+    for (const nftS3Path of presetDrop.nfts) {
+      if (Math.random() > 0.5) {
+        // Auction
+        const { data: auctionResult } = await fetchWithBQ({
+          url: `endpoints/dropUpload?action=InsertAuction`,
+          method: 'POST',
+          body: {
+            dropId,
+            minPrice: '1',
+            bannerImageS3Path: presetDrop.bannerS3Path,
+            startDate,
+            endDate,
+            name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
+            metadataPath,
+            s3Path: nftS3Path,
+            s3PathOptimized: nftS3Path,
+          },
+        });
+        const auctionId = (auctionResult as any).auctionId as number;
+        console.log(`createPresetDrops() :: Added auction ${auctionId} to drop ${dropId}`);
+      } else {
+        // Drawing
+        const { data: drawingResult } = await fetchWithBQ({
+          url: `endpoints/dropUpload?action=InsertDrawing`,
+          method: 'POST',
+          body: {
+            dropId,
+            ticketCostTokens: Math.random() > 0.5 ? 5 : 10,
+            ticketCostPoints: Math.random() > 0.5 ? 0 : 1,
+            maxTickets: 0,
+            maxTicketsPerUser: 0,
+            startDate,
+            endDate,
+          },
+        });
+        const drawingId = (drawingResult as any).drawingId as number;
+        console.log(`createPresetDrops() :: Added drawing ${drawingId} to drop ${dropId}`);
+        const { data: nftResult } = await fetchWithBQ({
+          url: `endpoints/dropUpload?action=InsertNft`,
+          method: 'POST',
+          body: {
+            dropId,
+            drawingId,
+            name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
+            numberOfEditions: 1,
+            metadataPath,
+            s3Path: nftS3Path,
+            s3PathOptimized: nftS3Path,
+          },
+        });
+        const nftId = (nftResult as any).nftId as number;
+        console.log(`createPresetDrops() :: Added nft ${nftId} to drawing ${drawingId}`);
+      }
+    }
+  }
+}
 
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
@@ -53,8 +156,8 @@ async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   if (artistNftContractAddress == ethers.constants.AddressZero) {
     throw new Error('Unable to deploy a new artist NFT contract');
   }
-  await createAuctions(drop, artistNftContractAddress, signer, fetchWithBQ);
-  await createLotteries(drop, artistNftContractAddress, signer, fetchWithBQ);
+  await deployAuctions(drop, artistNftContractAddress, signer, fetchWithBQ);
+  await deployLotteries(drop, artistNftContractAddress, signer, fetchWithBQ);
   await updateDbApprovedDateAndIsLiveFlags(drop, fetchWithBQ);
 }
 
@@ -129,19 +232,16 @@ async function deploySplitter(splitter: Splitter_include_Entries, signer: Signer
 async function createNftCollection(drop: DropFull, signer: Signer) {
   // const nftContract = await getNFTContract(signer);
   // const collectionExists = await nftContract.collectionExists(drop.id);
-
   // if (collectionExists) {
   //   console.log(`createNftCollection() :: Collection already exists for drop ${drop.id}`);
   //   return;
   // }
-
   // const royaltyAddress = drop.secondarySplitterId
   //   ? drop.SecondarySplitter?.splitterAddress
   //   : drop.artistAddress;
   // const primarySalesDestination = drop.primarySplitterId
   //   ? drop.PrimarySplitter?.splitterAddress
   //   : drop.artistAddress;
-
   // // percentage in basis points (2.00% = 200)
   // const royaltyPercentageBasisPoints = Math.floor(drop.royaltyPercentage * 100);
   // const dropBaseUrl = `https://arweave.net/${drop.dropMetadataCid}/`;
@@ -156,10 +256,10 @@ async function createNftCollection(drop: DropFull, signer: Signer) {
   //   primarySalesDestination!
   // );
   // await tx.wait();
-  console.log('createNftCollection() :: Collection created');
+  // console.log('createNftCollection() :: Collection created');
 }
 
-async function createAuctions(
+async function deployAuctions(
   drop: DropFull,
   artistNftContractAddress: string,
   signer: Signer,
@@ -170,7 +270,7 @@ async function createAuctions(
   for (const auction of drop.Auctions) {
     if (auction.contractAddress) {
       console.log(
-        `createAuctions() :: Auction ${auction.id} has already been deployed to ${auction.contractAddress}`
+        `deployAuctions() :: Auction ${auction.id} has already been deployed to ${auction.contractAddress}`
       );
       continue;
     }
@@ -180,7 +280,7 @@ async function createAuctions(
     const minimumPrice = ethers.utils.parseEther(auction.minimumPrice!);
 
     console.log(
-      `createAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath}`
+      `deployAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath}`
     );
     const tx = await auctionContract.createAuction(
       auction.id,
@@ -198,7 +298,7 @@ async function createAuctions(
   }
 }
 
-async function createLotteries(
+async function deployLotteries(
   drop: DropFull,
   artistNftContractAddress: string,
   signer: Signer,
@@ -209,7 +309,7 @@ async function createLotteries(
   for (const l of drop.Lotteries) {
     if (l.contractAddress) {
       console.log(
-        `createLotteries() :: Lottery ${l.id} has already been deployed to ${l.contractAddress}`
+        `deployLotteries() :: Lottery ${l.id} has already been deployed to ${l.contractAddress}`
       );
       continue;
     }
@@ -255,6 +355,9 @@ async function updateDbApprovedDateAndIsLiveFlags(drop: DropFull, fetchWithBQ: a
 export const {
   useGetApprovedDropsQuery,
   useGetDropsPendingApprovalQuery,
+  useGetPresetDropsQuery,
   useApproveAndDeployDropMutation,
+  useCreatePresetDropsMutation,
   useDeleteDropMutation,
+  useDeleteDropsMutation,
 } = dropsApi;
