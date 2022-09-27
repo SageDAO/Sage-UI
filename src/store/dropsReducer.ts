@@ -5,7 +5,7 @@ import { getAuctionContract, getLotteryContract } from '@/utilities/contracts';
 import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
 import { fetchOrCreateNftContract } from './nftsReducer';
 import { baseApi } from './baseReducer';
-import { Role } from '@prisma/client'
+import { Role } from '@prisma/client';
 
 export interface PresetDrop {
   artistAddress: string;
@@ -37,7 +37,10 @@ const dropsApi = baseApi.injectEndpoints({
       providesTags: ['PendingDrops'],
     }),
     getPresetDrops: builder.query<PresetDrop[], void>({
-      query: () => `drops?action=GetPresetDrops`,
+      queryFn: async (undefined, {}, _, fetchWithBQ) => {
+        // retry this operation because aws-sdk fails server-side randomly
+        return { data: await fetchWithRetries(`drops?action=GetPresetDrops`, 5, fetchWithBQ) };
+      },
     }),
     approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
       queryFn: async ({ dropId, signer }, { dispatch }, _, fetchWithBQ) => {
@@ -65,6 +68,22 @@ const dropsApi = baseApi.injectEndpoints({
 function addHours(numOfHours: number, date = new Date()) {
   date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
   return date;
+}
+
+async function fetchWithRetries(url: string, retriesLeft: number, fetchWithBQ: any): Promise<any> {
+  try {
+    console.log(`fetchWithRetries('${url}') :: ${retriesLeft} retries left`);
+    const result = await fetchWithBQ(url);
+    if (result.error) {
+      throw new Error();
+    }
+    return result.data;
+  } catch (e) {
+    if (retriesLeft > 1) {
+      return await fetchWithRetries(url, --retriesLeft, fetchWithBQ);
+    }
+    throw e;
+  }
 }
 
 async function createPresetDrops(

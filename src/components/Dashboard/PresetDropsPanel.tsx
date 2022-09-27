@@ -11,17 +11,15 @@ import LoaderSpinner from '../LoaderSpinner';
 export default function PresetDropsPanel() {
   const { data: presetDrops, isLoading, isError } = useGetPresetDropsQuery();
   const [createPresetDrops, { isLoading: isCreating }] = useCreatePresetDropsMutation();
+  const [selectedDrops, setSelectedDrops] = useState<PresetDrop[]>([]);
   const [duration, setDuration] = useState<number>(24);
-  const selectedDrops = [];
 
   const handleCheckboxChange = (drop: PresetDrop, isChecked: boolean) => {
     if (isChecked) {
-      selectedDrops.push(drop);
+      setSelectedDrops((selectedDrops) => [...selectedDrops, drop]);
     } else {
-      var index = selectedDrops.indexOf(drop);
-      if (index !== -1) {
-        selectedDrops.splice(index, 1);
-      }
+      const newArray = [...selectedDrops.filter((item) => item != drop)];
+      setSelectedDrops(newArray);
     }
   };
 
@@ -55,7 +53,7 @@ export default function PresetDropsPanel() {
       <div style={{ display: 'flex', flexFlow: 'wrap' }}>
         {presetDrops.map((drop: PresetDrop, i: number) => {
           return (
-            <div style={{ textAlign: 'center', padding: '10px' }}>
+            <div key={i} style={{ textAlign: 'center', padding: '10px' }}>
               <label>
                 <img src={drop.bannerS3Path} width={300} />
                 <br />
