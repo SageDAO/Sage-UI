@@ -6,6 +6,7 @@ import { getArtistsSalesData } from '@/prisma/functions';
 import { ArtistSales } from '@/prisma/types';
 import BurgerDotsSVG from '@/public/icons/burger-dots.svg';
 import BurgerSVG from '@/public/icons/burger.svg';
+import ListItem from '@/components/Pages/Artists/Ranking/ListItem';
 
 const usdFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -21,7 +22,7 @@ export default function ranking({ salesData }: Props) {
     (a, b) => b.amountTotalUSD - a.amountTotalUSD
   );
   return (
-    <Tabs defaultIndex={1} className='ranking-page'>
+    <Tabs  className='ranking-page'>
       <Logotype />
       <div className='ranking-page__header-container'>
         <div className='ranking-page__header-left'>
@@ -47,37 +48,15 @@ export default function ranking({ salesData }: Props) {
         <TabPanel className='ranking-page__grid'>
           {displayData.slice(0, 100).map((data) => {
             return (
-              <div className='ranking-page__grid-item'>
-                <PfpImage src={data.profilePicture}></PfpImage>
+              <div key={data.walletAddress} className='ranking-page__grid-item'>
+                <PfpImage src={data.profilePicture || null} ></PfpImage>
               </div>
             );
           })}
         </TabPanel>
         <TabPanel className='ranking-page__list'>
           {displayData.slice(0, 100).map((data) => {
-            return (
-              <div className='ranking-page__list-item'>
-                <div className='ranking-page__list-item-pfp-container'>
-                  <PfpImage src={data.profilePicture}></PfpImage>
-                </div>
-
-                <div className='ranking-page__list-item-info-container'>
-                  <p className='ranking-page__list-item-header'>{data.username}</p>
-                  <p className='ranking-page__list-item-subheader'>
-                    Total Artwork Value <pre /> ${data.amountTotalUSD.toFixed(2) || 0}
-                  </p>
-                </div>
-                <div className='ranking-page__list-item-info-container'>
-                  <p className='ranking-page__list-item-header'>LATEST</p>
-                  <p className='ranking-page__list-item-subheader'>
-                    artworks <pre /> sold
-                  </p>
-                </div>
-                <div className='ranking-page__list-item-artwork-slide'>
-                  <div className='ranking-page__list-item-artwork-slide-item'></div>
-                </div>
-              </div>
-            );
+            return <ListItem data={data} key={data.username || ''} />;
           })}
         </TabPanel>
       </section>

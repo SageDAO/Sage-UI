@@ -10,7 +10,12 @@ export interface ArtistSales {
   amountTotalUSD: number;
   highestSaleUSD: number;
 	profilePicture: string;
+	salesChartData?: any[];
 }
+
+// interface SalesChart {
+
+// }
 
 export type Auction_include_DropNftArtist = Prisma.AuctionGetPayload<{
   include: {
