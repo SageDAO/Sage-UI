@@ -26,7 +26,6 @@ const artistsApi = baseApi.injectEndpoints({
           artistSplit: ethers.utils.formatUnits(artistSplit),
           sageSplit: ethers.utils.formatUnits(sageSplit),
         };
-        console.log(`getArtistBalance() :: ${data}`);
         return { data };
       },
       providesTags: ['ArtistBalance'],

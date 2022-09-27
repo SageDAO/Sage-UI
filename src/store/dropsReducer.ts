@@ -325,7 +325,7 @@ async function deployAuctions(
     const minimumPrice = ethers.utils.parseEther(auction.minimumPrice!);
 
     console.log(
-      `deployAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath}`
+      `deployAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath})`
     );
     const tx = await auctionContract.createAuction(
       auction.id,
