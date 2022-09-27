@@ -167,6 +167,7 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
     select "seller", sum(coalesce("amountUSD", 0)) as "amount"
     from "SaleEvent" group by ("eventType", "eventId", "seller")`;
   result = await prisma.$queryRaw(Prisma.raw(query));
+	console.log(result);
   for (const row of result as any) {
     const item = salesData.get(row.seller);
     item.amountTotalUSD += row.amount;
