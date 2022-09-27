@@ -152,13 +152,13 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
     where "u"."role" = 'ARTIST'`;
   var result = await prisma.$queryRaw(Prisma.raw(query));
   for (const row of result as any) {
-    salesData.set(row.walletAddress, {
+    salesData.set(row.walletAddress, <ArtistSales>{
       username: String(row.username),
       walletAddress: String(row.walletAddress),
       nftCountTotal: Number(row.nftCount),
       amountTotalUSD: 0,
       highestSaleUSD: 0,
-    } as ArtistSales);
+    });
   }
 
   // query sales statistics

@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import prisma from '@/prisma/client';
 import { Prisma } from '@prisma/client';
 import { readPresetDropsFromS3 } from '@/utilities/awsS3-server';
+import { PresetDrop } from '@/store/dropsReducer';
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -139,6 +140,21 @@ async function getNftContractAddress(artistAddress: string, response: NextApiRes
 
 async function getPresetDrops(response: NextApiResponse) {
   const drops = await readPresetDropsFromS3();
+  // Populate artists usernames & roles
+  const dropsArtists = drops.map((item: PresetDrop) => item['artistAddress']);
+  const artists = await prisma.user.findMany({
+    where: { walletAddress: { in: dropsArtists } },
+    select: { walletAddress: true, username: true, role: true },
+  });
+  for (const drop of drops) {
+    for (const artist of artists) {
+      if (drop.artistAddress == artist.walletAddress) {
+        drop.artistUsername = artist.username;
+        drop.artistRole = artist.role;
+        break;
+      }
+    }
+  }
   console.log(`getPresetDrops() :: ${drops.length} items`);
   response.json(drops);
 }

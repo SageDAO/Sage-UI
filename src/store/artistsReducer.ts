@@ -4,7 +4,7 @@ import { getERC20Contract, getNFTContract } from '@/utilities/contracts';
 import { parameters } from '@/constants/config';
 import { playTxSuccessSound } from '@/utilities/sounds';
 import { promiseToast } from '@/utilities/toast';
-import { _fetchOrCreateNftContract } from './nftsReducer';
+import { fetchOrCreateNftContract } from './nftsReducer';
 
 export interface NftContractBalance {
   balance: string;
@@ -21,11 +21,11 @@ const artistsApi = baseApi.injectEndpoints({
         const fullBalance = await erc20Contract.balanceOf(artistContractAddress);
         const artistSplit = fullBalance.mul(BigNumber.from(80)).div(BigNumber.from(100));
         const sageSplit = fullBalance.sub(artistSplit);
-        const data = {
+        const data = <NftContractBalance>{
           balance: ethers.utils.formatUnits(fullBalance),
           artistSplit: ethers.utils.formatUnits(artistSplit),
           sageSplit: ethers.utils.formatUnits(sageSplit),
-        } as NftContractBalance;
+        };
         console.log(`getArtistBalance() :: ${data}`);
         return { data };
       },
@@ -44,7 +44,7 @@ const artistsApi = baseApi.injectEndpoints({
     }),
     deployArtistNftContract: builder.mutation<string, { artistAddress: string; signer: Signer }>({
       queryFn: async ({ artistAddress, signer }, {}, _, fetchWithBQ) => {
-        const artistNftContractAddress = await _fetchOrCreateNftContract(
+        const artistNftContractAddress = await fetchOrCreateNftContract(
           artistAddress,
           signer,
           fetchWithBQ

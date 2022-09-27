@@ -65,7 +65,7 @@ export default function PresetDropsPanel() {
                     handleCheckboxChange(drop, e.target.checked)
                   }
                 />{' '}
-                {drop.dropName}
+                {drop.dropName} by {drop.artistUsername || 'anon'}
               </label>
             </div>
           );

@@ -3,11 +3,14 @@ import { DropFull, Drop_include_GamesAndArtist, Splitter_include_Entries } from 
 import { toast } from 'react-toastify';
 import { getAuctionContract, getLotteryContract } from '@/utilities/contracts';
 import splitterContractJson from '@/constants/abis/Utils/Splitter.sol/Splitter.json';
-import { _fetchOrCreateNftContract } from './nftsReducer';
+import { fetchOrCreateNftContract } from './nftsReducer';
 import { baseApi } from './baseReducer';
+import { Role } from '@prisma/client'
 
 export interface PresetDrop {
   artistAddress: string;
+  artistUsername: string | null;
+  artistRole: Role | null;
   dropName: string;
   bannerS3Path: string;
   nfts: string[]; // s3 paths
@@ -33,7 +36,7 @@ const dropsApi = baseApi.injectEndpoints({
       query: () => `drops?action=GetDropsPendingApproval`,
       providesTags: ['PendingDrops'],
     }),
-    getPresetDrops: builder.query<[], void>({
+    getPresetDrops: builder.query<PresetDrop[], void>({
       query: () => `drops?action=GetPresetDrops`,
     }),
     approveAndDeployDrop: builder.mutation<boolean, { dropId: number; signer: Signer }>({
@@ -72,8 +75,8 @@ async function createPresetDrops(
   const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
   const startDate = Math.floor(addHours(0.5).getTime() / 1000);
   const endDate = Math.floor(addHours(durationHours).getTime() / 1000);
+  await checkUsersExistAndAreArtists(presetDrops);
   for (const presetDrop of presetDrops) {
-    // TODO check if address belongs to 'ARTIST' role
     const { data: dropResult } = await fetchWithBQ({
       url: `endpoints/dropUpload?action=InsertDrop`,
       method: 'POST',
@@ -142,13 +145,17 @@ async function createPresetDrops(
   }
 }
 
+async function checkUsersExistAndAreArtists(presetDrops: PresetDrop[]) {
+  // TODO create users if they don't exist, then assign usernames if null, then promote to artists
+}
+
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   const { data: drop } = await fetchWithBQ(`drops?action=GetFullDrop&id=${dropId}`);
   inspectDropGamesEndTimes(drop);
   //await processSplitter(drop.PrimarySplitter, signer, fetchWithBQ);
   //await processSplitter(drop.SecondarySplitter, signer, fetchWithBQ);
   //await createNftCollection(drop, signer);
-  const artistNftContractAddress = await _fetchOrCreateNftContract(
+  const artistNftContractAddress = await fetchOrCreateNftContract(
     drop.artistAddress,
     signer,
     fetchWithBQ

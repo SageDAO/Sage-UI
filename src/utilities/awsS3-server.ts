@@ -97,12 +97,14 @@ function findOrCreateDrop(drops: PresetDrop[], _artistAddress: string, _dropName
     ({ artistAddress, dropName }) => artistAddress == _artistAddress && dropName == _dropName
   );
   if (!drop) {
-    drop = {
+    drop = <PresetDrop>{
       artistAddress: _artistAddress,
+      artistUsername: null,
+      artistRole: null,
       dropName: _dropName,
       bannerS3Path: '',
       nfts: new Array<string>(),
-    } as PresetDrop;
+    };
     drops.push(drop);
   }
   return drop;
