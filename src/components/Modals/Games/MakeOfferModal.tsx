@@ -18,6 +18,7 @@ import {
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { useSession } from 'next-auth/react';
 import { parameters } from '@/constants/config';
+import { formatTimestampMMddHHmm } from '@/utilities/strings';
 
 interface Props extends ModalProps {
   artist: User;
@@ -147,7 +148,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
                       return (
                         <tr key={i} data-animate-first={true}>
                           <td>{shortenAddress(o.signer)}</td>
-                          <td>{formatDate(o.expiresAt)}</td>
+                          <td>{formatTimestampMMddHHmm(o.expiresAt)}</td>
                           <td>{o.price} ASH</td>
                           <td>
                             <div>
@@ -184,14 +185,3 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
   );
 }
 
-/**
- * Formats a timestamp to a MM/dd HH:mm string
- */
-function formatDate(ts: number) {
-  const padTo2Digits = (v: number) => v.toString().padStart(2, '0');
-  const d = new Date(ts * 1000);
-  return (
-    `${padTo2Digits(d.getMonth() + 1)}/${padTo2Digits(d.getDate())} ` +
-    `${padTo2Digits(d.getHours())}:${padTo2Digits(d.getMinutes())}`
-  );
-}
