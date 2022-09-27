@@ -7,10 +7,14 @@ import { fetchOrCreateNftContract } from './nftsReducer';
 import { baseApi } from './baseReducer';
 import { Role } from '@prisma/client';
 
+export interface PresetDropArtist {
+  walletAddress: string;
+  username: string | null;
+  role: Role | null;
+}
+
 export interface PresetDrop {
-  artistAddress: string;
-  artistUsername: string | null;
-  artistRole: Role | null;
+  artist: PresetDropArtist;
   dropName: string;
   bannerS3Path: string;
   nfts: string[]; // s3 paths
@@ -94,13 +98,13 @@ async function createPresetDrops(
   const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
   const startDate = Math.floor(addHours(0.5).getTime() / 1000);
   const endDate = Math.floor(addHours(durationHours).getTime() / 1000);
-  await checkUsersExistAndAreArtists(presetDrops);
+  await checkUsersExistAndAreArtists(presetDrops, fetchWithBQ);
   for (const presetDrop of presetDrops) {
     const { data: dropResult } = await fetchWithBQ({
       url: `endpoints/dropUpload?action=InsertDrop`,
       method: 'POST',
       body: {
-        artistWallet: presetDrop.artistAddress,
+        artistWallet: presetDrop.artist.walletAddress,
         name: presetDrop.dropName,
         bannerImageS3Path: presetDrop.bannerS3Path,
       },
@@ -164,8 +168,23 @@ async function createPresetDrops(
   }
 }
 
-async function checkUsersExistAndAreArtists(presetDrops: PresetDrop[]) {
-  // TODO create users if they don't exist, then assign usernames if null, then promote to artists
+async function checkUsersExistAndAreArtists(presetDrops: PresetDrop[], fetchWithBQ: any) {
+  var uniqueArtists = [];
+  presetDrops.filter(function (drop) {
+    var i = uniqueArtists.findIndex((x) => x.walletAddress == drop.artist.walletAddress);
+    if (i <= -1) {
+      uniqueArtists.push(drop.artist);
+    }
+    return null;
+  });
+  for (const artist of uniqueArtists) {
+    if (artist.role == null) {
+      // TODO CREATE USER
+    } 
+    if (artist.role == Role.USER) {
+      // TODO PROMOTE TO ARTIST
+    }
+  }
 }
 
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {

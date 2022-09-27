@@ -139,24 +139,24 @@ async function getNftContractAddress(artistAddress: string, response: NextApiRes
 }
 
 async function getPresetDrops(response: NextApiResponse) {
-  const drops = await readPresetDropsFromS3();
+  const presetDrops = await readPresetDropsFromS3();
   // Populate artists usernames & roles
-  const dropsArtists = drops.map((item: PresetDrop) => item['artistAddress']);
-  const artists = await prisma.user.findMany({
-    where: { walletAddress: { in: dropsArtists } },
+  const presetArtists = presetDrops.map((item: PresetDrop) => item.artist.walletAddress);
+  const dbArtists = await prisma.user.findMany({
+    where: { walletAddress: { in: presetArtists } },
     select: { walletAddress: true, username: true, role: true },
   });
-  for (const drop of drops) {
-    for (const artist of artists) {
-      if (drop.artistAddress == artist.walletAddress) {
-        drop.artistUsername = artist.username;
-        drop.artistRole = artist.role;
+  for (const drop of presetDrops) {
+    for (const dbArtist of dbArtists) {
+      if (drop.artist.walletAddress == dbArtist.walletAddress) {
+        drop.artist.username = dbArtist.username;
+        drop.artist.role = dbArtist.role;
         break;
       }
     }
   }
-  console.log(`getPresetDrops() :: ${drops.length} items`);
-  response.json(drops);
+  console.log(`getPresetDrops() :: ${presetDrops.length} items`);
+  response.json(presetDrops);
 }
 
 async function updateNftContractAddress(
