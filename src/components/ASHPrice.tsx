@@ -23,7 +23,7 @@ export default function ASHPrice({ callback }: Props) {
       }}
       className='ash-price'
     >
-      $ASH: {priceUSD} USD
+      $ASH: {priceUSD?.toFixed(2)} USD
     </div>
   );
 }
