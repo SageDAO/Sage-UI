@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 
 interface State {
   file: File | null;
+  s3Path: string | null;
   s3PathOptimized: string | null;
   title: string;
   description: string;
@@ -24,6 +25,7 @@ interface State {
 
 const INITIAL_STATE: State = {
   file: null,
+  s3Path: null,
   s3PathOptimized: null,
   title: '',
   description: '',
@@ -79,9 +81,9 @@ export default function CreationsPanel() {
     });
   }
 
-  function handleGeneratePreview(s3PathOptimized: string | null) {
+  function handleGeneratePreview(s3Path: string | null, s3PathOptimized: string | null) {
     setState((prevState) => {
-      return { ...prevState, s3PathOptimized };
+      return { ...prevState, s3Path, s3PathOptimized };
     });
   }
 
@@ -118,6 +120,7 @@ export default function CreationsPanel() {
       price: parseFloat(state.price),
       isFixedPrice: state.isFixedPrice,
       file: state.file,
+      s3Path: state.s3Path,
       s3PathOptimized: state.s3PathOptimized,
       signer: signer as Signer,
     } as MintRequest);

@@ -24,6 +24,7 @@ export interface MintRequest {
   price: number;
   isFixedPrice: boolean;
   file: File;
+  s3Path: string | null;
   s3PathOptimized: string | null;
   signer: Signer;
 }
@@ -222,13 +223,18 @@ const nftsApi = baseApi.injectEndpoints({
 });
 
 async function uploadToAwsAndArweave(mintRequest: MintRequest, endpoint: string) {
-  console.log(`uploadToAwsAndArweave() :: Uploading media to AWS S3...`);
-  const s3Path = await uploadFileToS3(
-    endpoint,
-    createBucketFolderName(),
-    mintRequest.file.name,
-    mintRequest.file
-  );
+  if (mintRequest.s3Path) {
+    console.log(`uploadToAwsAndArweave() :: Media has already been uploaded to AWS S3`);
+    var s3Path = mintRequest.s3Path;
+  } else {
+    console.log(`uploadToAwsAndArweave() :: Uploading media to AWS S3...`);
+    var s3Path = await uploadFileToS3(
+      endpoint,
+      createBucketFolderName(),
+      mintRequest.file.name,
+      mintRequest.file
+    );
+  }
   console.log(`uploadToAwsAndArweave() :: Uploading media to Arweave...`);
   const ipfsPath = await copyFromS3toArweave(endpoint, s3Path);
   console.log(`uploadToAwsAndArweave() :: Uploading metadata to Arweave...`);

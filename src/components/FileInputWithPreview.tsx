@@ -1,3 +1,4 @@
+import { createBucketFolderName, uploadFileToS3 } from '@/utilities/awsS3-client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -7,7 +8,7 @@ const ACCEPTED_TYPES = ['image/png', 'image/gif', 'image/jpeg', 'image/tiff', 'v
 interface Props {
   initialPreview?: string; // URL for initial image/video to be displayed
   onFileChange: (newFile: File) => void; // callback for when user selects a new input file
-  onGeneratePreview?: (s3PathOptimized: string) => void; // callback in case a preview file is generated
+  onGeneratePreview?: (s3Path: string, s3PathOptimized: string) => void; // callback in case a preview file is generated
   acceptedTypes?: string[]; // accepted file upload mime types
 }
 
@@ -41,10 +42,10 @@ export default function FileInputWithPreview({
     setPreview(LOADING_IMG);
     var newPreview = ERROR_IMG;
     optimizeTiffFile()
-      .then((s3PathOptimized) => {
+      .then(({ s3PathTiff, s3PathOptimized }) => {
         if (s3PathOptimized) {
           if (onGeneratePreview) {
-            onGeneratePreview(s3PathOptimized);
+            onGeneratePreview(s3PathTiff, s3PathOptimized);
           }
           newPreview = s3PathOptimized;
         }
@@ -58,15 +59,21 @@ export default function FileInputWithPreview({
       });
   }
 
-  async function optimizeTiffFile(): Promise<string> {
-    const formData = new FormData();
-    formData.append('file', file);
-    const result = await fetch(`/api/endpoints/tiffUpload/`, {
+  async function optimizeTiffFile(): Promise<{ s3PathTiff: string, s3PathOptimized: string }> {
+    const endpoint = '/api/endpoints/dropUpload/';
+    const s3PathTiff = await uploadFileToS3(
+      endpoint,
+      'tiff',
+      `${Date.now().toString()}_${file.name.toLowerCase()}`,
+      file
+    );
+    const response = await fetch(`/api/endpoints/tiffConverter/`, {
       method: 'POST',
-      body: formData,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ s3PathTiff }),
     });
-    const { s3PathOptimized } = await result.json();
-    return s3PathOptimized;
+    const { s3PathOptimized } = await response.json();
+    return { s3PathTiff, s3PathOptimized };
   }
 
   function handleFileInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -78,7 +85,7 @@ export default function FileInputWithPreview({
 
   function handleBrowserSupportedFileUpload() {
     if (onGeneratePreview) {
-      onGeneratePreview(null); // reset previously generated preview (if any) for the caller
+      onGeneratePreview(null, null); // reset previously generated preview (if any) for the caller
     }
     const reader = new FileReader();
     reader.onloadend = () => {
