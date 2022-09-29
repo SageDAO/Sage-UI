@@ -49,6 +49,12 @@
       margin-left: 0;
       text-transform: none;
       text-align: left;
+
+      font-style: normal;
+      font-weight: 600;
+      font-size: clamp(16px, 2.5vw, 20px);
+      line-height: 130%;
+      text-transform: capitalize;
     }
   }
 }
@@ -62,7 +68,6 @@
 
 .wallet__header-info {
   @include m.theme() {
-
     font-weight: 400;
     font-size: clamp(8px, 1vw, 16px);
     line-height: 130%;
@@ -73,6 +78,7 @@
     @include b.min-width('medium') {
       text-transform: none;
       text-align: left;
+      @include m.text-p1;
     }
   }
 }
