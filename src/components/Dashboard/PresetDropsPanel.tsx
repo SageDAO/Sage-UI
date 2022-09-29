@@ -77,7 +77,7 @@ export default function PresetDropsPanel() {
                     handleCheckboxChange(drop, e.target.checked)
                   }
                 />{' '}
-                {drop.dropName} by {drop.artist.username || 'anon'}
+                {drop.dropName} by {drop.artist.username || 'anon'} ({drop.nfts.length} NFTs)
               </label>
             </div>
           );
