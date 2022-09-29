@@ -96,7 +96,7 @@ async function createPresetDrops(
   fetchWithBQ: any
 ) {
   const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
-  const startDate = Math.floor(addHours(0.5).getTime() / 1000);
+  const startDate = Math.floor(addHours(0.16).getTime() / 1000);
   const endDate = Math.floor(addHours(durationHours).getTime() / 1000);
   await checkUsersExistAndAreArtists(presetDrops, fetchWithBQ);
   for (const presetDrop of presetDrops) {
@@ -180,7 +180,7 @@ async function checkUsersExistAndAreArtists(presetDrops: PresetDrop[], fetchWith
   for (const artist of uniqueArtists) {
     if (artist.role == null) {
       // TODO CREATE USER
-    } 
+    }
     if (artist.role == Role.USER) {
       // TODO PROMOTE TO ARTIST
     }
@@ -325,17 +325,20 @@ async function deployAuctions(
     const minimumPrice = ethers.utils.parseEther(auction.minimumPrice!);
 
     console.log(
-      `deployAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath})`
+      `deployAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}, ${auction.Nft.metadataPath})`
     );
-    const tx = await auctionContract.createAuction(
-      auction.id,
-      auction.nftId,
+    const tx = await auctionContract.createAuction({
+      auctionId: auction.id,
+      nftId: auction.nftId,
       minimumPrice,
       startTime,
       endTime,
-      artistNftContractAddress,
-      auction.Nft.metadataPath
-    );
+      nftContract: artistNftContractAddress,
+      nftUri: auction.Nft.metadataPath,
+      settled: false,
+      highestBid: 0,
+      highestBidder: ethers.constants.AddressZero,
+    });
     await tx.wait();
 
     const params = `id=${auction.id}&address=${auctionContract.address}`;
@@ -373,18 +376,21 @@ async function deployLotteries(
         l.maxTickets || 0
       }, ${l.maxTicketsPerUser || 0}, ${lowestId}, ${highestId})`
     );
-    const tx = await lotteryContract.createLottery(
-      l.id,
-      l.costPerTicketPoints,
-      costPerTicketTokens,
+    const tx = await lotteryContract.createLottery({
+      lotteryID: l.id,
+      ticketCostPoints: l.costPerTicketPoints,
+      ticketCostTokens: costPerTicketTokens,
       startTime,
-      endTime,
-      artistNftContractAddress,
-      l.maxTickets || 0,
-      l.maxTicketsPerUser || 0,
-      lowestId,
-      highestId
-    );
+      closeTime: endTime,
+      nftContract: artistNftContractAddress,
+      maxTickets: l.maxTickets || 0,
+      maxTicketsPerUser: l.maxTicketsPerUser || 0,
+      firstPrizeId: lowestId,
+      lastPrizeId: highestId,
+      participantsCount: 0,
+      numberOfTicketsSold: 0,
+      status: 0, // Status.Created
+    });
     await tx.wait();
 
     const params = `id=${l.id}&address=${lotteryContract.address}`;
