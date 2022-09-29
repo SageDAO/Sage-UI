@@ -6,7 +6,7 @@ const OPTIMIZED_JPEG_WIDTH = 487;
 const OPTIMIZED_BUCKET_FOLDER = 'optimized';
 
 /**
- * Receives an s3Path for a TIFF file (by POST), converts it to JPEG, uploads the JPEG (also to S3),
+ * Receives an s3Path for a TIFF file (by POST), converts it to PNG, uploads the PNG (also to S3),
  * and returns the path (URL) for the new optimized file.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -22,16 +22,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     const response = await fetch(s3PathTiff);
     const tiffFileContent = new Uint8Array(await response.arrayBuffer());
-    const jpegBuffer: Buffer = await sharp(tiffFileContent)
-      .jpeg()
+    const pngBuffer: Buffer = await sharp(tiffFileContent)
+      .png()
       .resize(OPTIMIZED_JPEG_WIDTH)
       .toBuffer();
-    const filename = `${Date.now().toString()}.jpg`;
+    const filename = `${Date.now().toString()}.png`;
     const s3PathOptimized = await uploadBufferToS3(
       OPTIMIZED_BUCKET_FOLDER,
       filename,
-      'image/jpeg',
-      jpegBuffer
+      'image/png',
+      pngBuffer
     );
     res.json({ s3PathOptimized });
   } catch (e: any) {
