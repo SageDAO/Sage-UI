@@ -104,7 +104,7 @@ export async function getArtistsPageData(prisma: PrismaClient) {
     walletAddress: row.artistAddress,
   }));
   return await prisma.user.findMany({
-    where: { OR: artistWallets },
+    where: { OR: artistWallets, bannerImageS3Path: { not: null } },
     take: 20,
   });
 }
