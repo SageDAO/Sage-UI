@@ -6,11 +6,11 @@
   align-items: center;
   flex-direction: column;
   justify-content: flex-end;
-  aspect-ratio: 322/380;
+  aspect-ratio: 322/329;
   @include m.standard-width;
   @include b.min-width('medium') {
     // aspect-ratio: none;
-    height: 690px;
+    height: 583px;
     @include m.desktop-width;
   }
 }
@@ -25,5 +25,18 @@
   aspect-ratio: 325/311;
   @include b.min-width('medium') {
     height: 539px;
+  }
+}
+
+.hero__svg {
+  height: 10vw;
+  // height: min(10vw, 128px);
+  width: max-content;
+  aspect-ratio: 400/96;
+  position: absolute;
+  // transform: translateY(-50%);
+  z-index: 999;
+  @include b.min-width('medium') {
+    height: 4.8vw;
   }
 }

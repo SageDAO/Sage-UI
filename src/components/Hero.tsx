@@ -9,7 +9,7 @@ interface Props {
 export default function Hero({ imgSrc, bannerOnClick }: Props) {
   return (
     <div className='hero'>
-      <Logotype></Logotype>
+      <Logotype className='hero__svg'></Logotype>
       <div className='hero__banner'>
         <BaseMedia onClickHandler={bannerOnClick} src={imgSrc}></BaseMedia>
       </div>
