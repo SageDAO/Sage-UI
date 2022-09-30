@@ -1,4 +1,5 @@
 import LogotypeSVG from '@/public/branding/sage-logotype.svg';
+import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
 import ErrortypeSVG from '@/public/branding/error-logotype.svg';
 import Motto from '@/components/Layout/Motto';
 import useSageRoutes from '@/hooks/useSageRoutes';
@@ -19,11 +20,10 @@ export default function Logotype({ isErrorPage, disableHomeRouting }: Props) {
           !disableHomeRouting && pushToHome();
         }}
       >
-        <Motto dataColor={dataColor} />
         {isErrorPage ? (
           <ErrortypeSVG data-color={dataColor} className='sage-logotype__svg' />
         ) : (
-          <LogotypeSVG data-color={dataColor} className='sage-logotype__svg' />
+          <SageFullLogoSVG data-color={dataColor} className='sage-logotype__svg' />
         )}
       </div>
     </div>

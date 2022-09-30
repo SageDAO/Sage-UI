@@ -7,19 +7,26 @@
 }
 
 .artist-page__banner-section {
-  // height: 881px;
-  // width: 1196px;
-  aspect-ratio: 1196/881;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1196/960;
   @include m.standard-width;
+  @include b.min-width('medium') {
+    aspect-ratio: 1196/928;
+  }
 }
 
 .artist-page__banner-section-svg {
-  height: 5%;
+  height: 10vw;
+  // height: min(10vw, 128px);
   width: max-content;
-  aspect-ratio: 421/96;
+  aspect-ratio: 400/96;
   position: absolute;
-  transform: translateY(-50%);
+  // transform: translateY(-50%);
   z-index: 999;
+  @include b.min-width('medium') {
+    height: 4.8vw;
+  }
 }
 
 .artist-page__banner-label {
@@ -35,7 +42,10 @@
 .artist-page__banner {
   position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1196/881;
+  margin-top: auto;
+  // height: 100%;
+  // transform: translateY(5vw);
 }
 
 .artist-page__artist-section {
