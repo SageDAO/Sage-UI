@@ -2,7 +2,15 @@ import LoaderSpinner from '@/components/LoaderSpinner';
 import { useGetIsFollowingQuery, useSetIsFollowingMutation } from '@/store/usersReducer';
 import { useSession } from 'next-auth/react';
 
-export default function FollowButton({ artistAddress }) {
+interface Props {
+  artistAddress: string;
+  className?: string;
+}
+
+export default function FollowButton({
+  artistAddress,
+  className,
+}: Props) {
   const { data: sessionData } = useSession();
   const { data: following, isFetching: isFetchingFollowing } = useGetIsFollowingQuery(undefined, {
     skip: !sessionData,
@@ -25,7 +33,7 @@ export default function FollowButton({ artistAddress }) {
   const loading = isFetchingFollowing || isSettingFollowing;
 
   return (
-    <button onClick={handleButtonClick} disabled={loading} className='artist-page__connect'>
+    <button onClick={handleButtonClick} disabled={loading} className={className}>
       {loading ? <LoaderSpinner /> : isFollowing() ? 'unfollow' : 'follow'}
     </button>
   );

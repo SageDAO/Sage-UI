@@ -44,7 +44,11 @@ export default function Row({ artists, shouldStartAsymmetric }: Props) {
             </div>
             <div className='artists-page__item-content'>
               <h1 className='artists-page__item-content-header'>{transformTitle(a.username)}</h1>
-              <p className='artists-page__item-content-description'>{a.bio}</p>
+              <p className='artists-page__item-content-description'>
+                {a.bio} Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis quisquam
+                molestias rem, explicabo totam laborum earum eum repellat id impedit deserunt? Vero
+                animi qui praesentium? Necessitatibus blanditiis quas ex facere?
+              </p>
             </div>
           </div>
         );

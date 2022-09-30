@@ -4,7 +4,7 @@ import Hero from '@/components/Hero';
 import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
 import { useGetListingNftsByArtistQuery } from '@/store/nftsReducer';
 import { Nft_include_NftContractAndOffers, User_include_NftContract } from '@/prisma/types';
-import { PfpImage } from '@/components/Media/BaseMedia';
+import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
 import TwitterSVG from '@/public/socials/twitter.svg';
 import MediumSVG from '@/public/socials/medium.svg';
@@ -13,6 +13,7 @@ import WebSVG from '@/public/socials/web.svg';
 import FollowButton from '@/components/Pages/Artists/FollowButton';
 import ArtistBalancePanel from '@/components/Pages/Artists/ArtistBalancePanel';
 import { useSession } from 'next-auth/react';
+import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
 
 type ListingNft = Nft_include_NftContractAndOffers;
 
@@ -37,63 +38,61 @@ export default function artist({ artist }: Props) {
 
   return (
     <div className='artist-page' data-cy='artist-page'>
-      <Hero imgSrc={artist.bannerImageS3Path || artist.profilePicture || '/'} />
-      <h1 className='artist-page__banner-label'>part of this month active drop</h1>
+      <section className='artist-page__banner-section'>
+        <SageFullLogoSVG className='artist-page__banner-section-svg'></SageFullLogoSVG>
+        <div className='artist-page__banner'>
+          <BaseMedia src={artist.bannerImageS3Path || '/'}></BaseMedia>
+        </div>
+      </section>
       <div className='artist-page__artist-section'>
         <div className='artist-page__artist-section-flex-x'>
-          <div className='artist-page__pfp-container'>
-            <PfpImage className='artist-page__pfp' src={artist.profilePicture}></PfpImage>
+          <div className='artist-page__artist-section-left'>
+            <div className='artist-page__artist-section-left-inner'>
+              <div className='artist-page__pfp-container'>
+                <PfpImage className='artist-page__pfp' src={artist.profilePicture}></PfpImage>
+              </div>
+            </div>
+            <CreatorSocials
+              artist={artist}
+              className='artist-page__socials--mobile'
+            ></CreatorSocials>
           </div>
-          <div>
-            <h1 className='artist-page__name'>{artist.username}</h1>
-            <ul className='artist-page__socials'>
-              {!!artist.twitterUsername && (
-                <div className='artist-page__socials-item'>
-                  <a target='_blank' href={`https://twitter.com/${artist.twitterUsername}`}>
-                    <TwitterSVG className='artist-page__socials-svg' />
-                  </a>
-                </div>
-              )}
-              {!!artist.mediumUsername && (
-                <div className='artist-page__socials-item'>
-                  <a target='_blank' href={`https://medium.com/@${artist.mediumUsername}`}>
-                    <MediumSVG className='artist-page__socials-svg' />
-                  </a>
-                </div>
-              )}
-              {!!artist.instagramUsername && (
-                <div className='artist-page__socials-item'>
-                  <a target='_blank' href={`https://instagram.com/${artist.instagramUsername}`}>
-                    <InstagramSVG className='artist-page__socials-svg' />
-                  </a>
-                </div>
-              )}
-              {!!artist.webpage && (
-                <div className='artist-page__socials-item'>
-                  <a
-                    target='_blank'
-                    href={
-                      artist.webpage.startsWith('http')
-                        ? artist.webpage
-                        : `https://${artist.webpage}`
-                    }
-                  >
-                    <WebSVG className='artist-page__socials-svg' />
-                  </a>
-                </div>
-              )}
-            </ul>
+          <div className='artist-page__artist-section-right'>
+            <div className='artist-page__artist-section-info'>
+              <div className='artist-page__name-container'>
+                <p className='artist-page__name'>{artist.username}</p>
+              </div>
+              <p className='artist-page__location'>Athens, Greece</p>
+              <p className='artist-page__bio'>
+                artist.bio Lorem ipsum dolor, sit amet consectetur adipisicing elit. Qui rerum
+                aliquid voluptas maxime facere. Perferendis adipisci itaque, quasi tempore dolores
+                eligendi facere debitis omnis asperiores veniam necessitatibus voluptates corporis
+                modi!
+              </p>
+            </div>
           </div>
+          <CreatorSocials
+            artist={artist}
+            className='artist-page__socials--desktop'
+          ></CreatorSocials>
           {false && isOwner() && (
             <div style={{ width: '100%' }}>
               <ArtistBalancePanel artistContractAddress={artist.NftContract?.contractAddress} />
             </div>
           )}
         </div>
-        <FollowButton artistAddress={artist.walletAddress} />
-      </div>
-      <div className='artist-page__bio-container'>
-        <p className='artist-page__bio'>{artist.bio}</p>
+        <div className='artist-page__follow-info'>
+          <FollowButton
+            className='artist-page__follow-btn--desktop'
+            artistAddress={artist.walletAddress}
+          />
+          <p className='artist-page__follower-count'>
+            followers: <span className='artist-page__follow-value'>29k</span>{' '}
+          </p>
+          <p className='artist-page__following-count'>
+            views: <span className='artist-page__follow-value'>33k</span>{' '}
+          </p>
+        </div>
       </div>
       <div className='artist-page__grid'>
         {nfts &&
@@ -102,6 +101,49 @@ export default function artist({ artist }: Props) {
             .map((nft: ListingNft, i: number) => <ListingTile key={i} nft={nft} artist={artist} />)}
       </div>
     </div>
+  );
+}
+
+interface CreatorSocialsProps {
+  artist: User_include_NftContract;
+  className?: string;
+}
+
+function CreatorSocials({ artist, className }: CreatorSocialsProps) {
+  return (
+    <ul className={className}>
+      {!artist.twitterUsername && (
+        <div className='artist-page__socials-item'>
+          <a target='_blank' href={`https://twitter.com/${artist.twitterUsername}`}>
+            <TwitterSVG className='artist-page__socials-svg' />
+          </a>
+        </div>
+      )}
+      {!artist.mediumUsername && (
+        <div className='artist-page__socials-item'>
+          <a target='_blank' href={`https://medium.com/@${artist.mediumUsername}`}>
+            <MediumSVG className='artist-page__socials-svg' />
+          </a>
+        </div>
+      )}
+      {!artist.instagramUsername && (
+        <div className='artist-page__socials-item'>
+          <a target='_blank' href={`https://instagram.com/${artist.instagramUsername}`}>
+            <InstagramSVG className='artist-page__socials-svg' />
+          </a>
+        </div>
+      )}
+      {!!artist.webpage && (
+        <div className='artist-page__socials-item'>
+          <a
+            target='_blank'
+            href={artist.webpage.startsWith('http') ? artist.webpage : `https://${artist.webpage}`}
+          >
+            <WebSVG className='artist-page__socials-svg' />
+          </a>
+        </div>
+      )}
+    </ul>
   );
 }
 
