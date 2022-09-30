@@ -164,7 +164,7 @@ export default function CreationsPanel() {
               onGeneratePreview={handleGeneratePreview}
             />
             <h1 className='creations-panel__file-upload-label'>
-              ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF, TIFF and MP4 )
+              ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF, TIFF, SVG and MP4 )
             </h1>
           </div>
           <div className='creations-panel__file-title-group'>

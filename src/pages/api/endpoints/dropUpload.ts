@@ -321,6 +321,10 @@ function inferMimeType(filename: string): string {
       return 'image/gif';
     case 'png':
       return 'image/png';
+    case 'tiff':
+      return 'image/tiff';
+    case 'svg':
+      return 'image/svg+xml';
   }
   return 'image/jpeg';
 }
