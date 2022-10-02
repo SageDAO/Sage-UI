@@ -55,13 +55,14 @@ model Auction {
   startTime             DateTime
   endTime               DateTime
   isLive                Boolean    @default(false) 
-  nftId                 Int @unique 
+  nftId                 Int 
   winnerAddress         String?     @db.Char(42)
   claimedAt             DateTime?
   contractAddress       String?   @db.Char(42)
   Drop                  Drop @relation(fields: [dropId], references: [id])
   Nft                   Nft  @relation(fields: [nftId], references: [id])
   Bids                  BidHistory[]
+  @@unique([nftId])
 }
 
 model SplitEntry {
@@ -219,9 +220,10 @@ enum OfferState {
 
 model Config {
   id              Int    @id @default(autoincrement())
-  featuredDropId  Int?   @unique
+  featuredDropId  Int?
   FeaturedDrop    Drop?  @relation("ConfigFeaturedDrop", fields:[featuredDropId], references:[id])
   welcomeMessage  String
+  @@unique([featuredDropId])
 }
 
 model Follow {
@@ -248,7 +250,7 @@ enum WhitelistType {
   MERKLE
 }
 
-enum SaleEventType { 
+enum SaleEventType {
   LOTTERY
   AUCTION
   MARKETPLACE
@@ -272,15 +274,15 @@ model Refund {
   buyer            String @db.Char(42)
   lotteryId        Int
   refundableTokens Float
-  txHash           String? @db.Char(66)
-  
+  blockTimestamp   Int?
+  txHash           String? @db.Char(66)  
   @@unique([buyer,lotteryId])
 }
 
 model BidHistory {
   id                    Int        @id @default(autoincrement())
   auctionId             Int
-  bidderAddress         String     @db.Char(42)
+  bidderAddress         String @db.Char(42)
   amount                Float
   blockTimestamp        Int
   Auction               Auction @relation(fields: [auctionId], references: [id])

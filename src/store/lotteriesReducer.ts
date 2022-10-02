@@ -12,6 +12,7 @@ import { pointsApi } from './pointsReducer';
 import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
 import { registerLotterySale } from '@/utilities/sales';
+import { Refund } from '@prisma/client';
 
 export interface BuyTicketRequest {
   lotteryId: number;
@@ -34,6 +35,14 @@ const lotteriesApi = baseApi.injectEndpoints({
     }),
     getLotteryWinners: builder.query<string[], number>({
       query: (lotteryId: number) => `lotteries?action=GetLotteryWinners&lotteryId=${lotteryId}`,
+    }),
+    getRefunds: builder.query<Refund[], void>({
+      query: () => `lotteries?action=GetRefunds`,
+      providesTags: ['Refunds'],
+    }),
+    getRefundByLottery: builder.query<Refund | null, number>({
+      query: (lotteryId) => `lotteries?action=GetRefund&lotteryId=${lotteryId}`,
+      providesTags: ['Refunds'],
     }),
     getTicketCounts: builder.query<TicketCountMap, { lotteryIds: number[]; walletAddress: string }>(
       {
@@ -106,6 +115,16 @@ const lotteriesApi = baseApi.injectEndpoints({
           return { data: false };
         }
       },
+    }),
+    claimRefund: builder.mutation<null, { refund: Refund; signer: Signer }>({
+      queryFn: async ({ refund, signer }) => {
+        const contract = await getLotteryContract(signer);
+        const wallet = await signer.getAddress();
+        const amountWei = ethers.utils.parseEther(refund.refundableTokens.toString());
+        await contract.refund(wallet, refund.lotteryId, amountWei);
+        return { data: null };
+      },
+      invalidatesTags: ['Refunds'],
     }),
   }),
 });
@@ -189,5 +208,8 @@ export const {
   useGetLotteryQuery,
   useGetLotteryWinnersQuery,
   useGetTicketCountsQuery,
+  useGetRefundsQuery,
+  useGetRefundByLotteryQuery,
   useBuyTicketsMutation,
+  useClaimRefundMutation,
 } = lotteriesApi;

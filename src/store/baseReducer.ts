@@ -14,6 +14,7 @@ export const baseApi = createApi({
     'Nfts',
     'PendingDrops',
     'Prizes',
+    'Refunds',
     'TicketCount',
     'User',
     'UserPoints',
