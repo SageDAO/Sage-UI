@@ -26,7 +26,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
     connectors,
   } = useSAGEAccount();
   const { pushToProfile } = useSageRoutes();
-  const showWalletSelection: boolean = Boolean(!isWalletConnected);
+  const showWalletSelection: boolean = Boolean(!isSignedIn);
   const showAuthSection: boolean = Boolean(isWalletConnected && isSignedIn);
   useSignIn(isOpen);
 
@@ -39,9 +39,9 @@ export default function Wallet({ closeModal, isOpen }: Props) {
           </h1>
           {showWalletSelection && (
             <h1 className='wallet__header-info'>
-              Connect to SAGE through your wallet.
+              By connecting your wallet, you agree
               <pre />
-              SAGE will never ask for your private keys.
+              to our terms of service and privacy policy.
             </h1>
           )}
         </section>
@@ -51,12 +51,12 @@ export default function Wallet({ closeModal, isOpen }: Props) {
               function onClick() {
                 connect({ connector: c });
               }
-							const className = `wallet__wallet-item wallet__${c.name}`
-							if  (!c.ready) return null;
+              const className = `wallet__wallet-item wallet__${c.name}`;
+              if (!c.ready) return null;
               return (
                 <button
                   className={className}
-									key={c.name}
+                  key={c.name}
                   disabled={isWalletConnecting}
                   data-loading={isWalletConnecting && 'true'}
                   onClick={onClick}

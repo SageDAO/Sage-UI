@@ -139,18 +139,23 @@
 
 .artists-page__item-content-header {
   margin: 0px 10px 0px;
-  font-weight: 600;
-  font-size: clamp(16px, 1.2vw, 40px);
-  line-height: clamp(24px, 1em, 51px);
+  // font-weight: 600;
+  // font-size: clamp(16px, 1.2vw, 40px);
+  // line-height: clamp(24px, 1em, 51px);
+	@include m.text-h1;
+	margin-top: 0;
+	margin-bottom: 0;
+
 }
 
 .artists-page__item-content-description {
   color: inherit;
   margin: 0px 10px;
   text-overflow: ellipsis;
-  font-style: normal;
-  font-weight: 400;
-  font-size: clamp(8px, 0.9vw, 16px);
+  // font-style: normal;
+  // font-weight: 400;
+  // font-size: clamp(8px, 0.9vw, 16px);
+	@include m.text-p1;
   overflow: clip;
-  line-height: 130%;
+  // line-height: 130%;
 }

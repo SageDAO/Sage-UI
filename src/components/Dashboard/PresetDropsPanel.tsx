@@ -9,19 +9,21 @@ import LoaderDots from '../LoaderDots';
 import LoaderSpinner from '../LoaderSpinner';
 
 export default function PresetDropsPanel() {
-  const { data: presetDrops, isLoading, isError } = useGetPresetDropsQuery();
+  const { data: presetDrops, isLoading, isError, refetch } = useGetPresetDropsQuery();
   const [createPresetDrops, { isLoading: isCreating }] = useCreatePresetDropsMutation();
+  const [selectedDrops, setSelectedDrops] = useState<PresetDrop[]>([]);
   const [duration, setDuration] = useState<number>(24);
-  const selectedDrops = [];
+
+  const handleRetryButtonClick = () => {
+    refetch();
+  };
 
   const handleCheckboxChange = (drop: PresetDrop, isChecked: boolean) => {
     if (isChecked) {
-      selectedDrops.push(drop);
+      setSelectedDrops((selectedDrops) => [...selectedDrops, drop]);
     } else {
-      var index = selectedDrops.indexOf(drop);
-      if (index !== -1) {
-        selectedDrops.splice(index, 1);
-      }
+      const newArray = [...selectedDrops.filter((item) => item != drop)];
+      setSelectedDrops(newArray);
     }
   };
 
@@ -42,20 +44,30 @@ export default function PresetDropsPanel() {
   if (isLoading) {
     return <LoaderDots />;
   }
+
   if (isError) {
     return (
-      <div style={{ marginTop: '15px' }}>
-        Unable to load preset data from AWS S3. Please try again later.
+      <div style={{ marginTop: '50px' }}>
+        <div style={{ textAlign: 'center', width: '300px' }}>
+          Unable to load preset data from AWS S3.
+          <button
+            onClick={handleRetryButtonClick}
+            className='dashboard__wipe-button'
+            style={{ width: '200px', marginTop: '30px', marginBottom: '150px' }}
+          >
+            click to retry
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <>
-      <div style={{ display: 'flex', flexFlow: 'wrap' }}>
+      <div style={{ display: 'flex', flexFlow: 'wrap', marginTop: '30px' }}>
         {presetDrops.map((drop: PresetDrop, i: number) => {
           return (
-            <div style={{ textAlign: 'center', padding: '10px' }}>
+            <div key={i} style={{ textAlign: 'center', padding: '10px' }}>
               <label>
                 <img src={drop.bannerS3Path} width={300} />
                 <br />
@@ -65,7 +77,7 @@ export default function PresetDropsPanel() {
                     handleCheckboxChange(drop, e.target.checked)
                   }
                 />{' '}
-                {drop.dropName}
+                {drop.dropName} by {drop.artist.username || 'anon'} ({drop.nfts.length} NFTs)
               </label>
             </div>
           );
@@ -82,6 +94,8 @@ export default function PresetDropsPanel() {
       >
         Drop duration:{' '}
         <select value={duration} onChange={handleDurationSelectChange}>
+          <option value='0.25'>15 minutes</option>
+          <option value='1'>1 hour</option>
           <option value='24'>24 hours</option>
           <option value='48'>48 hours</option>
           <option value='168'>1 week</option>

@@ -294,12 +294,13 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     margin-right: auto;
     align-items: center;
     z-index: 1;
-    width: min(1152px, 80vw);
+    // width: min(1152px, 80vw);
     @include m.text-h2;
     line-height: 1em;
     color: m.t('contrast');
-    width: 80%;
-    padding: 30px 0;
+    // width: 90%;
+		@include m.standard-width;
+    padding: 40px 0;
   }
 }
 
@@ -320,7 +321,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   font-size: clamp(24px, 1vw, 40px);
   line-height: clamp(29px, 1em, 49px);
   @include m.theme() {
-    color: m.t(contrast);
+    color:white;
   }
 }
 

@@ -1,4 +1,4 @@
-import { PresetDrop } from '@/store/dropsReducer';
+import { PresetDrop, PresetDropArtist } from '@/store/dropsReducer';
 import aws from 'aws-sdk';
 
 const AWS_REGION = 'us-east-2';
@@ -94,15 +94,19 @@ function deconstructS3Key(key: string) {
 
 function findOrCreateDrop(drops: PresetDrop[], _artistAddress: string, _dropName: string) {
   let drop = drops.find(
-    ({ artistAddress, dropName }) => artistAddress == _artistAddress && dropName == _dropName
+    ({ artist, dropName }) => artist.walletAddress == _artistAddress && dropName == _dropName
   );
   if (!drop) {
-    drop = {
-      artistAddress: _artistAddress,
+    drop = <PresetDrop>{
+      artist: <PresetDropArtist>{
+        walletAddress: _artistAddress,
+        username: null,
+        role: null
+      },
       dropName: _dropName,
       bannerS3Path: '',
       nfts: new Array<string>(),
-    } as PresetDrop;
+    };
     drops.push(drop);
   }
   return drop;

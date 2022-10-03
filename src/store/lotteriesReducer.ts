@@ -12,6 +12,7 @@ import { pointsApi } from './pointsReducer';
 import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
 import { registerLotterySale } from '@/utilities/sales';
+import { Refund } from '@prisma/client';
 
 export interface BuyTicketRequest {
   lotteryId: number;
@@ -22,10 +23,9 @@ export interface BuyTicketRequest {
   earnedPoints: GetEarnedPointsResponse;
 }
 
-export type LotteryTickets = {
-  userTickets: number;
-  totalTickets: number;
-};
+export interface TicketCountMap {
+  [gameId: number]: number;
+}
 
 const lotteriesApi = baseApi.injectEndpoints({
   overrideExisting: true,
@@ -36,20 +36,34 @@ const lotteriesApi = baseApi.injectEndpoints({
     getLotteryWinners: builder.query<string[], number>({
       query: (lotteryId: number) => `lotteries?action=GetLotteryWinners&lotteryId=${lotteryId}`,
     }),
-    getTicketCounts: builder.query<LotteryTickets, { lotteryId: number; walletAddress: string }>({
-      queryFn: async ({ lotteryId, walletAddress }, { dispatch }) => {
-        console.log(`getTicketCounts(${lotteryId}, ${walletAddress})`);
-        const totalTickets = await getTicketCount(lotteryId);
-        const userTickets = walletAddress
-          ? await getTicketCountPerUser(lotteryId, walletAddress)
-          : 0;
-        const ticketSoldEventCallback = () =>
-          dispatch(lotteriesApi.util.invalidateTags(['TicketCount']));
-        setupTicketSoldListener(lotteryId, ticketSoldEventCallback);
-        return { data: { userTickets, totalTickets } };
-      },
-      providesTags: ['TicketCount'],
+    getRefunds: builder.query<Refund[], void>({
+      query: () => `lotteries?action=GetRefunds`,
+      providesTags: ['Refunds'],
     }),
+    getRefundByLottery: builder.query<Refund | null, number>({
+      query: (lotteryId) => `lotteries?action=GetRefund&lotteryId=${lotteryId}`,
+      providesTags: ['Refunds'],
+    }),
+    getTicketCounts: builder.query<TicketCountMap, { lotteryIds: number[]; walletAddress: string }>(
+      {
+        queryFn: async ({ lotteryIds, walletAddress }, { dispatch }) => {
+          console.log(`getTicketCounts(${walletAddress})`);
+          if (!walletAddress) {
+            return { data: {} };
+          }
+          const ticketCounts = <TicketCountMap>{};
+          for (const id of lotteryIds) {
+            ticketCounts[id] = await getTicketCountPerUser(id, walletAddress);
+            // Reset cache when a ticket is sold
+            setupTicketSoldListener(id, () =>
+              dispatch(lotteriesApi.util.invalidateTags(['TicketCount']))
+            );
+          }
+          return { data: ticketCounts };
+        },
+        providesTags: ['TicketCount'],
+      }
+    ),
     buyTickets: builder.mutation<boolean, BuyTicketRequest>({
       queryFn: async (
         { lotteryId, numTickets, ticketCostPoints, ticketCostTokens, signer, earnedPoints },
@@ -101,6 +115,16 @@ const lotteriesApi = baseApi.injectEndpoints({
           return { data: false };
         }
       },
+    }),
+    claimRefund: builder.mutation<null, { refund: Refund; signer: Signer }>({
+      queryFn: async ({ refund, signer }) => {
+        const contract = await getLotteryContract(signer);
+        const wallet = await signer.getAddress();
+        const amountWei = ethers.utils.parseEther(refund.refundableTokens.toString());
+        await contract.refund(wallet, refund.lotteryId, amountWei);
+        return { data: null };
+      },
+      invalidatesTags: ['Refunds'],
     }),
   }),
 });
@@ -184,5 +208,8 @@ export const {
   useGetLotteryQuery,
   useGetLotteryWinnersQuery,
   useGetTicketCountsQuery,
+  useGetRefundsQuery,
+  useGetRefundByLotteryQuery,
   useBuyTicketsMutation,
+  useClaimRefundMutation,
 } = lotteriesApi;

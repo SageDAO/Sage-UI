@@ -104,7 +104,7 @@ export async function getArtistsPageData(prisma: PrismaClient) {
     walletAddress: row.artistAddress,
   }));
   return await prisma.user.findMany({
-    where: { OR: artistWallets },
+    where: { OR: artistWallets, bannerImageS3Path: { not: null } },
     take: 20,
   });
 }
@@ -152,7 +152,7 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
     where "u"."role" = 'ARTIST'`;
   var result = await prisma.$queryRaw(Prisma.raw(query));
   for (const row of result as any) {
-    salesData.set(row.walletAddress, {
+    salesData.set(row.walletAddress, <ArtistSales>{
       username: String(row.username),
       walletAddress: String(row.walletAddress),
       nftCountTotal: Number(row.nftCount),

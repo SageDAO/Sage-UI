@@ -194,7 +194,7 @@ export default function ProfilePanel({ isArtist }: Props) {
                 });
               }}
               maxLength={50}
-              placeholder='webpage'
+              placeholder='URL'
             />
           </div>
         </div>
@@ -214,7 +214,7 @@ export default function ProfilePanel({ isArtist }: Props) {
         {isArtist && (
           <FileInputWithPreview
             initialPreview={data.bannerImageS3Path}
-            acceptedTypes={['image/png', 'image/jpeg']}
+            acceptedTypes={['image/png', 'image/jpeg', 'image/gif', 'image/svg+xml']}
             onFileChange={handleFileInputChange}
           />
         )}
@@ -226,6 +226,14 @@ export default function ProfilePanel({ isArtist }: Props) {
           save your changes
         </button>
       </form>
+      <section className='profile-page__delete-profile-section'>
+        <p className='profile-page__delete-profile-info'>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ullam animi labore
+          consequatur, deserunt eius cum optio quae ducimus? Corrupti, asperiores a. Nostrum odio
+          tempora soluta illo, rem vel harum!
+        </p>
+        <button className='profile-page__delete-profile-button'>Delete Profile</button>
+      </section>
     </>
   );
 }

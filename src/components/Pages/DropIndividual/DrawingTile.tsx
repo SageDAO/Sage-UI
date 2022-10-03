@@ -15,10 +15,18 @@ interface Props {
 }
 export default function DrawingTile({ artistName, dropName, drawing, tickets }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
-  const { isStarted, isLive, mediaSrc, selectedNftName, selectedNftEditionsCount } = useLottery({
+  const { isStarted, isLive, isEnded, mediaSrc, selectedNftName, selectedNftEditionsCount } = useLottery({
     lottery: drawing,
     nfts: drawing.Nfts,
   });
+	let focusText: string = 'Upcoming';
+	if (isLive) {
+		focusText = 'Enter Drawing'
+	}
+
+	if (isEnded) {
+		focusText = 'Results'
+	}
   return (
     <div onClick={openModal} className='drop-page__grid-item'>
       <GetTicketModal
@@ -34,7 +42,7 @@ export default function DrawingTile({ artistName, dropName, drawing, tickets }: 
       <div className='drop-page__grid-item-media-container'>
         <BaseMedia className='drop-page__grid-item-media-src' src={mediaSrc}></BaseMedia>
         <div className='drop-page__grid-item-media-overlay'></div>
-        <div className='drop-page__grid-item-focus'>{isLive ? 'enter drawing' : 'results'}</div>
+        <div className='drop-page__grid-item-focus'>{focusText}</div>
       </div>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>

@@ -180,6 +180,8 @@
 }
 
 .dashboard__user-details-modal {
+  display: flex;
+  flex-direction: column;
   margin-top: auto;
   margin-bottom: auto;
   border-radius: 9px;

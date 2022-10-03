@@ -22,10 +22,10 @@ export async function uploadFileToS3(
 
 async function fetchS3SignedUrl(endpoint: string, folder: string, filename: string): Promise<any> {
   console.log(`fetchS3SignedUrl()`);
-  const request = await fetch(
+  const response = await fetch(
     `${endpoint}?action=CreateS3SignedUrl&bucket=${folder}&filename=${filename}`
   );
-  const response = await request.json();
-  console.log(`fetchS3SignedUrl() :: ${response.uploadUrl}`);
-  return response;
+  const responseJson = await response.json();
+  console.log(`fetchS3SignedUrl() :: ${responseJson.uploadUrl}`);
+  return responseJson;
 }

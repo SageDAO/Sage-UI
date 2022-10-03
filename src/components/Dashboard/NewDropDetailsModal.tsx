@@ -1,5 +1,6 @@
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
+import { formatDateMMddHHmm, reformatDate } from '@/utilities/strings';
 
 interface NewDropDetailsModalProps extends ModalProps {
   drop: Drop_include_GamesAndArtist;
@@ -9,87 +10,82 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
   return (
     <Modal title='Drop Details' isOpen={isOpen} closeModal={closeModal}>
       <div className='dashboard__drop-details-modal' style={{ padding: '25px' }}>
-        <div style={{ textAlign: 'center', fontSize: '14px', lineHeight: '18px' }}>
+        <div style={{ textAlign: 'center', fontSize: '12px', lineHeight: '18px' }}>
           DROP {drop.id}
           <br />
           <br />
           <img src={drop.bannerImageS3Path} width={300} />
           <br />
-          {drop.name}, by {drop.NftContract.Artist.username}
+          <span style={{ fontSize: '14px', fontWeight: 'bold' }}>
+            {drop.name}, by {drop.NftContract.Artist.username}
+          </span>
           <br />
           <br />
-          Description: {drop.description}
-          <br />
-          <br />
+          {drop.description && <span>{drop.description}</span>}
+          <hr />
           {drop.Lotteries && (
-            <>
-              <hr />
-              <br />
+            <div style={{ display: 'flex' }}>
               {drop.Lotteries.map((lottery, i) => {
                 return (
-                  <div key={i}>
-                    LOTTERY {lottery.id}
+                  <div key={i} style={{ padding: '10px', width: '175px' }}>
+                    DRAWING {lottery.id}
                     <br />
                     <br />
-                    Start Time: {lottery.startTime}
+                    Starts: {formatDateMMddHHmm(lottery.startTime)}
                     <br />
-                    End Time: {lottery.endTime}
+                    Ends: {formatDateMMddHHmm(lottery.endTime)}
                     <br />
                     Cost: {lottery.costPerTicketTokens} ASH + {lottery.costPerTicketPoints} PIXEL
                     <br />
-                    Max Tickets: {lottery.maxTickets}
-                    <br />
-                    Max Tickets Per User: {lottery.maxTicketsPerUser}
+                    Max Tickets: {lottery.maxTickets} total, {lottery.maxTicketsPerUser} per user
                     <br />
                     <br />
-                    <table>
-                      <tr>
-                        {lottery.Nfts.map((nft, i) => {
-                          return (
-                            <td key={i} style={{ padding: '10px' }}>
-                              <img src={nft.s3PathOptimized} width={150} />
-                              <br />
-                              Name: {nft.name}
-                              <br />
-                              Editions: {nft.numberOfEditions}
-                              <br />
-                              Description: {nft.description}
-                              <br />
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    </table>
+                    <div style={{ display: 'flex' }}>
+                      {lottery.Nfts.map((nft, i) => {
+                        return (
+                          <div key={i} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                            <img src={nft.s3PathOptimized} width={150} />
+                            <br />
+                            Name: {nft.name}
+                            <br />
+                            Editions: {nft.numberOfEditions}
+                            <br />
+                            {nft.description && <span>"{nft.description}"</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 );
               })}
-            </>
+            </div>
           )}
           <hr />
-          <br />
-          {drop.Auctions &&
-            drop.Auctions.map((auction, i) => {
-              return (
-                <div key={i}>
-                  AUCTION {auction.id}
-                  <br />
-                  <br />
-                  Start Time: {auction.startTime}
-                  <br />
-                  End Time: {auction.endTime}
-                  <br />
-                  Min Price: {auction.minimumPrice} ASH
-                  <br />
-                  <br />
-                  <img src={auction.Nft.s3PathOptimized} width={150} />
-                  <br />
-                  Name: {auction.Nft.name}
-                  <br />
-                  Description: {auction.Nft.description}
-                  <br />
-                </div>
-              );
-            })}
+          {drop.Auctions && (
+            <div style={{ display: 'flex' }}>
+              {drop.Auctions.map((auction, i) => {
+                return (
+                  <div key={i} style={{ padding: '10px', width: '175px' }}>
+                    AUCTION {auction.id}
+                    <br />
+                    <br />
+                    Starts: {formatDateMMddHHmm(auction.startTime)}
+                    <br />
+                    Ends: {formatDateMMddHHmm(auction.endTime)}
+                    <br />
+                    Min Price: {auction.minimumPrice} ASH
+                    <br />
+                    <br />
+                    <img src={auction.Nft.s3PathOptimized} width={150} />
+                    <br />
+                    Name: {auction.Nft.name}
+                    <br />
+                    {auction.Nft.description && <span>"{auction.Nft.description}"</span>}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </Modal>

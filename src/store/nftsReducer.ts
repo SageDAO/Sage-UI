@@ -24,6 +24,7 @@ export interface MintRequest {
   price: number;
   isFixedPrice: boolean;
   file: File;
+  s3Path: string | null;
   s3PathOptimized: string | null;
   signer: Signer;
 }
@@ -68,7 +69,7 @@ const nftsApi = baseApi.injectEndpoints({
         try {
           const endpoint = '/api/endpoints/dropUpload/';
           const artistAddress = await mintRequest.signer.getAddress();
-          const nftContractAddress = await _fetchOrCreateNftContract(
+          const nftContractAddress = await fetchOrCreateNftContract(
             artistAddress,
             mintRequest.signer,
             fetchWithBQ
@@ -222,13 +223,18 @@ const nftsApi = baseApi.injectEndpoints({
 });
 
 async function uploadToAwsAndArweave(mintRequest: MintRequest, endpoint: string) {
-  console.log(`uploadToAwsAndArweave() :: Uploading media to AWS S3...`);
-  const s3Path = await uploadFileToS3(
-    endpoint,
-    createBucketFolderName(),
-    mintRequest.file.name,
-    mintRequest.file
-  );
+  if (mintRequest.s3Path) {
+    console.log(`uploadToAwsAndArweave() :: Media has already been uploaded to AWS S3`);
+    var s3Path = mintRequest.s3Path;
+  } else {
+    console.log(`uploadToAwsAndArweave() :: Uploading media to AWS S3...`);
+    var s3Path = await uploadFileToS3(
+      endpoint,
+      createBucketFolderName(),
+      mintRequest.file.name,
+      mintRequest.file
+    );
+  }
   console.log(`uploadToAwsAndArweave() :: Uploading media to Arweave...`);
   const ipfsPath = await copyFromS3toArweave(endpoint, s3Path);
   console.log(`uploadToAwsAndArweave() :: Uploading metadata to Arweave...`);
@@ -332,7 +338,7 @@ async function signOffer(
   return { signedOffer, expiresAt };
 }
 
-export async function _fetchOrCreateNftContract(
+export async function fetchOrCreateNftContract(
   artistAddress: string,
   signer: Signer,
   fetchWithBQ: any
@@ -340,15 +346,15 @@ export async function _fetchOrCreateNftContract(
   const { data } = await fetchWithBQ(`drops?action=GetNftContractAddress&address=${artistAddress}`);
   if (data.contractAddress) {
     console.log(
-      `_fetchOrCreateNftContract() :: Found existing NFT contract in database at ${data.contractAddress}`
+      `fetchOrCreateNftContract() :: Found existing NFT contract in database at ${data.contractAddress}`
     );
     return data.contractAddress;
   }
   const nftFactoryContract = await getNftFactoryContract(signer);
-  console.log(`_fetchOrCreateNftContract() :: Using Factory ${nftFactoryContract.address}`);
+  console.log(`fetchOrCreateNftContract() :: Using Factory ${nftFactoryContract.address}`);
   var artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
   if (!artistContractAddress || artistContractAddress == ethers.constants.AddressZero) {
-    console.log(`_fetchOrCreateNftContract() :: Creating new NFT contract...`);
+    console.log(`fetchOrCreateNftContract() :: Creating new NFT contract...`);
     var tx: ContractTransaction;
     if (artistAddress == (await signer.getAddress())) {
       tx = await nftFactoryContract.deployByArtist('Sage', 'SAGE');
@@ -364,7 +370,7 @@ export async function _fetchOrCreateNftContract(
   await fetchWithBQ(
     `drops?action=UpdateNftContractAddress&artistAddress=${artistAddress}&contractAddress=${artistContractAddress}`
   );
-  console.log(`_fetchOrCreateNftContract() :: Contract deployed to ${artistContractAddress}`);
+  console.log(`fetchOrCreateNftContract() :: Contract deployed to ${artistContractAddress}`);
   return artistContractAddress;
 }
 

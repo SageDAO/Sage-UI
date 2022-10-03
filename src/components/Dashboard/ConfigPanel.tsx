@@ -57,7 +57,7 @@ export function ConfigPanel() {
           <option value={0}> -- latest -- </option>
           {drops.map((drop, i) => {
             return (
-              <option value={drop.id}>
+              <option key={i} value={drop.id}>
                 [{drop.id}] '{drop.name}' by {drop.NftContract.Artist.username}
               </option>
             );

@@ -7,6 +7,7 @@ import {
   BuyTicketRequest,
   useBuyTicketsMutation,
   useGetLotteryWinnersQuery,
+  useGetRefundByLotteryQuery,
 } from '@/store/lotteriesReducer';
 import { useGetEarnedPointsQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
@@ -20,6 +21,7 @@ import CloseSVG from '@/public/interactive/close.svg';
 import shortenAddress from '@/utilities/shortenAddress';
 import Countdown from '@/components/Countdown';
 import { transformTitle } from '@/utilities/strings';
+import ClaimRefundButton from '@/components/Pages/Profile/ClaimRefundButton';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -58,6 +60,7 @@ function GetTicketModal({
   const [errorState, setErrorState] = useState<ErrorState>(INITIAL_ERROR_STATE);
   const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, { skip: !sessionData });
   const [buyTickets, { isLoading: isBuyTicketsLoading }] = useBuyTicketsMutation();
+  const { data: refund } = useGetRefundByLotteryQuery(lottery.id);
 
   const now = new Date().getTime();
   const isStarted = lottery.startTime.getTime() < now;
@@ -189,8 +192,9 @@ function GetTicketModal({
                   <System type={systemType}></System>
                 </div>
                 <h1 className='games-modal__system-info'>
-                  This is a fair drop mechanic. By purchasing one or more entries, you have the
-                  opportunity to be selected to mint this NFT.
+                  This is a fair drop mechanic. By purchasing one or more tickets for this drop, you
+                  have the opportunity to be selected to buy this NFT. Losing tickets will be
+                  refunded.
                 </h1>
               </div>
 
@@ -243,6 +247,12 @@ function GetTicketModal({
                       <div key={winnerAddress}>{shortenAddress(winnerAddress)}</div>
                     ))}
                   </div>
+                </>
+              )}
+              {refund && (
+                <>
+                  <h1 className='games-modal__winners-label'>refund</h1>
+                  <div className='games-modal__winners-list'>{refund.refundableTokens} ASH {refund.txHash ? '' : 'pending refund'} <ClaimRefundButton refund={refund} /></div>
                 </>
               )}
             </div>

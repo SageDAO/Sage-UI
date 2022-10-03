@@ -223,7 +223,7 @@ $desktop-width: 1088px;
   font-size: clamp(14px, 0.8vw, 20px);
 }
 @mixin text-p4 {
-  font-size: clamp(10px, 1vw, 15px);
+  font-size: clamp(10px, 0.7vw, 15px);
   // line-height: clamp(18px, 1.5em, 25px);
 }
 

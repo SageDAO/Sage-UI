@@ -10,7 +10,7 @@
   width: 100%;
   justify-content: center;
   @include b.min-width('medium') {
-    width: 800px;
+    width: 600px;
     padding: 80px;
     gap: clamp(40px, 5vw, 50px);
     margin-top: 0;
@@ -27,7 +27,7 @@
     color: m.t(contrast);
 
     @include b.min-width('medium') {
-      gap: 30px;
+      gap: 15px;
     }
   }
 }
@@ -35,6 +35,7 @@
 .wallet__header-prompt {
   @include m.theme() {
     @include m.text-h1;
+    // padding: 0 30px;
     margin-top: 0;
     margin-bottom: 0;
     font-weight: 400;
@@ -45,7 +46,15 @@
     color: m.t(contrast);
     text-transform: uppercase;
     @include b.min-width('medium') {
+      margin-left: 0;
       text-transform: none;
+      text-align: left;
+
+      font-style: normal;
+      font-weight: 600;
+      font-size: clamp(16px, 2.5vw, 20px);
+      line-height: 130%;
+      text-transform: capitalize;
     }
   }
 }
@@ -68,6 +77,8 @@
     text-transform: uppercase;
     @include b.min-width('medium') {
       text-transform: none;
+      text-align: left;
+      @include m.text-p1;
     }
   }
 }
@@ -82,6 +93,7 @@
 .wallet__wallets {
   display: flex;
   align-items: stretch;
+  gap: 20px;
 }
 
 .wallet__wallet-item {
@@ -109,7 +121,6 @@
     display: flex;
   }
 }
-
 
 .wallet__WalletConnect {
 }
@@ -165,7 +176,6 @@
     color: m.t(contrast);
     border: 1px solid m.t(contrast);
   }
-  padding: 10px 20px;
 }
 
 .wallet__auth-sign-in-button {
