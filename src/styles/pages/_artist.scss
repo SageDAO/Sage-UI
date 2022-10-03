@@ -139,6 +139,8 @@
 
 .artist-page__socials--desktop {
   @include socials;
+  flex: 1;
+  align-items: end;
   display: none;
   @include b.min-width('medium') {
     display: flex;
@@ -160,6 +162,9 @@
 }
 
 .artist-page__socials-svg {
+	display: flex;
+	align-items: center;
+	justify-content: center;
   @include m.theme() {
     // background-color: m.t(accent);
     color: m.t(base);
@@ -271,25 +276,19 @@
 @mixin follow-btn {
   @include m.theme() {
     @include m.text-p4;
-    // margin-top:
     font-style: normal;
-    // font-weight: 400;
-    // font-size: 11px;
-    // line-height: 136.6%;
     text-align: center;
     justify-content: center;
     align-items: center;
     letter-spacing: 0.35em;
     aspect-ratio: 411/49;
-    // padding: 4px;
     text-transform: uppercase;
-    // overflow: visible;
-    height: 20px;
+    height: 30px;
     width: 120px;
-    @include m.transition-base;
     color: m.t(contrast2);
     background-color: m.t(base2);
     border: 1px solid m.t(contrast2);
+    @include m.transition-base;
     @include m.interact {
       background-color: m.t(accent);
       color: m.t(base);
