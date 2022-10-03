@@ -4,6 +4,7 @@ import {
   useGetUnclaimedAuctionNftsQuery,
 } from '@/store/auctionsReducer';
 import { GamePrize } from '@/prisma/types';
+import { useGetRefundsQuery } from '@/store/lotteriesReducer';
 
 function getUnclaimedNfts(prizeNfts: GamePrize[]) {
   return prizeNfts.filter((gamePrize) => {
@@ -17,9 +18,10 @@ export default function useUserNotifications() {
     useGetClaimedAuctionNftsQuery();
   const { data: unclaimedAuctionNfts, isFetching: fetchingUnclaimedAuctionNfts } =
     useGetUnclaimedAuctionNftsQuery();
+  const { data: refunds, isFetching: fetchingRefunds } = useGetRefundsQuery();
 
   const isLoading: boolean =
-    fetchingLotteryNfts || fetchingClaimedAuctionNfts || fetchingUnclaimedAuctionNfts;
+    fetchingLotteryNfts || fetchingClaimedAuctionNfts || fetchingUnclaimedAuctionNfts || fetchingRefunds;
 
   const prizeNfts: GamePrize[] = new Array().concat(
     lotteryNfts,
@@ -29,7 +31,7 @@ export default function useUserNotifications() {
 
   const unclaimedNfts = getUnclaimedNfts(prizeNfts);
   const notificationCount: number = unclaimedNfts.length;
-  const hasNotifications: boolean = notificationCount > 0;
+  const hasNotifications: boolean = !isLoading && notificationCount > 0;
 
-  return { prizeNfts, notificationCount, hasNotifications, isLoading };
+  return { prizeNfts, notificationCount, refunds, hasNotifications, isLoading };
 }

@@ -44,6 +44,10 @@ const auctionsApi = baseApi.injectEndpoints({
       },
       providesTags: ['AuctionState'],
     }),
+    getBidHistory: builder.query<[], number>({
+      query: (auctionId) => `auctions?action=GetBidHistory&auctionId=${auctionId}`,
+      providesTags: ['AuctionState'],
+    }),
     getClaimedAuctionNfts: builder.query<GamePrize[], void>({
       query: () => `auctions?action=GetClaimedAuctionNfts`,
       providesTags: ['Auction'],
@@ -53,7 +57,7 @@ const auctionsApi = baseApi.injectEndpoints({
       providesTags: ['Auction'],
     }),
     placeBid: builder.mutation<null, BidArgs>({
-      queryFn: async ({ auctionId, amount, signer }) => {
+      queryFn: async ({ auctionId, amount, signer }, {}, _, fetchWithBQ) => {
         console.log(`placeBid(${auctionId}, ${amount})`);
         const weiValue = ethers.utils.parseEther(amount.toString());
         try {
@@ -68,9 +72,11 @@ const auctionsApi = baseApi.injectEndpoints({
         }
         try {
           const auctionContract = await getAuctionContract(signer);
-          var tx = await auctionContract.bid(auctionId, weiValue);
+          const tx = await auctionContract.bid(auctionId, weiValue);
           promiseToast(tx, 'You are now the highest bidder!');
           await tx.wait();
+          const blockTs = (await signer.provider.getBlock(tx.blockNumber)).timestamp;
+          await fetchWithBQ(`auctions?action=SaveBid&id=${auctionId}&amt=${amount}&ts=${blockTs}`);
           playTxSuccessSound();
         } catch (e) {
           toast.error('Error placing bid');
@@ -179,6 +185,7 @@ async function updateDbPrizeClaimedDate(fetchWithBQ: any, auctionId: number): Pr
 export const {
   useGetAuctionQuery,
   useGetAuctionStateQuery,
+  useGetBidHistoryQuery,
   useClaimAuctionMutation,
   useGetClaimedAuctionNftsQuery,
   useGetUnclaimedAuctionNftsQuery,

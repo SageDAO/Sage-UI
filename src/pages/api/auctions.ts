@@ -10,6 +10,204 @@ interface FlattenArgs {
   drop: Drop;
 }
 
+async function handler(request: NextApiRequest, response: NextApiResponse) {
+  const {
+    query: { action },
+  } = request;
+  const session = await getSession({ req: request });
+  const { address: walletAddress } = session!;
+  switch (action) {
+    case 'GetAuction':
+      await getAuction(Number(request.query.auctionId), response);
+      break;
+    case 'GetBidHistory':
+      await getBidHistory(Number(request.query.auctionId), response);
+      break;
+    case 'GetClaimedAuctionNfts':
+      await getClaimedAuctionNfts(walletAddress as string, response);
+      break;
+    case 'GetUnclaimedAuctionNfts':
+      await getUnclaimedAuctionNfts(walletAddress as string, response);
+      break;
+    case 'SaveBid':
+      const { id, amt, ts } = request.query;
+      await saveBid(String(walletAddress), Number(id), Number(amt), Number(ts), response);
+      break;
+    case 'UpdateNftClaimedDate':
+      await updateNftClaimedDate(String(walletAddress), Number(request.query.auctionId), response);
+      break;
+    default:
+      response.status(500);
+  }
+  response.end();
+}
+
+async function getAuction(auctionId: number, response: NextApiResponse) {
+  console.log(`getAuction(${auctionId})`);
+  if (isNaN(auctionId)) {
+    response.status(500);
+    return;
+  }
+  try {
+    const auction = await prisma.auction.findFirst({
+      where: { id: auctionId },
+      include: {
+        Nft: true,
+        Drop: {
+          include: {
+            NftContract: {
+              include: {
+                Artist: { select: { username: true, profilePicture: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+    response.json(auction);
+  } catch (e) {
+    console.log({ e });
+    response.status(500);
+  }
+}
+
+async function getBidHistory(auctionId: number, response: NextApiResponse) {
+  console.log(`getBidHistory(${auctionId})`);
+  if (isNaN(auctionId)) {
+    response.status(500);
+  } else {
+    const bids = [];
+    const result = await prisma.bidHistory.findMany({ 
+      where: { auctionId },
+      include: { Bidder: true },
+      orderBy: [{ blockTimestamp: 'desc' }] 
+    });
+    for (const row of result) {
+      bids.push({
+        amount: row.amount,
+        bidder: row.Bidder.username ? row.Bidder.username : row.bidderAddress,
+        blockTimestamp: row.blockTimestamp
+      });
+    }
+    response.json(bids);
+  }
+}
+
+async function getClaimedAuctionNfts(walletAddress: string, response: NextApiResponse) {
+  if (!walletAddress) {
+    response.status(401).end('Not Authenticated');
+    return;
+  }
+  try {
+    const claimedAuctions = await prisma.auction.findMany({
+      where: {
+        winnerAddress: walletAddress,
+        settled: true,
+      },
+      include: {
+        Nft: true,
+        Drop: { include: { NftContract: { include: { Artist: true } } } },
+      },
+    });
+    const claimedNfts = Array<GamePrize>();
+    claimedAuctions.forEach((a) =>
+      claimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
+    );
+    console.log(`getClaimedAuctionNfts(${walletAddress}) :: ${claimedNfts.length}`);
+    response.json(claimedNfts);
+  } catch (e) {
+    console.log(e);
+    response.status(500);
+  }
+}
+
+async function getUnclaimedAuctionNfts(walletAddress: string, response: NextApiResponse) {
+  if (!walletAddress) {
+    response.status(401).end('Not Authenticated');
+    return;
+  }
+  try {
+    const unclaimedAuctions = await prisma.auction.findMany({
+      where: {
+        winnerAddress: walletAddress,
+        settled: false,
+      },
+      include: {
+        Nft: true,
+        Drop: { include: { NftContract: { include: { Artist: true } } } },
+      },
+    });
+    const unclaimedNfts = Array<GamePrize>();
+    unclaimedAuctions.forEach((a) =>
+      unclaimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
+    );
+    console.log(`getUnclaimedAuctionNfts(${walletAddress}) :: ${unclaimedNfts.length}`);
+    response.json(unclaimedNfts);
+  } catch (e) {
+    console.log(e);
+    response.status(500);
+  }
+}
+
+async function saveBid(
+  bidderAddress: string,
+  auctionId: number,
+  amount: number,
+  blockTimestamp: number,
+  response: NextApiResponse
+) {
+  console.log(`saveBid(${auctionId}, ${bidderAddress}, ${amount}, ${blockTimestamp})`);
+  if (!bidderAddress) {
+    response.status(401).end('Not Authenticated');
+    return;
+  }
+  if (isNaN(auctionId) || isNaN(amount) || isNaN(blockTimestamp)) {
+    response.status(500);
+    return;
+  }
+  await prisma.bidHistory.create({ 
+    data: { auctionId, amount, bidderAddress, blockTimestamp } }
+  );
+  await new Promise((r) => setTimeout(r, 500)); // give it a split second before finishing the request
+  response.status(200);
+}
+
+async function updateNftClaimedDate(
+  walletAddress: string,
+  auctionId: number,
+  response: NextApiResponse
+) {
+  console.log(`updateNftClaimedDate(${auctionId})`);
+  if (isNaN(auctionId)) {
+    response.status(500);
+    return;
+  }
+  if (!walletAddress) {
+    response.status(401).end('Not Authenticated');
+    return;
+  }
+  try {
+    const auctionWinner = await getUnclaimedAuctionWinner(auctionId);
+    let now = new Date();
+    await prisma.auction.updateMany({
+      where: {
+        id: auctionId,
+        claimedAt: null,
+        settled: false,
+      },
+      data: {
+        winnerAddress: auctionWinner,
+        claimedAt: now,
+        settled: true,
+      },
+    });
+    response.status(200).json({ claimedAt: now });
+  } catch (e) {
+    console.log({ e });
+    response.status(500);
+  }
+}
+
 function flatten({ auction, drop, artist }: FlattenArgs): GamePrize {
   return {
     auctionId: auction.id,
@@ -23,183 +221,6 @@ function flatten({ auction, drop, artist }: FlattenArgs): GamePrize {
     s3PathOptimized: auction.Nft.s3PathOptimized,
     claimedAt: auction.claimedAt || undefined,
   };
-}
-
-async function handler(request: NextApiRequest, response: NextApiResponse) {
-  const {
-    query: { action },
-  } = request;
-  const session = await getSession({ req: request });
-  const { address: walletAddress } = session!;
-  switch (action) {
-    case 'GetAuction':
-      await getAuction(Number(request.query.auctionId), response);
-      break;
-    case 'GetClaimedAuctionNfts':
-      await getClaimedAuctionNfts(walletAddress as string, response);
-      break;
-    case 'GetUnclaimedAuctionNfts':
-      await getUnclaimedAuctionNfts(walletAddress as string, response);
-      break;
-    case 'UpdateNftClaimedDate':
-      await updateNftClaimedDate(
-        walletAddress as string,
-        Number(request.query.auctionId),
-        request,
-        response
-      );
-      break;
-    default:
-      response.status(500);
-  }
-  response.end();
-}
-
-async function getAuction(auctionId: number, response: NextApiResponse) {
-  console.log(`getAuction(${auctionId})`);
-  if (isNaN(auctionId)) {
-    response.status(500);
-  } else {
-    try {
-      const auction = await prisma.auction.findFirst({
-        where: { id: auctionId },
-        include: {
-          Nft: true,
-          Drop: {
-            include: {
-              NftContract: {
-                include: {
-                  Artist: {
-                    select: {
-                      username: true,
-                      profilePicture: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
-      response.json(auction);
-    } catch (e) {
-      console.log({ e });
-      response.status(500);
-    }
-  }
-  response.end();
-}
-
-async function getClaimedAuctionNfts(walletAddress: string, response: NextApiResponse) {
-  if (!walletAddress) {
-    response.status(401).end('Not Authenticated');
-  } else {
-    try {
-      const claimedAuctions = await prisma.auction.findMany({
-        where: {
-          winnerAddress: walletAddress,
-          settled: true,
-        },
-        include: {
-          Nft: true,
-          Drop: {
-            include: {
-              NftContract: {
-                include: {
-                  Artist: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      const claimedNfts = Array<GamePrize>();
-      claimedAuctions.forEach((a) =>
-        claimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
-      );
-      console.log(`getClaimedAuctionNfts(${walletAddress}) :: ${claimedNfts.length}`);
-      response.json(claimedNfts);
-    } catch (e) {
-      console.log(e);
-      response.status(500);
-    }
-  }
-  response.end();
-}
-
-async function getUnclaimedAuctionNfts(walletAddress: string, response: NextApiResponse) {
-  if (!walletAddress) {
-    response.status(401).end('Not Authenticated');
-  } else {
-    try {
-      const unclaimedAuctions = await prisma.auction.findMany({
-        where: {
-          winnerAddress: walletAddress,
-          settled: false,
-        },
-        include: {
-          Nft: true,
-          Drop: {
-            include: {
-              NftContract: {
-                include: {
-                  Artist: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      const unclaimedNfts = Array<GamePrize>();
-      unclaimedAuctions.forEach((a) =>
-        unclaimedNfts.push(flatten({ auction: a, drop: a.Drop, artist: a.Drop.NftContract.Artist }))
-      );
-      console.log(`getUnclaimedAuctionNfts(${walletAddress}) :: ${unclaimedNfts.length}`);
-      response.json(unclaimedNfts);
-    } catch (e) {
-      console.log(e);
-      response.status(500);
-    }
-  }
-  response.end();
-}
-
-async function updateNftClaimedDate(
-  walletAddress: string,
-  auctionId: number,
-  request: NextApiRequest,
-  response: NextApiResponse
-) {
-  console.log(`updateNftClaimedDate(${auctionId})`);
-  if (isNaN(auctionId)) {
-    response.status(500);
-  } else {
-    if (!walletAddress) {
-      response.status(401).end('Not Authenticated');
-      return;
-    }
-    try {
-      const auctionWinner = await getUnclaimedAuctionWinner(auctionId);
-      let now = new Date();
-      await prisma.auction.updateMany({
-        where: {
-          id: auctionId,
-          claimedAt: null,
-          settled: false,
-        },
-        data: {
-          winnerAddress: auctionWinner,
-          claimedAt: now,
-          settled: true,
-        },
-      });
-      response.status(200).json({ claimedAt: now });
-    } catch (e) {
-      console.log({ e });
-      response.status(500);
-    }
-  }
-  response.end();
 }
 
 export default handler;

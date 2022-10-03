@@ -1,11 +1,13 @@
 import { Tab } from '@headlessui/react';
 import ClaimPrizeButton from './ClaimPrizeButton';
-import { reformatDate } from '@/utilities/strings';
+import { formatTimestampMMddHHmm, reformatDate } from '@/utilities/strings';
 import { GamePrize } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import CheckSVG from '@/public/icons/check.svg';
 import usePagination from '@/hooks/usePagination';
 import useUserNotifications from '@/hooks/useUserNotifications';
+import { Refund } from '@prisma/client';
+import ClaimRefundButton from './ClaimRefundButton';
 
 const prizeSorting = (a: GamePrize, b: GamePrize) => {
   if (a.claimedAt) {
@@ -18,7 +20,7 @@ const prizeSorting = (a: GamePrize, b: GamePrize) => {
 };
 
 export default function Notifications() {
-  const { prizeNfts, isLoading } = useUserNotifications();
+  const { prizeNfts, refunds, isLoading } = useUserNotifications();
   const sortedPrizes = prizeNfts.sort(prizeSorting);
   const { selectedPage, onNext, onPrev, pageSize } = usePagination({
     totalCount: prizeNfts.length,
@@ -38,7 +40,7 @@ export default function Notifications() {
         <Tab.Group>
           <Tab.List as='div' className='notifications-panel__tab-list'>
             <Tab className='notifications-panel__tab-item' as='button'>
-              claim prizes
+              claim prizes <span style={{ fontSize: '66%' }}>& refunds</span>
             </Tab>
           </Tab.List>
           <Tab.Panels as='div' className='notifications-panel__panels'>
@@ -72,6 +74,32 @@ export default function Notifications() {
                           <ClaimPrizeButton gamePrize={nft} />
                           <CheckSVG
                             data-claimed={!!nft.claimedAt}
+                            className='notifications-panel__td--interact-check-svg'
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                
+                {/* TODO move refund rows into paginated events above */}
+                {refunds &&
+                  refunds.map((refund: Refund) => {
+                    const dateDisplay = refund.blockTimestamp ? formatTimestampMMddHHmm(refund.blockTimestamp) : 'unclaimed';
+                    return (
+                      <tr key={refund.id} className='notifications-panel__data-row'>
+                        <td className='notifications-panel__td--creation'>
+                          <div className='notifications-panel__td-media-container'>
+                            Refund Drawing #{refund.lotteryId}
+                          </div>
+                          <span className='notifications-panel__td--creation-name'>
+                            {refund.refundableTokens} ASH
+                          </span>
+                        </td>
+                        <td className='notifications-panel__td--date'>{dateDisplay}</td>
+                        <td className='notifications-panel__td--interact'>
+                          <ClaimRefundButton refund={refund} />
+                          <CheckSVG
+                            data-claimed={!!refund.txHash}
                             className='notifications-panel__td--interact-check-svg'
                           />
                         </td>

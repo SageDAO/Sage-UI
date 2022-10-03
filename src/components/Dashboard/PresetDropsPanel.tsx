@@ -77,7 +77,7 @@ export default function PresetDropsPanel() {
                     handleCheckboxChange(drop, e.target.checked)
                   }
                 />{' '}
-                {drop.dropName} by {drop.artist.username || 'anon'}
+                {drop.dropName} by {drop.artist.username || 'anon'} ({drop.nfts.length} NFTs)
               </label>
             </div>
           );
@@ -94,6 +94,7 @@ export default function PresetDropsPanel() {
       >
         Drop duration:{' '}
         <select value={duration} onChange={handleDurationSelectChange}>
+          <option value='0.25'>15 minutes</option>
           <option value='1'>1 hour</option>
           <option value='24'>24 hours</option>
           <option value='48'>48 hours</option>

@@ -96,7 +96,7 @@ async function createPresetDrops(
   fetchWithBQ: any
 ) {
   const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
-  const startDate = Math.floor(addHours(0.5).getTime() / 1000);
+  const startDate = Math.floor(addHours(0.16).getTime() / 1000);
   const endDate = Math.floor(addHours(durationHours).getTime() / 1000);
   await checkUsersExistAndAreArtists(presetDrops, fetchWithBQ);
   for (const presetDrop of presetDrops) {
@@ -180,7 +180,7 @@ async function checkUsersExistAndAreArtists(presetDrops: PresetDrop[], fetchWith
   for (const artist of uniqueArtists) {
     if (artist.role == null) {
       // TODO CREATE USER
-    } 
+    }
     if (artist.role == Role.USER) {
       // TODO PROMOTE TO ARTIST
     }
@@ -311,35 +311,38 @@ async function deployAuctions(
   fetchWithBQ: any
 ) {
   const auctionContract = await getAuctionContract(signer);
-
+  const createParams = [];
   for (const auction of drop.Auctions) {
     if (auction.contractAddress) {
       console.log(
-        `deployAuctions() :: Auction ${auction.id} has already been deployed to ${auction.contractAddress}`
+        `deployAuctions() :: ${auction.id} has already been deployed to ${auction.contractAddress}`
       );
       continue;
     }
-
     const startTime = Math.floor(new Date(auction.startTime).getTime() / 1000);
     const endTime = Math.floor(new Date(auction.endTime).getTime() / 1000);
     const minimumPrice = ethers.utils.parseEther(auction.minimumPrice!);
-
-    console.log(
-      `deployAuctions() :: AuctionContract.createAuction(${auction.id}, ${auction.nftId}, ${minimumPrice}, ${startTime}, ${endTime}, ${artistNftContractAddress}), ${auction.Nft.metadataPath})`
-    );
-    const tx = await auctionContract.createAuction(
-      auction.id,
-      auction.nftId,
+    createParams.push({
+      auctionId: auction.id,
+      nftId: auction.nftId,
       minimumPrice,
       startTime,
       endTime,
-      artistNftContractAddress,
-      auction.Nft.metadataPath
-    );
+      nftContract: artistNftContractAddress,
+      nftUri: auction.Nft.metadataPath,
+      settled: false,
+      highestBid: 0,
+      highestBidder: ethers.constants.AddressZero,
+    });
+  }
+  if (createParams.length > 0) {
+    console.log(`deployAuctions() :: Deploying batch of ${createParams.length}...`);
+    const tx = await auctionContract.createAuctionBatch(createParams);
     await tx.wait();
-
-    const params = `id=${auction.id}&address=${auctionContract.address}`;
-    await fetchWithBQ(`drops?action=UpdateAuctionContractAddress&${params}`);
+    for (const { auctionId } of createParams) {
+      const params = `id=${auctionId}&address=${auctionContract.address}`;
+      await fetchWithBQ(`drops?action=UpdateAuctionContractAddress&${params}`);
+    }
   }
 }
 
@@ -349,46 +352,43 @@ async function deployLotteries(
   signer: Signer,
   fetchWithBQ: any
 ) {
-  const lotteryContract = await getLotteryContract(signer);
-
+  const createParams = [];
   for (const l of drop.Lotteries) {
     if (l.contractAddress) {
-      console.log(
-        `deployLotteries() :: Lottery ${l.id} has already been deployed to ${l.contractAddress}`
-      );
+      console.log(`deployLotteries() :: ${l.id} has already been deployed to ${l.contractAddress}`);
       continue;
     }
-
     const startTime = Math.floor(new Date(l.startTime).getTime() / 1000);
     const endTime = Math.floor(new Date(l.endTime).getTime() / 1000);
     const costPerTicketTokens = ethers.utils.parseEther(l.costPerTicketTokens.toString());
     const nftsSortedById = l.Nfts.sort((a, b) => a.id - b.id);
     const lowestId = nftsSortedById[0].id;
     const highestId = nftsSortedById[nftsSortedById.length - 1].id;
-
-    console.log(
-      `LotteryContract.createLottery(${l.id}, ${
-        l.costPerTicketPoints
-      }, ${costPerTicketTokens}, ${startTime}, ${endTime}, ${artistNftContractAddress}, ${
-        l.maxTickets || 0
-      }, ${l.maxTicketsPerUser || 0}, ${lowestId}, ${highestId})`
-    );
-    const tx = await lotteryContract.createLottery(
-      l.id,
-      l.costPerTicketPoints,
-      costPerTicketTokens,
+    createParams.push({
+      lotteryID: l.id,
+      ticketCostPoints: l.costPerTicketPoints,
+      ticketCostTokens: costPerTicketTokens,
       startTime,
-      endTime,
-      artistNftContractAddress,
-      l.maxTickets || 0,
-      l.maxTicketsPerUser || 0,
-      lowestId,
-      highestId
-    );
+      closeTime: endTime,
+      nftContract: artistNftContractAddress,
+      maxTickets: l.maxTickets || 0,
+      maxTicketsPerUser: l.maxTicketsPerUser || 0,
+      firstPrizeId: lowestId,
+      lastPrizeId: highestId,
+      participantsCount: 0,
+      numberOfTicketsSold: 0,
+      status: 0, // Status.Created
+    });
+  }
+  if (createParams.length > 0) {
+    console.log(`deployLotteries() :: Deploying batch of ${createParams.length}...`);
+    const lotteryContract = await getLotteryContract(signer);
+    const tx = await lotteryContract.createLotteryBatch(createParams);
     await tx.wait();
-
-    const params = `id=${l.id}&address=${lotteryContract.address}`;
-    await fetchWithBQ(`drops?action=UpdateLotteryContractAddress&${params}`);
+    for (const { lotteryID } of createParams) {
+      const params = `id=${lotteryID}&address=${lotteryContract.address}`;
+      await fetchWithBQ(`drops?action=UpdateLotteryContractAddress&${params}`);
+    }
   }
 }
 
