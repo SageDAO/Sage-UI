@@ -1,4 +1,4 @@
-import { LotteryWithNftsAndArtist } from '@/prisma/types';
+import { LotteryWithNftsAndArtist, Refund_include_Lottery } from '@/prisma/types';
 import type { GetEarnedPointsResponse } from '@/api/points';
 import {
   approveERC20Transfer,
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { pointsApi } from './pointsReducer';
 import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
-import { registerLotterySale } from '@/utilities/sales';
+import { registerLotterySale, registerRefund } from '@/utilities/sales';
 import { Refund } from '@prisma/client';
 
 export interface BuyTicketRequest {
@@ -36,11 +36,11 @@ const lotteriesApi = baseApi.injectEndpoints({
     getLotteryWinners: builder.query<string[], number>({
       query: (lotteryId: number) => `lotteries?action=GetLotteryWinners&lotteryId=${lotteryId}`,
     }),
-    getRefunds: builder.query<Refund[], void>({
+    getRefunds: builder.query<Refund_include_Lottery[], void>({
       query: () => `lotteries?action=GetRefunds`,
       providesTags: ['Refunds'],
     }),
-    getRefundByLottery: builder.query<Refund | null, number>({
+    getRefundByLottery: builder.query<Refund_include_Lottery | null, number>({
       query: (lotteryId) => `lotteries?action=GetRefund&lotteryId=${lotteryId}`,
       providesTags: ['Refunds'],
     }),
@@ -118,10 +118,18 @@ const lotteriesApi = baseApi.injectEndpoints({
     }),
     claimRefund: builder.mutation<null, { refund: Refund; signer: Signer }>({
       queryFn: async ({ refund, signer }) => {
-        const contract = await getLotteryContract(signer);
-        const wallet = await signer.getAddress();
-        const amountWei = ethers.utils.parseEther(refund.refundableTokens.toString());
-        await contract.refund(wallet, refund.lotteryId, amountWei);
+        try {
+          const contract = await getLotteryContract(signer);
+          const wallet = await signer.getAddress();
+          const amountWei = ethers.utils.parseEther(refund.refundableTokens.toString());
+          const tx = await contract.refund(wallet, refund.lotteryId, amountWei);
+          await tx.wait();
+          await registerRefund(refund.id, tx, signer);
+          toast.success('Success! Your refund has been processed.')
+        } catch (e) {
+          const errMsg = extractErrorMessage(e);
+          toast.error(`Failure! ${errMsg}`);
+        }
         return { data: null };
       },
       invalidatesTags: ['Refunds'],

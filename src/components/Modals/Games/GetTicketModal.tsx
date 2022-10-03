@@ -22,6 +22,7 @@ import shortenAddress from '@/utilities/shortenAddress';
 import Countdown from '@/components/Countdown';
 import { transformTitle } from '@/utilities/strings';
 import ClaimRefundButton from '@/components/Pages/Profile/ClaimRefundButton';
+import CheckSVG from '@/public/icons/check.svg';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -252,7 +253,14 @@ function GetTicketModal({
               {refund && (
                 <>
                   <h1 className='games-modal__winners-label'>refund</h1>
-                  <div className='games-modal__winners-list'>{refund.refundableTokens} ASH {refund.txHash ? '' : 'pending refund'} <ClaimRefundButton refund={refund} /></div>
+                  <div className='games-modal__winners-list'>
+                    {refund.refundableTokens} ASH {refund.txHash ? '' : 'available '} &nbsp; &nbsp;
+                    <ClaimRefundButton refund={refund} />
+                    <CheckSVG
+                      data-claimed={!!refund.txHash}
+                      className='notifications-panel__td--interact-check-svg'
+                    />
+                  </div>
                 </>
               )}
             </div>

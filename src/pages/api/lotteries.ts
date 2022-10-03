@@ -73,7 +73,10 @@ async function getRefund(request: NextApiRequest, response: NextApiResponse) {
     response.json([]);
     return;
   }
-  const data = await prisma.refund.findMany({ where: { buyer: walletAddress, lotteryId } });
+  const data = await prisma.refund.findMany({ 
+    where: { buyer: walletAddress, lotteryId },
+    include: { Lottery: { include: { Nfts: true } } }
+  });
   console.log(`getRefund(${walletAddress}, ${lotteryId}) :: ${data.length} refunds`);
   response.json(data.length > 0 ? data[0] : null);
 }
@@ -87,7 +90,10 @@ async function getRefunds(request: NextApiRequest, response: NextApiResponse) {
   }
   const idParam = Number(request.query.id);
   const lotteryId = isNaN(idParam) ? undefined : idParam;
-  const data = await prisma.refund.findMany({ where: { buyer: walletAddress, lotteryId } });
+  const data = await prisma.refund.findMany({ 
+    where: { buyer: walletAddress, lotteryId },
+    include: { Lottery: { include: { Nfts: true } } }
+  });
   console.log(`getRefunds(${walletAddress}) :: ${data.length} refunds`);
   response.json(data);
 }

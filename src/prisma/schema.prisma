@@ -43,7 +43,8 @@ model Lottery {
   startTime                   DateTime
   Drop                        Drop       @relation(fields: [dropId], references: [id])
   Nfts                        Nft[]
-  PrizeProofs                 PrizeProof[]   
+  PrizeProofs                 PrizeProof[]  
+  Refunds                     Refund[] 
 }
 
 model Auction {
@@ -275,7 +276,8 @@ model Refund {
   lotteryId        Int
   refundableTokens Float
   blockTimestamp   Int?
-  txHash           String? @db.Char(66)  
+  txHash           String? @db.Char(66)
+  Lottery          Lottery @relation(fields: [lotteryId], references: [id])
   @@unique([buyer,lotteryId])
 }
 

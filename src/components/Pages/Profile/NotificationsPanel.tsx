@@ -1,12 +1,11 @@
 import { Tab } from '@headlessui/react';
 import ClaimPrizeButton from './ClaimPrizeButton';
 import { formatTimestampMMddHHmm, reformatDate } from '@/utilities/strings';
-import { GamePrize } from '@/prisma/types';
+import { GamePrize, Refund_include_Lottery } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import CheckSVG from '@/public/icons/check.svg';
 import usePagination from '@/hooks/usePagination';
 import useUserNotifications from '@/hooks/useUserNotifications';
-import { Refund } from '@prisma/client';
 import ClaimRefundButton from './ClaimRefundButton';
 
 const prizeSorting = (a: GamePrize, b: GamePrize) => {
@@ -80,19 +79,25 @@ export default function Notifications() {
                       </tr>
                     );
                   })}
-                
+
                 {/* TODO move refund rows into paginated events above */}
                 {refunds &&
-                  refunds.map((refund: Refund) => {
-                    const dateDisplay = refund.blockTimestamp ? formatTimestampMMddHHmm(refund.blockTimestamp) : 'unclaimed';
+                  refunds.map((refund: any) => {
+                    const dateDisplay = refund.blockTimestamp
+                      ? formatTimestampMMddHHmm(refund.blockTimestamp)
+                      : 'unclaimed';
+                    console.log(refund);
                     return (
                       <tr key={refund.id} className='notifications-panel__data-row'>
                         <td className='notifications-panel__td--creation'>
                           <div className='notifications-panel__td-media-container'>
-                            Refund Drawing #{refund.lotteryId}
+                            <BaseMedia
+                              src={refund.Lottery.Nfts[0].s3PathOptimized}
+                              className='notifications-panel__td-media'
+                            ></BaseMedia>
                           </div>
                           <span className='notifications-panel__td--creation-name'>
-                            {refund.refundableTokens} ASH
+                            REFUND: {refund.refundableTokens} ASH
                           </span>
                         </td>
                         <td className='notifications-panel__td--date'>{dateDisplay}</td>

@@ -85,7 +85,8 @@ async function getBidHistory(auctionId: number, response: NextApiResponse) {
     for (const row of result) {
       bids.push({
         amount: row.amount,
-        bidder: row.Bidder.username ? row.Bidder.username : row.bidderAddress,
+        bidderAddress: row.bidderAddress,
+        bidderUsername: row.Bidder.username,
         blockTimestamp: row.blockTimestamp
       });
     }

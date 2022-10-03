@@ -1,6 +1,6 @@
 import { useGetBidHistoryQuery } from '@/store/auctionsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
-import { gql, useQuery } from '@apollo/client';
+// import { gql, useQuery } from '@apollo/client';
 import { ethers } from 'ethers';
 
 // interface BidHistoryItem {
@@ -46,7 +46,7 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
   return (
     <table className='games-modal__bid-history-table' data-active={isActive}>
       <tbody className='games-modal__bid-history-data'>
-        {bids.slice(0, 10).map(({ bidder, amount, blockTimestamp }) => {
+        {bids.slice(0, 10).map(({ bidderAddress, bidderUsername, amount, blockTimestamp }) => {
           // const { amountFormatted, amountFormattedShortened } = formatAmount(amount);
           const dateTime = new Date(blockTimestamp * 1000).toLocaleString();
           // const animateFirst: string = previousData ? 'true' : 'false';
@@ -61,7 +61,7 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
                 {dateTime}
               </th>
               <th data-col='bidder' className='games-modal__bid-history-cell'>
-                {isEthAddress(bidder) ? shortenAddress(bidder) : bidder}
+                {bidderUsername ? bidderUsername : bidderAddress}
               </th>
               <th data-col='amount' className='games-modal__bid-history-cell'>
                 {amount} ASH
