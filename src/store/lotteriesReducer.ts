@@ -33,8 +33,8 @@ const lotteriesApi = baseApi.injectEndpoints({
     getLottery: builder.query<LotteryWithNftsAndArtist, number>({
       query: (lotteryId: number) => `lotteries?action=GetLottery&lotteryId=${lotteryId}`,
     }),
-    getLotteryWinners: builder.query<string[], number>({
-      query: (lotteryId: number) => `lotteries?action=GetLotteryWinners&lotteryId=${lotteryId}`,
+    getWinners: builder.query<[], number>({
+      query: (lotteryId: number) => `lotteries?action=GetWinners&lotteryId=${lotteryId}`,
     }),
     getRefunds: builder.query<Refund_include_Lottery[], void>({
       query: () => `lotteries?action=GetRefunds`,
@@ -214,10 +214,10 @@ export async function setupTicketSoldListener(lotteryId: number, countUpdateCall
 
 export const {
   useGetLotteryQuery,
-  useGetLotteryWinnersQuery,
   useGetTicketCountsQuery,
   useGetRefundsQuery,
   useGetRefundByLotteryQuery,
+  useGetWinnersQuery,
   useBuyTicketsMutation,
   useClaimRefundMutation,
 } = lotteriesApi;

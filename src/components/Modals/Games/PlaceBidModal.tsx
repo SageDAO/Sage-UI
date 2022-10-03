@@ -192,7 +192,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                         data-is-open={state.shouldShowBidHistory}
                         className='games-modal__see-bid-history-icon'
                       ></ArrowRightSVG>
-                      See Bid History
+                      Bid History
                     </button>
                   </div>
                 </div>

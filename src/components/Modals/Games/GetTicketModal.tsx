@@ -6,7 +6,7 @@ import { Lottery_include_Nft } from '@/prisma/types';
 import {
   BuyTicketRequest,
   useBuyTicketsMutation,
-  useGetLotteryWinnersQuery,
+  useGetWinnersQuery,
   useGetRefundByLotteryQuery,
 } from '@/store/lotteriesReducer';
 import { useGetEarnedPointsQuery } from '@/store/pointsReducer';
@@ -68,7 +68,7 @@ function GetTicketModal({
   const isEnded = lottery.endTime.getTime() < now;
   const isActive = isStarted && !isEnded;
 
-  const { data: winners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
+  const { data: winners } = useGetWinnersQuery(lottery.id, { skip: !isEnded });
 
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   const editionsCount: number = lottery.Nfts[selectedNftIndex].numberOfEditions;
@@ -242,10 +242,10 @@ function GetTicketModal({
               )}
               {winners && winners.length > 0 && (
                 <>
-                  <h1 className='games-modal__winners-label'>winners</h1>
+                  <h1 className='games-modal__winners-label'>winner</h1>
                   <div className='games-modal__winners-list'>
-                    {winners.map((winnerAddress) => (
-                      <div key={winnerAddress}>{shortenAddress(winnerAddress)}</div>
+                    {winners.map((winner: any) => (
+                      <div key={winner}>{winner.User.username ? winner.User.username : winner.winnerAddress}</div>
                     ))}
                   </div>
                 </>
@@ -254,7 +254,7 @@ function GetTicketModal({
                 <>
                   <h1 className='games-modal__winners-label'>refund</h1>
                   <div className='games-modal__winners-list'>
-                    {refund.refundableTokens} ASH {refund.txHash ? '' : 'available '} &nbsp; &nbsp;
+                    {refund.refundableTokens} ASH &nbsp; &nbsp;
                     <ClaimRefundButton refund={refund} />
                     <CheckSVG
                       data-claimed={!!refund.txHash}

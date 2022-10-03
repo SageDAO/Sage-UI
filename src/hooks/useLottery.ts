@@ -1,4 +1,4 @@
-import { useGetLotteryWinnersQuery } from '@/store/lotteriesReducer';
+import { useGetWinnersQuery } from '@/store/lotteriesReducer';
 import { transformTitle } from '@/utilities/strings';
 import { Lottery, Nft } from '@prisma/client';
 
@@ -22,7 +22,7 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
   const selectedNftEditionsCount: number = selectedNft.numberOfEditions;
   const selectedNftName: string = transformTitle(selectedNft.name);
   const selectedNftEditionsText: string = selectedNftEditionsCount > 1 ? 'editions' : 'edition';
-  const { data: lotteryWinners } = useGetLotteryWinnersQuery(lottery.id, { skip: !isEnded });
+  const { data: lotteryWinners } = useGetWinnersQuery(lottery.id, { skip: !isEnded });
 
   return {
     isLive,
