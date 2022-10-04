@@ -10,8 +10,8 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'GetLottery':
       await getLottery(Number(request.query.lotteryId), response);
       break;
-    case 'GetLotteryWinners':
-      await getLotteryWinners(Number(request.query.lotteryId), response);
+    case 'GetWinners':
+      await getWinners(Number(request.query.lotteryId), response);
       break;
     case 'GetRefund':
       await getRefund(request, response);
@@ -46,18 +46,18 @@ async function getLottery(lotteryId: number, response: NextApiResponse) {
   }
 }
 
-async function getLotteryWinners(lotteryId: number, response: NextApiResponse) {
-  console.log(`getLotteryWinners(${lotteryId})`);
+async function getWinners(lotteryId: number, response: NextApiResponse) {
+  console.log(`getWinners(${lotteryId})`);
   if (isNaN(lotteryId)) {
     response.status(500);
   } else {
     try {
-      const winners = new Set<string>();
-      const result = await prisma.prizeProof.findMany({ where: { lotteryId } });
-      for (const w of result) {
-        winners.add(w.winnerAddress);
-      }
-      response.json(Array.from(winners));
+      const result = await prisma.prizeProof.findMany({ 
+        where: { lotteryId },
+        include: { User: true },
+        distinct: ['lotteryId', 'winnerAddress']
+      });
+      response.json(result);
     } catch (e) {
       console.log({ e });
       response.status(500);
@@ -73,7 +73,10 @@ async function getRefund(request: NextApiRequest, response: NextApiResponse) {
     response.json([]);
     return;
   }
-  const data = await prisma.refund.findMany({ where: { buyer: walletAddress, lotteryId } });
+  const data = await prisma.refund.findMany({ 
+    where: { buyer: walletAddress, lotteryId },
+    include: { Lottery: { include: { Nfts: true } } }
+  });
   console.log(`getRefund(${walletAddress}, ${lotteryId}) :: ${data.length} refunds`);
   response.json(data.length > 0 ? data[0] : null);
 }
@@ -87,7 +90,10 @@ async function getRefunds(request: NextApiRequest, response: NextApiResponse) {
   }
   const idParam = Number(request.query.id);
   const lotteryId = isNaN(idParam) ? undefined : idParam;
-  const data = await prisma.refund.findMany({ where: { buyer: walletAddress, lotteryId } });
+  const data = await prisma.refund.findMany({ 
+    where: { buyer: walletAddress, lotteryId },
+    include: { Lottery: { include: { Nfts: true } } }
+  });
   console.log(`getRefunds(${walletAddress}) :: ${data.length} refunds`);
   response.json(data);
 }

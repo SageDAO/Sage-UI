@@ -26,7 +26,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
     connectors,
   } = useSAGEAccount();
   const { pushToProfile } = useSageRoutes();
-  const showWalletSelection: boolean = Boolean(!isSignedIn);
+  const showWalletSelection: boolean = Boolean(!isWalletConnected);
   const showAuthSection: boolean = Boolean(isWalletConnected && isSignedIn);
   useSignIn(isOpen);
 

@@ -10,15 +10,35 @@ export default async function (request: NextApiRequest, response: NextApiRespons
   const session = await getSession({ req: request });
   const { address: walletAddress } = session!;
   if (!session || !walletAddress) {
-    response.status(500);
+    response.status(500).end();
     return;
   }
   switch (action) {
     case 'RegisterSale':
       await registerSale(body, response);
       break;
+    case 'RegisterRefund':
+      await registerRefund(String(walletAddress), body, response);
+      break;
   }
   response.end();
+}
+
+async function registerRefund(wallet: string, body: any, response: NextApiResponse) {
+  const id = Number(body.refundId);
+  if (isNaN(id)) {
+    response.status(500).end();
+    return;
+  }
+  const txHash = body.txHash;
+  const blockTimestamp = body.blockTimestamp;
+  const refundableResult = await prisma.refund.findMany({
+    where: { id, buyer: wallet, txHash: null }
+  });
+  if (refundableResult.length == 1) {
+    await prisma.refund.update({ where: { id }, data: { txHash, blockTimestamp }});
+  }  
+  response.status(200);
 }
 
 async function registerSale(body: any, response: NextApiResponse) {

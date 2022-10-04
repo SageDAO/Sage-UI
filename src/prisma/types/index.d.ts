@@ -18,14 +18,7 @@ export interface ArtistSales {
 // }
 
 export type Auction_include_DropNftArtist = Prisma.AuctionGetPayload<{
-  include: {
-    Nft: true;
-    Drop: {
-      include: {
-        Artist: true;
-      };
-    };
-  };
+  include: { Nft: true; Drop: { include: { Artist: true } } };
 }>;
 
 export type Auction_include_Nft = Prisma.AuctionGetPayload<{
@@ -35,11 +28,7 @@ export type Auction_include_Nft = Prisma.AuctionGetPayload<{
 export type AuctionNftWithArtist = Prisma.AuctionGetPayload<{
   include: {
     Nft: true;
-    Drop: {
-      include: {
-        Artist: true;
-      };
-    };
+    Drop: { include: { Artist: true } };
   };
 }>;
 
@@ -47,24 +36,14 @@ export type CollectedListingNft = Omit<GamePrize, 'dropId' | 'createdAt', 'uri'>
 
 export type Drop_include_GamesAndArtist = Prisma.DropGetPayload<{
   include: {
-    Lotteries: { include: { Nfts: true }};
-    Auctions: { include: { Nft: true }};
-    NftContract: {
-      include: {
-        Artist: true;
-      };
-    };
+    Lotteries: { include: { Nfts: true } };
+    Auctions: { include: { Nft: true } };
+    NftContract: { include: { Artist: true } };
   };
 }>;
 
 export type DropWithArtist = Prisma.DropGetPayload<{
-  include: {
-    NftContract: {
-      include: {
-        Artist: true;
-      };
-    };
-  };
+  include: { NftContract: { include: { Artist: true } } };
 }>;
 
 export type DropFull = Prisma.DropGetPayload<{
@@ -102,11 +81,7 @@ export type Lottery_include_Nft = Prisma.LotteryGetPayload<{
 export type LotteryWithNftsAndArtist = Prisma.LotteryGetPayload<{
   include: {
     Nfts: true;
-    Drop: {
-      include: {
-        Artist: true;
-      };
-    };
+    Drop: { include: { Artist: true } };
   };
 }>;
 
@@ -130,6 +105,10 @@ export type PrizeWithNftAndArtist = Prisma.PrizeProofGetPayload<{
       };
     };
   };
+}>;
+
+export type Refund_include_Lottery = Prisma.RefundGetPayload<{
+  include: { Lottery: { include: { Nft: true } } };
 }>;
 
 export type SafeUserUpdate = Partial<

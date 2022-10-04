@@ -63,3 +63,19 @@ export async function registerMarketplaceSale(
     }),
   });
 }
+
+export async function registerRefund(
+  refundId: number,
+  tx: ContractTransaction,
+  signer: Signer
+) {
+  await fetch(`/api/sales?action=RegisterRefund`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      refundId,
+      txHash: tx.hash,
+      blockTimestamp: (await signer.provider.getBlock(tx.blockNumber)).timestamp,
+    }),
+  });
+}
