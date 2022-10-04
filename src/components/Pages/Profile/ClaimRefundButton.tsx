@@ -2,6 +2,7 @@ import { useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Refund } from '@prisma/client';
 import { useClaimRefundMutation } from '@/store/lotteriesReducer';
+import LoaderSpinner from '@/components/LoaderSpinner';
 
 interface Props {
   refund: Refund;
@@ -32,7 +33,7 @@ export default function ClaimRefundButton({ refund }: Props) {
       onClick={handleInteractButtonClick}
       className='notifications-panel__interact-button'
     >
-      claim
+      {isClaimingRefund ? <LoaderSpinner /> : 'claim'}
     </button>
   );
 }
