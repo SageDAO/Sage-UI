@@ -8,11 +8,11 @@
 
 .artist-page__banner-section {
   display: flex;
+  position: relative;
   flex-direction: column;
-  aspect-ratio: 1196/960;
   @include m.standard-width;
+  aspect-ratio: 1495/909;
   @include b.min-width('medium') {
-    aspect-ratio: 1495/905;
   }
 }
 
@@ -162,9 +162,9 @@
 }
 
 .artist-page__socials-svg {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @include m.theme() {
     // background-color: m.t(accent);
     color: m.t(base);

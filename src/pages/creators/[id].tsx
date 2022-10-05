@@ -40,11 +40,8 @@ export default function artist({ artist }: Props) {
   return (
     <div className='artist-page' data-cy='artist-page'>
       <Logotype></Logotype>
-      <section className='artist-page__banner-section'>
-        <div className='artist-page__banner'>
-          <BaseMedia src={artist.bannerImageS3Path || '/'}></BaseMedia>
-        </div>
-      </section>
+      <Hero imgSrc={artist.bannerImageS3Path}></Hero>
+      <section className='artist-page__banner-section'></section>
       <div className='artist-page__artist-section'>
         <div className='artist-page__artist-section-flex-x'>
           <div className='artist-page__artist-section-left'>

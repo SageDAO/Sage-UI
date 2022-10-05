@@ -9,7 +9,7 @@ interface Props {
 export default function Motto({ dataColor }: Props) {
   return (
     <div className='sage-logotype__side'>
-      <MottoSVG data-color={dataColor} className='sage-logotype__motto' />
+			SAGE™️ - ACCELERATING WEB 3
     </div>
   );
 }
