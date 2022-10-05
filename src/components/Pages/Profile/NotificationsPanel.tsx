@@ -86,7 +86,6 @@ export default function Notifications() {
                     const dateDisplay = refund.blockTimestamp
                       ? formatTimestampYYMMddHHmm(refund.blockTimestamp)
                       : 'unclaimed';
-                    console.log(refund);
                     return (
                       <tr key={refund.id} className='notifications-panel__data-row'>
                         <td className='notifications-panel__td--creation'>
