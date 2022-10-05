@@ -18,7 +18,7 @@ import {
 import LoaderSpinner from '@/components/LoaderSpinner';
 import { useSession } from 'next-auth/react';
 import { parameters } from '@/constants/config';
-import { formatTimestampMMddHHmm } from '@/utilities/strings';
+import { formatTimestampYYMMddHHmm } from '@/utilities/strings';
 
 interface Props extends ModalProps {
   artist: User;
@@ -148,7 +148,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
                       return (
                         <tr key={i} data-animate-first={true}>
                           <td>{shortenAddress(o.signer)}</td>
-                          <td>{formatTimestampMMddHHmm(o.expiresAt)}</td>
+                          <td>{formatTimestampYYMMddHHmm(o.expiresAt)}</td>
                           <td>{o.price} ASH</td>
                           <td>
                             <div>

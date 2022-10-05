@@ -1,5 +1,5 @@
-import { Auction, Drop, Lottery, User } from '@prisma/client';
-import { reformatDate, transformTitle } from '@/utilities/strings';
+import { Drop, User } from '@prisma/client';
+import { formatDateYYMMddHHmm, transformTitle } from '@/utilities/strings';
 import useSageRoutes from './useSageRoutes';
 import { computeDropStatus } from '@/utilities/status';
 import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
@@ -21,7 +21,7 @@ function useDrop({ drop, artist, Lotteries, Auctions }: Args) {
   const artistName: string = transformTitle(artist.username);
   const bannerImgSrc: string = drop.bannerImageS3Path;
   const dropDescription: string = drop.description;
-  const createdAt = reformatDate(drop.createdAt);
+  const createdAt = formatDateYYMMddHHmm(drop.createdAt);
   const systemTypes = computeDropSystems({ lottery: Lotteries, auction: Auctions });
   const statusDisplay = status.toLocaleUpperCase();
   function goToDropOnClick() {

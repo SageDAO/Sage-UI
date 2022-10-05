@@ -1,6 +1,6 @@
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { formatDateMMddHHmm, reformatDate } from '@/utilities/strings';
+import { formatDateYYMMddHHmm } from '@/utilities/strings';
 
 interface NewDropDetailsModalProps extends ModalProps {
   drop: Drop_include_GamesAndArtist;
@@ -31,9 +31,9 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
                     DRAWING {lottery.id}
                     <br />
                     <br />
-                    Starts: {formatDateMMddHHmm(lottery.startTime)}
+                    Starts: {formatDateYYMMddHHmm(lottery.startTime)}
                     <br />
-                    Ends: {formatDateMMddHHmm(lottery.endTime)}
+                    Ends: {formatDateYYMMddHHmm(lottery.endTime)}
                     <br />
                     Cost: {lottery.costPerTicketTokens} ASH + {lottery.costPerTicketPoints} PIXEL
                     <br />
@@ -69,9 +69,9 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
                     AUCTION {auction.id}
                     <br />
                     <br />
-                    Starts: {formatDateMMddHHmm(auction.startTime)}
+                    Starts: {formatDateYYMMddHHmm(auction.startTime)}
                     <br />
-                    Ends: {formatDateMMddHHmm(auction.endTime)}
+                    Ends: {formatDateYYMMddHHmm(auction.endTime)}
                     <br />
                     Min Price: {auction.minimumPrice} ASH
                     <br />

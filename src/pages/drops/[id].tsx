@@ -6,12 +6,11 @@ import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';
 import { getIndividualDropsPagePaths, getIndividualDropsPageData } from '@/prisma/functions';
-import System, { computeDropSystems } from '@/components/Icons/System';
+import System from '@/components/Icons/System';
 import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
 import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
 import { useSession } from 'next-auth/react';
-import { reformatDate } from '@/utilities/strings';
 import useDrop from '@/hooks/useDrop';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 

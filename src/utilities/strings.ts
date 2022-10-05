@@ -1,6 +1,3 @@
-export function reformatDate(date: Date) {
-  return new Date(date).toISOString().split('T')[0].replaceAll('-', '.');
-}
 
 // usage: standard string manipulation through entire site for 1) drop names 2) nft names 3) game names, 4) artist names throughout app
 export function transformTitle(title: string) {
@@ -10,15 +7,15 @@ export function transformTitle(title: string) {
 /**
  * Formats a timestamp to a MM/dd HH:mm string
  */
- export function formatTimestampMMddHHmm(ts: number) {
-  return formatDateMMddHHmm(new Date(ts * 1000));
+export function formatTimestampYYMMddHHmm(ts: number) {
+  return formatDateYYMMddHHmm(new Date(ts * 1000));
 }
 
-export function formatDateMMddHHmm(date: Date) {
-  const padTo2Digits = (v: number) => v.toString().padStart(2, '0');
+export function formatDateYYMMddHHmm(date: Date) {
+  const padTo2Dig = (v: number) => v.toString().padStart(2, '0');
   const d = new Date(date);
   return (
-    `${padTo2Digits(d.getMonth() + 1)}/${padTo2Digits(d.getDate())} ` +
-    `${padTo2Digits(d.getHours())}:${padTo2Digits(d.getMinutes())}`
+    `${d.getFullYear()}/${padTo2Dig(d.getMonth() + 1)}/${padTo2Dig(d.getDate())} ` +
+    `${padTo2Dig(d.getHours())}:${padTo2Dig(d.getMinutes())}`
   );
 }

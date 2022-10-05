@@ -1,7 +1,7 @@
 import { Tab } from '@headlessui/react';
 import ClaimPrizeButton from './ClaimPrizeButton';
-import { formatTimestampMMddHHmm, reformatDate } from '@/utilities/strings';
-import { GamePrize, Refund_include_Lottery } from '@/prisma/types';
+import { formatDateYYMMddHHmm, formatTimestampYYMMddHHmm } from '@/utilities/strings';
+import { GamePrize } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import CheckSVG from '@/public/icons/check.svg';
 import usePagination from '@/hooks/usePagination';
@@ -54,7 +54,7 @@ export default function Notifications() {
               <tbody className='notifications-panel__data-list'>
                 {!isLoading &&
                   pageItems.map((nft: GamePrize) => {
-                    const dateDisplay = nft.claimedAt ? reformatDate(nft.claimedAt) : 'unclaimed';
+                    const dateDisplay = nft.claimedAt ? formatDateYYMMddHHmm(nft.claimedAt) : 'unclaimed';
                     return (
                       <tr key={nft.nftId} className='notifications-panel__data-row'>
                         <td className='notifications-panel__td--creation'>
@@ -84,7 +84,7 @@ export default function Notifications() {
                 {refunds &&
                   refunds.map((refund: any) => {
                     const dateDisplay = refund.blockTimestamp
-                      ? formatTimestampMMddHHmm(refund.blockTimestamp)
+                      ? formatTimestampYYMMddHHmm(refund.blockTimestamp)
                       : 'unclaimed';
                     console.log(refund);
                     return (
