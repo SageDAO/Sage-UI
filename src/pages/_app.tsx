@@ -56,7 +56,7 @@ function App({ Component, pageProps, router }: AppProps) {
   const [query, setQuery] = useState<string | null>(null);
   const isMaintenanceOn: boolean = process.env.NEXT_PUBLIC_MAINTENANCE_ON === 'true';
 
-  const themeContent: string = theme === 'dark' ? 'black' : 'white';
+  const themeContent: string = theme === 'dark' ? '#101010' : 'white';
   return (
     <ReduxProvider store={store}>
       <WagmiConfig client={wagmiClient}>
