@@ -1,7 +1,7 @@
 import { Lottery, Auction } from '@prisma/client';
 import LotterySVG from '@/public/icons/systems/lotteries.svg';
 import AuctionSVG from '@/public/icons/systems/auctions.svg';
-import DrawingSVG from '@/public/icons/systems/drawings.svg';
+// import DrawingSVG from '@/public/icons/systems/drawings.svg';
 
 export type SystemTypes = 'drawing' | 'auction' | 'lottery' | 'listing';
 
@@ -35,7 +35,8 @@ export default function System({ type }: Props) {
     return <AuctionSVG className='systems__svg' />;
   }
   if (type === 'drawing') {
-    return <DrawingSVG className='systems__svg' />;
+    return <LotterySVG className='systems__svg' />;
+    // return <DrawingSVG className='systems__svg' />;
   }
 
   return null;
