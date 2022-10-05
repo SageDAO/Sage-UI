@@ -7,11 +7,13 @@
   flex-direction: column;
   justify-content: flex-end;
   aspect-ratio: 322/329;
+	margin-top: 75px;
+	// @include m.header-margins;
+	// margin-bottom: 0;
   @include m.standard-width;
   @include b.min-width('medium') {
-    // aspect-ratio: none;
-    height: 583px;
     @include m.desktop-width;
+    aspect-ratio: 1495/909;
   }
 }
 
@@ -22,9 +24,9 @@
   position: absolute;
   transition-duration: 300ms;
   width: 100%;
-  aspect-ratio: 325/311;
+  // aspect-ratio: 325/311;
   @include b.min-width('medium') {
-    height: 539px;
+    aspect-ratio: 1495/909;
   }
 }
 

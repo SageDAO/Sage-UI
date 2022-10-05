@@ -35,12 +35,13 @@
   position: absolute;
   justify-content: center;
   gap: 10px;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(50%);
   @include m.theme() {
     color: m.t(contrast2);
   }
   left: -5vw;
-  height: 25vw;
+  // height: 25vw;
+  bottom: 50%;
   @include b.min-width('medium') {
     height: 256px;
   }
@@ -65,21 +66,21 @@
 
 .sage-logotype__svg {
   // flex: 1;
-	display: flex;
-	// background-color: red;
-	// width: min-content;
+  display: flex;
+  // background-color: red;
+  // width: min-content;
   justify-content: flex-start;
   // height: min(10vw, 108px);
-	height: 10vw;
-	width: 40vw;
-	// width: max-content;
-	// aspect-ratio: 165/36;
+  height: 10vw;
+  width: 40vw;
+  // width: max-content;
+  // aspect-ratio: 165/36;
   @include m.theme() {
     color: m.t(contrast2);
     @include m.data-color;
   }
-	@include b.min-width('medium') {
-		height: 4.9vw;
-	width: 19.6vw;
-	}
+  @include b.min-width('medium') {
+    height: 4.9vw;
+    width: min(19.6vw, 236px);
+  }
 }

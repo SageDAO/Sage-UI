@@ -14,6 +14,7 @@ import FollowButton from '@/components/Pages/Artists/FollowButton';
 import ArtistBalancePanel from '@/components/Pages/Artists/ArtistBalancePanel';
 import { useSession } from 'next-auth/react';
 import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
+import Logotype from '@/components/Logotype';
 
 type ListingNft = Nft_include_NftContractAndOffers;
 
@@ -38,8 +39,8 @@ export default function artist({ artist }: Props) {
 
   return (
     <div className='artist-page' data-cy='artist-page'>
+      <Logotype></Logotype>
       <section className='artist-page__banner-section'>
-        <SageFullLogoSVG className='artist-page__banner-section-svg'></SageFullLogoSVG>
         <div className='artist-page__banner'>
           <BaseMedia src={artist.bannerImageS3Path || '/'}></BaseMedia>
         </div>

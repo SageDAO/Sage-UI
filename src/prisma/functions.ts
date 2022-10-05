@@ -38,9 +38,19 @@ export async function getHomePageData(prisma: PrismaClient) {
   const config = await prisma.config.findFirst({
     include: { FeaturedDrop: { include: dropIncludes } },
   });
+  const latestArtists = await prisma.user.findMany({
+    where: { role: Role.ARTIST },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+  });
+  const newArtworks = await prisma.nft.findMany({
+    take: 5,
+    include: { NftContract: { include: { Artist: true } } },
+  });
+
   const welcomeMessage = config ? config.welcomeMessage : '';
   const featuredDrop = config && config.FeaturedDrop ? config.FeaturedDrop : drops[0];
-  return { featuredDrop, upcomingDrops: drops, drops, welcomeMessage };
+  return { featuredDrop, upcomingDrops: drops, drops, welcomeMessage, latestArtists, newArtworks };
 }
 
 export async function getDropsPageData(prisma: PrismaClient) {
@@ -152,14 +162,14 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
     where "u"."role" = 'ARTIST'`;
   var result = await prisma.$queryRaw(Prisma.raw(query));
   for (const row of result as any) {
-    salesData.set(row.walletAddress, <ArtistSales>{
+    salesData.set(row.walletAddress, (<ArtistSales>{
       username: String(row.username),
       walletAddress: String(row.walletAddress),
       nftCountTotal: Number(row.nftCount),
       amountTotalUSD: 0,
       highestSaleUSD: 0,
       profilePicture: row.profilePicture,
-    } as ArtistSales);
+    }) as ArtistSales);
   }
 
   // query sales statistics
@@ -167,7 +177,6 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
     select "seller", sum(coalesce("amountUSD", 0)) as "amount"
     from "SaleEvent" group by ("eventType", "eventId", "seller")`;
   result = await prisma.$queryRaw(Prisma.raw(query));
-	console.log(result);
   for (const row of result as any) {
     const item = salesData.get(row.seller);
     item.amountTotalUSD += row.amount;

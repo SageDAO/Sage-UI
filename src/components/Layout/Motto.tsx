@@ -6,11 +6,10 @@ interface Props {
   dataColor?: string;
 }
 
-export default function DestroyingFakes({ dataColor }: Props) {
+export default function Motto({ dataColor }: Props) {
   return (
     <div className='sage-logotype__side'>
       <MottoSVG data-color={dataColor} className='sage-logotype__motto' />
-      <SageIconSVG data-color={dataColor} className='sage-logotype__sage-icon' />
     </div>
   );
 }

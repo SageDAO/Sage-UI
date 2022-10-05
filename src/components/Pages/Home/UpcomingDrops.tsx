@@ -61,30 +61,12 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
         const display =
           status === 'Upcoming' ? <Countdown endTime={startTime} /> : status.toUpperCase();
         return (
-          <div
-            data-span2={String(shouldTileSpanTwoColumns)}
-            className='home-page__upcoming-drops-tile'
-            key={d.id}
-            onClick={onClick}
-          >
-            {status !== 'Done' && (
-              <div className='home-page__upcoming-drops-countdown' data-status={status}>
-                {display}
-              </div>
-            )}
-
-            <BaseMedia src={src} />
-            <h1 className='home-page__upcoming-drops-tile-tag'>
-              <mark className='home-page__upcoming-drops-tile-tag-item'>
-                <i className='home-page__upcoming-drops-tile-tag-item-name'>
-                  {transformTitle(d.name)}
-                </i>
-                , by {d.NftContract.Artist.username}
-              </mark>
-              <br />
-              <mark className='home-page__upcoming-drops-tile-tag-item'>SAGE-Curated</mark>
-            </h1>
-          </div>
+          <UpcomingDropsTile
+            Lotteries={d.Lotteries}
+            Auctions={d.Auctions}
+            drop={d}
+            artist={d.NftContract.Artist}
+          />
         );
       })}
     </div>
@@ -104,7 +86,7 @@ function UpcomingDropsTile(props: UpcomingDropsTileProps) {
     dropName,
   } = useDrop(props);
   return (
-    <div className='home-page__upcoming-drops-tile--mobile' onClick={goToDropOnClick}>
+    <div className='home-page__upcoming-drops-tile' onClick={goToDropOnClick}>
       {dropStatus !== 'Done' && (
         <div className='home-page__upcoming-drops-countdown' data-status={dropStatus}>
           {dropStatus === 'Upcoming' ? <Countdown endTime={startTime} /> : statusDisplay}
@@ -112,12 +94,10 @@ function UpcomingDropsTile(props: UpcomingDropsTileProps) {
       )}
       <BaseMedia src={bannerImgSrc} />
       <h3 className='home-page__upcoming-drops-tile-tag'>
-        <mark className='home-page__upcoming-drops-tile-tag-item'>
-          <i className='home-page__upcoming-drops-tile-tag-item-name'>{dropName}</i>, by{' '}
-          {artistName}
-        </mark>
-        <br />
-        <mark className='home-page__upcoming-drops-tile-tag-item'>SAGE-Curated</mark>
+        <span className='home-page__upcoming-drops-tile-tag-item'>
+          <i className='home-page__upcoming-drops-tile-tag-item-name'>{dropName}</i>
+          <pre /> by {artistName}
+        </span>
       </h3>
     </div>
   );
