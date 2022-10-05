@@ -36,7 +36,7 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
       <div className='dashboard__user-details-modal'>
         <section className='games-modal__header'>
           {/* hidden button so browser won't complain about not having a focusable element inside the modal */}
-          <button style={{ background: 'transparent', outline: '0px' }}></button>
+          <button style={{ background: 'transparent', outline: 'none' }}></button>
           <CloseSVG onClick={closeModal} className='games-modal__close-button' />
         </section>
         <section className='games-modal__body'>
