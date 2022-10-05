@@ -76,7 +76,8 @@ const auctionsApi = baseApi.injectEndpoints({
           const blockTs = (await signer.provider.getBlock(tx.blockNumber)).timestamp;
           await fetchWithBQ(`auctions?action=SaveBid&id=${auctionId}&amt=${amount}&ts=${blockTs}`);
         } catch (e) {
-          toast.error('Error placing bid');
+          const errMsg = extractErrorMessage(e);
+          toast.error(`Failure! ${errMsg}`);
           console.error(e);
         }
         return { data: null };
