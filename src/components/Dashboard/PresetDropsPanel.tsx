@@ -105,11 +105,17 @@ export default function PresetDropsPanel() {
         <br />
         <br />
         <button
-          disabled={isCreating}
+          disabled={isCreating || selectedDrops.length == 0}
           className='games-modal__place-bid-button'
           onClick={handleCreateDropsButtonClick}
         >
-          {isCreating ? <LoaderSpinner /> : 'create selected drops'}
+          {isCreating ? (
+            <LoaderSpinner />
+          ) : selectedDrops.length == 0 ? (
+            'select one or more drops'
+          ) : (
+            `create ${selectedDrops.length} selected drop${selectedDrops.length > 1 ? 's' : ''}`
+          )}
         </button>
       </div>
     </>
