@@ -1,17 +1,48 @@
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { useGetGamesSalesEventsQuery } from '@/store/dashboardReducer';
 import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
+import { gql, useQuery } from '@apollo/client';
 import { utils } from 'ethers';
 import { toast } from 'react-toastify';
 import Countdown from '../Countdown';
 import LoaderDots from '../LoaderDots';
 
+const GAMES_QUERY = gql`
+  query GetGames {
+    lotteries {
+      id
+      status
+      tickets {
+        id
+        txnHash
+        address
+      }
+      claimedPrizes {
+        id
+        txnHash
+      }
+    }
+    auctions {
+      id
+      status
+      highestBid
+      highestBidder
+      endTime
+      bids {
+        id
+        txnHash
+        bidder
+        amount
+        blockTimestamp
+      }
+    }
+  }
+`;
+
 export function GamesStatsPanel() {
-  const { data: drops, isLoading: isLoadingDrops } = useGetApprovedDropsQuery();
-  const { data: sales, isLoading: isLoadingSales } = useGetGamesSalesEventsQuery(undefined, {
-    pollingInterval: 60000, // refetch sales data every 60 seconds
-  });
+  const { data: drops, isFetching: isLoadingFromDB } = useGetApprovedDropsQuery();
+  const { loading: isLoadingFromSubgraph, data: graphData, startPolling } = useQuery(GAMES_QUERY);
+  startPolling(3000);
 
   function download(filename: string, filecontents: string) {
     var element = document.createElement('a');
@@ -29,28 +60,26 @@ export function GamesStatsPanel() {
   function downloadTickets(lotteryId: number) {
     const lotteryIdHexStr = '0x' + lotteryId.toString(16);
     var filecontents = 'txnHash,wallet';
-    // TODO use db data instead of graph
-    // graphData.lotteries.forEach((lotto: any) => {
-    //   if (lotteryIdHexStr == lotto.id) {
-    //     lotto.tickets.forEach((item: any) => {
-    //       filecontents += `\n${item.txnHash},${item.address}`;
-    //     });
-    //   }
-    // });
+    graphData.lotteries.forEach((lotto: any) => {
+      if (lotteryIdHexStr == lotto.id) {
+        lotto.tickets.forEach((item: any) => {
+          filecontents += `\n${item.txnHash},${item.address}`;
+        });
+      }
+    });
     download(`lottery_${lotteryId}_tickets_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
   }
 
   function downloadBids(auctionId: number) {
     const auctionIdHexStr = '0x' + auctionId.toString(16);
     var filecontents = 'txnHash,blockTimestamp,wallet,amount';
-    // TODO use db data instead of graph
-    // graphData.auctions.forEach((auction: any) => {
-    //   if (auctionIdHexStr == auction.id) {
-    //     auction.bids.forEach((item: any) => {
-    //       filecontents += `\n${item.txnHash},${item.blockTimestamp},${item.bidder},${item.amount}`;
-    //     });
-    //   }
-    // });
+    graphData.auctions.forEach((auction: any) => {
+      if (auctionIdHexStr == auction.id) {
+        auction.bids.forEach((item: any) => {
+          filecontents += `\n${item.txnHash},${item.blockTimestamp},${item.bidder},${item.amount}`;
+        });
+      }
+    });
     download(`auction_${auctionId}_bids_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
   }
 
@@ -77,19 +106,19 @@ export function GamesStatsPanel() {
     download(`lottery_${lotteryId}_prizes_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
   }
 
-  if (isLoadingDrops || isLoadingSales) {
+  if (isLoadingFromDB || isLoadingFromSubgraph) {
     return <LoaderDots />;
   }
   const getLotteryGameStats = (id: number) => {
-    // for (let lottery of graphData.lotteries) {
-    //   if (parseInt(lottery.id) == id) return lottery;
-    // }
+    for (let lottery of graphData.lotteries) {
+      if (parseInt(lottery.id) == id) return lottery;
+    }
     return {};
   };
   const getAuctionGameStats = (id: number) => {
-    // for (let auction of graphData.auctions) {
-    //   if (parseInt(auction.id) == id) return auction;
-    // }
+    for (let auction of graphData.auctions) {
+      if (parseInt(auction.id) == id) return auction;
+    }
     return {};
   };
   return (
@@ -110,22 +139,30 @@ export function GamesStatsPanel() {
                 {drop.Lotteries.map((lottery, i) => {
                   const stats = getLotteryGameStats(lottery.id);
                   return (
-                    <tr key={i} style={{ border: '1px solid gray', height: '100px' }}>
+                    <tr key={i} style={{ border: '1px solid gray', height: '140px' }}>
                       <td>
                         lottery <span className='dashboard-game-stats__id'>{lottery.id}</span>
                         <br />
-                        {new Date(lottery.endTime).getTime() > new Date().getTime() ? (
+                        status: {stats.status} <br />
+                        {stats.status === 'Created' &&
+                        new Date(lottery.endTime).getTime() > new Date().getTime() ? (
                           <Countdown
                             className='status__countdown'
                             endTime={new Date(lottery.endTime).getTime()}
                           />
                         ) : (
-                          `end date: ${new Date(lottery.endTime).toLocaleString()}`
+                          `end: ${new Date(lottery.endTime).toLocaleString()}`
                         )}
-                        {/* stats.tickets?.length > 0 && downloadIcon(() => downloadTickets(lottery.id)) */}
+                        {stats.tickets?.length > 0 && downloadIcon(() => downloadTickets(lottery.id))}
                       </td>
                       <td>
-                        tickets sold: {/*stats.tickets?.length || 0*/} <br />
+                        tickets sold: {stats.tickets?.length || 0} <br />
+                        revenue (points):{' '}
+                        {(stats.tickets?.length || 0) * lottery.costPerTicketPoints} PIXEL
+                        <br />
+                        revenue (tokens):{' '}
+                        {(stats.tickets?.length || 0) * lottery.costPerTicketTokens} ASH <br />
+                        prizes claimed: {stats.claimedPrizes?.length || 0}
                       </td>
                     </tr>
                   );
@@ -138,28 +175,30 @@ export function GamesStatsPanel() {
               <tbody>
                 {drop.Auctions.map((auction, i) => {
                   const stats = getAuctionGameStats(auction.id);
-                  if ('' == null) {
+                  if (stats.endTime == null) {
                     var endTime = Math.floor(new Date(auction.endTime).getTime() / 1000);
                   } else {
-                    var endTime = Number(new Date().getTime() / 1000);
+                    var endTime = Number(stats.endTime);
                   }
                   return (
-                    <tr key={i} style={{ border: '1px solid gray', height: '100px' }}>
+                    <tr key={i} style={{ border: '1px solid gray', height: '140px' }}>
                       <td style={{}}>
                         auction <span className='dashboard-game-stats__id'>{auction.id}</span>{' '}
                         <br />
-                        {endTime > new Date().getTime() ? (
+                        status: {stats.status}
+                        <br />
+                        {stats.status === 'Created' && endTime > new Date().getTime() ? (
                           <Countdown className='status__countdown' endTime={endTime * 1000} />
                         ) : (
                           `end: ${new Date(endTime * 1000).toLocaleString()}`
                         )}
-                        {/*stats.bids?.length > 0 && downloadIcon(() => downloadBids(auction.id))*/}
+                        {stats.bids?.length > 0 && downloadIcon(() => downloadBids(auction.id))}
                       </td>
                       <td>
-                        bids: {0} <br />
-                        highest bid: {0} ASH
+                        bids: {stats.bids?.length || 0} <br />
+                        highest bid: {utils.formatUnits(stats.highestBid || 0)} ASH
                         <br />
-                        highest bidder: {shortenAddress('')}
+                        highest bidder: {shortenAddress(stats.highestBidder)}
                       </td>
                     </tr>
                   );

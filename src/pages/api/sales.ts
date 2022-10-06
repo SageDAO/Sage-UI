@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import prisma from '@/prisma/client';
+import { SaleEventType } from '@prisma/client';
 
 export default async function (request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -20,6 +21,9 @@ export default async function (request: NextApiRequest, response: NextApiRespons
     case 'RegisterRefund':
       await registerRefund(String(walletAddress), body, response);
       break;
+    case 'GetGamesSalesEvents':
+      await getGamesSalesEvents(response);
+      break;
   }
   response.end();
 }
@@ -33,11 +37,11 @@ async function registerRefund(wallet: string, body: any, response: NextApiRespon
   const txHash = body.txHash;
   const blockTimestamp = body.blockTimestamp;
   const refundableResult = await prisma.refund.findMany({
-    where: { id, buyer: wallet, txHash: null }
+    where: { id, buyer: wallet, txHash: null },
   });
   if (refundableResult.length == 1) {
-    await prisma.refund.update({ where: { id }, data: { txHash, blockTimestamp }});
-  }  
+    await prisma.refund.update({ where: { id }, data: { txHash, blockTimestamp } });
+  }
   response.status(200);
 }
 
@@ -62,6 +66,16 @@ async function registerSale(body: any, response: NextApiResponse) {
     },
   });
   response.status(200);
+}
+
+async function getGamesSalesEvents(response: NextApiResponse) {
+  console.log('getGamesSalesEvents()');
+  const result = await prisma.saleEvent.findMany({
+    where: {
+      OR: [{ eventType: SaleEventType.AUCTION }, { eventType: SaleEventType.LOTTERY }],
+    },
+  });
+  response.json(result);
 }
 
 async function findArtistAddress(eventType: string, eventId: number) {

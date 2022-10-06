@@ -2,6 +2,7 @@ import { getStorageContract } from '@/utilities/contracts';
 import { User_include_EarnedPointsAndNftContracts } from '@/prisma/types';
 import { ethers, Signer } from 'ethers';
 import { baseApi } from './baseReducer';
+import { SaleEvent } from '@prisma/client';
 
 export interface LotteryParticipant {
   walletAddress: string;
@@ -33,6 +34,9 @@ const dashboardApi = baseApi.injectEndpoints({
     getConfig: builder.query<{ featuredDropId: number; welcomeMessage: string }, void>({
       query: () => `config`,
       providesTags: ['Config'],
+    }),
+    getGamesSalesEvents: builder.query<SaleEvent[], void>({
+      query: () => `sales?action=GetGamesSalesEvents`
     }),
     promoteUserToAdmin: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
       queryFn: async ({ walletAddress, signer }, {}, _, fetchWithBQ) => {
@@ -74,6 +78,7 @@ const dashboardApi = baseApi.injectEndpoints({
 export const {
   useGetAllUsersAndEarnedPointsQuery,
   useGetConfigQuery,
+  useGetGamesSalesEventsQuery,
   usePromoteUserToAdminMutation,
   usePromoteUserToArtistMutation,
   useUpdateConfigMutation,
