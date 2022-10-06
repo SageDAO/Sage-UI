@@ -1,16 +1,16 @@
 import { Drop_include_GamesAndArtist } from '@/prisma/types';
-import { useGetGamesSalesEventsQuery } from '@/store/dashboardReducer';
+import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
+import { useGetSalesEventsQuery } from '@/store/dashboardReducer';
 import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
-import { utils } from 'ethers';
-import { toast } from 'react-toastify';
+import { SaleEvent, SaleEventType } from '@prisma/client';
 import Countdown from '../Countdown';
 import LoaderDots from '../LoaderDots';
 
 export function GamesStatsPanel() {
   const { data: drops, isLoading: isLoadingDrops } = useGetApprovedDropsQuery();
-  const { data: sales, isLoading: isLoadingSales } = useGetGamesSalesEventsQuery(undefined, {
-    pollingInterval: 60000, // refetch sales data every 60 seconds
+  const { data: sales, isLoading: isLoadingSales } = useGetSalesEventsQuery(undefined, {
+    pollingInterval: 120000, // refetch sales data every two minutes
   });
 
   function download(filename: string, filecontents: string) {
@@ -28,15 +28,10 @@ export function GamesStatsPanel() {
 
   function downloadTickets(lotteryId: number) {
     const lotteryIdHexStr = '0x' + lotteryId.toString(16);
-    var filecontents = 'txnHash,wallet';
-    // TODO use db data instead of graph
-    // graphData.lotteries.forEach((lotto: any) => {
-    //   if (lotteryIdHexStr == lotto.id) {
-    //     lotto.tickets.forEach((item: any) => {
-    //       filecontents += `\n${item.txnHash},${item.address}`;
-    //     });
-    //   }
-    // });
+    var filecontents = 'txnHash,wallet,amount';
+    getLotterySales(lotteryId).forEach((ticket: SaleEvent) => {
+      filecontents += `\n${ticket.txHash},${ticket.buyer},${ticket.amountTokens}`;
+    });
     download(`lottery_${lotteryId}_tickets_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
   }
 
@@ -54,37 +49,17 @@ export function GamesStatsPanel() {
     download(`auction_${auctionId}_bids_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
   }
 
-  async function downloadPrizes(lotteryId: number) {
-    var filecontents = 'nftId,winnerAddress,createdAt,claimedAt';
-    var request = fetch(`/api/prizes?action=GetLotteryPrizes&lotteryId=${lotteryId}`);
-    toast.promise(request, {
-      pending: 'Retrieving prize data...',
-      success: 'Success! File ready for download.',
-      error: 'Failure! Unable to complete request.',
-    });
-    let prizeProofEntries: any = await (await request).json();
-    prizeProofEntries.forEach((item: any) => {
-      filecontents +=
-        '\r\n' +
-        item.nftId +
-        ',' +
-        item.winnerAddress +
-        ',' +
-        item.createdAt +
-        ',' +
-        item.claimedAt;
-    });
-    download(`lottery_${lotteryId}_prizes_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
-  }
-
   if (isLoadingDrops || isLoadingSales) {
     return <LoaderDots />;
   }
-  const getLotteryGameStats = (id: number) => {
-    // for (let lottery of graphData.lotteries) {
-    //   if (parseInt(lottery.id) == id) return lottery;
-    // }
-    return {};
+  const getLotterySales = (id: number): SaleEvent[] => {
+    const tickets = [];
+    for (let e of sales) {
+      if (e.eventType == SaleEventType.LOTTERY && e.eventId == id) {
+        tickets.push(e);
+      }
+    }
+    return tickets;
   };
   const getAuctionGameStats = (id: number) => {
     // for (let auction of graphData.auctions) {
@@ -108,11 +83,11 @@ export function GamesStatsPanel() {
             <table width='500'>
               <tbody>
                 {drop.Lotteries.map((lottery, i) => {
-                  const stats = getLotteryGameStats(lottery.id);
+                  const saleEvents = getLotterySales(lottery.id);
                   return (
-                    <tr key={i} style={{ border: '1px solid gray', height: '100px' }}>
-                      <td>
-                        lottery <span className='dashboard-game-stats__id'>{lottery.id}</span>
+                    <tr key={i} style={{ border: '1px solid gray', height: '95px' }}>
+                      <td style={{ verticalAlign: 'middle' }}>
+                        drawing <span className='dashboard-game-stats__id'>{lottery.id}</span>
                         <br />
                         {new Date(lottery.endTime).getTime() > new Date().getTime() ? (
                           <Countdown
@@ -122,10 +97,10 @@ export function GamesStatsPanel() {
                         ) : (
                           `end date: ${new Date(lottery.endTime).toLocaleString()}`
                         )}
-                        {/* stats.tickets?.length > 0 && downloadIcon(() => downloadTickets(lottery.id)) */}
                       </td>
-                      <td>
-                        tickets sold: {/*stats.tickets?.length || 0*/} <br />
+                      <td style={{ verticalAlign: 'middle' }}>
+                        entries sold: <span style={{ fontWeight: 'bold' }}>{saleEvents.length}</span>
+                        { saleEvents.length > 0 && downloadIcon(() => downloadTickets(lottery.id)) }
                       </td>
                     </tr>
                   );
@@ -144,22 +119,19 @@ export function GamesStatsPanel() {
                     var endTime = Number(new Date().getTime() / 1000);
                   }
                   return (
-                    <tr key={i} style={{ border: '1px solid gray', height: '100px' }}>
-                      <td style={{}}>
-                        auction <span className='dashboard-game-stats__id'>{auction.id}</span>{' '}
+                    <tr key={i} style={{ border: '1px solid gray', height: '95px' }}>
+                      <td style={{ verticalAlign: 'middle' }}>
+                        auction <span className='dashboard-game-stats__id'>{auction.id}</span>
                         <br />
                         {endTime > new Date().getTime() ? (
                           <Countdown className='status__countdown' endTime={endTime * 1000} />
                         ) : (
-                          `end: ${new Date(endTime * 1000).toLocaleString()}`
+                          `end date: ${new Date(endTime * 1000).toLocaleString()}`
                         )}
                         {/*stats.bids?.length > 0 && downloadIcon(() => downloadBids(auction.id))*/}
                       </td>
-                      <td>
-                        bids: {0} <br />
-                        highest bid: {0} ASH
-                        <br />
-                        highest bidder: {shortenAddress('')}
+                      <td style={{ verticalAlign: 'middle' }}>
+                        {auctionContractState(auction.id)}
                       </td>
                     </tr>
                   );
@@ -173,13 +145,21 @@ export function GamesStatsPanel() {
   );
 }
 
+function auctionContractState(id: number) {
+  const {data} = useGetAuctionStateQuery(id);
+  if (data) {
+    return <>highest bid: {data.highestBidNumber} ASH<br/>by {shortenAddress(data.highestBidder)}</>;
+  }
+  return '';
+}
+
 function downloadIcon(callback: any) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <div
         style={{
           backgroundColor: '#161619',
-          width: '20px',
+          width: '10px',
           padding: '3px',
           borderRadius: '3px',
           marginTop: '5px',

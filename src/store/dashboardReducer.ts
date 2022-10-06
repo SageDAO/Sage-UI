@@ -4,26 +4,6 @@ import { ethers, Signer } from 'ethers';
 import { baseApi } from './baseReducer';
 import { SaleEvent } from '@prisma/client';
 
-export interface LotteryParticipant {
-  walletAddress: string;
-  numTicketsPoints: number;
-  numTicketsCoins: number;
-}
-
-export interface LotteryStats {
-  lotteryId: number;
-  dropId: number;
-  closeTime: number;
-  status: number;
-  ticketCostPoints: string;
-  ticketCostCoins: string;
-  numTicketsPoints: number;
-  numTicketsCoins: number;
-  participants: LotteryParticipant[];
-  prizesDrawn?: number;
-  prizesClaimed?: number;
-}
-
 const dashboardApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -35,8 +15,8 @@ const dashboardApi = baseApi.injectEndpoints({
       query: () => `config`,
       providesTags: ['Config'],
     }),
-    getGamesSalesEvents: builder.query<SaleEvent[], void>({
-      query: () => `sales?action=GetGamesSalesEvents`
+    getSalesEvents: builder.query<SaleEvent[], void>({
+      query: () => `sales?action=GetSalesEvents`
     }),
     promoteUserToAdmin: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
       queryFn: async ({ walletAddress, signer }, {}, _, fetchWithBQ) => {
@@ -78,7 +58,7 @@ const dashboardApi = baseApi.injectEndpoints({
 export const {
   useGetAllUsersAndEarnedPointsQuery,
   useGetConfigQuery,
-  useGetGamesSalesEventsQuery,
+  useGetSalesEventsQuery,
   usePromoteUserToAdminMutation,
   usePromoteUserToArtistMutation,
   useUpdateConfigMutation,

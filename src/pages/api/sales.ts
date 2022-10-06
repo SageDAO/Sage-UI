@@ -21,8 +21,8 @@ export default async function (request: NextApiRequest, response: NextApiRespons
     case 'RegisterRefund':
       await registerRefund(String(walletAddress), body, response);
       break;
-    case 'GetGamesSalesEvents':
-      await getGamesSalesEvents(response);
+    case 'GetSalesEvents':
+      await getSalesEvents(response);
       break;
   }
   response.end();
@@ -68,13 +68,9 @@ async function registerSale(body: any, response: NextApiResponse) {
   response.status(200);
 }
 
-async function getGamesSalesEvents(response: NextApiResponse) {
-  console.log('getGamesSalesEvents()');
-  const result = await prisma.saleEvent.findMany({
-    where: {
-      OR: [{ eventType: SaleEventType.AUCTION }, { eventType: SaleEventType.LOTTERY }],
-    },
-  });
+async function getSalesEvents(response: NextApiResponse) {
+  console.log('getSalesEvents()');
+  const result = await prisma.saleEvent.findMany({});
   response.json(result);
 }
 
