@@ -320,12 +320,12 @@ async function deleteDrops(response: NextApiResponse) {
   }
   await prisma.config.updateMany({ where: {}, data: { featuredDropId: null } });
   await prisma.saleEvent.deleteMany();
+  await prisma.refund.deleteMany();
   await prisma.prizeProof.deleteMany();
   await prisma.offer.deleteMany();
   await prisma.auction.deleteMany();
   await prisma.nft.deleteMany();
   await prisma.lottery.deleteMany();
-  await prisma.nft.deleteMany();
   await prisma.drop.deleteMany();
 }
 
