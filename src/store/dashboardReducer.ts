@@ -34,6 +34,16 @@ const dashboardApi = baseApi.injectEndpoints({
       query: () => `config`,
       providesTags: ['Config'],
     }),
+    promoteUserToAdmin: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
+      queryFn: async ({ walletAddress, signer }, {}, _, fetchWithBQ) => {
+        const contract = await getStorageContract(signer);
+        const tx = await contract.grantAdmin(walletAddress);
+        await tx.wait();
+        await fetchWithBQ(`user?action=PromoteToAdmin&address=${walletAddress}`);
+        return { data: true };
+      },
+      invalidatesTags: ['AllUsers'],
+    }),
     promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
       queryFn: async ({ walletAddress, signer }, {}, _, fetchWithBQ) => {
         const contract = await getStorageContract(signer);
@@ -64,6 +74,7 @@ const dashboardApi = baseApi.injectEndpoints({
 export const {
   useGetAllUsersAndEarnedPointsQuery,
   useGetConfigQuery,
+  usePromoteUserToAdminMutation,
   usePromoteUserToArtistMutation,
   useUpdateConfigMutation,
 } = dashboardApi;

@@ -32,7 +32,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           await getAllUsersAndEarnedPoints(res);
           break;
         case 'PromoteToArtist':
-          await promoteToArtist(String(req.query.address), res);
+          await promoteToArtist(String(walletAddress), String(req.query.address), res);
+          break;
+        case 'PromoteToAdmin':
+          await promoteToAdmin(String(walletAddress), String(req.query.address), res);
           break;
         case 'GetIsFollowing':
           await getIsFollowing(String(walletAddress), res);
@@ -139,15 +142,44 @@ async function updateUser(user: SafeUserUpdate, walletAddress: string, res: Next
   }
 }
 
-async function promoteToArtist(walletAddress: string, res: NextApiResponse) {
-  console.log(`promoteToArtist(${walletAddress})`);
+async function requireAdmin(walletAddress: string) {
+  const user = await prisma.user.findUnique({
+    where: { walletAddress },
+  });
+  if (!user || user.role != Role.ADMIN) {
+    throw new Error(`This function requires ADMIN privileges`);
+  }
+}
+
+async function promoteToArtist(signerAddress: string, walletAddress: string, res: NextApiResponse) {
+  console.log(`promoteToArtist(${signerAddress}, ${walletAddress})`);
   try {
+    requireAdmin(signerAddress);
     const updatedUser = await prisma.user.update({
       where: {
         walletAddress,
       },
       data: {
         role: Role.ARTIST,
+      },
+    });
+    res.status(200).json({ success: !!updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).end();
+  }
+}
+
+async function promoteToAdmin(signerAddress: string, walletAddress: string, res: NextApiResponse) {
+  console.log(`promoteToAdmin(${signerAddress}, ${walletAddress})`);
+  try {
+    requireAdmin(signerAddress);
+    const updatedUser = await prisma.user.update({
+      where: {
+        walletAddress,
+      },
+      data: {
+        role: Role.ADMIN,
       },
     });
     res.status(200).json({ success: !!updatedUser });

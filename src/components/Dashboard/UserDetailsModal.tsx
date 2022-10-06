@@ -2,7 +2,10 @@ import { useGetPointsBalanceByUserQuery } from '@/store/pointsReducer';
 import Modal, { Props as ModalProps } from '@/components/Modals';
 import { PfpImage } from '@/components/Media/BaseMedia';
 import { User_include_EarnedPoints } from '@/prisma/types';
-import { usePromoteUserToArtistMutation } from '@/store/dashboardReducer';
+import {
+  usePromoteUserToAdminMutation,
+  usePromoteUserToArtistMutation,
+} from '@/store/dashboardReducer';
 import LoaderSpinner from '../LoaderSpinner';
 import { useBalance, useSigner } from 'wagmi';
 import { Signer } from 'ethers';
@@ -18,7 +21,8 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
   const { data: pointsBalance } = useGetPointsBalanceByUserQuery(userData?.walletAddress, {
     skip: !userData,
   });
-  const [promoteUserToArtist, { isLoading: isPromoting }] = usePromoteUserToArtistMutation();
+  const [promoteUserToArtist, { isLoading: isPromotingToArtist }] = usePromoteUserToArtistMutation();
+  const [promoteUserToAdmin, { isLoading: isPromotingToAdmin }] = usePromoteUserToAdminMutation();
   const { data: walletBalance } = useBalance({
     token: parameters.ASHTOKEN_ADDRESS,
     addressOrName: userData?.walletAddress,
@@ -29,6 +33,12 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
 
   async function handlePromoteToArtistClick(walletAddress: string) {
     await promoteUserToArtist({ walletAddress, signer: signer as Signer });
+  }
+
+  async function handlePromoteToAdminClick(walletAddress: string) {
+    if (confirm(`Confirm promoting ${walletAddress} to ADMIN?`)) {
+      await promoteUserToAdmin({ walletAddress, signer: signer as Signer });
+    }
   }
 
   return (
@@ -80,14 +90,24 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
                 }
               </div>
               {userData?.role == 'USER' && userData?.username && (
-                <button
-                  disabled={isPromoting}
-                  onClick={() => handlePromoteToArtistClick(userData?.walletAddress!)}
-                  className='btn-place-bid'
-                  style={{ marginTop: '20px', lineHeight: '40px' }}
-                >
-                  {isPromoting ? <LoaderSpinner /> : 'Promote to ARTIST'}
-                </button>
+                <>
+                  <button
+                    disabled={isPromotingToAdmin || isPromotingToArtist}
+                    onClick={() => handlePromoteToArtistClick(userData?.walletAddress!)}
+                    className='btn-place-bid'
+                    style={{ marginTop: '20px', lineHeight: '40px' }}
+                  >
+                    {isPromotingToAdmin || isPromotingToArtist ? <LoaderSpinner /> : 'Promote to ARTIST'}
+                  </button>
+                  <button
+                    disabled={isPromotingToAdmin || isPromotingToArtist}
+                    onClick={() => handlePromoteToAdminClick(userData?.walletAddress!)}
+                    className='btn-place-bid'
+                    style={{ marginTop: '20px', lineHeight: '40px' }}
+                  >
+                    {isPromotingToAdmin || isPromotingToArtist ? <LoaderSpinner /> : 'Promote to ADMIN'}
+                  </button>
+                </>
               )}
             </div>
           </div>
