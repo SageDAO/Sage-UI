@@ -112,7 +112,7 @@ async function createPresetDrops(
     const dropId = (dropResult as any).dropId as number;
     console.log(`createPresetDrops() :: Added drop ${dropId}`);
     for (const nftS3Path of presetDrop.nfts) {
-      if (Math.random() > 0.5) {
+      if (Math.random() > 0.6) {
         // Auction
         const { data: auctionResult } = await fetchWithBQ({
           url: `endpoints/dropUpload?action=InsertAuction`,
