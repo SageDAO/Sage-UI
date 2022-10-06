@@ -1,10 +1,10 @@
 import useSageRoutes from '@/hooks/useSageRoutes';
 import { useGetUserQuery } from '@/store/usersReducer';
 import { useSession } from 'next-auth/react';
+import Connect from '../Connect';
 import { PfpImage } from '../Media/BaseMedia';
 import PersonalizedMessage from '../PersonalizedMessage';
 import { SearchInput } from '../SearchInput';
-import HiddenMenu from './HiddenMenu';
 interface NavLink {
   name: string;
   routeFunction: () => any;
@@ -50,19 +50,23 @@ export default function Nav() {
 
   return (
     <div className='nav__wrapper'>
-      <HiddenMenu></HiddenMenu>
       <div className='nav' data-color={dataColor} data-cy='nav'>
         <div className='nav__content'>
           {shouldShowPersonal && (
             <div className='nav__personal'>
-              {isSignedIn && (
-                <div onClick={pushToProfile} className='nav__personal-pfp-container'>
-                  <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
-                </div>
+              {isSignedIn ? (
+                <>
+                  <div onClick={pushToProfile} className='nav__personal-pfp-container'>
+                    <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
+                  </div>
+
+                  <h1 className='nav__personal-message'>
+                    <PersonalizedMessage />
+                  </h1>
+                </>
+              ) : (
+                <Connect></Connect>
               )}
-              <h1 className='nav__personal-message'>
-                <PersonalizedMessage />
-              </h1>
             </div>
           )}
           <div className='nav__menu'>

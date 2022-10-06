@@ -2,7 +2,6 @@ import { baseApi } from './baseReducer';
 import { BigNumber, ethers, Signer } from 'ethers';
 import { getERC20Contract, getNFTContract } from '@/utilities/contracts';
 import { parameters } from '@/constants/config';
-import { playTxSuccessSound } from '@/utilities/sounds';
 import { promiseToast } from '@/utilities/toast';
 import { fetchOrCreateNftContract } from './nftsReducer';
 
@@ -63,7 +62,6 @@ const artistsApi = baseApi.injectEndpoints({
         var tx = await contract.withdrawERC20(ASHTOKEN_ADDRESS);
         promiseToast(tx, 'Balance has been withdrawed!');
         await tx.wait();
-        playTxSuccessSound();
         return { data: null };
       },
       invalidatesTags: ['ArtistBalance'],

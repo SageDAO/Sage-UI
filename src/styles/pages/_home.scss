@@ -29,7 +29,9 @@
 .home-page__featured-drop-tag-info {
   // text-transform: capitalize;
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
+	align-items: center;
+	gap: 10px;
 }
 
 .home-page__featured-drop-tag-sage-logo {
@@ -44,15 +46,24 @@
   font-weight: 400;
   font-size: clamp(5px, 1.5vw, 10px);
   line-height: clamp(6px, 1em, 12px);
+	text-transform: uppercase;
   @include m.interact;
+}
+
+.home-page__featured-drop-pfp {
+	@include m.pfp-container;
+	@include m.interact;
+	width: 20px;
 }
 
 .home-page__statement {
   display: flex;
   justify-content: center;
-  font-weight: 900;
-  font-size: clamp(25px, 3.8vw, 50px);
-  line-height: clamp(25px, 1.2em, 64px);
+  flex-direction: column;
+  font-weight: 400;
+  // font-size: clamp(25px, 3.8vw, 50px);
+  // line-height: clamp(25px, 1.2em, 64px);
+  @include m.text-h1;
   padding: clamp(30px, 5vw, 120px) 0;
   text-transform: uppercase;
   @include b.min-width('medium') {
@@ -69,10 +80,14 @@
   @include m.standard-width;
 }
 
-.home-page__upcoming-drops-header-left {
+@mixin subheader {
   font-weight: 900;
   @include m.text-h2;
-  text-transform: capitalize;
+  text-transform: uppercase;
+}
+
+.home-page__upcoming-drops-header-left {
+  @include subheader;
 }
 
 .home-page__upcoming-drops-header-right {
@@ -97,6 +112,7 @@
   font-size: clamp(10px, 1.2vw, 16px);
   line-height: 1.6em;
   flex: 1;
+  text-transform: uppercase;
 }
 
 .home-page__upcoming-drops-grid {
@@ -132,6 +148,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   aspect-ratio: 1/1;
   transition-duration: 300ms;
   transition-timing-function: ease-out;
+  height: 300px;
   position: relative;
   &[data-span2='true'] {
     aspect-ratio: 2/1;
@@ -139,12 +156,8 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   }
   @include b.min-width('medium') {
     aspect-ratio: 828/600;
+    height: auto;
   }
-}
-
-.home-page__upcoming-drops-tile--mobile {
-  @include upcoming-drops-tile;
-  height: 300px;
 }
 
 .home-page__upcoming-drops-tile {
@@ -161,8 +174,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   margin: clamp(9px, 2vw, 20px);
   position: absolute;
   font-weight: 400;
-  font-size: clamp(10px, 1.4vw, 32px);
-  line-height: clamp(12px, 1.2em, 30px);
+  // font-size: clamp(10px, 1.4vw, 32px);
+  // line-height: clamp(12px, 1.2em, 30px);
+  @include m.text-p1;
   z-index: $tile-info-z;
   position: absolute;
   bottom: 0;
@@ -170,7 +184,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   text-transform: capitalize;
   & > * {
     @include m.theme() {
-      background-color: m.t(accent);
+      // background-color: m.t(accent);
       padding: 0 0.01em;
       display: inline-block;
       height: 1.15em;
@@ -181,9 +195,10 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 
 .home-page__upcoming-drops-tile-tag-item {
   @include m.theme() {
-    background-color: m.t(base);
+    // background-color: m.t(base);
     color: m.t(contrast);
     padding: 0 8px;
+    text-transform: uppercase;
   }
 }
 
@@ -197,10 +212,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     background-color: m.t('base');
     position: absolute;
     z-index: $tile-info-z;
-    font-weight: 600;
-    font-size: clamp(10px, 1vw, 16px);
+    @include m.text-p1;
     aspect-ratio: 121/36.37;
-    letter-spacing: 1px;
+    letter-spacing: 0.1em;
     top: 20px;
     left: 20px;
     width: clamp(90px, 10vw, 121px);
@@ -212,6 +226,97 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     }
     display: flex;
   }
+}
+
+@mixin section-strip {
+  @include m.standard-width;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.home-page__latest-artists-section {
+  @include section-strip;
+}
+
+.home-page__latest-artists-header {
+  @include m.text-p3;
+}
+
+.home-page__latest-artists-flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.home-page__latest-artists-item {
+  display: flex;
+  @include m.interact;
+  overflow: hidden;
+  align-items: center;
+  position: relative;
+  // height: 60px;
+  aspect-ratio: 1/1;
+  width: 6.5%;
+  border-radius: 100%;
+}
+
+.home-page__new-artworks-section {
+  @include section-strip;
+}
+
+.home-page__new-artworks-header {
+  @include m.text-p3;
+}
+
+.home-page__new-artworks-flex-container {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.home-page__new-artworks-item {
+  width: 19%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.home-page__new-artworks-media {
+  position: relative;
+  @include m.interact;
+  width: 100%;
+  aspect-ratio: 284/200;
+}
+
+.home-page__new-artworks-item-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-page__new-artworks-item-pfp {
+  @include m.pfp-container;
+  @include m.interact;
+  width: 12%;
+}
+
+.home-page__new-artworks-item-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  height: 100%;
+  text-transform: uppercase;
+}
+.home-page__new-artworks-item-name {
+  @include m.text-p5;
+	font-weight: 600;
+}
+.home-page__new-artworks-item-artist-name {
+  font-size: 7px;
+  line-height: 8px;
+  color: #c4c4c4;
 }
 
 .home-page__events-section {
@@ -286,21 +391,17 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 
 .home-page__event-slide-header {
   @include m.theme() {
-    font-weight: 900;
-    text-transform: capitalize;
-    // margin-top: 30px;
     display: flex;
     margin-left: auto;
     margin-right: auto;
     align-items: center;
     z-index: 1;
     // width: min(1152px, 80vw);
-    @include m.text-h2;
-    line-height: 1em;
     color: m.t('contrast');
     // width: 90%;
-		@include m.standard-width;
+    @include m.standard-width;
     padding: 40px 0;
+    @include subheader;
   }
 }
 
@@ -321,7 +422,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   font-size: clamp(24px, 1vw, 40px);
   line-height: clamp(29px, 1em, 49px);
   @include m.theme() {
-    color:white;
+    color: white;
   }
 }
 

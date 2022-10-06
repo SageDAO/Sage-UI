@@ -93,6 +93,9 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
         </header>
         <section className='drop-page__content'>
           <div className='drop-page__grid'>
+            {auctions.map((a) => {
+              return <AuctionTile key={a.id} dropName={drop.name} artist={artist} auction={a} />;
+            })}
             {lotteries.map((l) => {
               return (
                 <LotteryTile
@@ -115,9 +118,6 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
                   tickets={ticketCountMap ? ticketCountMap[d.id] : 0}
                 />
               );
-            })}
-            {auctions.map((a) => {
-              return <AuctionTile key={a.id} dropName={drop.name} artist={artist} auction={a} />;
             })}
           </div>
         </section>

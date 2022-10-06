@@ -10,7 +10,6 @@ import { createBucketFolderName, uploadFileToS3 } from '@/utilities/awsS3-client
 import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave';
 import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { toast } from 'react-toastify';
-import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { Offer } from '@prisma/client';
 import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
@@ -112,7 +111,6 @@ const nftsApi = baseApi.injectEndpoints({
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
-          playErrorSound();
           return { data: false };
         }
         try {
@@ -138,7 +136,6 @@ const nftsApi = baseApi.injectEndpoints({
             tx,
             signer
           );
-          playTxSuccessSound();
           return { data: true };
         } catch (e) {
           console.log(e);
@@ -169,7 +166,6 @@ const nftsApi = baseApi.injectEndpoints({
           await tx.wait(1);
           await fetchWithBQ(`nfts?action=UpdateOwner&id=${offer.id}`);
           await registerMarketplaceSale(offer.nftId, offer.price, offer.signer, tx, signer);
-          playTxSuccessSound();
           return { data: true };
         } catch (e) {
           console.log(e);
@@ -209,7 +205,6 @@ const nftsApi = baseApi.injectEndpoints({
         } catch (e) {
           console.error(e);
           toast.error(`Error placing offer`);
-          playErrorSound();
         }
         return { data: null };
       },

@@ -7,19 +7,26 @@
 }
 
 .artist-page__banner-section {
-  // height: 881px;
-  // width: 1196px;
-  aspect-ratio: 1196/881;
+  display: flex;
+  position: relative;
+  flex-direction: column;
   @include m.standard-width;
+  aspect-ratio: 1495/909;
+  @include b.min-width('medium') {
+  }
 }
 
 .artist-page__banner-section-svg {
-  height: 5%;
+  height: 10vw;
+  // height: min(10vw, 128px);
   width: max-content;
-  aspect-ratio: 421/96;
+  aspect-ratio: 400/96;
   position: absolute;
-  transform: translateY(-50%);
+  // transform: translateY(-50%);
   z-index: 999;
+  @include b.min-width('medium') {
+    height: 4.8vw;
+  }
 }
 
 .artist-page__banner-label {
@@ -35,7 +42,10 @@
 .artist-page__banner {
   position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1196/881;
+  margin-top: auto;
+  // height: 100%;
+  // transform: translateY(5vw);
 }
 
 .artist-page__artist-section {
@@ -129,6 +139,8 @@
 
 .artist-page__socials--desktop {
   @include socials;
+  flex: 1;
+  align-items: end;
   display: none;
   @include b.min-width('medium') {
     display: flex;
@@ -150,6 +162,9 @@
 }
 
 .artist-page__socials-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @include m.theme() {
     // background-color: m.t(accent);
     color: m.t(base);
@@ -261,25 +276,19 @@
 @mixin follow-btn {
   @include m.theme() {
     @include m.text-p4;
-    // margin-top:
     font-style: normal;
-    // font-weight: 400;
-    // font-size: 11px;
-    // line-height: 136.6%;
     text-align: center;
     justify-content: center;
     align-items: center;
     letter-spacing: 0.35em;
     aspect-ratio: 411/49;
-    // padding: 4px;
     text-transform: uppercase;
-    // overflow: visible;
-    height: 20px;
+    height: 30px;
     width: 120px;
-    @include m.transition-base;
     color: m.t(contrast2);
     background-color: m.t(base2);
     border: 1px solid m.t(contrast2);
+    @include m.transition-base;
     @include m.interact {
       background-color: m.t(accent);
       color: m.t(base);

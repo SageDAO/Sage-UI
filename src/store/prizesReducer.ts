@@ -3,7 +3,6 @@ import { GamePrize } from '@/prisma/types';
 import { Lottery, Nft, User, PrizeProof } from '@prisma/client';
 import { toast } from 'react-toastify';
 import { extractErrorMessage, getLotteryContract } from '../utilities/contracts';
-import { playErrorSound, playPrizeClaimedSound } from '../utilities/sounds';
 import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
 
@@ -73,11 +72,9 @@ const prizesApi = baseApi.injectEndpoints({
             );
           } else {
             toast.error(`Failure! ${errMsg}`);
-            playErrorSound();
             return { error: { status: 500, data: null } };
           }
         }
-        playPrizeClaimedSound();
         return { data: claimedAt };
       },
       invalidatesTags: ['Prizes'],

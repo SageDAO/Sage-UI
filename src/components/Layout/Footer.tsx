@@ -1,12 +1,13 @@
 import FooterLogoSVG from '@/public/branding/footer-logo.svg';
-import MottoSVG from '@/public/branding/motto.svg';
 import Socials from '@/components/Socials';
 import { SearchInput } from '../SearchInput';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import Copyright from '../Branding/Copyright';
+import Motto from './Motto';
 
 export default function Footer() {
-  const { pushToHowToBuyAsh, pushToPrivacyPolicy, pushToTermsOfService, pushToSubmissions } = useSageRoutes();
+  const { pushToHowToBuyAsh, pushToPrivacyPolicy, pushToTermsOfService, pushToSubmissions } =
+    useSageRoutes();
 
   return (
     <div className='footer' data-cy='footer'>
@@ -15,7 +16,7 @@ export default function Footer() {
           <div className='footer__top-content'>
             <div className='footer__logo'>
               <FooterLogoSVG className='footer__logo-svg'></FooterLogoSVG>
-              <MottoSVG className='footer__motto' />
+              <Motto></Motto>
             </div>
             <div className='footer__search-container'>
               <div className='searchform'>

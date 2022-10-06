@@ -1,22 +1,36 @@
 import prisma from '@/prisma/client';
 import React from 'react';
-import { Drop_include_GamesAndArtist } from '@/prisma/types';
+import { Drop_include_GamesAndArtist, Nft, User } from '@/prisma/types';
 import { getHomePageData, getSageMediumData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import UpcomingDrops from '@/components/Pages/Home/UpcomingDrops';
 import FeaturedDrop from '@/components/Pages/Home/FeaturedDrop';
+import LatestArtists from '@/components/Pages/Home/LatestArtists';
+import NewArtworks from '@/components/Pages/Home/NewArtworks';
+import Logotype from '@/components/Logotype';
 
-interface Props {
-  featuredDrop: Drop_include_GamesAndArtist;
-  upcomingDrops: Drop_include_GamesAndArtist[];
+interface Props extends Awaited<ReturnType<typeof getHomePageData>> {
+  // featuredDrop: Drop_include_GamesAndArtist;
+  // upcomingDrops: Drop_include_GamesAndArtist[];
   mediumData: any;
-  welcomeMessage: string;
+  // welcomeMessage: string;
+  // latestArtists: User[];
+  // newArtworks: ;
 }
 
-function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props) {
+function home({
+  featuredDrop,
+  upcomingDrops,
+  mediumData,
+  welcomeMessage,
+  latestArtists,
+  newArtworks,
+}: Props) {
+  const welcomeMessageArray = welcomeMessage.split(',');
   return (
     <div className='home-page' data-cy='home-page'>
       <div className='home-page__main'>
+        <Logotype></Logotype>
         {featuredDrop && (
           <FeaturedDrop
             drop={featuredDrop}
@@ -25,7 +39,9 @@ function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props
             Auctions={featuredDrop.Auctions}
           ></FeaturedDrop>
         )}
-        <h1 className='home-page__statement'>{welcomeMessage}</h1>
+        <h1 className='home-page__statement'>
+          {welcomeMessageArray[0] + ','} <pre /> {welcomeMessageArray[1]}
+        </h1>
         <div className='home-page__upcoming-drops-header'>
           <h1 className='home-page__upcoming-drops-header-left'>drops</h1>
           <div className='home-page__upcoming-drops-header-right'>
@@ -37,6 +53,8 @@ function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props
           </div>
         </div>
         <UpcomingDrops upcomingDrops={upcomingDrops}></UpcomingDrops>
+        <LatestArtists latestArtists={latestArtists}></LatestArtists>
+        <NewArtworks newArtworks={newArtworks}></NewArtworks>
         <EventSlider mediumData={mediumData} />
       </div>
     </div>
@@ -44,14 +62,17 @@ function home({ featuredDrop, upcomingDrops, mediumData, welcomeMessage }: Props
 }
 
 export async function getStaticProps() {
-  const { featuredDrop, upcomingDrops, welcomeMessage } = await getHomePageData(prisma);
+  const { featuredDrop, upcomingDrops, welcomeMessage, newArtworks, latestArtists } =
+    await getHomePageData(prisma);
   const mediumData = await getSageMediumData();
   return {
     props: {
+      newArtworks,
       featuredDrop,
       upcomingDrops,
       mediumData,
       welcomeMessage,
+      latestArtists,
     },
     revalidate: 60,
   };

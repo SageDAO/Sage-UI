@@ -46,8 +46,7 @@ $menu-toggle-z: $menu-z + 1;
   position: relative;
   display: flex;
   align-items: center;
-
-  padding: 4px 8px;
+  padding: 4px 0px;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -194,8 +193,8 @@ $menu-toggle-z: $menu-z + 1;
 
 .mobile-menu__ash-price-container {
   width: clamp(60px, 10vw, 100px);
-  transform: translateX(-10%);
-  left: -5vw;
+  // transform: translateX(-10%);
+  // left:vw;
   position: absolute;
 }
 

@@ -3,6 +3,7 @@
 @use '@/styles/abstracts/breakpoints' as b;
 @use '@/styles/layout/layout' as l;
 .nav {
+	margin-top: 50px;
   height: 44px;
   justify-content: center;
   gap: 20%;

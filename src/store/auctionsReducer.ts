@@ -4,7 +4,6 @@ import {
   extractErrorMessage,
   getAuctionContract,
 } from '@/utilities/contracts';
-import { playErrorSound, playPrizeClaimedSound, playTxSuccessSound } from '@/utilities/sounds';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import { BigNumber, ethers, Signer, utils } from 'ethers';
@@ -67,7 +66,6 @@ const auctionsApi = baseApi.injectEndpoints({
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
-          playErrorSound();
           return { data: null };
         }
         try {
@@ -77,9 +75,9 @@ const auctionsApi = baseApi.injectEndpoints({
           await tx.wait();
           const blockTs = (await signer.provider.getBlock(tx.blockNumber)).timestamp;
           await fetchWithBQ(`auctions?action=SaveBid&id=${auctionId}&amt=${amount}&ts=${blockTs}`);
-          playTxSuccessSound();
         } catch (e) {
-          toast.error('Error placing bid');
+          const errMsg = extractErrorMessage(e);
+          toast.error(`Failure! ${errMsg}`);
           console.error(e);
         }
         return { data: null };
@@ -97,13 +95,11 @@ const auctionsApi = baseApi.injectEndpoints({
           const claimedAt = await updateDbPrizeClaimedDate(fetchWithBQ, id);
           const auction = await contract.getAuction(id);
           await registerAuctionSale(id, auction.highestBid, auction.highestBidder, tx, signer);
-          playPrizeClaimedSound();
           return { data: claimedAt };
         } catch (e) {
           console.error(e);
           const errMsg = extractErrorMessage(e);
           toast.error(`Failure! ${errMsg}`);
-          playErrorSound();
           return { error: { status: 500, data: null } };
         }
       },

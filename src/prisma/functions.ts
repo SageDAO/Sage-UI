@@ -38,9 +38,19 @@ export async function getHomePageData(prisma: PrismaClient) {
   const config = await prisma.config.findFirst({
     include: { FeaturedDrop: { include: dropIncludes } },
   });
+  const latestArtists = await prisma.user.findMany({
+    where: { role: Role.ARTIST },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+  });
+  const newArtworks = await prisma.nft.findMany({
+    take: 5,
+    include: { NftContract: { include: { Artist: true } } },
+  });
+
   const welcomeMessage = config ? config.welcomeMessage : '';
   const featuredDrop = config && config.FeaturedDrop ? config.FeaturedDrop : drops[0];
-  return { featuredDrop, upcomingDrops: drops, drops, welcomeMessage };
+  return { featuredDrop, upcomingDrops: drops, drops, welcomeMessage, latestArtists, newArtworks };
 }
 
 export async function getDropsPageData(prisma: PrismaClient) {
@@ -134,7 +144,7 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
   const salesData = new Map<string, ArtistSales>();
   // get list of artists' usernames, wallets and nft counts from all games, including listings
   var query = `
-    select "u"."walletAddress", "u"."username", 
+    select "u"."walletAddress", "u"."username", "u"."profilePicture", 
 	    coalesce("a"."auctionCount", 0) + coalesce("b"."lotteryCount", 0) + coalesce("c"."listingCount", 0) as "nftCount"
     from "User" as "u" 
     left join (
@@ -152,13 +162,14 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
     where "u"."role" = 'ARTIST'`;
   var result = await prisma.$queryRaw(Prisma.raw(query));
   for (const row of result as any) {
-    salesData.set(row.walletAddress, <ArtistSales>{
+    salesData.set(row.walletAddress, (<ArtistSales>{
       username: String(row.username),
       walletAddress: String(row.walletAddress),
       nftCountTotal: Number(row.nftCount),
       amountTotalUSD: 0,
       highestSaleUSD: 0,
-    });
+      profilePicture: row.profilePicture,
+    }) as ArtistSales);
   }
 
   // query sales statistics
@@ -173,5 +184,6 @@ export async function getArtistsSalesData(prisma: PrismaClient) {
       item.highestSaleUSD = row.amount;
     }
   }
+
   return salesData;
 }

@@ -5,7 +5,6 @@ import {
   extractErrorMessage,
   getLotteryContract,
 } from '@/utilities/contracts';
-import { playErrorSound, playTxSuccessSound } from '@/utilities/sounds';
 import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import { toast } from 'react-toastify';
 import { pointsApi } from './pointsReducer';
@@ -86,7 +85,6 @@ const lotteriesApi = baseApi.injectEndpoints({
         } catch (e) {
           console.error(e);
           toast.error(`Error approving transfer`);
-          playErrorSound();
           return { data: false };
         }
         try {
@@ -99,7 +97,6 @@ const lotteriesApi = baseApi.injectEndpoints({
           promiseToast(tx, `You obtained ${numTickets} ${numTickets > 1 ? 'entries' : 'entry'}!`);
           await tx.wait();
           await registerLotterySale(lotteryId, purchaseCostTokens, purchaseCostPoints, tx, signer);
-          playTxSuccessSound();
           if (purchaseCostPoints) {
             dispatch(pointsApi.util.invalidateTags(['UserPoints']));
           }
@@ -111,7 +108,6 @@ const lotteriesApi = baseApi.injectEndpoints({
           }
           const errMsg = extractErrorMessage(e);
           toast.error(`Failure! ${errMsg}`);
-          playErrorSound();
           return { data: false };
         }
       },

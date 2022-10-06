@@ -67,6 +67,7 @@
   }
   &:not([disabled]) {
     cursor: pointer;
+		@include transition-base;
     @include hover {
       @content;
       filter: brightness(0.9);
@@ -99,7 +100,7 @@
 
 $themes: (
   dark: (
-    base: $black,
+    base: #101010,
     base2: $dark,
     accent: $gold,
     contrast2: $light,
@@ -167,16 +168,16 @@ $theme-map: null;
   }
 }
 
-$desktop-width: 1088px;
+$desktop-width: 1495px;
 
 @mixin desktop-width {
   @include b.min-width('medium') {
-    width: min($desktop-width, 80vw);
+    width: min($desktop-width, 83vw);
   }
 }
 
 @mixin desktop-inner-width {
-  width: 680px;
+  width: 850px;
 }
 
 @mixin mobile-width {
@@ -193,15 +194,16 @@ $desktop-width: 1088px;
 }
 
 @mixin text-h1 {
-  // font-size: clamp(25px, 7vw, 45px);
-  // line-height: 1em;
   text-align: left;
-  margin-top: clamp(24px, 10vw, 111px);
-  margin-bottom: clamp(10px, 5vw, 50px);
-  // text-transform: capitalize;
-  font-weight: 900;
+  font-weight: 400;
   font-size: clamp(20px, 5vw, 50px);
   line-height: clamp(24px, 1.2em, 60px);
+	@include header-margins;
+}
+
+@mixin header-margins {
+  margin-top: clamp(24px, 10vw, 111px);
+  margin-bottom: clamp(10px, 5vw, 50px);
 }
 
 @mixin text-h2 {
@@ -215,7 +217,7 @@ $desktop-width: 1088px;
 }
 
 @mixin text-p1 {
-  line-height: 140%;
+  line-height: 120%;
   font-size: clamp(10px, 2vw, 16px);
 }
 
@@ -248,6 +250,15 @@ $desktop-width: 1088px;
 @mixin animate-pulse {
   animation: pulse 1900ms infinite;
   animation-timing-function: ease-in;
+}
+
+@mixin pfp-container {
+  position: relative;
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 @mixin button-base {

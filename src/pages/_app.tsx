@@ -2,7 +2,7 @@ import '@/styles/index.scss';
 import Head from 'next/head';
 import useTheme from '@/hooks/useTheme';
 // import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-// import 'react-medium-image-zoom/dist/styles.css';
+import 'react-medium-image-zoom/dist/styles.css';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SessionProvider } from 'next-auth/react';
 import store from '@/store/store';

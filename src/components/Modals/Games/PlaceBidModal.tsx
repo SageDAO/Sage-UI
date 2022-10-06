@@ -155,7 +155,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
         <div className='games-modal__body'>
           <section className='games-modal__main'>
             <div className='games-modal__main-img-container'>
-              <BaseMedia src={nftPath} />
+              <BaseMedia src={nftPath} isZoomable={true} />
               {!isOpenForBids && (
                 <Countdown endTime={startTime} className='games-modal__countdown'></Countdown>
               )}

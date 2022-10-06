@@ -5,11 +5,6 @@ import { signIn, signOut } from 'next-auth/react';
 import { SiweMessage } from 'siwe';
 import { baseApi } from './baseReducer';
 import { createBucketFolderName, uploadFileToS3 } from '@/utilities/awsS3-client';
-// import {
-//   playLikeDropSound,
-//   playUnlikeDropSound,
-//   playWalletConnectedSound,
-// } from '../../utilities/sounds';
 
 export type UserDisplayInfo = Pick<User, 'username' | 'profilePicture'>;
 

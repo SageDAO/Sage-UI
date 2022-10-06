@@ -1,5 +1,7 @@
 import Logotype from '@/components/Logotype';
 import { BaseMedia } from '@/components/Media/BaseMedia';
+import Motto from './Layout/Motto';
+
 
 interface Props {
   imgSrc: string;
@@ -9,10 +11,8 @@ interface Props {
 export default function Hero({ imgSrc, bannerOnClick }: Props) {
   return (
     <div className='hero'>
-      <Logotype></Logotype>
-      <div className='hero__banner'>
         <BaseMedia onClickHandler={bannerOnClick} src={imgSrc}></BaseMedia>
-      </div>
+			<Motto></Motto>
     </div>
   );
 }
