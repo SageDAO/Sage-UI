@@ -35,46 +35,53 @@ export default function EventSlider({ mediumData }: Props) {
 
   return (
     <section className='home-page__events-section'>
-      <h3 className='home-page__event-slide-header'>news</h3>
+      <h3 className='home-page__events-header'>news</h3>
       <div className='home-page__events'>
-        {state.items.map((item, i: number) => {
-          return (
-            <>
-              <a target='__blank' key={i} className='home-page__event-slide' href={item.link}>
-                <Image
-                  src={item.thumbnail}
-                  layout='fill'
-                  objectFit='cover'
-                  className='home-page__events-slide-bg'
-                  loader={({ src, width, quality }) => {
-                    return `${src}?w=${width}&q=${quality || 75}`;
-                  }}
-                />
-                <h3 className='home-page__event-slide-header'></h3>
-                <div className='home-page__events-slide-middle'>
-                  <Image
-                    src={item.thumbnail}
-                    layout='fill'
-                    objectFit='cover'
-                    className=''
-                    loader={({ src, width, quality }) => {
-                      return `${src}?w=${width}&q=${quality || 75}`;
-                    }}
-                  />
-                </div>
-
-                <div className='home-page__event-slide-content'>
-                  <h1 className='home-page__event-slide-content-title'>{item.title}</h1>
-                  <div className='home-page__event-slide-content-group'>
-                    <button className='home-page__event-slide-content-read-more-button'>
-                      read more
-                    </button>
-                  </div>
-                </div>
-              </a>
-            </>
-          );
-        })}
+        <a target='__blank' className='home-page__events-main' href={state.items[0]?.link}>
+          <div className='home-page__events-main-media'>
+            <Image
+              src={state.items[0]?.thumbnail}
+              layout='fill'
+              objectFit='cover'
+              className='home-page__events-slide-bg'
+              loader={({ src, width, quality }) => {
+                return `${src}?w=${width}&q=${quality || 75}`;
+              }}
+            />
+          </div>
+          <div className='home-page__event-slide-content'>
+            <h1 className='home-page__event-slide-content-title'>{state.items[0]?.title}</h1>
+          </div>
+        </a>
+        <div className='home-page__events-secondary'>
+          <>
+            <div className='home-page__events-secondary-item'>
+              <div className='home-page__events-secondary-item-media'>
+                <Image src={'/sample/geo.png'} layout='fill'></Image>
+              </div>
+              <p className='home-page__events-secondary-item-title'>new geometrics style guide</p>
+            </div>
+            <div className='home-page__events-secondary-item'>
+              <div className='home-page__events-secondary-item-media'>
+                <Image src={'/sample/court.png'} layout='fill'></Image>
+              </div>
+              <p className='home-page__events-secondary-item-title'>courtside with teddy kelly</p>
+            </div>
+            <div className='home-page__events-secondary-item'>
+              <div className='home-page__events-secondary-item-media'>
+                <Image src={'/sample/trends.png'} layout='fill'></Image>
+              </div>
+              <p className='home-page__events-secondary-item-title'>2023 crypto art trends</p>
+            </div>
+            <div className='home-page__events-secondary-item'>
+              <div className='home-page__events-secondary-item-media'>
+                <Image src={'/sample/datamatics.png'} layout='fill'></Image>
+              </div>
+              <p className='home-page__events-secondary-item-title'>ryoji ikeda - datamatics</p>
+            </div>
+          </>
+          <button className='home-page__events-visit-news-button'>visit news page</button>
+        </div>
       </div>
     </section>
   );

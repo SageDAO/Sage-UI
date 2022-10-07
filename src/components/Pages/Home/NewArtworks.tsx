@@ -14,7 +14,6 @@ export default function NewArtworks({ newArtworks }: Props) {
       <p className='home-page__new-artworks-header'>NEW ARTWORK</p>
       <div className='home-page__new-artworks-flex-container'>
         {newArtworks.map((nft) => {
-          console.log(nft);
           const artist = nft.NftContract?.Artist;
           return (
             <div key={nft.id} onClick={() => {}} className='home-page__new-artworks-item'>
