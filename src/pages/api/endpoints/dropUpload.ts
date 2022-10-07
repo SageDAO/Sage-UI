@@ -205,13 +205,19 @@ async function insertDrop(data: any, response: NextApiResponse) {
 
 async function insertAuction(data: any, response: NextApiResponse) {
   console.log('insertAuction()');
+  if (data.endDate) {
+    var endTime = new Date(Number(data.endDate) * 1000);
+  } else {
+    var duration = data.duration ? data.duration : 24*60*60;
+    var endTime = new Date((Number(data.startDate) + duration) * 1000);
+  }
   try {
     var record = await prisma.auction.create({
       data: {
         Drop: { connect: { id: Number(data.dropId) } },
         minimumPrice: data.minPrice,
         startTime: new Date(Number(data.startDate) * 1000),
-        endTime: new Date(Number(data.endDate) * 1000),
+        endTime,
         Nft: {
           create: {
             name: data.name,
