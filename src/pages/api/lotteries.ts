@@ -47,7 +47,6 @@ async function getLottery(lotteryId: number, response: NextApiResponse) {
 }
 
 async function getWinners(lotteryId: number, response: NextApiResponse) {
-  console.log(`getWinners(${lotteryId})`);
   if (isNaN(lotteryId)) {
     response.status(500);
   } else {
@@ -58,6 +57,7 @@ async function getWinners(lotteryId: number, response: NextApiResponse) {
         distinct: ['lotteryId', 'winnerAddress']
       });
       response.json(result);
+      console.log(`getWinners(${lotteryId}) :: ${result.length}`);
     } catch (e) {
       console.log({ e });
       response.status(500);

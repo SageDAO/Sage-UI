@@ -55,6 +55,7 @@ function GetTicketModal({
   systemType,
 }: Props) {
   const { data: sessionData } = useSession();
+  const walletAddress = sessionData?.address;
   const { data: signer } = useSigner();
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0);
@@ -245,7 +246,14 @@ function GetTicketModal({
                   <h1 className='games-modal__winners-label'>winner</h1>
                   <div className='games-modal__winners-list'>
                     {winners.map((winner: any) => (
-                      <div key={winner}>{winner.User.username ? winner.User.username : winner.winnerAddress}</div>
+                      <div key={winner}>
+                        {winner.User.username ? winner.User.username : winner.winnerAddress}
+                        {walletAddress && walletAddress == winner.winnerAddress && 
+                        <>
+                          &nbsp; &nbsp; 
+                          {/* TODO place claim button here */}
+                        </>}
+                      </div>
                     ))}
                   </div>
                 </>
