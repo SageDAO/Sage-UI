@@ -16,6 +16,7 @@ export interface AuctionState {
   highestBidNumber: number;
   settled: boolean;
   endTime: number; // timestamp
+  duration: number; // seconds
   nextMinBid: number;
   bidIncrementPercentage: number;
   timeExtension: number;
@@ -129,6 +130,7 @@ export async function getAuctionContractState(auctionId: number) {
       highestBidder: auctionStruct.highestBidder,
       settled: auctionStruct.settled,
       endTime,
+      duration: auctionStruct.duration,
       nextMinBid,
       bidIncrementPercentage: +bidIncrementPercentage,
       timeExtension,

@@ -1,19 +1,18 @@
 import { Auction_include_Nft, User } from '@/prisma/types';
-import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
+import { AuctionState, useGetAuctionStateQuery } from '@/store/auctionsReducer';
 import { transformTitle } from '@/utilities/strings';
+
 interface Args {
   auction: Auction_include_Nft;
   artist: User;
 }
+
 export default function useAuction({ auction, artist }: Args) {
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
   const now = new Date().getTime();
-  const isOpenForBids =
-    auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
+  const isOpenForBids = getIsOpenForBids(auctionState, auction.startTime);
   const isStarted = auction.startTime.getTime() < now;
-  const isEnded = auctionState
-    ? Boolean(auctionState.endTime !== undefined) && Boolean(auctionState.endTime < now)
-    : false;
+  const isEnded = getIsEnded(auctionState, auction.startTime);
   const auctionFocusText = isOpenForBids ? 'place bid' : isEnded ? 'results' : 'starting soon';
   const startTime = auction.startTime;
   const endTime = auctionState?.endTime || auction.endTime;
@@ -50,4 +49,31 @@ export default function useAuction({ auction, artist }: Args) {
     buttonText,
     description,
   };
+}
+
+function getIsOpenForBids(auctionState: AuctionState, startTime: Date): boolean {
+  if (!auctionState) {
+    return false;
+  }
+  const now = new Date().getTime();
+  if (startTime.getTime() > now) {
+    return false;
+  }
+  if (auctionState.endTime == 0) {
+    const endTime = startTime.getTime() + auctionState.duration * 1000;
+    return endTime > now;
+  }
+  return auctionState.endTime > now;
+}
+
+function getIsEnded(auctionState: AuctionState, startTime: Date): boolean {
+  if (!auctionState) {
+    return false;
+  }
+  const now = new Date().getTime();
+  if (auctionState.endTime == 0) {
+    const endTime = startTime.getTime() + auctionState.duration * 1000;
+    return endTime < now;
+  }
+  return auctionState.endTime < now;
 }

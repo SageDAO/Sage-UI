@@ -50,7 +50,7 @@ export function ConfigPanel() {
       <div className='creations-panel__file-desc-group' style={{ marginTop: '25px' }}>
         <h1 className='creations-panel__file-desc-label'>Featured Drop</h1>
         <select
-          value={featuredDropId}
+          value={featuredDropId || ''}
           onChange={handleFeaturedDropChange}
           className='creations-panel__file-input-field'
         >
