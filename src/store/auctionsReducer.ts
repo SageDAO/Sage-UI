@@ -113,7 +113,7 @@ export async function getAuctionContractState(auctionId: number) {
   const auctionContract = await getAuctionContract();
   try {
     const auctionStruct = await auctionContract.getAuction(auctionId);
-    const timeExtension = Number(await auctionContract.getDefaultTimeExtension());
+    const timeExtension = Number(auctionContract.DEFAULT_EXTENSION);
     const endTime = auctionStruct.endTime * 1000;
     const bidIncrementPercentage = await auctionContract.getBidIncrementPercentage();
     const highestBidNumber = utils.formatUnits(auctionStruct.highestBid);
