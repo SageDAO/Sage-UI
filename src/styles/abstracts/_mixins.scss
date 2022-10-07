@@ -197,12 +197,13 @@ $desktop-width: 1495px;
   text-align: left;
   font-weight: 400;
   font-size: clamp(20px, 5vw, 50px);
-  line-height: clamp(24px, 1.2em, 60px);
+  line-height: clamp(24px, 1em, 60px);
 	@include header-margins;
+	text-transform: uppercase;
 }
 
 @mixin header-margins {
-  margin-top: clamp(24px, 10vw, 111px);
+  margin-top: clamp(24px, 5vw, 70px);
   margin-bottom: clamp(10px, 5vw, 50px);
 }
 
@@ -223,6 +224,7 @@ $desktop-width: 1495px;
 
 @mixin text-p3 {
   font-size: clamp(14px, 0.8vw, 20px);
+	line-height: 1.25em;
 }
 @mixin text-p4 {
   font-size: clamp(10px, 0.7vw, 15px);
@@ -259,6 +261,7 @@ $desktop-width: 1495px;
   overflow: hidden;
   display: flex;
   align-items: center;
+	@include interact;
 }
 
 @mixin button-base {
@@ -267,14 +270,15 @@ $desktop-width: 1495px;
   align-items: center;
   justify-content: center;
   font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
+  // font-weight: 400;
+  font-size: 12px;
   line-height: 40px;
   text-align: center;
   letter-spacing: 0.2em;
-  font-weight: 400;
-  font-size: clamp(10px, 1.5vw, 16px);
-  width: min(365px, 80vw);
+  // font-weight: 400;
+  // font-size: clamp(10px, 1.5vw, 16px);
+  width: min(250px, 80vw);
+	height: 35px;
   text-align: center;
   letter-spacing: 0.1em;
   @include interact;

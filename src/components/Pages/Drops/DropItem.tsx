@@ -1,5 +1,5 @@
 import Countdown from '@/components/Countdown';
-import { BaseMedia } from '@/components/Media/BaseMedia';
+import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 import useDrop, { UseDropArgs } from '@/hooks/useDrop';
 
 interface Props extends UseDropArgs {}
@@ -12,6 +12,7 @@ export default function DropItem({ drop, artist, Lotteries, Auctions }: Props) {
     startTime,
     status: dropStatus,
     dropDescription,
+		goToArtistOnClick,
     goToDropOnClick,
   } = useDrop({
     drop,
@@ -19,34 +20,24 @@ export default function DropItem({ drop, artist, Lotteries, Auctions }: Props) {
     Lotteries,
     Auctions,
   });
-  const buttonDisplay = 'View Drop Artworks';
-  const counterDisplay =
-    dropStatus === 'Upcoming' ? (
-      <Countdown endTime={startTime} />
-    ) : (
-      <div>{dropStatus.toUpperCase()}</div>
-    );
+  const buttonDisplay = dropStatus === 'Upcoming' ? <Countdown endTime={startTime} /> : 'View Drop';
 
   return (
     <div key={drop.id} className='drops-page__drop'>
-      <div className='drops-page__drop-header'>
-        <h3 className='drops-page__drop-header-title'>
-          <i className='drops-page__drop-header-title-name'>
-            {dropName}, by {artistName}
-          </i>
-          <span className='drops-page__drop-header-title-artist'></span>
-        </h3>
-        {dropStatus !== 'Done' && (
-          <div className='drops-page__drop-header-countdown' data-status={dropStatus}>
-            {counterDisplay}
-          </div>
-        )}
+      <div className='drops-page__drop-header' onClick={goToDropOnClick}>
+        <h3 className='drops-page__drop-header-title'>{dropName}</h3>
+        <BaseMedia src={bannerImgSrc} className='drops-page__drop-backdrop' />
       </div>
-      <BaseMedia src={bannerImgSrc} className='drops-page__drop-backdrop' />
-      <div onClick={goToDropOnClick} className='drops-page__drop-focus'>
-        <BaseMedia src={bannerImgSrc} />
-      </div>
+
       <div className='drops-page__drop-content'>
+        <div className='drops-page__drop-artist'>
+          <div className='drops-page__drop-artist-pfp' onClick={goToArtistOnClick}>
+            <PfpImage src={artist.profilePicture}></PfpImage>
+          </div>
+          <div className='drops-page__drop-artist-info'>
+            <p className='drops-page__drop-artist-name'>BY {artist.username}</p>
+          </div>
+        </div>
         <div
           onClick={goToDropOnClick}
           className='drops-page__drop-content-btn'
@@ -54,7 +45,6 @@ export default function DropItem({ drop, artist, Lotteries, Auctions }: Props) {
         >
           {buttonDisplay}
         </div>
-        <p className='drops-page__drop-content-description'>{dropDescription}</p>
       </div>
     </div>
   );

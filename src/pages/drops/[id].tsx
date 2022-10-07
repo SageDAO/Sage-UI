@@ -12,7 +12,7 @@ import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
 import { useSession } from 'next-auth/react';
 import useDrop from '@/hooks/useDrop';
-import { BaseMedia } from '@/components/Media/BaseMedia';
+import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 
 //type drop page data
 type DropPageData = Awaited<ReturnType<typeof getIndividualDropsPageData>>;
@@ -75,23 +75,40 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
               </h1>
               <p className='drop-page__header-drop-description'>{dropDescription}</p>
               <div className='drop-page__header-drop-details'>
-                <h1 className='drop-page__header-drop-details-item'>Minted by: {artistName}</h1>
-                <h1 className='drop-page__header-drop-details-item'>Creation date: {createdAt}</h1>
-              </div>
-              <div className='drop-page__header-drop-details-systems'>
-                Systems in this drop:
-                {systemTypes.map((type) => {
-                  return (
-                    <div key={type} className='drop-page__systems-icon'>
-                      <System type={type}></System>
-                    </div>
-                  );
-                })}
+                <p className='drop-page__header-drop-details-item'>
+                  <strong>Minted by:</strong> {artistName}
+                </p>
+                <p className='drop-page__header-drop-details-item'>
+                  <strong>Creation date:</strong> {createdAt}
+                </p>
+                <p className='drop-page__header-drop-details-item'>
+                  <strong>Systems in this drop:</strong>
+                  {systemTypes.map((type) => {
+                    return (
+                      <div key={type} className='drop-page__systems-icon'>
+                        <System type={type}></System>
+                      </div>
+                    );
+                  })}
+                </p>
               </div>
             </div>
           </section>
         </header>
         <section className='drop-page__content'>
+          <div className='drop-page__drop-info'>
+            <div className='drop-page__artist'>
+              <div className='drop-page__artist-pfp'>
+                <PfpImage src={artist.profilePicture}></PfpImage>
+              </div>
+              <div className='drop-page__artist-info'>
+                <p className='drop-page__artist-name'>{artist.username}</p>
+                <p className='drop-page__artist-label'>VOID, USA</p>
+              </div>
+            </div>
+            <h3 className='drop-page__drop-info-name'>{drop.name}</h3>
+            <p className='drop-page__drop-info-description'>{drop.description}</p>
+          </div>
           <div className='drop-page__grid'>
             {auctions.map((a) => {
               return <AuctionTile key={a.id} dropName={drop.name} artist={artist} auction={a} />;

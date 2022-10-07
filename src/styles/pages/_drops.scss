@@ -11,20 +11,12 @@
 }
 
 .drops-page__subheader {
-  // @include m.desktop-width;
   display: flex;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  @include m.mobile-width;
-  @include b.min-width('medium') {
-    @include m.desktop-inner-width;
-  }
+  @include m.standard-width;
 }
 
 .drops-page__subheader-top {
   display: flex;
-  // gap: min(40px, 3vw);
 }
 
 .drops-page__subheader-sage-icon {
@@ -41,31 +33,25 @@
 .drops-page__subheader-content {
   display: flex;
   flex-direction: column;
-  // gap: 8px;
 }
 
 .drops-page__subheader-label {
   @include m.text-h1;
-  // @include m.text-h1;
-  // font-style: normal;
-  // font-weight: 400;
-  // font-size: clamp(24px, 3.5vw, 50px);
-  // line-height: clamp(25px, 1em, 60px);
 }
 
 .drops-page__subheader-info {
-  // margin-top: 20px;
-  // text-transform: capitalize;
   font-style: normal;
   font-weight: 400;
-  font-size: clamp(10px, 1.5vw, 16px);
-  line-height: 130%;
+  @include m.text-p1;
+  text-transform: uppercase;
 }
 
 .drops-page__drops-section {
-  display: flex;
-  flex-direction: column;
-  margin-top: clamp(30px, 5vw, 90px);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  // flex-direction: column;
+  gap: 40px 20px;
+  margin-top: 48px;
   @include m.mobile-width-full;
   @include b.min-width('medium') {
     @include m.desktop-width;
@@ -74,88 +60,67 @@
 
 .drops-page__drop {
   overflow: hidden;
-  position: relative;
+  // position: relative;
   width: 100%;
-  aspect-ratio: 1440/1000;
+  // aspect-ratio: 1440/1000;
   display: flex;
   flex-direction: column;
   align-items: center;
+	gap: 20px;
 }
 
 .drops-page__drop-header {
+  position: relative;
   display: flex;
   flex: 1;
   z-index: 1;
-  width: 80%;
+  width: 100%;
   align-items: center;
+  aspect-ratio: 738/528;
   justify-content: space-between;
+	@include m.interact;
 }
 
 .drops-page__drop-header-title {
   font-style: normal;
-  font-weight: 400;
+  font-weight: 900;
   font-size: clamp(14px, 3vw, 52px);
-		line-height: 1em;
+  line-height: 1em;
   color: c.$light;
+	z-index: 2;
+	position: absolute;
+	bottom: 0;
+	margin: 20px;
 }
 
-.drops-page__drop-header-title-name {
+.drops-page__drop-artist-name {
   // font-style: italic;
+	@include m.text-p1;
+	font-weight: 300;
 }
 
 .drops-page__drop-header-title-artist {
   // font-size: clamp(8px, 1vw, 28px);
   // line-height: clamp(19px, 1em, 81px);
-    font-size: clamp(8px, 1.5vw, 18px);
-    line-height: 130%;
-}
-
-.drops-page__drop-header-countdown {
-  @include m.theme() {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: clamp(30px, 7em, 150px);
-    font-size: clamp(8px, 1.5vw, 18px);
-    line-height: 130%;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-    color: c.$white;
-    border: 1px solid c.$white;
-    // aspect-ratio: 64/19;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    // font-size: clamp(8px, 2vw, 32px);
-    // padding: clamp(3px, 2em, px);
-    padding: 0.2em;
-    height: max-content;
-    &[data-status='Live'] {
-      // aspect-ratio: 400/85;
-      color: m.t(accent);
-      border: 1px solid m.t(accent);
-    }
-  }
+  font-size: clamp(8px, 1.5vw, 18px);
+  line-height: 130%;
 }
 
 .drops-page__drop-content {
   gap: 20px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  flex: 1;
+  justify-content: space-between;
   z-index: 1;
-  width: 80%;
+  width: 100%;
 }
 
 .drops-page__drop-content-btn {
   @include m.interact;
-  margin-right: auto;
   transition-duration: 200ms;
   @include m.button-base;
-  width: 100%;
   @include b.min-width('medium') {
-      width: min(365px, 80vw);
+    // width: min(365px, 80vw);
   }
 
   @include m.theme {
@@ -166,6 +131,21 @@
       background-color: m.t(accent);
     }
   }
+}
+
+.drops-page__drop-artist-pfp {
+	@include m.pfp-container;
+	width: 30px;
+}
+
+.drops-page__drop-artist{
+	display: flex;
+	gap: 20px;
+}
+
+.drops-page__drop-artist-info {
+	display: flex;
+	align-items: center;
 }
 
 .drops-page__drop-content-description {
@@ -185,13 +165,4 @@
 .drops-page__drop-backdrop {
   width: 1000px;
   height: 1000px;
-  filter: brightness(0.3);
-}
-
-.drops-page__drop-focus {
-  cursor: pointer;
-  position: relative;
-  width: 80%;
-  aspect-ratio: 1196/640;
-  z-index: 2;
 }

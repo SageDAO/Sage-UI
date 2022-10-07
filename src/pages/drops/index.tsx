@@ -10,12 +10,7 @@ interface Props {
   drops: Awaited<ReturnType<typeof getDropsPageData>>;
 }
 
-function filterLotteries(unfiltered: Lottery_include_Nft[]) {
-  if (unfiltered.length === 0) return { drawings: [], lotteries: unfiltered };
-  const drawings = unfiltered.filter((l) => l.Nfts.length === 1);
-  const lotteries = unfiltered.filter((l) => l.Nfts.length > 1);
-  return { drawings, lotteries };
-}
+
 
 function drops({ drops }: Props) {
   return (
@@ -25,10 +20,12 @@ function drops({ drops }: Props) {
         <div className='drops-page__subheader'>
           <div className='drops-page__subheader-top'>
             <div className='drops-page__subheader-content'>
-              <h1 className='drops-page__subheader-label'>SAGE-Curated live and upcoming drops.</h1>
+              <h1 className='drops-page__subheader-label'>
+                SAGE-Curated <br /> live and upcoming drops.
+              </h1>
               <h2 className='drops-page__subheader-info'>
-                SAGE drops are carefully curated to meet the standards and new structures in NFT
-                assets.
+                Drops are carefully curated to meet <br /> the standards and new structures in{' '}
+                <br /> NFT assets.
               </h2>
             </div>
           </div>
@@ -36,6 +33,7 @@ function drops({ drops }: Props) {
       </section>
       <section className='drops-page__drops-section'>
         {drops.map((d) => {
+          console.log(d);
           return (
             <DropItem
               key={d.id}

@@ -3,7 +3,55 @@
 @use '@/styles/abstracts/mixins' as m;
 @use '@/styles/abstracts/breakpoints' as b;
 
+strong {
+  font-weight: 600;
+}
+
 .drop-page {
+}
+
+.drop-page__artist {
+  display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.drop-page__drop-info {
+	text-transform: uppercase;
+	@include m.standard-width;
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.drop-page__drop-info-name {
+	font-weight: 600;
+	@include m.text-p3;
+}
+
+
+.drop-page__drop-info-description {
+	@include m.text-p3;
+	text-transform: none;
+}
+
+
+
+
+.drop-page__artist-pfp {
+  @include m.pfp-container;
+	width: 35px;
+	height: 35px;
+}
+
+.drop-page__artist-name {
+	@include m.text-p1;
+}
+
+.drop-page__artist-label {
+	color: #696969;
+	@include m.text-p5;
 }
 
 .drop-page__banner-base {
@@ -19,12 +67,12 @@
   @include m.theme() {
     display: flex;
     flex-direction: column;
-    @include m.standard-width;
     padding-top: 97px;
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 80px;
     position: relative;
+    @include m.standard-width;
     @include b.min-width('medium') {
       padding-top: 80px;
     }
@@ -44,13 +92,8 @@
   color: c.$white;
   z-index: 99;
   gap: 40px;
-  margin-right: auto;
-  margin-left: auto;
 
-  @include m.mobile-width;
-  @include b.min-width('medium') {
-    @include m.desktop-inner-width;
-  }
+  @include m.standard-width;
 }
 
 .drop-page__header-logo-column {
@@ -78,35 +121,27 @@
 
 .drop-page__header-drop-name {
   @include m.text-h1;
+  margin-bottom: 0;
 }
 
 .drop-page__header-drop-name-italic {
   // font-style: italic;
 }
 
-.drop-page__header-drop-description {
-  font-style: normal;
-  font-weight: 400;
-  margin-bottom: clamp(10px, 5vw, 50px);
-  @include m.text-p1;
-  // font-size: clamp(10px, 0.5vw, 16px);
-}
-
 .drop-page__header-drop-details {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 0.6em;
+  text-transform: uppercase;
   font-style: normal;
-  // font-weight: 400;
-  // font-size: 10px;
-  // line-height: 130%;
-	@include m.text-p4;
-  // text-transform: capitalize;
-  margin-bottom: clamp(5px, 2.5vw, 25px);
+  @include m.text-p4;
+  gap: 2px;
 }
 
 .drop-page__header-drop-details-item {
   color: c.$white;
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 
 .drop-page__header-drop-details-systems {
@@ -124,21 +159,25 @@
     background-color: m.t(accent);
   }
   position: relative;
-  width: clamp(15px, 2vw, 15px);
-  height: clamp(15px, 2vw, 15px);
+  // width: clamp(15px, 1vw, 15px);
+  // height: clamp(15px, 1vw, 15px);
+  width: 1em;
+  height: 1em;
 }
 
 .drop-page__content {
   @include m.theme() {
     display: flex;
-    justify-content: center;
+    // justify-content: center;
+		align-items: center;
+		flex-direction: column;
     flex: 1;
     background-color: m.t(base);
-    z-index:-999;
+    z-index: -999;
     width: 100vw;
-    padding: 45px 0 50px;
+    padding: 0 0 50px;
     @include b.min-width('medium') {
-      padding: 110px 0 150px;
+      padding: 0 0 150px;
     }
   }
 }
