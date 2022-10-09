@@ -9,7 +9,6 @@ import { getIndividualDropsPagePaths, getIndividualDropsPageData } from '@/prism
 import System from '@/components/Icons/System';
 import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
 import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
-import LotteryTile from '@/components/Pages/DropIndividual/LotteryTile';
 import { useSession } from 'next-auth/react';
 import useDrop from '@/hooks/useDrop';
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
@@ -21,32 +20,31 @@ type DropPageData = Awaited<ReturnType<typeof getIndividualDropsPageData>>;
 interface Props {
   drop: DropPageData;
   artist: DropPageData['NftContract']['Artist'];
-  lotteries: DropPageData['Lotteries'];
   drawings: DropPageData['Lotteries'];
   auctions: DropPageData['Auctions'];
 }
 
-function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
-  return {
-    drawings: array.filter((l: Lottery_include_Nft) => unique(l.Nfts, 's3Path').length == 1),
-    lotteries: array.filter((l: Lottery_include_Nft) => unique(l.Nfts, 's3Path').length > 1),
-  };
-}
+// function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
+//   return {
+//     drawings: array.filter((l: Lottery_include_Nft) => unique(l.Nfts, 's3Path').length == 1),
+//     lotteries: array.filter((l: Lottery_include_Nft) => unique(l.Nfts, 's3Path').length > 1),
+//   };
+// }
 
 function unique(array: any[], propertyName: string) {
   return array.filter((e, i) => array.findIndex((a) => a[propertyName] === e[propertyName]) === i);
 }
 
-function computeEditionSize(nfts: Nft[]) {
-  let editionSize = 0;
-  const uniqueImages = unique(nfts, 's3Path');
-  uniqueImages.forEach((nft) => {
-    editionSize += nft.numberOfEditions;
-  });
-  return editionSize;
-}
+// function computeEditionSize(nfts: Nft[]) {
+//   let editionSize = 0;
+//   const uniqueImages = unique(nfts, 's3Path');
+//   uniqueImages.forEach((nft) => {
+//     editionSize += nft.numberOfEditions;
+//   });
+//   return editionSize;
+// }
 
-export default function drop({ drop, auctions, artist, lotteries, drawings }: Props) {
+export default function drop({ drop, auctions, artist,  drawings }: Props) {
   const { systemTypes, bannerImgSrc, dropName, dropDescription, artistName, createdAt } = useDrop({
     drop,
     Auctions: auctions,
@@ -55,7 +53,7 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
   });
   const { data: sessionData } = useSession();
   const ticketCountMap = useTicketCount(
-    new Array().concat(drawings, lotteries),
+    new Array().concat(drawings),
     sessionData?.address as string
   );
   return (
@@ -113,18 +111,6 @@ export default function drop({ drop, auctions, artist, lotteries, drawings }: Pr
             {auctions.map((a) => {
               return <AuctionTile key={a.id} dropName={drop.name} artist={artist} auction={a} />;
             })}
-            {lotteries.map((l) => {
-              return (
-                <LotteryTile
-                  key={l.id}
-                  imgSrc={l.Nfts[0].s3PathOptimized}
-                  dropName={dropName}
-                  artistName={artistName}
-                  lottery={l}
-                  tickets={ticketCountMap ? ticketCountMap[l.id] : 0}
-                />
-              );
-            })}
             {drawings.map((d) => {
               return (
                 <DrawingTile
@@ -166,16 +152,15 @@ export async function getStaticProps({
     };
   }
 
-  const { drawings, lotteries } = filterDrawingsFromLottery(drop.Lotteries);
   const auctions = drop.Auctions;
   const artist = drop.NftContract.Artist;
+  const drawings = drop.Lotteries;
 
   return {
     props: {
       drop,
       artist,
       auctions,
-      lotteries,
       drawings,
     },
     revalidate: 60,
