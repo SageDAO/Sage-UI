@@ -33,7 +33,6 @@ function drops({ drops }: Props) {
       </section>
       <section className='drops-page__drops-section'>
         {drops.map((d) => {
-          console.log(d);
           return (
             <DropItem
               key={d.id}

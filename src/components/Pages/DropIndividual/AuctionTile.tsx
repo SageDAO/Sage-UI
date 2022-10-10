@@ -1,10 +1,10 @@
 import Countdown from '@/components/Countdown';
-import { BaseMedia } from '@/components/Media/BaseMedia';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useAuction from '@/hooks/useAuction';
 import useModal from '@/hooks/useModal';
 import { Auction_include_Nft, User } from '@/prisma/types';
 import React from 'react';
+import Media from './Media';
 import TileHeader from './TileHeader';
 
 interface Props {
@@ -44,11 +44,7 @@ export default function AuctionTile({ artist, dropName, auction }: Props) {
         closeModal={closeModal}
       />
       <TileHeader editionSize={editionSize} systemType='auction' />
-      <div className='drop-page__grid-item-media-container'>
-        <BaseMedia className='drop-page__grid-item-media-src' src={nftPath} />
-        <div className='drop-page__grid-item-media-overlay'></div>
-        <div className='drop-page__grid-item-focus'>{auctionFocusText}</div>
-      </div>
+      <Media src={auction.Nft.s3Path}></Media>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
