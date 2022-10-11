@@ -14,39 +14,32 @@
   @include m.noselect;
   overflow: visible;
   display: flex;
-  // aspect-ratio: 1196/384;
-  // margin-left: auto;
-  // margin-right: auto;
   @include m.mobile-width;
   justify-content: flex-start;
   @include b.min-width('medium') {
     @include m.desktop-width;
   }
-  // @include m.interact;
   &[data-route-home='true'] {
     cursor: pointer;
   }
 }
 
-.sage-logotype__side {
-	@include m.text-p5;
-	letter-spacing: 0.1em;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  justify-content: center;
-  gap: 10px;
-  transform: translateX(-50%) translateY(50%) rotate(-90deg);
+.motto {
   @include m.theme() {
+    @include m.text-p5;
+    letter-spacing: 0.1em;
+    position: absolute;
+    gap: 10px;
+    transform: rotate(-90deg);
+    transform-origin: bottom left;
     color: m.t(contrast2);
-  }
-  left: -5vw;
-  // height: 25vw;
-  bottom: 50%;
-  @include b.min-width('medium') {
-    height: 256px;
+    left: 5vw;
+    // height: 25vw;
+    bottom: 50%;
+    cursor: default;
+    @include b.min-width('medium') {
+      // height: 256px;
+    }
   }
 }
 

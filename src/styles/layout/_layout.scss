@@ -5,33 +5,21 @@
 $indent: max(1em, 10vw);
 
 .layout {
-  display: flex;
-  flex-direction: column;
-  perspective: 10px;
-  height: 100vh;
-  width: 100vw;
-  overflow: overlay;
-  overflow-x: hidden;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
   @include m.theme() {
+    display: flex;
+    flex-direction: column;
+    perspective: 10px;
+    height: 100vh;
+    width: 100vw;
+    overflow: overlay;
+    overflow-x: hidden;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
     background-color: m.t('base');
     color: m.t('contrast');
+    @include m.no-scrollbar;
+    @include b.min-width(medium) {
+      @include m.custom-scrollbar;
+    }
   }
-  @include m.no-scrollbar;
-  @include b.min-width(medium) {
-    @include m.custom-scrollbar;
-  }
-
-	perspective: 2px;
 }
-
-.layout__main {
-}
-
-// .layout__destroying-fakes {
-//   position: absolute;
-//   left: 3%;
-//   padding: 160px 0;
-//   z-index: 998;
-// }

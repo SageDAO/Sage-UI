@@ -16,7 +16,6 @@ export default function Footer() {
           <div className='footer__top-content'>
             <div className='footer__logo'>
               <FooterLogoSVG className='footer__logo-svg'></FooterLogoSVG>
-              <Motto></Motto>
             </div>
             <div className='footer__search-container'>
               <div className='searchform'>

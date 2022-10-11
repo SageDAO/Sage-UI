@@ -14,6 +14,7 @@ import { useSignOutMutation } from '@/store/usersReducer';
 import SageIconSVG from '@/public/branding/sage-icon.svg';
 import useSAGEAccount from '@/hooks/useSAGEAccount';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import Motto from './Motto';
 
 type Props = {
   children: JSX.Element[] | JSX.Element;
@@ -81,6 +82,7 @@ export default function Layout({ children, router }: Props) {
         {children}
         <Footer></Footer>
       </div>
+      <Motto></Motto>
     </React.Fragment>
   );
 }
