@@ -71,6 +71,8 @@ export async function getDropsPageData(prisma: PrismaClient) {
   return drops;
 }
 
+export type DropPageData = Awaited<ReturnType<typeof getIndividualDropsPageData>>;
+
 export async function getIndividualDropsPagePaths(prisma: PrismaClient) {
   let drops = await prisma.drop.findMany({
     where: {

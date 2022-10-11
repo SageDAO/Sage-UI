@@ -5,7 +5,11 @@ import { Lottery_include_Nft, Auction_include_Nft } from '@/prisma/types';
 import { useTicketCount } from '@/hooks/useTicketCount';
 import React from 'react';
 import Logotype from '@/components/Logotype';
-import { getIndividualDropsPagePaths, getIndividualDropsPageData } from '@/prisma/functions';
+import {
+  getIndividualDropsPagePaths,
+  getIndividualDropsPageData,
+  DropPageData,
+} from '@/prisma/functions';
 import System from '@/components/Icons/System';
 import AuctionTile from '@/components/Pages/DropIndividual/AuctionTile';
 import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
@@ -14,7 +18,6 @@ import useDrop from '@/hooks/useDrop';
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 
 //type drop page data
-type DropPageData = Awaited<ReturnType<typeof getIndividualDropsPageData>>;
 
 //determines the type interface received from getStaticProps()
 interface Props {
@@ -22,6 +25,7 @@ interface Props {
   artist: DropPageData['NftContract']['Artist'];
   drawings: DropPageData['Lotteries'];
   auctions: DropPageData['Auctions'];
+  gamesCount: number;
 }
 
 // function filterDrawingsFromLottery(array: Lottery_include_Nft[]) {
@@ -44,7 +48,14 @@ function unique(array: any[], propertyName: string) {
 //   return editionSize;
 // }
 
-export default function drop({ drop, auctions, artist,  drawings }: Props) {
+type GridClassName = 'drop-page__grid' | 'drop-page__grid--single' | 'drop-page__grid--double';
+
+type TileClassName =
+  | 'drop-page__grid-item'
+  | 'drop-page__grid-item--single'
+  | 'drop-page__grid-item--double';
+
+export default function drop({ drop, auctions, artist, drawings, gamesCount }: Props) {
   const { systemTypes, bannerImgSrc, dropName, dropDescription, artistName, createdAt } = useDrop({
     drop,
     Auctions: auctions,
@@ -56,6 +67,18 @@ export default function drop({ drop, auctions, artist,  drawings }: Props) {
     new Array().concat(drawings),
     sessionData?.address as string
   );
+
+  let gridClassName: GridClassName = 'drop-page__grid';
+  let tileClassName: TileClassName = 'drop-page__grid-item';
+  if (gamesCount === 1) {
+    gridClassName = 'drop-page__grid--single';
+    tileClassName = 'drop-page__grid-item--single';
+  }
+  if (gamesCount === 2) {
+    gridClassName = 'drop-page__grid--double';
+    tileClassName = 'drop-page__grid-item--double';
+  }
+
   return (
     <>
       <div className='drop-page__banner-base'>
@@ -79,7 +102,7 @@ export default function drop({ drop, auctions, artist,  drawings }: Props) {
                 <p className='drop-page__header-drop-details-item'>
                   <strong>Creation date:</strong> {createdAt}
                 </p>
-                <p className='drop-page__header-drop-details-item'>
+                <div className='drop-page__header-drop-details-item'>
                   <strong>Systems in this drop:</strong>
                   {systemTypes.map((type) => {
                     return (
@@ -88,7 +111,7 @@ export default function drop({ drop, auctions, artist,  drawings }: Props) {
                       </div>
                     );
                   })}
-                </p>
+                </div>
               </div>
             </div>
           </section>
@@ -107,13 +130,22 @@ export default function drop({ drop, auctions, artist,  drawings }: Props) {
             <h3 className='drop-page__drop-info-name'>{drop.name}</h3>
             <p className='drop-page__drop-info-description'>{drop.description}</p>
           </div>
-          <div className='drop-page__grid'>
+          <div className={gridClassName}>
             {auctions.map((a) => {
-              return <AuctionTile key={a.id} dropName={drop.name} artist={artist} auction={a} />;
+              return (
+                <AuctionTile
+                  key={a.id}
+                  className={tileClassName}
+                  dropName={drop.name}
+                  artist={artist}
+                  auction={a}
+                />
+              );
             })}
             {drawings.map((d) => {
               return (
                 <DrawingTile
+                  className={tileClassName}
                   key={d.id}
                   dropName={drop.name}
                   artistName={artistName}
@@ -155,6 +187,7 @@ export async function getStaticProps({
   const auctions = drop.Auctions;
   const artist = drop.NftContract.Artist;
   const drawings = drop.Lotteries;
+  const gamesCount: number = auctions.length + drawings.length;
 
   return {
     props: {
@@ -162,6 +195,7 @@ export async function getStaticProps({
       artist,
       auctions,
       drawings,
+      gamesCount,
     },
     revalidate: 60,
   };

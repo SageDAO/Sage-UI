@@ -11,9 +11,10 @@ interface Props {
   dropName: string;
   artist: User;
   auction: Auction_include_Nft;
+  className: string;
 }
 
-export default function AuctionTile({ artist, dropName, auction }: Props) {
+export default function AuctionTile({ artist, dropName, auction, className }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
 
   const {
@@ -35,7 +36,7 @@ export default function AuctionTile({ artist, dropName, auction }: Props) {
   if (!auctionState) return null;
 
   return (
-    <div onClick={openModal} className='drop-page__grid-item'>
+    <div onClick={openModal} className={className}>
       <PlaceBidModal
         auction={auction}
         artist={artist}
@@ -43,8 +44,7 @@ export default function AuctionTile({ artist, dropName, auction }: Props) {
         isOpen={isOpen}
         closeModal={closeModal}
       />
-      <TileHeader editionSize={editionSize} systemType='auction' />
-      <Media src={auction.Nft.s3Path}></Media>
+      <Media focusText={auctionFocusText} src={auction.Nft.s3Path}></Media>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>

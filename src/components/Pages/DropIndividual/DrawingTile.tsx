@@ -13,8 +13,10 @@ interface Props {
   artistName: string;
   drawing: Lottery_include_Nft;
   tickets: number;
+  className: string;
 }
-export default function DrawingTile({ artistName, dropName, drawing, tickets }: Props) {
+
+export default function DrawingTile({ artistName, dropName, drawing, tickets, className }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
   const { isStarted, isLive, isEnded, mediaSrc, selectedNftName, selectedNftEditionsCount } =
     useLottery({
@@ -30,7 +32,7 @@ export default function DrawingTile({ artistName, dropName, drawing, tickets }: 
     focusText = 'Results';
   }
   return (
-    <div onClick={openModal} className='drop-page__grid-item'>
+    <div onClick={openModal} className={className}>
       <GetTicketModal
         lottery={drawing}
         dropName={dropName}
@@ -40,8 +42,7 @@ export default function DrawingTile({ artistName, dropName, drawing, tickets }: 
         ticketCount={tickets}
         systemType='drawing'
       ></GetTicketModal>
-      <TileHeader editionSize={selectedNftEditionsCount} systemType='drawing'></TileHeader>
-      <Media src={mediaSrc}></Media>
+      <Media focusText={focusText} src={mediaSrc}></Media>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
