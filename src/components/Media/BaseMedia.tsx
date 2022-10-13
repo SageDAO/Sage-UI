@@ -78,7 +78,9 @@ interface PfpImageProps {
 function PfpImage({ src, className }: PfpImageProps) {
   if (!src) {
     // return <Image src={DEFAULT_PROFILE_PICTURE} className={className || 'default-pfp-src'} layout='fill' objectFit='cover' />;
-    return <DEFAULT_PFP className={'default-pfp-src'} layout='fill' objectfit='cover' />;
+    return (
+      <DEFAULT_PFP className={className || 'default-pfp-src'} layout='fill' objectfit='cover' />
+    );
   }
   return <Image src={src} layout='fill' className={className} objectFit='cover' />;
 }

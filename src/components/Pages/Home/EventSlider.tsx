@@ -1,3 +1,4 @@
+import useSageRoutes from '@/hooks/useSageRoutes';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -15,8 +16,11 @@ interface Props {
   mediumData: any;
 }
 
+function formatDescription() {}
+
 export default function EventSlider({ mediumData }: Props) {
   const [state, setState] = useState(INITIAL_STATE);
+  const { pushToNews } = useSageRoutes();
 
   useEffect(() => {
     setState((prevState) => {
@@ -36,52 +40,37 @@ export default function EventSlider({ mediumData }: Props) {
   return (
     <section className='home-page__events-section'>
       <h3 className='home-page__events-header'>news</h3>
+      <p className='home-page__events-subheader'>Latest news from the crypto space.</p>
       <div className='home-page__events'>
-        <a target='__blank' className='home-page__events-main' href={state.items[0]?.link}>
-          <div className='home-page__events-main-media'>
-            <Image
-              src={state.items[0]?.thumbnail}
-              layout='fill'
-              objectFit='cover'
-              className='home-page__events-slide-bg'
-              loader={({ src, width, quality }) => {
-                return `${src}?w=${width}&q=${quality || 75}`;
-              }}
-            />
-          </div>
-          <div className='home-page__event-slide-content'>
-            <h1 className='home-page__event-slide-content-title'>{state.items[0]?.title}</h1>
-          </div>
-        </a>
-        <div className='home-page__events-secondary'>
-          <>
-            <div className='home-page__events-secondary-item'>
-              <div className='home-page__events-secondary-item-media'>
-                <Image src={'/sample/geo.png'} layout='fill'></Image>
+        {state.items.map((item) => {
+          const regex = /(<([^>]+)>)/gi;
+          let description = item.description.replace(regex, '');
+          description = description.slice(0, 300);
+          return (
+            <a target='__blank' className='home-page__events-item' href={item.link}>
+              <div className='home-page__events-item-media'>
+                <Image
+                  src={item.thumbnail}
+                  layout='fill'
+                  objectFit='cover'
+                  className='home-page__events-slide-bg'
+                  loader={({ src, width, quality }) => {
+                    return `${src}?w=${width}&q=${quality || 75}`;
+                  }}
+                />
               </div>
-              <p className='home-page__events-secondary-item-title'>new geometrics style guide</p>
-            </div>
-            <div className='home-page__events-secondary-item'>
-              <div className='home-page__events-secondary-item-media'>
-                <Image src={'/sample/court.png'} layout='fill'></Image>
+              <div className='home-page__event-slide-content'>
+                <p className='home-page__event-slide-content-title'>{item.title}</p>
+                <p className='home-page__event-slide-content-description'>{description}</p>
               </div>
-              <p className='home-page__events-secondary-item-title'>courtside with teddy kelly</p>
-            </div>
-            <div className='home-page__events-secondary-item'>
-              <div className='home-page__events-secondary-item-media'>
-                <Image src={'/sample/trends.png'} layout='fill'></Image>
-              </div>
-              <p className='home-page__events-secondary-item-title'>2023 crypto art trends</p>
-            </div>
-            <div className='home-page__events-secondary-item'>
-              <div className='home-page__events-secondary-item-media'>
-                <Image src={'/sample/datamatics.png'} layout='fill'></Image>
-              </div>
-              <p className='home-page__events-secondary-item-title'>ryoji ikeda - datamatics</p>
-            </div>
-          </>
-          <button className='home-page__events-visit-news-button'>visit news page</button>
-        </div>
+            </a>
+          );
+        })}
+      </div>
+      <div className='home-page__events-section-bottom'>
+        <button onClick={pushToNews} className='home-page__events-visit-button'>
+          VIEW ALL NEWS
+        </button>
       </div>
     </section>
   );

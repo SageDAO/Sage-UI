@@ -12,6 +12,7 @@ export default function NewArtworks({ newArtworks }: Props) {
   return (
     <section className='home-page__new-artworks-section'>
       <p className='home-page__new-artworks-header'>NEW ARTWORK</p>
+      <p className='home-page__new-artworks-subheader'>Fresh mints by SAGE creators</p>
       <div className='home-page__new-artworks-flex-container'>
         {newArtworks.map((nft) => {
           const artist = nft.NftContract?.Artist;

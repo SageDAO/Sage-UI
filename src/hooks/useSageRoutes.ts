@@ -6,6 +6,7 @@ import {
   basePathHome,
   basePathSubmissions,
   basePathProfile,
+  basePathNews,
 } from '@/constants/paths';
 import { useRouter } from 'next/router';
 import { User, Drop } from '@prisma/client';
@@ -53,6 +54,10 @@ export default function useSageRoutes() {
     await router.push('/termsofservice');
   }
 
+  async function pushToNews() {
+    await router.push(basePathNews);
+  }
+
   const { pathname } = router;
 
   const isProfilePage: boolean = pathname.includes(basePathProfile);
@@ -67,6 +72,7 @@ export default function useSageRoutes() {
     pushToHowToBuyAsh,
     pushToPrivacyPolicy,
     pushToTermsOfService,
+    pushToNews,
     isProfilePage,
     isSingleDropsPage,
   };

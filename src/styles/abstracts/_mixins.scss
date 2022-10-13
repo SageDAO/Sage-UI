@@ -67,7 +67,7 @@
   }
   &:not([disabled]) {
     cursor: pointer;
-		@include transition-base;
+    @include transition-base;
     @include hover {
       @content;
       filter: brightness(0.9);
@@ -198,8 +198,8 @@ $desktop-width: 1495px;
   font-weight: 400;
   font-size: clamp(20px, 5vw, 50px);
   line-height: clamp(24px, 1em, 60px);
-	@include header-margins;
-	text-transform: uppercase;
+  @include header-margins;
+  text-transform: uppercase;
 }
 
 @mixin header-margins {
@@ -224,7 +224,7 @@ $desktop-width: 1495px;
 
 @mixin text-p3 {
   font-size: clamp(14px, 0.8vw, 20px);
-	line-height: 1.25em;
+  line-height: 1.25em;
 }
 @mixin text-p4 {
   font-size: clamp(10px, 0.7vw, 15px);
@@ -255,13 +255,14 @@ $desktop-width: 1495px;
 }
 
 @mixin pfp-container {
+  @include interact;
   position: relative;
   aspect-ratio: 1/1;
   border-radius: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
-	@include interact;
+  justify-content: center;
 }
 
 @mixin button-base {
@@ -278,7 +279,7 @@ $desktop-width: 1495px;
   // font-weight: 400;
   // font-size: clamp(10px, 1.5vw, 16px);
   width: min(250px, 80vw);
-	height: 35px;
+  height: 35px;
   text-align: center;
   letter-spacing: 0.1em;
   @include interact;

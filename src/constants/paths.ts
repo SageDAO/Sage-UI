@@ -2,6 +2,7 @@ const basePathHome = '/';
 const basePathDrops = '/drops';
 const basePathCreators = '/creators';
 const basePathAbout = '/about';
+const basePathNews = '/news';
 const basePathPress = '/press';
 const basePathHowToBuyAsh = '/howtobuyash';
 
@@ -15,6 +16,7 @@ const basePathProfile = '/profile';
 export {
   basePathHome,
   basePathDrops,
+  basePathNews,
   basePathAbout,
   basePathCreators,
   basePathGames,

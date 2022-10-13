@@ -1,0 +1,20 @@
+@use '@/styles/abstracts/colors' as c;
+@use '@/styles/abstracts/mixins' as m;
+@use '@/styles/abstracts/breakpoints' as b;
+
+.news-page {
+  @include m.page;
+}
+
+.news-page__header {
+  @include m.text-h1;
+  @include m.standard-width;
+}
+
+.news-page__subheader {
+  @include m.standard-width;
+}
+
+.news-page__main {
+  @include m.standard-width;
+}

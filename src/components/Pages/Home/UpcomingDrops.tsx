@@ -1,12 +1,13 @@
 import { getHomePageData } from '@/prisma/functions';
 import React from 'react';
 import { computeDropStatus } from '@/utilities/status';
-import { BaseMedia } from '@/components/Media/BaseMedia';
+import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 import Countdown from '@/components/Countdown';
 import useWindowDimensions from '@/hooks/useWindowSize';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import { transformTitle } from '@/utilities/strings';
 import useDrop, { UseDropArgs } from '@/hooks/useDrop';
+import artist from 'src/pages/creators/[id]';
 
 interface Props {
   upcomingDrops: Awaited<ReturnType<typeof getHomePageData>>['upcomingDrops'];
@@ -93,12 +94,16 @@ function UpcomingDropsTile(props: UpcomingDropsTileProps) {
         </div>
       )}
       <BaseMedia src={bannerImgSrc} />
-      <h3 className='home-page__upcoming-drops-tile-tag'>
-        <span className='home-page__upcoming-drops-tile-tag-item'>
-          <i className='home-page__upcoming-drops-tile-tag-item-name'>{dropName}</i>
-          <pre /> by {artistName}
+      <div className='home-page__upcoming-drops-tile-tag'>
+        <div className='home-page__upcoming-drops-tile-pfp'>
+          <PfpImage src={props.artist.profilePicture}></PfpImage>
+        </div>
+        <span className='home-page__upcoming-drops-tile-item-name'>
+          {dropName}
+          <pre />
+          <i className='home-page__upcoming-drops-tile-artist-name'>by {artistName}</i>
         </span>
-      </h3>
+      </div>
     </div>
   );
 }
