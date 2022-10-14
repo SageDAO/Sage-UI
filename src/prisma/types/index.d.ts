@@ -66,6 +66,7 @@ export type GamePrize = {
   auctionId?: Auction['id'];
   lotteryId?: Lottery['id'];
   lotteryProof?: PrizeProof['proof'];
+  ticketNumber?: PrizeProof['ticketNumber'];
   nftName: Nft['name'];
   artistUsername: User['username'];
   artistProfilePicture: User['profilePicture'];

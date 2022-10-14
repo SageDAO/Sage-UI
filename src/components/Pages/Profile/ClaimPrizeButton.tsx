@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function ClaimPrizeButton({ gamePrize }: Props) {
-  const { lotteryId, lotteryProof, uri, nftId, auctionId } = gamePrize;
+  const { lotteryId, lotteryProof, ticketNumber, uri, nftId, auctionId } = gamePrize;
   const [claimLotteryPrize, { isLoading: isClaimLotteryPrizeLoading }] =
     useClaimLotteryPrizeMutation();
   const [claimAuctionPrize, { isLoading: isClaimAuctionPrizeLoading }] = useClaimAuctionMutation();
@@ -28,7 +28,8 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
           lotteryId: lotteryId,
           proof: lotteryProof as string,
           walletAddress: userData?.walletAddress as string,
-          uri: uri,
+          uri,
+          ticketNumber,
           signer: signer as Signer,
           nftId: nftId,
         });

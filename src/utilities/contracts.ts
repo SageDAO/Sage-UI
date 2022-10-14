@@ -16,7 +16,7 @@ import {
   SageNFT as NftContract,
   NFTFactory as NftFactoryContract,
   Marketplace as MarketplaceContract,
-  SageStorage as StorageContract
+  SageStorage as StorageContract,
 } from '@/types/contracts';
 import { promiseToast } from './toast';
 
@@ -107,13 +107,14 @@ async function getContract(address: string, abi: any, signer?: Signer) {
 
 export function extractErrorMessage(err: any): string {
   var error = err.error ? err.error : err;
-  var rawMessage: any;
   if (error.code == -32603) {
-    // RPC Error: Internal JSON-RPC error
-    rawMessage = error.message;
-  }
-  if (!rawMessage) {
-    rawMessage = err.message;
+    // 32603 = RPC Error: Internal JSON-RPC error
+    var rawMessage = String(error.message);
+  } else if (error.code == 4001 || error.code == 'ACTION_REJECTED') {
+    // 4001 = MetaMask Tx Signature: User denied transaction signature.
+    var rawMessage = 'User denied transaction signature';
+  } else {
+    var rawMessage = String(err.message);
   }
   var key = 'execution reverted: ';
   if (rawMessage.includes(key)) {

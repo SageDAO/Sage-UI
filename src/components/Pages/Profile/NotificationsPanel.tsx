@@ -53,26 +53,26 @@ export default function Notifications() {
               </thead>
               <tbody className='notifications-panel__data-list'>
                 {!isLoading &&
-                  pageItems.map((nft: GamePrize) => {
-                    const dateDisplay = nft.claimedAt ? formatDateYYMMddHHmm(nft.claimedAt) : 'unclaimed';
+                  pageItems.map((prize: GamePrize) => {
+                    const dateDisplay = prize.claimedAt ? formatDateYYMMddHHmm(prize.claimedAt) : 'unclaimed';
                     return (
-                      <tr key={nft.nftId} className='notifications-panel__data-row'>
+                      <tr key={prize.nftId} className='notifications-panel__data-row'>
                         <td className='notifications-panel__td--creation'>
                           <div className='notifications-panel__td-media-container'>
                             <BaseMedia
-                              src={nft.s3PathOptimized}
+                              src={prize.s3PathOptimized}
                               className='notifications-panel__td-media'
                             ></BaseMedia>
                           </div>
                           <span className='notifications-panel__td--creation-name'>
-                            {nft.nftName}
+                            {prize.nftName}
                           </span>
                         </td>
                         <td className='notifications-panel__td--date'>{dateDisplay}</td>
                         <td className='notifications-panel__td--interact'>
-                          <ClaimPrizeButton gamePrize={nft} />
+                          <ClaimPrizeButton gamePrize={prize} />
                           <CheckSVG
-                            data-claimed={!!nft.claimedAt}
+                            data-claimed={!!prize.claimedAt}
                             className='notifications-panel__td--interact-check-svg'
                           />
                         </td>

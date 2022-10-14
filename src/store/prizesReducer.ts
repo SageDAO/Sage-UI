@@ -11,6 +11,7 @@ export interface ClaimPrizeRequest {
   uri: Nft['metadataPath'];
   nftId: Nft['id'];
   proof: PrizeProof['proof'];
+  ticketNumber: PrizeProof['ticketNumber'];
   walletAddress: User['walletAddress'];
   signer: Signer;
 }
@@ -48,7 +49,7 @@ const prizesApi = baseApi.injectEndpoints({
           var tx = await contract.claimPrize(
             args.lotteryId,
             args.walletAddress,
-            args.nftId,
+            args.ticketNumber,
             args.uri,
             toByteArray(args.proof)
           );

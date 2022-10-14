@@ -25,6 +25,7 @@ export default function CollectionTile({ item }: Props) {
         lotteryId: prize.lotteryId,
         nftId: prize.nftId,
         proof: prize.lotteryProof,
+        ticketNumber: prize.ticketNumber,
         walletAddress: sessionData?.address,
         signer: signer as Signer,
       } as ClaimPrizeRequest);
