@@ -29,11 +29,9 @@ export function computeDropStatus({
     status = 'Live';
     if (endTime < Date.now()) {
       status = 'Done';
-      //TODO: check if user has a claimable in this drop
     }
   }
 
-  //TODO: this function should return react nodes with unique styling
   return { startTime, endTime, status };
 }
 

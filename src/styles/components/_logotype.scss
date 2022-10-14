@@ -53,30 +53,24 @@
 }
 
 .sage-logotype__sage-icon {
-  width: clamp(10px, 1vw, 30px);
   @include m.theme() {
-    color: m.t(contrast2);
-  }
-  @include m.data-color;
-}
-
-.sage-logotype__svg {
-  // flex: 1;
-  display: flex;
-  // background-color: red;
-  // width: min-content;
-  justify-content: flex-start;
-  // height: min(10vw, 108px);
-  height: 10vw;
-  width: 40vw;
-  // width: max-content;
-  // aspect-ratio: 165/36;
-  @include m.theme() {
+    width: clamp(10px, 1vw, 30px);
     color: m.t(contrast2);
     @include m.data-color;
   }
-  @include b.min-width('medium') {
-    height: 4.9vw;
-    width: min(19.6vw, 236px);
+}
+
+.sage-logotype__svg {
+  @include m.theme() {
+    display: flex;
+    justify-content: flex-start;
+    height: 10vw;
+    width: 40vw;
+    color: m.t(contrast2);
+    @include m.data-color;
+    @include b.min-width('medium') {
+      height: 4.9vw;
+      width: min(19.6vw, 236px);
+    }
   }
 }

@@ -22,24 +22,10 @@ interface Props {
 // }
 //
 
-function checkTime(i: number) {
-  let value: string = String(i);
-  if (i < 10) {
-    value = String('0' + value);
-  }
-
-  return value;
-}
-
 export default function Countdown({ endTime, color, className }: Props) {
-  const { days, hours, minutes, seconds, total } = useCountdown({ targetDate: endTime });
-  const [displayValue, setDisplayValue] = useState<string>('');
-  let h = checkTime(days * 24 + hours);
-  let m = checkTime(minutes);
-  let s = checkTime(seconds);
-  useEffect(() => {
-    setDisplayValue(`${h}:${m}:${s}`);
-  }, [total]);
+  const { total, displayValue } = useCountdown({
+    targetDate: endTime,
+  });
   if (total < 0) {
     return null;
   }

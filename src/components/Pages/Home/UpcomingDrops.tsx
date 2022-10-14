@@ -8,6 +8,7 @@ import useSageRoutes from '@/hooks/useSageRoutes';
 import { transformTitle } from '@/utilities/strings';
 import useDrop, { UseDropArgs } from '@/hooks/useDrop';
 import artist from 'src/pages/creators/[id]';
+import useCountdown from '@/hooks/useCountdown';
 
 interface Props {
   upcomingDrops: Awaited<ReturnType<typeof getHomePageData>>['upcomingDrops'];
@@ -58,11 +59,9 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
         function onClick() {
           pushToDrops(d.id);
         }
-        const { startTime, status } = computeDropStatus(d);
-        const display =
-          status === 'Upcoming' ? <Countdown endTime={startTime} /> : status.toUpperCase();
         return (
           <UpcomingDropsTile
+            key={d.id}
             Lotteries={d.Lotteries}
             Auctions={d.Auctions}
             drop={d}
@@ -83,14 +82,16 @@ function UpcomingDropsTile(props: UpcomingDropsTileProps) {
     statusDisplay,
     bannerImgSrc,
     startTime,
+    endTime,
     artistName,
     dropName,
   } = useDrop(props);
+  const { displayValue: openingTime } = useCountdown({ targetDate: startTime });
   return (
     <div className='home-page__upcoming-drops-tile' onClick={goToDropOnClick}>
       {dropStatus !== 'Done' && (
         <div className='home-page__upcoming-drops-countdown' data-status={dropStatus}>
-          {dropStatus === 'Upcoming' ? <Countdown endTime={startTime} /> : statusDisplay}
+          {dropStatus === 'Upcoming' ? openingTime : statusDisplay}
         </div>
       )}
       <BaseMedia src={bannerImgSrc} />

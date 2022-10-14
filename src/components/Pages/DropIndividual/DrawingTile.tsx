@@ -7,6 +7,7 @@ import useModal from '@/hooks/useModal';
 import TileHeader from './TileHeader';
 import Countdown from '@/components/Countdown';
 import useLottery from '@/hooks/useLottery';
+import useCountdown from '@/hooks/useCountdown';
 
 interface Props {
   dropName: string;
@@ -18,12 +19,24 @@ interface Props {
 
 export default function DrawingTile({ artistName, dropName, drawing, tickets, className }: Props) {
   const { isOpen, closeModal, openModal } = useModal();
-  const { isStarted, isLive, isEnded, mediaSrc, selectedNftName, selectedNftEditionsCount } =
-    useLottery({
-      lottery: drawing,
-      nfts: drawing.Nfts,
-    });
-  let focusText: string = 'Upcoming';
+  const {
+    isStarted,
+    isLive,
+    isEnded,
+    mediaSrc,
+    selectedNftName,
+    selectedNftEditionsCount,
+    endTime,
+    startTime,
+  } = useLottery({
+    lottery: drawing,
+    nfts: drawing.Nfts,
+  });
+  let focusText: string = 'Starting soon';
+
+  const { displayValue } = useCountdown({ targetDate: startTime });
+  const { displayValue: countdownEnd } = useCountdown({ targetDate: endTime });
+
   if (isLive) {
     focusText = 'Enter Drawing';
   }
@@ -56,18 +69,8 @@ export default function DrawingTile({ artistName, dropName, drawing, tickets, cl
           )}
         </div>
         <div className='drop-page__grid-item-info-right'>
-          {isStarted && (
-            <Countdown
-              endTime={drawing.endTime}
-              className='drop-page__grid-item-info-countdown'
-            ></Countdown>
-          )}
-          {!isStarted && (
-            <Countdown
-              endTime={drawing.startTime}
-              className='drop-page__grid-item-info-countdown'
-            ></Countdown>
-          )}
+          {!isStarted && <div className='drop-page__grid-item-info-countdown'>{displayValue}</div>}
+          {isLive && <div className='drop-page__grid-item-info-countdown'>{countdownEnd}</div>}
         </div>
       </div>
     </div>

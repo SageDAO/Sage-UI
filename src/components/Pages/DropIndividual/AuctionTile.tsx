@@ -1,6 +1,7 @@
 import Countdown from '@/components/Countdown';
 import PlaceBidModal from '@/components/Modals/Games/PlaceBidModal';
 import useAuction from '@/hooks/useAuction';
+import useCountdown from '@/hooks/useCountdown';
 import useModal from '@/hooks/useModal';
 import { Auction_include_Nft, User } from '@/prisma/types';
 import React from 'react';
@@ -24,14 +25,19 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
     isStarted,
     isOpenForBids,
     endTime,
+    isEnded,
     startTime,
     artistName,
     auctionState,
     nftName,
+    isRunning,
   } = useAuction({
     auction,
     artist,
   });
+
+  const { displayValue } = useCountdown({ targetDate: startTime });
+  const { displayValue: timeUntilClose } = useCountdown({ targetDate: endTime });
 
   if (!auctionState) return null;
 
@@ -53,17 +59,14 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
           <h1 className='drop-page__grid-item-info-game-name'>{nftName}</h1>
         </div>
         <div className='drop-page__grid-item-info-right'>
-          {!isStarted && (
-            <Countdown
-              endTime={startTime}
-              className='drop-page__grid-item-info-countdown'
-            ></Countdown>
+          {!isOpenForBids && (
+            <div className='drop-page__grid-item-info-countdown'>{displayValue}</div>
           )}
-          {isOpenForBids && (
-            <Countdown
-              endTime={endTime}
-              className='drop-page__grid-item-info-countdown'
-            ></Countdown>
+          {isRunning && !isEnded && (
+            <div className='drop-page__grid-item-info-countdown'>{timeUntilClose}</div>
+          )}
+          {!isRunning && isOpenForBids && (
+            <div className='drop-page__grid-item-info-countdown'>Bid Now</div>
           )}
         </div>
       </div>
