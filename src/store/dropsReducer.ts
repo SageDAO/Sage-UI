@@ -362,9 +362,6 @@ async function deployLotteries(
     const startTime = Math.floor(new Date(l.startTime).getTime() / 1000);
     const endTime = Math.floor(new Date(l.endTime).getTime() / 1000);
     const costPerTicketTokens = ethers.utils.parseEther(l.costPerTicketTokens.toString());
-    const nftsSortedById = l.Nfts.sort((a, b) => a.id - b.id);
-    const lowestId = nftsSortedById[0].id;
-    const highestId = nftsSortedById[nftsSortedById.length - 1].id;
     createParams.push({
       lotteryID: l.id,
       ticketCostPoints: l.costPerTicketPoints,
@@ -374,8 +371,7 @@ async function deployLotteries(
       nftContract: artistNftContractAddress,
       maxTickets: l.maxTickets || 0,
       maxTicketsPerUser: l.maxTicketsPerUser || 0,
-      firstPrizeId: lowestId,
-      lastPrizeId: highestId,
+      numberOfEditions: l.Nfts[0].numberOfEditions,
       participantsCount: 0,
       numberOfTicketsSold: 0,
       status: 0, // Status.Created

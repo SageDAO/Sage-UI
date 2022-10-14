@@ -7,7 +7,7 @@ import {
   getNftFactoryContract,
 } from '@/utilities/contracts';
 import { createBucketFolderName, uploadFileToS3 } from '@/utilities/awsS3-client';
-import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave';
+import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave-client';
 import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { Offer } from '@prisma/client';
@@ -15,6 +15,7 @@ import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
 import { registerMarketplaceSale } from '@/utilities/sales';
 import { parameters } from '@/constants/config';
+import { NFTFactory } from '@/types/contracts';
 
 export interface MintRequest {
   name: string;
@@ -77,7 +78,7 @@ const nftsApi = baseApi.injectEndpoints({
           nftId = await dbInsertNft(mintRequest, artistAddress, s3Path, metadataPath, fetchWithBQ);
           console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
           const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
-          const mintTx = await nftContract.artistMint(artistAddress, nftId, metadataPath);
+          const mintTx = await nftContract.artistMint(artistAddress, metadataPath);
           await mintTx.wait();
           if (mintRequest.isFixedPrice) {
             await createSignedOffer(
@@ -338,6 +339,7 @@ export async function fetchOrCreateNftContract(
   signer: Signer,
   fetchWithBQ: any
 ): Promise<string> {
+  // check db for existing nft contract
   const { data } = await fetchWithBQ(`drops?action=GetNftContractAddress&address=${artistAddress}`);
   if (data.contractAddress) {
     console.log(
@@ -345,28 +347,56 @@ export async function fetchOrCreateNftContract(
     );
     return data.contractAddress;
   }
+  // check contract factory for existing nft contract
   const nftFactoryContract = await getNftFactoryContract(signer);
   console.log(`fetchOrCreateNftContract() :: Using Factory ${nftFactoryContract.address}`);
   var artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
   if (!artistContractAddress || artistContractAddress == ethers.constants.AddressZero) {
     console.log(`fetchOrCreateNftContract() :: Creating new NFT contract...`);
-    var tx: ContractTransaction;
-    if (artistAddress == (await signer.getAddress())) {
-      tx = await nftFactoryContract.deployByArtist('Sage', 'SAGE');
-    } else {
-      tx = await nftFactoryContract.deployByAdmin(artistAddress, 'Sage', 'SAGE');
-    }
-    await tx.wait(1);
-    artistContractAddress = await nftFactoryContract.getContractAddress(artistAddress);
-    if (artistContractAddress == ethers.constants.AddressZero) {
-      throw new Error('Unable to create a new NFT contract');
-    }
+    artistContractAddress = await createNftContract(
+      nftFactoryContract,
+      signer,
+      artistAddress,
+      fetchWithBQ
+    );
   }
+  // update db
   await fetchWithBQ(
     `drops?action=UpdateNftContractAddress&artistAddress=${artistAddress}&contractAddress=${artistContractAddress}`
   );
   console.log(`fetchOrCreateNftContract() :: Contract deployed to ${artistContractAddress}`);
   return artistContractAddress;
+}
+
+async function createNftContract(
+  factory: NFTFactory,
+  signer: Signer,
+  artistAddress: string,
+  fetchWithBQ: any
+): Promise<string> {
+  var tx: ContractTransaction;
+  if (artistAddress == (await signer.getAddress())) {
+    tx = await factory.deployByArtist('Sage', 'SAGE');
+  } else {
+    tx = await factory.deployByAdmin(artistAddress, 'Sage', 'SAGE');
+  }
+  await tx.wait(1);
+  const contractAddress = await factory.getContractAddress(artistAddress);
+  if (contractAddress == ethers.constants.AddressZero) {
+    throw new Error('Unable to create a new NFT contract');
+  }
+  console.log(`createNftContract() :: Deploying contract metadata file...`);
+  const { data: response } = await fetchWithBQ({
+    url: `nfts?action=DeployContractMetadata`,
+    method: 'POST',
+    body: { artistAddress, contractAddress },
+  });
+  const metadataURL = (response as any).metadataURL;
+  console.log(`createNftContract() :: Setting contract metadata to ${metadataURL}`);
+  const contract = await getNFTContract(contractAddress, signer);
+  tx = await contract.setContractMetadata(metadataURL);
+  await tx.wait();
+  return contractAddress;
 }
 
 export const {

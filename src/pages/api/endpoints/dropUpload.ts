@@ -2,21 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import NextCors from 'nextjs-cors';
 import prisma from '@/prisma/client';
 import { Role } from '@prisma/client';
-import Arweave from 'arweave';
-import { JWKInterface } from 'arweave/node/lib/wallet';
-import Transaction from 'arweave/node/lib/transaction';
-import { computePrimes } from 'jwk-rsa-compute-primes';
 import { getSession } from 'next-auth/react';
 import { createS3SignedUrl } from '@/utilities/awsS3-server';
-
-const arweaveJwk = computePrimes(JSON.parse(process.env.ARWEAVE_JSON_JWK || ''));
-
-const arweave = Arweave.init({
-  host: 'arweave.net',
-  port: 443,
-  protocol: 'https',
-  timeout: 120000,
-});
+import { sendArweaveTransaction } from '@/utilities/arweave-server';
 
 /*
  * TODO authenticate requests coming from the (external) upload app
@@ -88,16 +76,12 @@ async function getS3SignedUrl(folder: string, filename: string, response: NextAp
 async function copyFromS3toArweave(s3Path: string, response: NextApiResponse) {
   var balance = '';
   try {
-    const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
-    balance = await arweave.wallets.getBalance(walletAddress);
-    balance = arweave.ar.winstonToAr(balance);
     const fileContent = await fetchFileContent(s3Path);
     const filename = s3Path.split('/').pop() as string;
-    const tx = await sendArweaveTransaction(
+    const { tx, balance } = await sendArweaveTransaction(
       filename,
       fileContent,
-      inferMimeType(s3Path),
-      arweaveJwk
+      inferMimeType(s3Path)
     );
     response.json({ id: tx.id, balance });
   } catch (e: any) {
@@ -106,38 +90,13 @@ async function copyFromS3toArweave(s3Path: string, response: NextApiResponse) {
   }
 }
 
-async function sendArweaveTransaction(
-  filename: string,
-  data: Uint8Array,
-  contentType: string,
-  jwk: JWKInterface
-): Promise<Transaction> {
-  const transaction = await arweave.createTransaction({ data }, jwk);
-  transaction.addTag('Content-Type', contentType);
-  await arweave.transactions.sign(transaction, jwk);
-  await arweave.transactions.post(transaction);
-  // const uploader = await arweave.transactions.getUploader(transaction);
-  // while (!uploader.isComplete) {
-  //   await uploader.uploadChunk();
-  //   console.log(
-  //     `${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`
-  //   );
-  // }
-  console.log(`sendArweaveTransaction() :: ${filename} -> ${transaction.id}`);
-  return transaction;
-}
-
 async function uploadNftMetadataToArweave(nftMetadataFile: any, response: NextApiResponse) {
   var metadataType = 'application/json';
-  const tx = await sendArweaveTransaction(
+  const { tx, balance } = await sendArweaveTransaction(
     nftMetadataFile.filename,
     nftMetadataFile.data,
-    metadataType,
-    arweaveJwk
+    metadataType
   );
-  const walletAddress = await arweave.wallets.jwkToAddress(arweaveJwk);
-  var balance = await arweave.wallets.getBalance(walletAddress);
-  balance = arweave.ar.winstonToAr(balance);
   response.json({ id: tx.id, balance });
 }
 
