@@ -3,7 +3,7 @@
 @use '@/styles/abstracts/breakpoints' as b;
 @use '@/styles/layout/layout' as l;
 .nav {
-	margin-top: 50px;
+  margin-top: 50px;
   height: 44px;
   justify-content: center;
   gap: 20%;
@@ -103,7 +103,7 @@
 .nav__search {
   width: 33%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 
