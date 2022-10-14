@@ -23,6 +23,7 @@ import Countdown from '@/components/Countdown';
 import { transformTitle } from '@/utilities/strings';
 import ClaimRefundButton from '@/components/Pages/Profile/ClaimRefundButton';
 import CheckSVG from '@/public/icons/check.svg';
+import { useRouter } from 'next/router';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -54,6 +55,7 @@ function GetTicketModal({
   ticketCount,
   systemType,
 }: Props) {
+  const router = useRouter();
   const { data: sessionData } = useSession();
   const walletAddress = sessionData?.address;
   const { data: signer } = useSigner();
@@ -243,16 +245,19 @@ function GetTicketModal({
               )}
               {winners && winners.length > 0 && (
                 <>
-                  <h1 className='games-modal__winners-label'>winner</h1>
+                  <h1 className='games-modal__winners-label'>
+                    winner{winners.length > 1 ? 's' : ''}
+                  </h1>
                   <div className='games-modal__winners-list'>
                     {winners.map((winner: any) => (
                       <div key={winner}>
                         {winner.User.username ? winner.User.username : winner.winnerAddress}
-                        {walletAddress && walletAddress == winner.winnerAddress && 
-                        <>
-                          &nbsp; &nbsp; 
-                          {/* TODO place claim button here */}
-                        </>}
+                        {walletAddress && walletAddress == winner.winnerAddress && (
+                          <>
+                            &nbsp; &nbsp;
+                            <button onClick={() => router.push('/profile?notifications')} className='notifications-panel__interact-button'>claim</button>
+                          </>
+                        )}
                       </div>
                     ))}
                   </div>
