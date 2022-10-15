@@ -30,14 +30,13 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
     artistName,
     auctionState,
     nftName,
-    isRunning,
   } = useAuction({
     auction,
     artist,
   });
 
-  const { displayValue } = useCountdown({ targetDate: startTime });
-  const { displayValue: timeUntilClose } = useCountdown({ targetDate: endTime });
+  const { displayValue: countdownUntilOpen } = useCountdown({ targetDate: startTime });
+  const { displayValue: countdownUntilClose } = useCountdown({ targetDate: endTime });
 
   if (!auctionState) return null;
 
@@ -59,14 +58,14 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
           <h1 className='drop-page__grid-item-info-game-name'>{nftName}</h1>
         </div>
         <div className='drop-page__grid-item-info-right'>
-          {!isOpenForBids && (
-            <div className='drop-page__grid-item-info-countdown'>{displayValue}</div>
+          {!isStarted && (
+            <div className='drop-page__grid-item-info-countdown'>{countdownUntilOpen}</div>
           )}
-          {isRunning && !isEnded && (
-            <div className='drop-page__grid-item-info-countdown'>{timeUntilClose}</div>
-          )}
-          {!isRunning && isOpenForBids && (
+          {isOpenForBids && (
             <div className='drop-page__grid-item-info-countdown'>Bid Now</div>
+          )}
+          {isOpenForBids && !isEnded && (
+            <div className='drop-page__grid-item-info-countdown'>{countdownUntilClose}</div>
           )}
         </div>
       </div>

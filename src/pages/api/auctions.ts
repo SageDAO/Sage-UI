@@ -23,6 +23,10 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     case 'GetBidHistory':
       await getBidHistory(Number(request.query.auctionId), response);
       break;
+    case 'GetNftByAuctionAndWinner':
+      const { auctionId, winner } = request.query;
+      await getNftByAuctionAndWinner(Number(auctionId), String(winner), response);
+      break;
     case 'GetClaimedAuctionNfts':
       await getClaimedAuctionNfts(walletAddress as string, response);
       break;
@@ -77,21 +81,45 @@ async function getBidHistory(auctionId: number, response: NextApiResponse) {
     response.status(500);
   } else {
     const bids = [];
-    const result = await prisma.bidHistory.findMany({ 
+    const result = await prisma.bidHistory.findMany({
       where: { auctionId },
       include: { Bidder: true },
-      orderBy: [{ blockTimestamp: 'desc' }] 
+      orderBy: [{ blockTimestamp: 'desc' }],
     });
     for (const row of result) {
       bids.push({
         amount: row.amount,
         bidderAddress: row.bidderAddress,
         bidderUsername: row.Bidder.username,
-        blockTimestamp: row.blockTimestamp
+        blockTimestamp: row.blockTimestamp,
       });
     }
     response.json(bids);
   }
+}
+
+async function getNftByAuctionAndWinner(
+  auctionId: number,
+  winner: string,
+  response: NextApiResponse
+) {
+  response.json(
+    await prisma.auction.findFirst({
+      where: {
+        id: auctionId,
+        winnerAddress: winner,
+      },
+      include: {
+        Nft: {
+          include: {
+            Lottery: {
+              include: { Drop: { include: { NftContract: { include: { Artist: true } } } } },
+            },
+          },
+        },
+      },
+    })
+  );
 }
 
 async function getClaimedAuctionNfts(walletAddress: string, response: NextApiResponse) {
@@ -166,9 +194,9 @@ async function saveBid(
     response.status(500);
     return;
   }
-  await prisma.bidHistory.create({ 
-    data: { auctionId, amount, bidderAddress, blockTimestamp } }
-  );
+  await prisma.bidHistory.create({
+    data: { auctionId, amount, bidderAddress, blockTimestamp },
+  });
   await new Promise((r) => setTimeout(r, 500)); // give it a split second before finishing the request
   response.status(200);
 }

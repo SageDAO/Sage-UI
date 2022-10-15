@@ -44,6 +44,14 @@ const auctionsApi = baseApi.injectEndpoints({
       },
       providesTags: ['AuctionState'],
     }),
+    getNftByAuctionAndWinner: builder.query<
+      GamePrize,
+      { auctionId: number; walletAddress: string }
+    >({
+      query: ({ auctionId, walletAddress }) =>
+        `auctions?action=GetNftByAuctionAndWinner&auctionId=${auctionId}&winner=${walletAddress}`,
+      providesTags: ['Auction'],
+    }),
     getBidHistory: builder.query<[], number>({
       query: (auctionId) => `auctions?action=GetBidHistory&auctionId=${auctionId}`,
       providesTags: ['AuctionState'],
@@ -184,6 +192,7 @@ export const {
   useGetAuctionQuery,
   useGetAuctionStateQuery,
   useGetBidHistoryQuery,
+  useGetNftByAuctionAndWinnerQuery,
   useClaimAuctionMutation,
   useGetClaimedAuctionNftsQuery,
   useGetUnclaimedAuctionNftsQuery,

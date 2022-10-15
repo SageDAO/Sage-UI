@@ -3,7 +3,6 @@ import ClaimPrizeButton from './ClaimPrizeButton';
 import { formatDateYYMMddHHmm, formatTimestampYYMMddHHmm } from '@/utilities/strings';
 import { GamePrize } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
-import CheckSVG from '@/public/icons/check.svg';
 import usePagination from '@/hooks/usePagination';
 import useUserNotifications from '@/hooks/useUserNotifications';
 import ClaimRefundButton from './ClaimRefundButton';
@@ -71,10 +70,6 @@ export default function Notifications() {
                         <td className='notifications-panel__td--date'>{dateDisplay}</td>
                         <td className='notifications-panel__td--interact'>
                           <ClaimPrizeButton gamePrize={prize} />
-                          <CheckSVG
-                            data-claimed={!!prize.claimedAt}
-                            className='notifications-panel__td--interact-check-svg'
-                          />
                         </td>
                       </tr>
                     );
@@ -102,10 +97,6 @@ export default function Notifications() {
                         <td className='notifications-panel__td--date'>{dateDisplay}</td>
                         <td className='notifications-panel__td--interact'>
                           <ClaimRefundButton refund={refund} />
-                          <CheckSVG
-                            data-claimed={!!refund.txHash}
-                            className='notifications-panel__td--interact-check-svg'
-                          />
                         </td>
                       </tr>
                     );
