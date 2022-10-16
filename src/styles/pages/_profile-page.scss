@@ -766,6 +766,7 @@
     &:disabled {
       background-color: m.t(base);
       color: m.t(contrast);
+      cursor: default;
     }
   }
 }
