@@ -42,12 +42,12 @@ export default function EventSlider({ mediumData }: Props) {
       <h3 className='home-page__events-header'>news</h3>
       <p className='home-page__events-subheader'>Latest news from the crypto space.</p>
       <div className='home-page__events'>
-        {state.items.map((item) => {
+        {state.items.map((item, i) => {
           const regex = /(<([^>]+)>)/gi;
           let description = item.description.replace(regex, '');
           description = description.slice(0, 300);
           return (
-            <a target='__blank' className='home-page__events-item' href={item.link}>
+            <a key={i} target='__blank' className='home-page__events-item' href={item.link}>
               <div className='home-page__events-item-media'>
                 <Image
                   src={item.thumbnail}

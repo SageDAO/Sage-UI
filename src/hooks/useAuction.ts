@@ -25,6 +25,7 @@ export default function useAuction({ auction, artist, walletAddress }: Args) {
   const now = new Date().getTime();
   const isOpenForBids = getIsOpenForBids(auctionState, auction.startTime);
   const isStarted = auction.startTime.getTime() < now;
+  const isRunning = !!auctionState?.endTime;
   const isEnded = getIsEnded(auctionState, auction.startTime);
   const auctionFocusText = isOpenForBids ? 'place bid' : isEnded ? 'results' : 'starting soon';
   const startTime = auction.startTime;
@@ -51,9 +52,10 @@ export default function useAuction({ auction, artist, walletAddress }: Args) {
   }, [auctionState]);
 
   return {
+    isStarted,
+    isRunning,
     isOpenForBids,
     isEnded,
-    isStarted,
     auctionState,
     auctionFocusText,
     endTime,

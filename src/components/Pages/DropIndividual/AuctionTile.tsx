@@ -24,9 +24,10 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
     editionSize,
     isStarted,
     isOpenForBids,
-    endTime,
+    isRunning,
     isEnded,
     startTime,
+    endTime,
     artistName,
     auctionState,
     nftName,
@@ -61,10 +62,10 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
           {!isStarted && (
             <div className='drop-page__grid-item-info-countdown'>{countdownUntilOpen}</div>
           )}
-          {isOpenForBids && (
+          {!isRunning && isOpenForBids && (
             <div className='drop-page__grid-item-info-countdown'>Bid Now</div>
           )}
-          {isOpenForBids && !isEnded && (
+          {isRunning && !isEnded && (
             <div className='drop-page__grid-item-info-countdown'>{countdownUntilClose}</div>
           )}
         </div>
