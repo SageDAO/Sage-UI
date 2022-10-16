@@ -64,14 +64,20 @@ function GetTicketModal({
   const [errorState, setErrorState] = useState<ErrorState>(INITIAL_ERROR_STATE);
   const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, { skip: !sessionData });
   const [buyTickets, { isLoading: isBuyTicketsLoading }] = useBuyTicketsMutation();
-  const { data: refund } = useGetRefundByLotteryQuery(lottery.id);
 
   const now = new Date().getTime();
   const isStarted = lottery.startTime.getTime() < now;
   const isEnded = lottery.endTime.getTime() < now;
   const isActive = isStarted && !isEnded;
 
-  const { data: winners } = useGetWinnersQuery(lottery.id, { skip: !isEnded });
+  const { data: winners } = useGetWinnersQuery(lottery.id, {
+    skip: !isEnded,
+    pollingInterval: 60000,
+  });
+  const { data: refund } = useGetRefundByLotteryQuery(lottery.id, {
+    skip: !isEnded,
+    pollingInterval: 60000,
+  });
 
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   const editionsCount: number = lottery.Nfts[selectedNftIndex].numberOfEditions;
@@ -255,7 +261,12 @@ function GetTicketModal({
                         {walletAddress && walletAddress == winner.winnerAddress && (
                           <>
                             &nbsp; &nbsp;
-                            <button onClick={() => router.push('/profile?notifications')} className='notifications-panel__interact-button'>claim</button>
+                            <button
+                              onClick={() => router.push('/profile?notifications')}
+                              className='notifications-panel__interact-button'
+                            >
+                              claim
+                            </button>
                           </>
                         )}
                       </div>
@@ -269,10 +280,6 @@ function GetTicketModal({
                   <div className='games-modal__winners-list'>
                     {refund.refundableTokens} ASH &nbsp; &nbsp;
                     <ClaimRefundButton refund={refund} />
-                    <CheckSVG
-                      data-claimed={!!refund.txHash}
-                      className='notifications-panel__td--interact-check-svg'
-                    />
                   </div>
                 </>
               )}
