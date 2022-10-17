@@ -74,8 +74,18 @@ const nftsApi = baseApi.injectEndpoints({
             mintRequest.signer,
             fetchWithBQ
           );
-          const { s3Path, metadataPath } = await uploadToAwsAndArweave(mintRequest, endpoint);
-          nftId = await dbInsertNft(mintRequest, artistAddress, s3Path, metadataPath, fetchWithBQ);
+          const { s3Path, arweavePath, metadataPath } = await uploadToAwsAndArweave(
+            mintRequest,
+            endpoint
+          );
+          nftId = await dbInsertNft(
+            mintRequest,
+            artistAddress,
+            s3Path,
+            arweavePath,
+            metadataPath,
+            fetchWithBQ
+          );
           console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
           const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
           const mintTx = await nftContract.artistMint(artistAddress, metadataPath);
@@ -232,22 +242,23 @@ async function uploadToAwsAndArweave(mintRequest: MintRequest, endpoint: string)
     );
   }
   console.log(`uploadToAwsAndArweave() :: Uploading media to Arweave...`);
-  const ipfsPath = await copyFromS3toArweave(endpoint, s3Path);
+  const arweavePath = await copyFromS3toArweave(endpoint, s3Path);
   console.log(`uploadToAwsAndArweave() :: Uploading metadata to Arweave...`);
   const metadataPath = await createNftMetadataOnArweave(
     endpoint,
     mintRequest.name,
     mintRequest.description,
-    ipfsPath,
+    arweavePath,
     mintRequest.file.name.toLowerCase().endsWith('mp4')
   );
-  return { s3Path, metadataPath };
+  return { s3Path, arweavePath, metadataPath };
 }
 
 async function dbInsertNft(
   mintRequest: MintRequest,
   artistAddress: string,
   s3Path: string,
+  arweavePath: string,
   metadataPath: string,
   fetchWithBQ: any
 ) {
@@ -264,6 +275,7 @@ async function dbInsertNft(
       s3Path,
       s3PathOptimized: mintRequest.s3PathOptimized,
       metadataPath,
+      arweavePath,
       numberOfEditions: 1,
     },
   });

@@ -95,7 +95,9 @@ async function createPresetDrops(
   durationHours: number,
   fetchWithBQ: any
 ) {
+  // TODO fix test paths below
   const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
+  const arweavePath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
   const startDate = Math.floor(addHours(0.0833).getTime() / 1000); // starts in 5 minutes
   const endDate = Math.floor(addHours(durationHours + 0.0833).getTime() / 1000);
   await checkUsersExistAndAreArtists(presetDrops, fetchWithBQ);
@@ -125,6 +127,7 @@ async function createPresetDrops(
             endDate,
             name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
             metadataPath,
+            arweavePath,
             s3Path: nftS3Path,
             s3PathOptimized: nftS3Path,
           },
@@ -157,6 +160,7 @@ async function createPresetDrops(
             name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
             numberOfEditions: 1,
             metadataPath,
+            arweavePath,
             s3Path: nftS3Path,
             s3PathOptimized: nftS3Path,
           },
