@@ -21,7 +21,10 @@ export default function useUserNotifications() {
   const { data: refunds, isFetching: fetchingRefunds } = useGetRefundsQuery();
 
   const isLoading: boolean =
-    fetchingLotteryNfts || fetchingClaimedAuctionNfts || fetchingUnclaimedAuctionNfts || fetchingRefunds;
+    fetchingLotteryNfts ||
+    fetchingClaimedAuctionNfts ||
+    fetchingUnclaimedAuctionNfts ||
+    fetchingRefunds;
 
   const prizeNfts: GamePrize[] = new Array().concat(
     lotteryNfts,

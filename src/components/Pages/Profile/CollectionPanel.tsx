@@ -72,7 +72,7 @@ export default function CollectionPanel() {
               })}
           </TabPanel>
           <TabPanel as='div' className='collection-panel__gallery'>
-            <Gallery nfts={[]}></Gallery>
+            <Gallery nfts={myNfts}></Gallery>
           </TabPanel>
         </div>
       </Tabs>

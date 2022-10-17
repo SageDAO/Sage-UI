@@ -11,6 +11,7 @@
     @include interact;
     @include text-p5;
     @include flex-center;
+    text-transform: uppercase;
     width: 131px;
     height: 25px;
     color: t(contrast);
