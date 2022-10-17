@@ -16,7 +16,7 @@ import {
   SageNFT as NftContract,
   NFTFactory as NftFactoryContract,
   Marketplace as MarketplaceContract,
-  SageStorage as StorageContract
+  SageStorage as StorageContract,
 } from '@/types/contracts';
 import { promiseToast } from './toast';
 
@@ -36,8 +36,8 @@ export type SignerOrProvider = Signer | Signer['provider'];
 
 var ContractFactory = (function () {
   var instances = new Map<string, Contract>();
-  async function createInstance(address: string, abi: any) {
-    console.log(`Creating contract instance for address ${address}`);
+  async function createInstance(address: string, name: string, abi: any) {
+    console.log(`Creating ${name} contract instance using ${address}`);
     const contract = new ethers.Contract(
       address,
       abi,
@@ -50,10 +50,10 @@ var ContractFactory = (function () {
     return contract;
   }
   return {
-    getInstance: async function (address: string, abi: any) {
+    getInstance: async function (address: string, name: string, abi: any) {
       const existingContract = instances.get(address);
       if (!existingContract) {
-        let contract = await createInstance(address, abi);
+        let contract = await createInstance(address, name, abi);
         instances.set(address, contract);
         return contract;
       }
@@ -63,57 +63,59 @@ var ContractFactory = (function () {
 })();
 
 export async function getLotteryContract(signer?: Signer): Promise<LotteryContract> {
-  return (await getContract(LOTTERY_ADDRESS, LotteryJson.abi, signer)) as LotteryContract;
+  return (await getContract(LOTTERY_ADDRESS, LotteryJson.contractName, LotteryJson.abi, signer)) as LotteryContract;
 }
 
 export async function getAuctionContract(signer?: Signer): Promise<AuctionContract> {
-  return (await getContract(AUCTION_ADDRESS, AuctionJson.abi, signer)) as AuctionContract;
+  return (await getContract(AUCTION_ADDRESS, AuctionJson.contractName, AuctionJson.abi, signer)) as AuctionContract;
 }
 
 export async function getRewardsContract(signer?: Signer): Promise<RewardsContract> {
-  return (await getContract(REWARDS_ADDRESS, RewardsJson.abi, signer)) as RewardsContract;
+  return (await getContract(REWARDS_ADDRESS, RewardsJson.contractName, RewardsJson.abi, signer)) as RewardsContract;
 }
 
 export async function getNFTContract(address: string, signer?: Signer): Promise<NftContract> {
-  return (await getContract(address, SageNFTJson.abi, signer)) as NftContract;
+  return (await getContract(address, SageNFTJson.contractName, SageNFTJson.abi, signer)) as NftContract;
 }
 
 export async function getERC20Contract(signer?: Signer): Promise<ERC20Contract> {
-  return (await getContract(ASHTOKEN_ADDRESS, ERC20StandardJson.abi, signer)) as ERC20Contract;
+  return (await getContract(ASHTOKEN_ADDRESS, 'ERC20StandardJson', ERC20StandardJson.abi, signer)) as ERC20Contract;
 }
 
 export async function getNftFactoryContract(signer?: Signer): Promise<NftFactoryContract> {
-  return (await getContract(NFTFACTORY_ADDRESS, NFTFactoryJson.abi, signer)) as NftFactoryContract;
+  return (await getContract(NFTFACTORY_ADDRESS, NFTFactoryJson.contractName, NFTFactoryJson.abi, signer)) as NftFactoryContract;
 }
 
 export async function getStorageContract(signer?: Signer): Promise<StorageContract> {
-  return (await getContract(STORAGE_ADDRESS, StorageJson.abi, signer)) as StorageContract;
+  return (await getContract(STORAGE_ADDRESS, StorageJson.contractName, StorageJson.abi, signer)) as StorageContract;
 }
 
 export async function getMarketplaceContract(signer?: Signer): Promise<MarketplaceContract> {
   return (await getContract(
     MARKETPLACE_ADDRESS,
+    MarketplaceJson.contractName,
     MarketplaceJson.abi,
     signer
   )) as MarketplaceContract;
 }
 
-async function getContract(address: string, abi: any, signer?: Signer) {
+async function getContract(address: string, name: string, abi: any, signer?: Signer) {
   if (signer) {
     return new ethers.Contract(address, abi, signer);
   }
-  return await ContractFactory.getInstance(address, abi);
+  return await ContractFactory.getInstance(address, name, abi);
 }
 
 export function extractErrorMessage(err: any): string {
   var error = err.error ? err.error : err;
-  var rawMessage: any;
   if (error.code == -32603) {
-    // RPC Error: Internal JSON-RPC error
-    rawMessage = error.message;
-  }
-  if (!rawMessage) {
-    rawMessage = err.message;
+    // 32603 = RPC Error: Internal JSON-RPC error
+    var rawMessage = String(error.message);
+  } else if (error.code == 4001 || error.code == 'ACTION_REJECTED') {
+    // 4001 = MetaMask Tx Signature: User denied transaction signature.
+    var rawMessage = 'User denied transaction signature';
+  } else {
+    var rawMessage = String(err.message);
   }
   var key = 'execution reverted: ';
   if (rawMessage.includes(key)) {

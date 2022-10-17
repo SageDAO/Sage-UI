@@ -32,7 +32,7 @@ function profile() {
 
   useEffect(() => {
     if (asPath.indexOf('notifications')) {
-      setSelectedTabIndex(0);
+      setSelectedTabIndex(2);
     }
   }, []);
 

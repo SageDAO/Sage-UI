@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { Refund } from '@prisma/client';
 import { useClaimRefundMutation } from '@/store/lotteriesReducer';
 import LoaderSpinner from '@/components/LoaderSpinner';
+import CheckSVG from '@/public/icons/check.svg';
 
 interface Props {
   refund: Refund;
@@ -20,20 +21,19 @@ export default function ClaimRefundButton({ refund }: Props) {
     await claimRefund({ refund, signer });
   }
 
-  if (refund.txHash) {
-    return (
-      <button disabled={true} className='notifications-panel__interact-button'>
-        claimed
-      </button>
-    );
-  }
   return (
-    <button
-      disabled={isClaimingRefund || !!refund.txHash}
-      onClick={handleInteractButtonClick}
-      className='notifications-panel__interact-button'
-    >
-      {isClaimingRefund ? <LoaderSpinner /> : 'claim'}
-    </button>
+    <>
+      <button
+        disabled={!!refund.txHash || isClaimingRefund || !!refund.txHash}
+        onClick={handleInteractButtonClick}
+        className='notifications-panel__interact-button'
+      >
+        {isClaimingRefund ? <LoaderSpinner /> : refund.txHash ? 'claimed' : 'claim'}
+      </button>
+      <CheckSVG
+        data-claimed={!!refund.txHash}
+        className='notifications-panel__td--interact-check-svg'
+      />
+    </>
   );
 }

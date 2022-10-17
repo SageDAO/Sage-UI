@@ -5,16 +5,18 @@ import { useGetUserQuery } from '@/store/usersReducer';
 import { useSigner } from 'wagmi';
 import { GamePrize } from '@/prisma/types';
 import { toast } from 'react-toastify';
+import CheckSVG from '@/public/icons/check.svg';
+import LoaderSpinner from '@/components/LoaderSpinner';
 
 interface Props {
   gamePrize: GamePrize;
 }
 
 export default function ClaimPrizeButton({ gamePrize }: Props) {
-  const { lotteryId, lotteryProof, uri, nftId, auctionId } = gamePrize;
-  const [claimLotteryPrize, { isLoading: isClaimLotteryPrizeLoading }] =
-    useClaimLotteryPrizeMutation();
-  const [claimAuctionPrize, { isLoading: isClaimAuctionPrizeLoading }] = useClaimAuctionMutation();
+  if (!gamePrize) return null;
+  const { lotteryId, lotteryProof, ticketNumber, uri, nftId, auctionId } = gamePrize;
+  const [claimLotteryPrize, { isLoading: isClaimingLotteryPrize }] = useClaimLotteryPrizeMutation();
+  const [claimAuctionPrize, { isLoading: isClaimingAuction }] = useClaimAuctionMutation();
   const { data: userData } = useGetUserQuery();
   const { data: signer } = useSigner();
   async function handleInteractButtonClick() {
@@ -28,7 +30,8 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
           lotteryId: lotteryId,
           proof: lotteryProof as string,
           walletAddress: userData?.walletAddress as string,
-          uri: uri,
+          uri,
+          ticketNumber,
           signer: signer as Signer,
           nftId: nftId,
         });
@@ -40,20 +43,25 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
     }
   }
 
-  if (gamePrize.claimedAt) {
-    return (
-      <button disabled={true} className='notifications-panel__interact-button'>
-        claimed
-      </button>
-    );
-  }
   return (
-    <button
-      disabled={isClaimAuctionPrizeLoading || isClaimLotteryPrizeLoading}
-      onClick={handleInteractButtonClick}
-      className='notifications-panel__interact-button'
-    >
-      claim
-    </button>
+    <>
+      <button
+        disabled={!!gamePrize.claimedAt || isClaimingAuction || isClaimingLotteryPrize}
+        onClick={handleInteractButtonClick}
+        className='notifications-panel__interact-button'
+      >
+        {isClaimingAuction || isClaimingLotteryPrize ? (
+          <LoaderSpinner />
+        ) : gamePrize.claimedAt ? (
+          'claimed'
+        ) : (
+          'claim'
+        )}
+      </button>
+      <CheckSVG
+        data-claimed={!!gamePrize.claimedAt}
+        className='notifications-panel__td--interact-check-svg'
+      />
+    </>
   );
 }

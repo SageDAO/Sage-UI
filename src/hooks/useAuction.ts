@@ -1,14 +1,27 @@
 import { Auction_include_Nft, User } from '@/prisma/types';
-import { AuctionState, useGetAuctionStateQuery } from '@/store/auctionsReducer';
+import {
+  AuctionState,
+  useGetAuctionStateQuery,
+  useGetNftByAuctionAndWinnerQuery,
+} from '@/store/auctionsReducer';
 import { transformTitle } from '@/utilities/strings';
+import { useEffect } from 'react';
 
 interface Args {
   auction: Auction_include_Nft;
   artist: User;
+  walletAddress?: string;
 }
 
-export default function useAuction({ auction, artist }: Args) {
+export default function useAuction({ auction, artist, walletAddress }: Args) {
   const { data: auctionState } = useGetAuctionStateQuery(auction.id);
+  const { data: prize, refetch: refetchPrize } = useGetNftByAuctionAndWinnerQuery(
+    {
+      auctionId: auction.id,
+      walletAddress: walletAddress,
+    },
+    { skip: !walletAddress }
+  );
   const now = new Date().getTime();
   const isOpenForBids = getIsOpenForBids(auctionState, auction.startTime);
   const isStarted = auction.startTime.getTime() < now;
@@ -31,16 +44,23 @@ export default function useAuction({ auction, artist }: Args) {
   const nextMinBid = auctionState?.nextMinBid;
   const buttonText = 'place bid';
   const description = auction.Nft.description || 'This artwork has no description provided.';
+
+  useEffect(() => {
+    if (walletAddress && auctionState && walletAddress == auctionState.highestBidder) {
+      refetchPrize();
+    }
+  }, [auctionState]);
+
   return {
+    isStarted,
+    isRunning,
     isOpenForBids,
     isEnded,
-    isStarted,
     auctionState,
     auctionFocusText,
     endTime,
     startTime,
     nftName,
-    isRunning,
     artistName,
     editionSize,
     nftPath,
@@ -50,6 +70,7 @@ export default function useAuction({ auction, artist }: Args) {
     nextMinBid,
     buttonText,
     description,
+    prize,
   };
 }
 

@@ -96,8 +96,8 @@ async function createPresetDrops(
   fetchWithBQ: any
 ) {
   const metadataPath = 'https://arweave.net/2capUuzTo1t4SPe3VGEwBmkrgFMPgFMgdQdKo3Msqgo';
-  const startDate = Math.floor(addHours(0.16).getTime() / 1000);
-  const endDate = Math.floor(addHours(durationHours).getTime() / 1000);
+  const startDate = Math.floor(addHours(0.0833).getTime() / 1000); // starts in 5 minutes
+  const endDate = Math.floor(addHours(durationHours + 0.0833).getTime() / 1000);
   await checkUsersExistAndAreArtists(presetDrops, fetchWithBQ);
   for (const presetDrop of presetDrops) {
     const { data: dropResult } = await fetchWithBQ({
@@ -138,7 +138,7 @@ async function createPresetDrops(
           method: 'POST',
           body: {
             dropId,
-            ticketCostTokens: Math.random() > 0.5 ? 5 : 10,
+            ticketCostTokens: Math.random() > 0.5 ? 1 : 2,
             ticketCostPoints: Math.random() > 0.5 ? 0 : 1,
             maxTickets: 0,
             maxTicketsPerUser: 0,
@@ -362,9 +362,6 @@ async function deployLotteries(
     const startTime = Math.floor(new Date(l.startTime).getTime() / 1000);
     const endTime = Math.floor(new Date(l.endTime).getTime() / 1000);
     const costPerTicketTokens = ethers.utils.parseEther(l.costPerTicketTokens.toString());
-    const nftsSortedById = l.Nfts.sort((a, b) => a.id - b.id);
-    const lowestId = nftsSortedById[0].id;
-    const highestId = nftsSortedById[nftsSortedById.length - 1].id;
     createParams.push({
       lotteryID: l.id,
       ticketCostPoints: l.costPerTicketPoints,
@@ -374,8 +371,7 @@ async function deployLotteries(
       nftContract: artistNftContractAddress,
       maxTickets: l.maxTickets || 0,
       maxTicketsPerUser: l.maxTicketsPerUser || 0,
-      firstPrizeId: lowestId,
-      lastPrizeId: highestId,
+      numberOfEditions: l.Nfts[0].numberOfEditions,
       participantsCount: 0,
       numberOfTicketsSold: 0,
       status: 0, // Status.Created

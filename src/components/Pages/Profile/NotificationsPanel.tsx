@@ -1,33 +1,24 @@
 import { Tab } from '@headlessui/react';
 import ClaimPrizeButton from './ClaimPrizeButton';
 import { formatDateYYMMddHHmm, formatTimestampYYMMddHHmm } from '@/utilities/strings';
-import { GamePrize } from '@/prisma/types';
 import { BaseMedia } from '@/components/Media/BaseMedia';
-import CheckSVG from '@/public/icons/check.svg';
 import usePagination from '@/hooks/usePagination';
 import useUserNotifications from '@/hooks/useUserNotifications';
 import ClaimRefundButton from './ClaimRefundButton';
-
-const prizeSorting = (a: GamePrize, b: GamePrize) => {
-  if (a.claimedAt) {
-    return b.claimedAt ? new Date(b.claimedAt).getTime() - new Date(a.claimedAt).getTime() : 1;
-  }
-  if (b.claimedAt) {
-    return -1;
-  }
-  return b.nftId - a.nftId;
-};
+import { GamePrize } from '@/prisma/types';
+import { Refund } from '@prisma/client';
 
 export default function Notifications() {
   const { prizeNfts, refunds, isLoading } = useUserNotifications();
-  const sortedPrizes = prizeNfts.sort(prizeSorting);
+  const items = prizeNfts && refunds ? [...prizeNfts, ...refunds] : [];
   const { selectedPage, onNext, onPrev, pageSize } = usePagination({
-    totalCount: prizeNfts.length,
+    totalCount: items.length,
     pageSize: 10,
   });
   const firstIndex = (selectedPage - 1) * pageSize;
   const secondIndex = selectedPage * pageSize;
-  const pageItems = sortedPrizes.slice(firstIndex, secondIndex);
+  const sortedItems = items.sort(sorting);
+  const pageItems = sortedItems.slice(firstIndex, secondIndex);
 
   return (
     <>
@@ -53,61 +44,11 @@ export default function Notifications() {
               </thead>
               <tbody className='notifications-panel__data-list'>
                 {!isLoading &&
-                  pageItems.map((nft: GamePrize) => {
-                    const dateDisplay = nft.claimedAt ? formatDateYYMMddHHmm(nft.claimedAt) : 'unclaimed';
-                    return (
-                      <tr key={nft.nftId} className='notifications-panel__data-row'>
-                        <td className='notifications-panel__td--creation'>
-                          <div className='notifications-panel__td-media-container'>
-                            <BaseMedia
-                              src={nft.s3PathOptimized}
-                              className='notifications-panel__td-media'
-                            ></BaseMedia>
-                          </div>
-                          <span className='notifications-panel__td--creation-name'>
-                            {nft.nftName}
-                          </span>
-                        </td>
-                        <td className='notifications-panel__td--date'>{dateDisplay}</td>
-                        <td className='notifications-panel__td--interact'>
-                          <ClaimPrizeButton gamePrize={nft} />
-                          <CheckSVG
-                            data-claimed={!!nft.claimedAt}
-                            className='notifications-panel__td--interact-check-svg'
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-
-                {/* TODO move refund rows into paginated events above */}
-                {refunds &&
-                  refunds.map((refund: any) => {
-                    const dateDisplay = refund.blockTimestamp
-                      ? formatTimestampYYMMddHHmm(refund.blockTimestamp)
-                      : 'unclaimed';
-                    return (
-                      <tr key={refund.id} className='notifications-panel__data-row'>
-                        <td className='notifications-panel__td--creation'>
-                          <div className='notifications-panel__td-media-container'>
-                            <BaseMedia
-                              src={refund.Lottery.Nfts[0].s3PathOptimized}
-                              className='notifications-panel__td-media'
-                            ></BaseMedia>
-                          </div>
-                          <span className='notifications-panel__td--creation-name'>
-                            REFUND: {refund.refundableTokens} ASH
-                          </span>
-                        </td>
-                        <td className='notifications-panel__td--date'>{dateDisplay}</td>
-                        <td className='notifications-panel__td--interact'>
-                          <ClaimRefundButton refund={refund} />
-                          <CheckSVG
-                            data-claimed={!!refund.txHash}
-                            className='notifications-panel__td--interact-check-svg'
-                          />
-                        </td>
-                      </tr>
+                  pageItems.map((item: any, i: number) => {
+                    return isRefund(item) ? (
+                      <RefundNotificationRow key={i} refund={item} />
+                    ) : (
+                      <GamePrizeNotificationRow key={i} prize={item} />
                     );
                   })}
               </tbody>
@@ -127,3 +68,72 @@ export default function Notifications() {
     </>
   );
 }
+
+function RefundNotificationRow({ refund }) {
+  const dateDisplay = refund.blockTimestamp
+    ? formatTimestampYYMMddHHmm(refund.blockTimestamp)
+    : 'unclaimed';
+  return (
+    <tr key={refund.id} className='notifications-panel__data-row'>
+      <td className='notifications-panel__td--creation'>
+        <div className='notifications-panel__td-media-container'>
+          <BaseMedia
+            src={refund.Lottery.Nfts[0].s3PathOptimized}
+            className='notifications-panel__td-media'
+          ></BaseMedia>
+        </div>
+        <span className='notifications-panel__td--creation-name'>
+          REFUND: {refund.refundableTokens} ASH
+        </span>
+      </td>
+      <td className='notifications-panel__td--date'>{dateDisplay}</td>
+      <td className='notifications-panel__td--interact'>
+        <ClaimRefundButton refund={refund} />
+      </td>
+    </tr>
+  );
+}
+
+function GamePrizeNotificationRow({ prize }) {
+  const dateDisplay = prize.claimedAt ? formatDateYYMMddHHmm(prize.claimedAt) : 'unclaimed';
+  return (
+    <tr key={prize.nftId} className='notifications-panel__data-row'>
+      <td className='notifications-panel__td--creation'>
+        <div className='notifications-panel__td-media-container'>
+          <BaseMedia
+            src={prize.s3PathOptimized}
+            className='notifications-panel__td-media'
+          ></BaseMedia>
+        </div>
+        <span className='notifications-panel__td--creation-name'>{prize.nftName}</span>
+      </td>
+      <td className='notifications-panel__td--date'>{dateDisplay}</td>
+      <td className='notifications-panel__td--interact'>
+        <ClaimPrizeButton gamePrize={prize} />
+      </td>
+    </tr>
+  );
+}
+
+function isRefund(obj: GamePrize | Refund): boolean {
+  return Object.hasOwn(obj, 'buyer');
+}
+
+const getTimeMilis = (x: GamePrize | Refund) => {
+  if (isRefund(x)) {
+    return (x as Refund).blockTimestamp ? (x as Refund).blockTimestamp * 1000 : undefined;
+  }
+  return (x as GamePrize).claimedAt ? new Date((x as GamePrize).claimedAt).getTime() : undefined;
+};
+
+const sorting = (a: GamePrize | Refund, b: GamePrize | Refund) => {
+  const aTime = getTimeMilis(a);
+  const bTime = getTimeMilis(b);
+  if (aTime) {
+    return bTime ? bTime - aTime : 1;
+  }
+  if (bTime) {
+    return -1;
+  }
+  return 1;
+};

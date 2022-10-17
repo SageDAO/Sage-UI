@@ -6,12 +6,16 @@ import { ethers } from 'ethers';
 import { getSession } from 'next-auth/react';
 import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/types';
 import { SearchableNftData } from '@/store/nftsReducer';
+import { sendArweaveTransaction } from '@/utilities/arweave-server';
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
     query: { action },
   } = request;
   switch (action) {
+    case 'DeployContractMetadata':
+      await deployContractMetadata(request, response);
+      break;
     case 'GetSearchableNftData':
       await getSearchableNftData(response);
       break;
@@ -37,6 +41,35 @@ export default async function handler(request: NextApiRequest, response: NextApi
       response.status(500);
   }
   response.end();
+}
+
+/**
+ * https://docs.opensea.io/docs/contract-level-metadata
+ */
+async function deployContractMetadata(request: NextApiRequest, response: NextApiResponse) {
+  console.log(`deployContractMetadata()`);
+  const { artistAddress, contractAddress } = request.body;
+  const artist = await prisma.user.findUnique({ where: { walletAddress: artistAddress } });
+  if (!artist) {
+    response.status(500).end();
+    return;
+  }
+  const contractMetadata = {
+    name: artist.username,
+    description: artist.bio,
+    image: artist.bannerImageS3Path,
+    external_link: `${process.env.NEXTAUTH_URL}creators/${artist.username}`,
+    seller_fee_basis_points: 1000,
+    fee_recipient: contractAddress,
+  };
+  var metadataType = 'application/json';
+  const { tx } = await sendArweaveTransaction(
+    'contract-metadata.json',
+    JSON.stringify(contractMetadata) as any,
+    metadataType
+  );
+  const metadataURL = `https://arweave.net/${tx.id}`;
+  response.json({ metadataURL });
 }
 
 async function getSearchableNftData(response: NextApiResponse) {

@@ -15,6 +15,9 @@ import Countdown from '@/components/Countdown';
 import ArrowRightSVG from '@/public/interactive/arrow-right.svg';
 import { transformTitle } from '@/utilities/strings';
 import useAuction from '@/hooks/useAuction';
+import { useSession } from 'next-auth/react';
+import shortenAddress from '@/utilities/shortenAddress';
+import ClaimPrizeButton from '@/components/Pages/Profile/ClaimPrizeButton';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -53,6 +56,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
   const [state, setState] = useState<State>(initialState);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
+  const { data: sessionData } = useSession();
+  const walletAddress = sessionData?.address;
 
   const {
     nftName,
@@ -71,7 +76,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
     nextMinBid,
     buttonText,
     description,
-  } = useAuction({ auction, artist });
+    prize,
+  } = useAuction({ auction, artist, walletAddress: walletAddress as string });
 
   function toggleBidHistory() {
     setState((prevState) => {
@@ -177,12 +183,26 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                 </div>
                 <h1 className='games-modal__system-info'>This is an auction</h1>
               </div>
+              {isEnded && walletAddress && walletAddress == highestBidder && (
+                <div style={{ marginBottom: '25px' }}>
+                  <div className='games-modal__bid-info-group'>
+                    <div className='games-modal__highest-bid'>
+                      <h1 className='games-modal__highest-bid-label'>WINNER</h1>
+                      <h1 className='games-modal__highest-bid-value'>
+                        {shortenAddress(highestBidder)}
+                      </h1>
+                      &nbsp; &nbsp;
+                      <ClaimPrizeButton gamePrize={prize} />
+                    </div>
+                  </div>
+                </div>
+              )}
               {isStarted && (
                 <div>
                   <div className='games-modal__bid-info-group'>
                     <div className='games-modal__highest-bid'>
                       <h1 className='games-modal__highest-bid-label'>Highest Bid</h1>
-                      <h1 className='games-modal__highest-bid-value'>{highestBid}</h1>
+                      <h1 className='games-modal__highest-bid-value'>{highestBid} ASH</h1>
                     </div>
                     <button
                       onClick={toggleBidHistory}
