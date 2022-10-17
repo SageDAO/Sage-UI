@@ -1,5 +1,51 @@
 @use '@/styles/abstracts/colors' as *;
 @use '@/styles/abstracts/breakpoints' as b;
+
+@mixin tabs-list {
+  @include flex-row;
+  gap: 22px;
+}
+
+@mixin tabs-tab {
+  @include theme() {
+    @include interact;
+    @include text-p5;
+    @include flex-center;
+    width: 131px;
+    height: 25px;
+    color: t(contrast);
+    border-width: 1px;
+    border-style: solid;
+    border-color: t(contrast);
+    &--selected {
+      color: t(base);
+      background-color: t(accent);
+      border-color: t(accent);
+    }
+  }
+}
+
+@mixin tabs-panels {
+  // @include flex-center;
+  margin-top: 72px;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @mixin img-container {
   position: relative;
   overflow: hidden;
@@ -252,6 +298,11 @@ $desktop-width: 1495px;
 @mixin animate-pulse {
   animation: pulse 1900ms infinite;
   animation-timing-function: ease-in;
+}
+
+@mixin media-container {
+  position: relative;
+  overflow: hidden;
 }
 
 @mixin pfp-container {

@@ -1,4 +1,8 @@
 import { PfpImage } from '@/components/Media/BaseMedia';
+import TwitterSVG from '@/public/socials/twitter.svg';
+import MediumSVG from '@/public/socials/medium.svg';
+import InstagramSVG from '@/public/socials/insta.svg';
+import WebSVG from '@/public/socials/web.svg';
 import { useGetUserQuery, useUpdateArtistMutation } from '@/store/usersReducer';
 import { useState, useEffect } from 'react';
 import { useUpdateUserMutation } from '@/store/usersReducer';
@@ -100,11 +104,6 @@ export default function ProfilePanel({ isArtist }: Props) {
 
   return (
     <>
-      <h1 className='profile-page__tabs-panel-header'>
-        profile
-        <span className='profile-page__tabs-panel-subheader'>edit your SAGE profile</span>
-      </h1>
-
       <form onSubmit={handleFormSubmit} className='profile-panel'>
         <ProfilePictureModal
           isOpen={isProfilePicModalOpen}
@@ -115,10 +114,8 @@ export default function ProfilePanel({ isArtist }: Props) {
           <div onClick={openProfilePicModal} className='profile-panel__pfp-container'>
             <PfpImage src={state?.profilePicture}></PfpImage>
           </div>
-          <h2 className='profile-panel__pfp-label'>edit profile picture</h2>
         </div>
-        <div className='profile-panel__personal-group'>
-          <h2 className='profile-panel__personal-label'>username</h2>
+        <div className='profile-panel__username-group'>
           <input
             type='text'
             value={state?.username ?? ''}
@@ -128,11 +125,10 @@ export default function ProfilePanel({ isArtist }: Props) {
               });
             }}
             maxLength={40}
-            className='profile-panel__personal-field'
+            className='profile-panel__username-field'
           />
         </div>
-        <div className='profile-panel__personal-group'>
-          <h2 className='profile-panel__personal-label'>e-mail</h2>
+        <div className='profile-panel__email-group'>
           <input
             type='text'
             value={state?.email ?? ''}
@@ -142,69 +138,16 @@ export default function ProfilePanel({ isArtist }: Props) {
               });
             }}
             maxLength={40}
-            className='profile-panel__personal-field'
+            className='profile-panel__email-field'
           />
         </div>
-        <div className='profile-panel__socials-group'>
-          <h2 className='profile-panel__socials-label'>add up to 4 profiles</h2>
-          <div className='profile-panel__socials-field-container'>
-            <input
-              type='text'
-              value={state.twitterUsername ?? ''}
-              className='profile-panel__socials-field'
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setState((prevState) => {
-                  return { ...prevState, twitterUsername: e.target.value.trim() };
-                });
-              }}
-              maxLength={40}
-              placeholder='twitter'
-            />
-            <input
-              type='text'
-              value={state.instagramUsername ?? ''}
-              className='profile-panel__socials-field'
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setState((prevState) => {
-                  return { ...prevState, instagramUsername: e.target.value.trim() };
-                });
-              }}
-              maxLength={40}
-              placeholder='instagram'
-            />
-            <input
-              type='text'
-              value={state.mediumUsername ?? ''}
-              className='profile-panel__socials-field'
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setState((prevState) => {
-                  return { ...prevState, mediumUsername: e.target.value.trim() };
-                });
-              }}
-              maxLength={40}
-              placeholder='medium'
-            />
-            <input
-              type='text'
-              value={state.webpage ?? ''}
-              className='profile-panel__socials-field'
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setState((prevState) => {
-                  return { ...prevState, webpage: e.target.value.trim() };
-                });
-              }}
-              maxLength={50}
-              placeholder='URL'
-            />
-          </div>
-        </div>
         <div className='profile-panel__bio-group'>
-          <h2 className='profile-panel__bio-label'>
-            about section{' '}
+          <p className='profile-panel__bio-label'>
+            about{' '}
             <span style={state.bio && state.bio.length > 400 ? { color: 'red' } : {}}>
               ({state.bio?.length || 0}/400 chars max)
             </span>
-          </h2>
+          </p>
           <textarea
             value={(state.bio as string) || ''}
             onChange={handleBioInput}
@@ -218,6 +161,52 @@ export default function ProfilePanel({ isArtist }: Props) {
             onFileChange={handleFileInputChange}
           />
         )}
+
+        <div className='profile-panel__socials-group'>
+          <p className='profile-panel__socials-label'>Connect Your Social Profile</p>
+          <div className='profile-panel__socials-field-container'>
+            <TwitterSVG
+              type='text'
+              value={state.twitterUsername ?? ''}
+              className='profile-panel__socials-field'
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setState((prevState) => {
+                  return { ...prevState, twitterUsername: e.target.value.trim() };
+                });
+              }}
+            />
+            <InstagramSVG
+              type='text'
+              value={state.instagramUsername ?? ''}
+              className='profile-panel__socials-field'
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setState((prevState) => {
+                  return { ...prevState, instagramUsername: e.target.value.trim() };
+                });
+              }}
+            />
+            <MediumSVG
+              type='text'
+              value={state.mediumUsername ?? ''}
+              className='profile-panel__socials-field'
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setState((prevState) => {
+                  return { ...prevState, mediumUsername: e.target.value.trim() };
+                });
+              }}
+            />
+            <WebSVG
+              type='text'
+              value={state.webpage ?? ''}
+              className='profile-panel__socials-field'
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setState((prevState) => {
+                  return { ...prevState, webpage: e.target.value.trim() };
+                });
+              }}
+            />
+          </div>
+        </div>
         <button
           disabled={isUpdatingUser || isUpdatingArtist}
           type='submit'

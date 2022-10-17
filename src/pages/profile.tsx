@@ -51,90 +51,103 @@ function profile() {
   return (
     <Tab.Group selectedIndex={selectedTabIndex} onChange={setSelectedTabIndex} vertical>
       <div className='profile-page'>
-        <div className='profile-page__left'>
-          <SageFullLogoSVG
-            onClick={() => router.push('/')}
-            className='profile-page__sage-logo-svg'
-          />
-          <div className='profile-page__pfp-container'>
-            <PfpImage src={userData?.profilePicture}></PfpImage>
+        <section className='profile-page__upper'>
+          <div className='profile-page__logotype-container'>
+            <SageFullLogoSVG
+              onClick={() => router.push('/')}
+              className='profile-page__sage-logo-svg'
+            />
           </div>
-          <Tab.List className='profile-page__tabs'>
-            <Tab as={React.Fragment}>
-              {({ selected }) => {
-                return (
-                  <button data-active={selected} className='profile-page__tabs-tab'>
-                    profile
-                  </button>
-                );
-              }}
-            </Tab>
-            <Tab as={React.Fragment}>
-              {({ selected }) => {
-                return (
-                  <button data-active={selected} className='profile-page__tabs-tab'>
-                    collection
-                  </button>
-                );
-              }}
-            </Tab>
-            <Tab as={React.Fragment}>
-              {({ selected }) => {
-                return (
-                  <button
-                    data-active={selected}
-                    data-type='notifications'
-                    className='profile-page__tabs-tab  '
-                  >
-                    notifications
-                    {hasNotifications && (
-                      <span className='profile-page__tabs-tab-notifications-counter'>
-                        {notificationCount}
-                      </span>
-                    )}
-                  </button>
-                );
-              }}
-            </Tab>
-            {isArtist && (
+          <Balances />
+        </section>
+        <h1 className='profile-page__header'>IN AND OUTGOING BIDS</h1>
+        <section className='profile-page__main'>
+          <div className='profile-page__left'>
+            <div className='profile-page__pfp-section'>
+              <div className='profile-page__pfp-container'>
+                <PfpImage src={userData?.profilePicture}></PfpImage>
+              </div>
+              <div className='profile-page__pfp-section-right'>
+                <p className='profile-page__pfp-section-username'>{userData?.username}</p>
+                <p className='profile-page__pfp-section-role'>{userData?.role}</p>
+              </div>
+            </div>
+            <Tab.List className='profile-page__tabs'>
               <Tab as={React.Fragment}>
                 {({ selected }) => {
                   return (
-                    <button
-                      disabled={!isArtist}
-                      data-active={selected}
-                      className='profile-page__tabs-tab'
-                    >
-                      MINT
+                    <button data-active={selected} className='profile-page__tabs-tab'>
+                      profile
                     </button>
                   );
                 }}
               </Tab>
-            )}
-            <button onClick={handleSignOut} className='profile-page__tabs-tab'>
-              log out
-            </button>
-          </Tab.List>
-        </div>
-        <div className='profile-page__main'>
-          <Balances />
-          <Tab.Panels>
-            <Tab.Panel as='div' className='profile-page__tabs-panel'>
-              <ProfilePanel isArtist={isArtist} />
-            </Tab.Panel>
-            <Tab.Panel as='div' className='profile-page__tabs-panel'>
-              <CollectionPanel />
-            </Tab.Panel>
-            <Tab.Panel as='div' className='profile-page__tabs-panel'>
-              <NotificationsPanel />
-            </Tab.Panel>
-            {isArtist && (
+              <Tab as={React.Fragment}>
+                {({ selected }) => {
+                  return (
+                    <button data-active={selected} className='profile-page__tabs-tab'>
+                      collection
+                    </button>
+                  );
+                }}
+              </Tab>
+              <Tab as={React.Fragment}>
+                {({ selected }) => {
+                  return (
+                    <button
+                      data-active={selected}
+                      data-type='notifications'
+                      className='profile-page__tabs-tab  '
+                    >
+                      notifications
+                      {hasNotifications && (
+                        <span className='profile-page__tabs-tab-notifications-counter'>
+                          {notificationCount}
+                        </span>
+                      )}
+                    </button>
+                  );
+                }}
+              </Tab>
+              {isArtist && (
+                <Tab as={React.Fragment}>
+                  {({ selected }) => {
+                    return (
+                      <button
+                        disabled={!isArtist}
+                        data-active={selected}
+                        className='profile-page__tabs-tab'
+                      >
+                        MINT
+                      </button>
+                    );
+                  }}
+                </Tab>
+              )}
+              <button onClick={handleSignOut} className=' profile-page__log-out-btn'>
+                log out
+              </button>
+            </Tab.List>
+          </div>
+          <div className='profile-page__right'>
+            <Tab.Panels>
               <Tab.Panel as='div' className='profile-page__tabs-panel'>
-                <CreationsPanel />
+                <ProfilePanel isArtist={isArtist} />
               </Tab.Panel>
-            )}
-          </Tab.Panels>
-        </div>
+              <Tab.Panel as='div' className='profile-page__tabs-panel'>
+                <CollectionPanel />
+              </Tab.Panel>
+              <Tab.Panel as='div' className='profile-page__tabs-panel'>
+                <NotificationsPanel />
+              </Tab.Panel>
+              {isArtist && (
+                <Tab.Panel as='div' className='profile-page__tabs-panel'>
+                  <CreationsPanel />
+                </Tab.Panel>
+              )}
+            </Tab.Panels>
+          </div>
+        </section>
       </div>
     </Tab.Group>
   );
