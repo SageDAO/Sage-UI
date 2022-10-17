@@ -215,7 +215,7 @@ $theme-map: null;
   }
 }
 
-$desktop-width: 1196px;
+$desktop-width: 1345px;
 
 @mixin desktop-width {
   @include b.min-width('medium') {
