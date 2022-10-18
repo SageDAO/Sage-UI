@@ -4,6 +4,19 @@ import { useGetUserQuery } from '@/store/usersReducer';
 import { useSession } from 'next-auth/react';
 import { useAccount, useBalance, useConnect } from 'wagmi';
 
+function formatBalance(balance: number) {
+  if (balance > 1_000_000) {
+    const millions = balance / 1_000_000;
+    return String(millions.toFixed(0)) + 'M';
+  }
+  if (balance > 10_000) {
+    const thousands = balance / 1000;
+    return String(thousands.toFixed(0)) + 'K';
+  }
+
+  return balance.toFixed(2);
+}
+
 export default function useSAGEAccount() {
   const {
     address: walletAddress,
@@ -22,8 +35,8 @@ export default function useSAGEAccount() {
     addressOrName: walletAddress,
   });
   const ashBalance = Number(walletBalance?.formatted);
-  const ashBalanceDisplay = isNaN(ashBalance) ? '' : ashBalance.toFixed(2);
-  const pointsBalanceDisplay = isNaN(Number(pointsBalance)) ? '' : Number(pointsBalance).toFixed(2);
+  const ashBalanceDisplay = isNaN(ashBalance) ? '' : formatBalance(ashBalance);
+  const pointsBalanceDisplay = isNaN(Number(pointsBalance)) ? '' : formatBalance(+pointsBalance);
 
   return {
     isSignedIn,

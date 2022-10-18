@@ -64,6 +64,7 @@ model Auction {
   Drop                  Drop @relation(fields: [dropId], references: [id])
   Nft                   Nft  @relation(fields: [nftId], references: [id])
   Bids                  BidHistory[]
+
   @@unique([nftId])
 }
 
@@ -103,7 +104,8 @@ model Nft {
   id                       Int          @id @default(autoincrement())
   name                     String
   description              String
-  metadataPath             String
+  metadataPath             String?
+  arweavePath              String?
   s3Path                   String
   s3PathOptimized          String
   tags                     String?
@@ -129,6 +131,7 @@ model NftContract {
   Artist                 User        @relation("ArtistContract", fields: [artistAddress], references: [walletAddress])
   Drops                  Drop[]  @relation("ContractDrops")
   ListingNfts            Nft[] 
+
   @@unique([contractAddress])      
 }
 
@@ -156,6 +159,7 @@ model TokenTransaction {
   assetType      AssetType
   id             Int       @id @default(autoincrement())
   txHash         String    @db.Char(66)
+
   @@index([from, to])
 }
 
@@ -197,6 +201,7 @@ model User {
   FavoriteDrops                 Drop[]        @relation("userFavoriteDrops")
   Bids                          BidHistory[]  
   PrizeProofs                   PrizeProof[] 
+
   @@index([walletAddress])
   @@unique([username])
 }
@@ -227,12 +232,15 @@ model Config {
   featuredDropId  Int?
   FeaturedDrop    Drop?  @relation("ConfigFeaturedDrop", fields:[featuredDropId], references:[id])
   welcomeMessage  String
+  gasLimitForTxs  Int
+
   @@unique([featuredDropId])
 }
 
 model Follow {
   walletAddress                 String @db.Char(42)
   followedAddress               String @db.Char(42)
+
   @@id([walletAddress, followedAddress])  
 }
 
@@ -271,6 +279,7 @@ model SaleEvent {
   amountUSD       Float?
   txHash          String? @db.Char(66)
   blockTimestamp  Int
+
 }
 
 model Refund {

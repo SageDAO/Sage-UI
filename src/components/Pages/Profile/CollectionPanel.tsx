@@ -5,6 +5,8 @@ import LoaderDots from '@/components/LoaderDots';
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import { useSession } from 'next-auth/react';
 import { useGetListingNftsByOwnerQuery } from '@/store/nftsReducer';
+import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
+import Gallery from './Gallery';
 
 export default function CollectionPanel() {
   const { data: sessionData } = useSession();
@@ -26,34 +28,54 @@ export default function CollectionPanel() {
   const myNfts = new Array().concat(claimedAuctionNfts, claimedPrizes, listingNfts);
 
   return (
-    <>
-      <h1 className='profile-page__tabs-panel-header'>
-        collection
-        <span className='profile-page__tabs-panel-subheader'>
-          your collection of artworks on SAGE
-        </span>
-      </h1>
-      <div className='collection-panel'>
-        <div className='collection-panel__grid'>
-          {!myNfts.length && 'a little bit empty...'}
-          {myNfts &&
-            myNfts?.map((nft: GamePrize | CollectedListingNft) => {
-              if (!nft?.s3PathOptimized) return null;
-              // if ()
-              return (
-                <div key={nft.nftId} className='collection-panel__tile'>
-                  <div className='collection-panel__img-container'>
-                    <BaseMedia src={nft.s3PathOptimized} isZoomable={true}></BaseMedia>
-                  </div>
-                  <div className='collection-panel__tile-header'>
-                    by {nft.artistUsername}
-                    <h1 className='collection-panel__tile-name'>{nft.nftName}</h1>
-                  </div>
-                </div>
-              );
-            })}
+    <div className='collection-panel'>
+      <Tabs className='collection-panel__tabs'>
+        <TabList className='collection-panel__tabs-list' as='div'>
+          <Tab
+            as='div'
+            selectedClassName='collection-panel__tabs-tab--selected'
+            className='collection-panel__tabs-tab'
+          >
+            LIST VIEW
+          </Tab>
+          <Tab
+            as='div'
+            selectedClassName='collection-panel__tabs-tab--selected'
+            className='collection-panel__tabs-tab'
+          >
+            GALLERY VIEW
+          </Tab>
+        </TabList>
+        <div className='collection-panel__tabs-panels'>
+          <TabPanel as='div' className='collection-panel__grid'>
+            {!myNfts.length && 'a little bit empty...'}
+            {myNfts &&
+              myNfts?.map((nft: GamePrize | CollectedListingNft) => {
+                if (!nft?.s3PathOptimized) return null;
+                // if ()
+                return (
+                  <>
+                    <div key={nft.nftId} className='collection-panel__tile'>
+                      <div className='collection-panel__img-container'>
+                        <BaseMedia src={nft.s3PathOptimized} isZoomable={true}></BaseMedia>
+                      </div>
+                      <div className='collection-panel__tile-info'>
+                        <p className='collection-panel__tile-nft-name'>{nft.nftName}</p>
+
+                        <p className='collection-panel__tile-artist-name'>
+                          by {nft.artistUsername}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                );
+              })}
+          </TabPanel>
+          <TabPanel as='div' className='collection-panel__gallery'>
+            <Gallery nfts={myNfts}></Gallery>
+          </TabPanel>
         </div>
-      </div>
-    </>
+      </Tabs>
+    </div>
   );
 }

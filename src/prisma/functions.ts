@@ -48,7 +48,9 @@ export async function getHomePageData(prisma: PrismaClient) {
     include: { NftContract: { include: { Artist: true } } },
   });
 
-  const welcomeMessage = config ? config.welcomeMessage : '';
+  const welcomeMessage = config
+    ? config.welcomeMessage
+    : 'SAGE IS A PORTAL INTO WEB3, CURATING THE SPACE OF THE FUTURE.';
   const featuredDrop = config && config.FeaturedDrop ? config.FeaturedDrop : drops[0];
   return { featuredDrop, upcomingDrops: drops, drops, welcomeMessage, latestArtists, newArtworks };
 }

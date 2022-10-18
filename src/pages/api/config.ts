@@ -49,14 +49,14 @@ async function getConfig(res: NextApiResponse) {
 async function updateConfig(featuredDropId: number, welcomeMessage: string, res: NextApiResponse) {
   try {
     const data = {
-      featuredDropId: featuredDropId != 0 ? featuredDropId : null, 
-      welcomeMessage 
+      featuredDropId: featuredDropId != 0 ? featuredDropId : null,
+      welcomeMessage,
     };
     const record = await prisma.config.findMany({});
     if (record.length > 0) {
       await prisma.config.update({ where: { id: record[0].id }, data });
     } else {
-      await prisma.config.create({ data });
+      await prisma.config.create({ data: { ...data, gasLimitForTxs: 50 } });
     }
   } catch (e) {
     console.log(e);
