@@ -22,7 +22,7 @@ type Props = {
 };
 
 export default function Layout({ children, router }: Props) {
-  const { isSignedIn, isWalletConnected, walletAddress, sessionData } = useSAGEAccount();
+  const { isSignedIn, isWalletConnected, walletAddress, sessionData, userData } = useSAGEAccount();
   const { pushToHome } = useSageRoutes();
   const {
     isNetworkModalOpen,
@@ -33,7 +33,7 @@ export default function Layout({ children, router }: Props) {
   const [signOut] = useSignOutMutation();
   const { disconnect } = useDisconnect();
   useEffect(() => {
-    if (isSignedIn && isWalletConnected && sessionData.address != walletAddress) {
+    if (isSignedIn && isWalletConnected && userData?.walletAddress != walletAddress) {
       signOut();
       disconnect();
       pushToHome();
