@@ -57,15 +57,10 @@ export default function artist({ artist }: Props) {
           <div className='artist-page__artist-section-right'>
             <div className='artist-page__artist-section-info'>
               <div className='artist-page__name-container'>
-                <p className='artist-page__name'>{artist.username}</p>
+                {/* <p className='artist-page__name'>{artist.username}</p> */}
               </div>
               <p className='artist-page__location'>Athens, Greece</p>
-              <p className='artist-page__bio'>
-                artist.bio Lorem ipsum dolor, sit amet consectetur adipisicing elit. Qui rerum
-                aliquid voluptas maxime facere. Perferendis adipisci itaque, quasi tempore dolores
-                eligendi facere debitis omnis asperiores veniam necessitatibus voluptates corporis
-                modi!
-              </p>
+              <p className='artist-page__bio'>{artist.bio}</p>
             </div>
           </div>
           <CreatorSocials
@@ -86,9 +81,9 @@ export default function artist({ artist }: Props) {
           <p className='artist-page__follower-count'>
             followers: <span className='artist-page__follow-value'>29k</span>{' '}
           </p>
-          <p className='artist-page__following-count'>
+          {/* <p className='artist-page__following-count'>
             views: <span className='artist-page__follow-value'>33k</span>{' '}
-          </p>
+          </p> */}
         </div>
       </div>
       <div className='artist-page__grid'>

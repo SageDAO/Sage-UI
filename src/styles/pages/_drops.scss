@@ -66,7 +66,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-	gap: 20px;
+  gap: 20px;
 }
 
 .drops-page__drop-header {
@@ -78,25 +78,32 @@
   align-items: center;
   aspect-ratio: 738/528;
   justify-content: space-between;
-	@include m.interact;
+  @include m.interact;
 }
 
 .drops-page__drop-header-title {
   font-style: normal;
-  font-weight: 900;
+  font-weight: 700;
   font-size: clamp(14px, 3vw, 52px);
   line-height: 1em;
   color: c.$light;
-	z-index: 2;
-	position: absolute;
-	bottom: 0;
-	margin: 20px;
+  z-index: 2;
+  position: absolute;
+  bottom: 0;
+  margin: 20px 20px 30px;
 }
 
 .drops-page__drop-artist-name {
   // font-style: italic;
-	@include m.text-p1;
-	font-weight: 300;
+  text-transform: uppercase;
+  @include m.text-p1;
+  font-weight: 300;
+}
+
+.drops-page__drop-drop-name {
+  @include m.text-p1;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .drops-page__drop-header-title-artist {
@@ -134,18 +141,17 @@
 }
 
 .drops-page__drop-artist-pfp {
-	@include m.pfp-container;
-	width: 30px;
+  @include m.pfp-container;
+  width: 30px;
 }
 
-.drops-page__drop-artist{
-	display: flex;
-	gap: 20px;
+.drops-page__drop-artist {
+  display: flex;
+  gap: 20px;
 }
 
 .drops-page__drop-artist-info {
-	display: flex;
-	align-items: center;
+  @include m.flex-col;
 }
 
 .drops-page__drop-content-description {
