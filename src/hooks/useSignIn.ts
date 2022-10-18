@@ -54,7 +54,6 @@ export default function useSignIn(isOpen: boolean) {
     const shouldPromptSignIn: boolean =
       isOpen && isConnected && sessionStatus === 'unauthenticated';
     if (shouldPromptSignIn) {
-      console.log('sign in auto prompt: ', shouldPromptSignIn);
       handleSignInClick();
     }
   }, [isOpen, isConnected]);
