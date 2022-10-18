@@ -20,7 +20,11 @@ export default function useSignIn(isOpen: boolean) {
     try {
       const chainId = activeChain?.id;
       if (!address || !chainId) return;
+<<<<<<< HEAD
       const issuedAt = new Date().toISOString();
+=======
+
+>>>>>>> parent of bf76f91 (debug: log siwe message)
       const nonce = await getCsrfToken();
       const message = new SiweMessage({
         domain: window.location.host,
@@ -30,9 +34,13 @@ export default function useSignIn(isOpen: boolean) {
         version: '1',
         chainId,
         nonce,
+<<<<<<< HEAD
         issuedAt,
       });
       const signThis = message.prepareMessage();
+=======
+      });
+>>>>>>> parent of bf76f91 (debug: log siwe message)
       const signature = await signMessageAsync({
         message: message.prepareMessage(),
       });
