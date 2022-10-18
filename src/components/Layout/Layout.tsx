@@ -33,7 +33,7 @@ export default function Layout({ children, router }: Props) {
   const [signOut] = useSignOutMutation();
   const { disconnect } = useDisconnect();
   useEffect(() => {
-    if (isSignedIn && isWalletConnected && userData?.walletAddress != walletAddress) {
+    if (isSignedIn && isWalletConnected && sessionData?.address != walletAddress) {
       signOut();
       disconnect();
       pushToHome();
