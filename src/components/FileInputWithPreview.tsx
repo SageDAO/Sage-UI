@@ -1,5 +1,4 @@
-import { createBucketFolderName, uploadFileToS3 } from '@/utilities/awsS3-client';
-import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
+import { uploadFileToS3 } from '@/utilities/awsS3-client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import PlusSVG from '@/public/icons/plus.svg';
@@ -17,6 +16,7 @@ const ACCEPTED_TYPES = [
 interface Props {
   initialPreview?: string; // URL for initial image/video to be displayed
   onFileChange: (newFile: File) => void; // callback for when user selects a new input file
+  onAspectRatioChange?: (width: number, height: number) => void; // callback when aspect ratio changes
   onGeneratePreview?: (s3Path: string, s3PathOptimized: string) => void; // callback in case a preview file is generated
   acceptedTypes?: string[]; // accepted file upload mime types
 }
@@ -24,6 +24,7 @@ interface Props {
 export default function FileInputWithPreview({
   initialPreview,
   onFileChange,
+  onAspectRatioChange,
   onGeneratePreview,
   acceptedTypes,
 }: Props) {
@@ -33,7 +34,6 @@ export default function FileInputWithPreview({
   );
   const isVideo: boolean = file?.type == 'video/mp4';
   const isTiff: boolean = file?.type == 'image/tiff';
-  const isSVG: boolean = file?.type == 'image/svg+xml';
 
   useEffect(() => {
     if (file) {
@@ -116,12 +116,25 @@ export default function FileInputWithPreview({
           video.play();
         }
       }
-      // let preview = isSVG ? 'data:image/svg+xml;base64,' + btoa(result) : result;
       setPreviewSrc(result);
       setContainerAspectRatio(result, isVideo);
     };
-    // isSVG ? reader.readAsText(file) : reader.readAsDataURL(file);
     reader.readAsDataURL(file);
+  }
+
+  async function setContainerAspectRatio(data: string, isVideo: boolean = false) {
+    const div = document.getElementById('file-upload-preview-container');
+    if (div) {
+      const { width, height } = isVideo
+        ? await getVideoAspectRatio(data)
+        : await getImageAspectRatio(data);
+      const aspectRatio = `${width}/${height}`;
+      console.log(`Setting aspect ratio to ${aspectRatio}`)
+      div.style.aspectRatio = aspectRatio;
+      if (onAspectRatioChange) {
+        onAspectRatioChange(width, height);
+      }
+    }
   }
 
   return (
@@ -132,7 +145,7 @@ export default function FileInputWithPreview({
         className='creations-panel__file-upload-field'
         accept={(acceptedTypes || ACCEPTED_TYPES).join(',')}
       />
-      <PlusSVG
+      <Image
         className='creations-panel__file-upload-plus-icon'
         src='/icons/plus.svg'
         width={40}
@@ -163,32 +176,34 @@ export default function FileInputWithPreview({
   );
 }
 
-async function getImageAspectRatio(data: string) {
+async function getImageAspectRatio(data: string): Promise<{ width: number; height: number }> {
   if (data.startsWith('data:image/svg+xml')) {
-    try {
-      let decodedSvgText = atob(data.replace('data:image/svg+xml;base64,', ''));
-      decodedSvgText = decodedSvgText.substring(decodedSvgText.indexOf('<svg'));
-      let div = document.createElement('div');
-      div.innerHTML = decodedSvgText;
-      let svg = div.firstChild as SVGElement;
-      let viewbox = svg.getAttribute('viewBox').split(' ');
-      let aspect = `${viewbox[2]}/${viewbox[3]}`;
-      console.log(`getImageAspectRatio() :: ${aspect}`);
-      return aspect;
-    } catch (e) {
-      console.log(e);
-      return '1/1';
-    }
+    return getSVGAspectRatio(data);
   }
   let img = document.createElement('img');
   img.src = data;
   while (img.width == 0) {
     await new Promise((r) => setTimeout(r, 250)); // give the browser a sec to process img
   }
-  return `${img.width}/${img.height}`;
+  return { width: img.width, height: img.height };
 }
 
-async function getVideoAspectRatio(data: string) {
+function getSVGAspectRatio(data: string): { width: number; height: number } {
+  try {
+    let decodedSvgText = atob(data.replace('data:image/svg+xml;base64,', ''));
+    decodedSvgText = decodedSvgText.substring(decodedSvgText.indexOf('<svg'));
+    let div = document.createElement('div');
+    div.innerHTML = decodedSvgText;
+    let svg = div.firstChild as SVGElement;
+    let viewbox = svg.getAttribute('viewBox').split(' ');
+    return { width: Number(viewbox[2]), height: Number(viewbox[3]) };
+  } catch (e) {
+    console.log(e);
+    return { width: 100, height: 100 };
+  }
+}
+
+async function getVideoAspectRatio(data: string): Promise<{ width: number; height: number }> {
   let video = document.createElement('video');
   let source = document.createElement('source');
   source.type = 'video/mp4';
@@ -197,13 +212,5 @@ async function getVideoAspectRatio(data: string) {
   while (video.videoWidth == 0) {
     await new Promise((r) => setTimeout(r, 250)); // give the browser a sec to process video
   }
-  return `${video.videoWidth}/${video.videoHeight}`;
-}
-
-async function setContainerAspectRatio(data: string, isVideo: boolean = false) {
-  const div = document.getElementById('file-upload-preview-container');
-  if (div) {
-    const aspectRatio = isVideo ? await getVideoAspectRatio(data) : await getImageAspectRatio(data);
-    div.style.aspectRatio = aspectRatio;
-  }
+  return { width: video.videoWidth, height: video.videoHeight };
 }

@@ -14,6 +14,8 @@ import { useSession } from 'next-auth/react';
 
 interface State {
   file: File | null;
+  width: number | null;
+  height: number | null;
   s3Path: string | null;
   s3PathOptimized: string | null;
   title: string;
@@ -25,6 +27,8 @@ interface State {
 
 const INITIAL_STATE: State = {
   file: null,
+  width: null,
+  height: null,
   s3Path: null,
   s3PathOptimized: null,
   title: '',
@@ -87,6 +91,12 @@ export default function CreationsPanel() {
     });
   }
 
+  function handleAspectRatioChange(width: number, height: number) {
+    setState((prevState) => {
+      return { ...prevState, width, height };
+    });
+  }
+
   async function handleDeployContractButtonClick() {
     await deployContract({
       artistAddress: sessionData?.address as string,
@@ -120,6 +130,8 @@ export default function CreationsPanel() {
       price: parseFloat(state.price),
       isFixedPrice: state.isFixedPrice,
       file: state.file,
+      width: state.width,
+      height: state.height,
       s3Path: state.s3Path,
       s3PathOptimized: state.s3PathOptimized,
       signer: signer as Signer,
@@ -158,6 +170,7 @@ export default function CreationsPanel() {
             <FileInputWithPreview
               onFileChange={handleFileInputChange}
               onGeneratePreview={handleGeneratePreview}
+              onAspectRatioChange={handleAspectRatioChange}
             />
             <h1 className='creations-panel__file-upload-label'>
               ADD AN ARTWORK ( WE SUPPORT JPG, PNG, GIF, TIFF, SVG and MP4 )
@@ -213,6 +226,7 @@ export default function CreationsPanel() {
             {isMinting || isDeployingContract ? <LoaderSpinner /> : `mint artwork`}
           </button>
         </form>
+        w: {state.width!} h: {state.height!}
       </div>
     </Fragment>
   );

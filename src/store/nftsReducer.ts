@@ -24,6 +24,8 @@ export interface MintRequest {
   price: number;
   isFixedPrice: boolean;
   file: File;
+  width: number;
+  height: number;
   s3Path: string | null;
   s3PathOptimized: string | null;
   signer: Signer;
@@ -272,6 +274,8 @@ async function dbInsertNft(
       description: mintRequest.description,
       //tags: mintRequest.tags,
       price: mintRequest.price,
+      width: mintRequest.width,
+      height: mintRequest.height,
       s3Path,
       s3PathOptimized: mintRequest.s3PathOptimized,
       metadataPath,

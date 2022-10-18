@@ -159,6 +159,8 @@ async function createPresetDrops(
             drawingId,
             name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
             numberOfEditions: 1,
+            width: 1024,
+            height: 1024,
             metadataPath,
             arweavePath,
             s3Path: nftS3Path,
