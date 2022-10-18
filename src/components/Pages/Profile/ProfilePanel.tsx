@@ -125,6 +125,7 @@ export default function ProfilePanel({ isArtist }: Props) {
               });
             }}
             maxLength={40}
+            placeholder='USERNAME'
             className='profile-panel__username-field'
           />
         </div>
@@ -132,6 +133,7 @@ export default function ProfilePanel({ isArtist }: Props) {
           <input
             type='text'
             value={state?.email ?? ''}
+            placeholder='EMAIL'
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setState((prevState) => {
                 return { ...prevState, email: e.target.value.trim() };
@@ -151,6 +153,7 @@ export default function ProfilePanel({ isArtist }: Props) {
           <textarea
             value={(state.bio as string) || ''}
             onChange={handleBioInput}
+            placeholder='ABOUT'
             className='profile-panel__bio-field'
           />
         </div>
