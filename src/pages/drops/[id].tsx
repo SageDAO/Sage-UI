@@ -124,7 +124,7 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
               </div>
               <div className='drop-page__artist-info'>
                 <p className='drop-page__artist-name'>{artist.username}</p>
-                <p className='drop-page__artist-label'>VOID, USA</p>
+                {/* <p className='drop-page__artist-label'>VOID, USA</p> */}
               </div>
             </div>
             <h3 className='drop-page__drop-info-name'>{drop.name}</h3>
