@@ -24,6 +24,7 @@ import { transformTitle } from '@/utilities/strings';
 import ClaimRefundButton from '@/components/Pages/Profile/ClaimRefundButton';
 import CheckSVG from '@/public/icons/check.svg';
 import { useRouter } from 'next/router';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -56,8 +57,8 @@ function GetTicketModal({
   systemType,
 }: Props) {
   const router = useRouter();
-  const { data: sessionData } = useSession();
-  const walletAddress = sessionData?.address;
+  const { sessionData } = useSAGEAccount();
+  const walletAddress = sessionData.user.address;
   const { data: signer } = useSigner();
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0);
