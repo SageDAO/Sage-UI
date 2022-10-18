@@ -58,7 +58,7 @@ function GetTicketModal({
 }: Props) {
   const router = useRouter();
   const { sessionData } = useSAGEAccount();
-  const walletAddress = sessionData.address;
+  const walletAddress = sessionData?.address;
   const { data: signer } = useSigner();
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
   const [selectedNftIndex, setSelectedNftIndex] = useState<number>(0);
