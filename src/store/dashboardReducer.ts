@@ -19,9 +19,12 @@ const dashboardApi = baseApi.injectEndpoints({
       query: () => `sales?action=GetSalesEvents`
     }),
     promoteUserToAdmin: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
-      queryFn: async ({ walletAddress, signer }, {}, _, fetchWithBQ) => {
+      queryFn: async ({ walletAddress, signer }, { }, _, fetchWithBQ) => {
         const contract = await getStorageContract(signer);
-        const tx = await contract.grantAdmin(walletAddress);
+        const tx = await contract.grantRole(
+          ethers.utils.solidityKeccak256(['string'], ['role.admin']),
+          walletAddress
+        );
         await tx.wait();
         await fetchWithBQ(`user?action=PromoteToAdmin&address=${walletAddress}`);
         return { data: true };
