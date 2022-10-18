@@ -68,9 +68,9 @@ export default function EventSlider({ mediumData }: Props) {
         })}
       </div>
       <div className='home-page__events-section-bottom'>
-        <button onClick={pushToNews} className='home-page__events-visit-button'>
+        {/* <button onClick={pushToNews} className='home-page__events-visit-button'>
           VIEW ALL NEWS
-        </button>
+        </button> */}
       </div>
     </section>
   );
