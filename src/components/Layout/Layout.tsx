@@ -23,7 +23,7 @@ type Props = {
 
 export default function Layout({ children, router }: Props) {
   const { isSignedIn, isWalletConnected, walletAddress, sessionData, userData } = useSAGEAccount();
-  const { pushToHome } = useSageRoutes();
+  const { pushToHome, isCreatorsPage } = useSageRoutes();
   const {
     isNetworkModalOpen,
     closeNetworkModal,
@@ -80,9 +80,10 @@ export default function Layout({ children, router }: Props) {
           toggleMobileMenu={toggleMobileMenu}
         />
         {children}
+        {!isCreatorsPage && <Motto />}
+
         <Footer></Footer>
       </div>
-      <Motto></Motto>
     </React.Fragment>
   );
 }

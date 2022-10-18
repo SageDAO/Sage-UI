@@ -62,6 +62,7 @@ export default function useSageRoutes() {
 
   const isProfilePage: boolean = pathname.includes(basePathProfile);
   const isSingleDropsPage: boolean = pathname.includes(basePathDrops + '/');
+  const isCreatorsPage: boolean = pathname.includes(basePathCreators) && !pathname.includes('id');
 
   return {
     pushToCreators,
@@ -75,5 +76,6 @@ export default function useSageRoutes() {
     pushToNews,
     isProfilePage,
     isSingleDropsPage,
+    isCreatorsPage,
   };
 }
