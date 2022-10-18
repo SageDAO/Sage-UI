@@ -53,6 +53,7 @@
 
 .dashboard-user {
   &__profile-img {
+    @include m.pfp-container;
     overflow: hidden;
     position: relative;
     width: 3rem;
@@ -199,8 +200,10 @@
     @include m.theme() {
       border: 1px solid m.t(contrast);
     }
+    @include m.pfp-container;
     margin: 0px auto 20px auto;
     position: relative;
+    border-radius: 0;
     width: 200px;
     height: 200px;
   }
