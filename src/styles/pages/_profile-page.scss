@@ -191,6 +191,8 @@
     color: m.t(base);
     @include m.pill;
     @include m.flex-row;
+    @include m.flex-center;
+    width: min-content;
     text-align: center;
     padding: 0 8px;
     text-transform: uppercase;
@@ -252,7 +254,7 @@
   @include menu-tab;
   @include m.theme() {
     color: m.t(contrast);
-    &[data-active='true'] {
+    &--selected {
       &:after {
         content: '';
         width: 10px;
@@ -298,7 +300,7 @@
   flex: 1;
   display: flex;
   // flex-direction: column;
-  gap: 60px;
+  // gap: 60px;
 }
 
 .profile-page__balances {
@@ -345,11 +347,12 @@
 
 .profile-page__tabs-panel {
   display: flex;
-  flex: 1;
+  // flex: 1;
   min-height: 60vh;
   flex-direction: column;
   gap: 45px;
   max-width: 863px;
+  // background-color: red;
 }
 
 .profile-page__tabs-panel-header {
@@ -381,6 +384,7 @@
   display: flex;
   flex-direction: column;
   gap: 23px;
+  width: 100%;
 }
 
 .profile-panel__pfp-group {

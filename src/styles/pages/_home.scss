@@ -327,9 +327,8 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 }
 
 .home-page__new-artworks-item-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
+  @include m.flex-col;
+  @include m.flex-center;
   height: 100%;
   text-transform: uppercase;
 }
