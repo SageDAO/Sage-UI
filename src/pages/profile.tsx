@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import LoaderDots from '@/components/LoaderDots';
-import { Tab } from '@headlessui/react';
 import useTabs from '@/hooks/useTabs';
 import ProfilePanel from '@/components/Pages/Profile/ProfilePanel';
 import CollectionPanel from '@/components/Pages/Profile/CollectionPanel';
@@ -14,7 +13,31 @@ import { useRouter } from 'next/router';
 import { useDisconnect } from 'wagmi';
 import { PfpImage } from '@/components/Media/BaseMedia';
 import useUserNotifications from '@/hooks/useUserNotifications';
-import useSageRoutes from '@/hooks/useSageRoutes';
+import Link from 'next/link';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import useProfileRoutes from '@/hooks/useProfileRoutes';
+
+type Headers =
+  | 'IN AND OUTGOING BIDS'
+  | 'YOUR SALES'
+  | 'CLAIM YOUR WINS'
+  | 'YOUR REFUNDS FROM RAFFLES'
+  | 'ALL YOUR ACTIVITIES ON SAGE'
+  | 'YOUR SALES'
+  | 'YOUR OFFERS'
+  | 'EDIT YOUR PROFILE'
+  | 'UPLOAD AN ARTWORK'
+  | 'YOUR COLLECTED NFTS ON SAGE';
+
+function parseQuery(queryString) {
+  var query = {};
+  var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i].split('=');
+    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+  }
+  return query;
+}
 
 function profile() {
   const router = useRouter();
@@ -25,16 +48,42 @@ function profile() {
   });
   const [signOut] = useSignOutMutation();
   const { selectedTabIndex, setSelectedTabIndex } = useTabs();
+  const { selectedTabIndex: subtabIndex, setSelectedTabIndex: setSubtabIndex } = useTabs();
   const { disconnect } = useDisconnect();
   const { asPath } = useRouter();
-
   const { notificationCount, hasNotifications } = useUserNotifications();
+  const [header, setHeader] = useState<Headers>('EDIT YOUR PROFILE');
+  const { shallowRoute } = useProfileRoutes();
+
+  // useEffect(() => {
+  //   if (asPath.indexOf('notifications')) {
+  //     setSelectedTabIndex(2);
+  //   }
+  // }, []);
 
   useEffect(() => {
-    if (asPath.indexOf('notifications')) {
-      setSelectedTabIndex(2);
+    if (selectedTabIndex == 0) setHeader('EDIT YOUR PROFILE');
+    if (selectedTabIndex == 1) setHeader('YOUR COLLECTED NFTS ON SAGE');
+    if (selectedTabIndex == 2) {
+      if (subtabIndex == 0) {
+        setHeader('YOUR OFFERS');
+      }
+      if (subtabIndex == 1) {
+        setHeader('YOUR SALES');
+      }
+      if (subtabIndex == 2) {
+        setHeader('CLAIM YOUR WINS');
+      }
+
+      if (subtabIndex == 3) {
+        setHeader('YOUR REFUNDS FROM RAFFLES');
+      }
+
+      if (subtabIndex == 4) {
+        setHeader('ALL YOUR ACTIVITIES ON SAGE');
+      }
     }
-  }, []);
+  }, [selectedTabIndex, subtabIndex]);
 
   async function handleSignOut() {
     signOut();
@@ -49,107 +98,100 @@ function profile() {
   const isArtist: boolean = userData?.role === 'ARTIST';
 
   return (
-    <Tab.Group selectedIndex={selectedTabIndex} onChange={setSelectedTabIndex} vertical>
-      <div className='profile-page'>
-        <section className='profile-page__upper'>
-          <div className='profile-page__logotype-container'>
-            <SageFullLogoSVG
-              onClick={() => router.push('/')}
-              className='profile-page__sage-logo-svg'
-            />
-          </div>
-          <Balances />
-        </section>
-        <h1 className='profile-page__header'>IN AND OUTGOING BIDS</h1>
-        <section className='profile-page__main'>
-          <div className='profile-page__left'>
-            <div className='profile-page__pfp-section'>
-              <div className='profile-page__pfp-container'>
-                <PfpImage src={userData?.profilePicture}></PfpImage>
-              </div>
-              <div className='profile-page__pfp-section-right'>
-                <p className='profile-page__pfp-section-username'>{userData?.username}</p>
-                <p className='profile-page__pfp-section-role'>{userData?.role}</p>
-              </div>
+    <Tabs
+      className='profile-page'
+      selectedIndex={selectedTabIndex}
+      onSelect={(index) => {
+        shallowRoute(String(index));
+        setSelectedTabIndex(index);
+      }}
+    >
+      <section className='profile-page__upper'>
+        <div className='profile-page__logotype-container'>
+          <SageFullLogoSVG
+            onClick={() => router.push('/')}
+            className='profile-page__sage-logo-svg'
+          />
+        </div>
+        <Balances />
+      </section>
+      <h1 className='profile-page__header'>{header}</h1>
+      <section className='profile-page__main'>
+        <div className='profile-page__left'>
+          <div className='profile-page__pfp-section'>
+            <div className='profile-page__pfp-container'>
+              <PfpImage src={userData?.profilePicture}></PfpImage>
             </div>
-            <Tab.List className='profile-page__tabs'>
-              <Tab as={React.Fragment}>
-                {({ selected }) => {
-                  return (
-                    <button data-active={selected} className='profile-page__tabs-tab'>
-                      profile
-                    </button>
-                  );
-                }}
-              </Tab>
-              <Tab as={React.Fragment}>
-                {({ selected }) => {
-                  return (
-                    <button data-active={selected} className='profile-page__tabs-tab'>
-                      collection
-                    </button>
-                  );
-                }}
-              </Tab>
-              <Tab as={React.Fragment}>
-                {({ selected }) => {
-                  return (
-                    <button
-                      data-active={selected}
-                      data-type='notifications'
-                      className='profile-page__tabs-tab  '
-                    >
-                      notifications
-                      {hasNotifications && (
-                        <span className='profile-page__tabs-tab-notifications-counter'>
-                          {notificationCount}
-                        </span>
-                      )}
-                    </button>
-                  );
-                }}
-              </Tab>
-              {isArtist && (
-                <Tab as={React.Fragment}>
-                  {({ selected }) => {
-                    return (
-                      <button
-                        disabled={!isArtist}
-                        data-active={selected}
-                        className='profile-page__tabs-tab'
-                      >
-                        MINT
-                      </button>
-                    );
-                  }}
-                </Tab>
-              )}
-              <button onClick={handleSignOut} className=' profile-page__log-out-btn'>
-                log out
-              </button>
-            </Tab.List>
+            <div className='profile-page__pfp-section-right'>
+              <p className='profile-page__pfp-section-username'>{userData?.username}asdfsdfs</p>
+              <p className='profile-page__pfp-section-role'>{userData?.role}</p>
+            </div>
           </div>
-          <div className='profile-page__right'>
-            <Tab.Panels>
-              <Tab.Panel as='div' className='profile-page__tabs-panel'>
-                <ProfilePanel isArtist={isArtist} />
-              </Tab.Panel>
-              <Tab.Panel as='div' className='profile-page__tabs-panel'>
-                <CollectionPanel />
-              </Tab.Panel>
-              <Tab.Panel as='div' className='profile-page__tabs-panel'>
-                <NotificationsPanel />
-              </Tab.Panel>
-              {isArtist && (
-                <Tab.Panel as='div' className='profile-page__tabs-panel'>
-                  <CreationsPanel />
-                </Tab.Panel>
+          <TabList className='profile-page__tabs'>
+            <Tab
+              as={'button'}
+              className='profile-page__tabs-tab'
+              selectedClassName='profile-page__tabs-tab--selected'
+            >
+              profile
+            </Tab>
+            <Tab
+              as={'button'}
+              className='profile-page__tabs-tab'
+              selectedClassName='profile-page__tabs-tab--selected'
+            >
+              collection
+            </Tab>
+
+            <Tab
+              as={'button'}
+              className='profile-page__tabs-tab'
+              selectedClassName='profile-page__tabs-tab--selected'
+            >
+              notifications
+              {hasNotifications && (
+                <span className='profile-page__tabs-tab-notifications-counter'>
+                  {notificationCount}
+                </span>
               )}
-            </Tab.Panels>
-          </div>
-        </section>
-      </div>
-    </Tab.Group>
+            </Tab>
+
+            {isArtist && (
+              <Tab
+                as={'button'}
+                disabled={!isArtist}
+                className='profile-page__tabs-tab'
+                selectedClassName='profile-page__tabs-tab--selected'
+              >
+                MINT
+              </Tab>
+            )}
+            <button onClick={handleSignOut} className=' profile-page__log-out-btn'>
+              log out
+            </button>
+          </TabList>
+        </div>
+        <div className='profile-page__right'>
+          <TabPanel href="/profile?tab='profile" as='div' className='profile-page__tabs-panel'>
+            <ProfilePanel isArtist={isArtist} />
+          </TabPanel>
+          <TabPanel as='div' className='profile-page__tabs-panel'>
+            <CollectionPanel
+              collectionTabIndex={subtabIndex}
+              setCollectionTabIndex={setSubtabIndex}
+            />
+          </TabPanel>
+          <TabPanel as='div' className='profile-page__tabs-panel'>
+            <NotificationsPanel subtabIndex={subtabIndex} setSubtabIndex={setSubtabIndex} />
+          </TabPanel>
+          {isArtist && (
+            <TabPanel as='div' className='profile-page__tabs-panel'>
+              <CreationsPanel />
+            </TabPanel>
+          )}
+        </div>
+      </section>
+    </Tabs>
   );
 }
 

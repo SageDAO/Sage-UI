@@ -12,7 +12,7 @@ export default function DropItem({ drop, artist, Lotteries, Auctions }: Props) {
     startTime,
     status: dropStatus,
     dropDescription,
-		goToArtistOnClick,
+    goToArtistOnClick,
     goToDropOnClick,
   } = useDrop({
     drop,
@@ -35,6 +35,7 @@ export default function DropItem({ drop, artist, Lotteries, Auctions }: Props) {
             <PfpImage src={artist.profilePicture}></PfpImage>
           </div>
           <div className='drops-page__drop-artist-info'>
+            <p className='drops-page__drop-drop-name'>{dropName}</p>
             <p className='drops-page__drop-artist-name'>BY {artist.username}</p>
           </div>
         </div>

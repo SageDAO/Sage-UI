@@ -17,7 +17,7 @@ function RefundsPanel({ refunds }: Props) {
   });
   return (
     <>
-      <tbody className='notifications-panel__data-list'>
+      <div className='notifications-panel__data-list'>
         {refunds.map((refund) => {
           const dateDisplay = refund.blockTimestamp
             ? formatTimestampYYMMddHHmm(refund.blockTimestamp)
@@ -42,7 +42,7 @@ function RefundsPanel({ refunds }: Props) {
             </tr>
           );
         })}
-      </tbody>
+      </div>
 
       <Pagination onPrev={onPrev} selectedPage={selectedPage} onNext={onNext}></Pagination>
     </>

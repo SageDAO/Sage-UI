@@ -10,14 +10,24 @@ import { Tabs, TabList, TabPanel, Tab } from 'react-tabs';
 import ClaimPanel from './ClaimPanel';
 import RefundsPanel from './RefundsPanel';
 
-export default function Notifications() {
+interface Props {
+  subtabIndex: number;
+  setSubtabIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export default function Notifications({ setSubtabIndex, subtabIndex }: Props) {
   const { prizeNfts, refunds, isLoading } = useUserNotifications();
   const items = prizeNfts && refunds ? [...prizeNfts, ...refunds] : [];
 
   return (
     <>
       <div className='notifications-panel'>
-        <Tabs>
+        <Tabs
+          selectedIndex={subtabIndex}
+          onSelect={(index) => {
+            setSubtabIndex(index);
+          }}
+        >
           <TabList as='div' className='notifications-panel__tab-list'>
             <Tab
               selectedClassName='notifications-panel__tab-item--selected'

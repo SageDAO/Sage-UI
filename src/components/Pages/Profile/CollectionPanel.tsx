@@ -8,7 +8,12 @@ import { useGetListingNftsByOwnerQuery } from '@/store/nftsReducer';
 import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
 import Gallery from './Gallery';
 
-export default function CollectionPanel() {
+interface Props {
+  collectionTabIndex: number;
+  setCollectionTabIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export default function CollectionPanel({ collectionTabIndex, setCollectionTabIndex }: Props) {
   const { data: sessionData } = useSession();
   const { data: claimedPrizes, isFetching: fetchingClaimedPrizes } = useGetClaimedPrizesQuery(
     undefined,
@@ -29,7 +34,13 @@ export default function CollectionPanel() {
 
   return (
     <div className='collection-panel'>
-      <Tabs className='collection-panel__tabs'>
+      <Tabs
+        selectedIndex={collectionTabIndex}
+        onSelect={(index) => {
+          setCollectionTabIndex(index);
+        }}
+        className='collection-panel__tabs'
+      >
         <TabList className='collection-panel__tabs-list' as='div'>
           <Tab
             as='div'

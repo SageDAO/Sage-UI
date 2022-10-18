@@ -38,7 +38,7 @@ function ClaimPanel({ prizeNfts }: Props) {
   const pageItems = sortedItems.slice(firstIndex, secondIndex);
   return (
     <>
-      <tbody className='notifications-panel__data-list'>
+      <div className='notifications-panel__data-list'>
         {prizeNfts.map((prize: any, i: number) => {
           const dateDisplay = prize.claimedAt ? formatDateYYMMddHHmm(prize.claimedAt) : 'unclaimed';
           return (
@@ -59,7 +59,7 @@ function ClaimPanel({ prizeNfts }: Props) {
             </tr>
           );
         })}
-      </tbody>
+      </div>
       <Pagination onPrev={onPrev} selectedPage={selectedPage} onNext={onNext}></Pagination>
     </>
   );
