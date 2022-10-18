@@ -20,6 +20,7 @@ export default function useSignIn(isOpen: boolean) {
     try {
       const chainId = activeChain?.id;
       if (!address || !chainId) return;
+      const issuedAt = new Date().toISOString();
       const nonce = await getCsrfToken();
       const message = new SiweMessage({
         domain: window.location.host,
@@ -29,13 +30,13 @@ export default function useSignIn(isOpen: boolean) {
         version: '1',
         chainId,
         nonce,
-        // issuedAt: new Date().toLocaleTimeString(),
+        issuedAt,
       });
-      console.log('message:', message);
-      // const signature = await signMessageAsync({
-      //   message: message.prepareMessage(),
-      // });
-      // signIn({ message, signature });
+      const signThis = message.prepareMessage();
+      const signature = await signMessageAsync({
+        message: message.prepareMessage(),
+      });
+      signIn({ message, signature });
     } catch (error) {
       console.error(error);
     }
