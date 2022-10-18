@@ -78,9 +78,9 @@ export default function artist({ artist }: Props) {
             className='artist-page__follow-btn--desktop'
             artistAddress={artist.walletAddress}
           />
-          <p className='artist-page__follower-count'>
+          {/* <p className='artist-page__follower-count'>
             followers: <span className='artist-page__follow-value'>29k</span>{' '}
-          </p>
+          </p> */}
           {/* <p className='artist-page__following-count'>
             views: <span className='artist-page__follow-value'>33k</span>{' '}
           </p> */}

@@ -134,10 +134,6 @@ export default function CreationsPanel() {
 
   return (
     <Fragment>
-      <h1 className='profile-page__tabs-panel-header'>
-        creations panel
-        <span className='profile-page__tabs-panel-subheader'>mint your own artwork</span>
-      </h1>
       <div className='creations-panel'>
         <form className='creations-panel__form'>
           {artistNftContractAddress ? (

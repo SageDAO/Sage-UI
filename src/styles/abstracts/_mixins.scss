@@ -1,6 +1,36 @@
 @use '@/styles/abstracts/colors' as *;
 @use '@/styles/abstracts/breakpoints' as b;
 
+@mixin input-label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-transform: capitalize;
+
+  @include theme() {
+    color: #696969;
+  }
+}
+
+@mixin input-field {
+  @include theme() {
+    min-height: 30px;
+    flex: 1;
+    background: transparent;
+    padding: 2px 10px;
+    color: t(contrast);
+    border: 1px solid #696969;
+    min-height: 42px;
+  }
+}
+
+@mixin input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
 @mixin tabs-list {
   @include flex-row;
   gap: 22px;

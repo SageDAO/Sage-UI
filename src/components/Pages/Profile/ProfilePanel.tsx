@@ -110,10 +110,31 @@ export default function ProfilePanel({ isArtist }: Props) {
           closeModal={closeProfilePicModal}
           title='Profile Picture'
         />
-        <div className='profile-panel__pfp-group'>
-          <div onClick={openProfilePicModal} className='profile-panel__pfp-container'>
-            <PfpImage src={state?.profilePicture}></PfpImage>
+        <div className='profile-panel__uploads'>
+          <div className='profile-panel__pfp-group'>
+            <div onClick={openProfilePicModal} className='profile-panel__pfp-container'>
+              <PfpImage src={state?.profilePicture}></PfpImage>
+            </div>
+            <p className='profile-panel__pfp-label'>
+              ADD OR CHANGE <br /> PROFILE PICTURE
+            </p>
           </div>
+
+          {isArtist && (
+            <div className='profile-panel__banner-group'>
+              <div className='profile-panel__banner-container'>
+                <FileInputWithPreview
+                  initialPreview={data.bannerImageS3Path}
+                  acceptedTypes={['image/png', 'image/jpeg', 'image/gif', 'image/svg+xml']}
+                  onFileChange={handleFileInputChange}
+                />
+              </div>
+
+              <p className='profile-panel__pfp-label'>
+                ADD OR CHANGE <br /> BANNER PICTURE
+              </p>
+            </div>
+          )}
         </div>
         <div className='profile-panel__username-group'>
           <input
@@ -157,13 +178,6 @@ export default function ProfilePanel({ isArtist }: Props) {
             className='profile-panel__bio-field'
           />
         </div>
-        {isArtist && (
-          <FileInputWithPreview
-            initialPreview={data.bannerImageS3Path}
-            acceptedTypes={['image/png', 'image/jpeg', 'image/gif', 'image/svg+xml']}
-            onFileChange={handleFileInputChange}
-          />
-        )}
 
         <div className='profile-panel__socials-group'>
           <p className='profile-panel__socials-label'>Connect Your Social Profile</p>

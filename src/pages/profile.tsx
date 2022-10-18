@@ -123,7 +123,9 @@ function profile() {
               <PfpImage src={userData?.profilePicture}></PfpImage>
             </div>
             <div className='profile-page__pfp-section-right'>
-              <p className='profile-page__pfp-section-username'>{userData?.username}asdfsdfs</p>
+              <p className='profile-page__pfp-section-username'>
+                {userData?.username || 'anonymous'}
+              </p>
               <p className='profile-page__pfp-section-role'>{userData?.role}</p>
             </div>
           </div>

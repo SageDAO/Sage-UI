@@ -34,6 +34,7 @@ function Gallery({ nfts }: Props) {
   }
 
   if (!nfts.length) return null;
+  if (!nfts) return null;
 
   return (
     <>

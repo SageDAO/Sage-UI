@@ -2,6 +2,7 @@ import { createBucketFolderName, uploadFileToS3 } from '@/utilities/awsS3-client
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import PlusSVG from '@/public/icons/plus.svg';
 
 const EMPTY_PREVIEW = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 const ACCEPTED_TYPES = [
@@ -131,7 +132,7 @@ export default function FileInputWithPreview({
         className='creations-panel__file-upload-field'
         accept={(acceptedTypes || ACCEPTED_TYPES).join(',')}
       />
-      <Image
+      <PlusSVG
         className='creations-panel__file-upload-plus-icon'
         src='/icons/plus.svg'
         width={40}
