@@ -48,12 +48,13 @@
 
 .drops-page__drops-section {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   // flex-direction: column;
   gap: 40px 20px;
   margin-top: 48px;
-  @include m.mobile-width-full;
+  @include m.mobile-width;
   @include b.min-width('medium') {
+    grid-template-columns: repeat(2, 1fr);
     @include m.desktop-width;
   }
 }
