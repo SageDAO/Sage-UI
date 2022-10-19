@@ -79,10 +79,9 @@ function profile() {
       if (subtabIndex == 4) {
         setHeader('ALL YOUR ACTIVITIES ON SAGE');
       }
-
-      if (subtabIndex == 5) {
-        setHeader('UPLOAD AN ARTWORK');
-      }
+    }
+    if (selectedTabIndex == 3) {
+      setHeader('UPLOAD AN ARTWORK');
     }
   }, [selectedTabIndex, subtabIndex]);
 
