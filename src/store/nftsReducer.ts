@@ -33,6 +33,7 @@ export interface MintRequest {
 
 export interface OfferRequest {
   nftId: number;
+  tokenId: number;
   nftContractAddress: string;
   amount: number;
   signer: Signer;
@@ -99,6 +100,7 @@ const nftsApi = baseApi.injectEndpoints({
             await createSignedOffer(
               nftContractAddress,
               nftId,
+              tokenId.toNumber(),
               mintRequest.price,
               mintRequest.signer,
               true,
@@ -210,6 +212,7 @@ const nftsApi = baseApi.injectEndpoints({
           await createSignedOffer(
             offer.nftContractAddress,
             offer.nftId,
+            offer.tokenId,
             offer.amount,
             offer.signer,
             false,
@@ -299,6 +302,7 @@ async function dbInsertNft(
 async function createSignedOffer(
   nftContractAddress: string,
   nftId: number,
+  tokenId: number,
   amount: number,
   signer: Signer,
   isSellOffer: boolean,
@@ -307,7 +311,7 @@ async function createSignedOffer(
   const weiAmount = ethers.utils.parseEther(amount.toString());
   var { signedOffer, expiresAt } = await signOffer(
     nftContractAddress,
-    nftId,
+    tokenId,
     weiAmount,
     signer,
     isSellOffer

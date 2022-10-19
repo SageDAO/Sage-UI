@@ -66,6 +66,7 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
     }
     await createBuyOffer({
       nftId: nft.id,
+      tokenId: nft.tokenId,
       amount,
       signer: signer as Signer,
       nftContractAddress: nft.NftContract?.contractAddress,
