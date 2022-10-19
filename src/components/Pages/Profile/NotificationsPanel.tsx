@@ -33,6 +33,7 @@ export default function Notifications({ setSubtabIndex, subtabIndex }: Props) {
               selectedClassName='notifications-panel__tab-item--selected'
               className='notifications-panel__tab-item'
               as='button'
+              style={{ display: 'none' }}
             >
               BIDS
             </Tab>
@@ -40,6 +41,7 @@ export default function Notifications({ setSubtabIndex, subtabIndex }: Props) {
               selectedClassName='notifications-panel__tab-item--selected'
               className='notifications-panel__tab-item'
               as='button'
+              style={{ display: 'none' }}
             >
               SALES
             </Tab>
@@ -64,20 +66,21 @@ export default function Notifications({ setSubtabIndex, subtabIndex }: Props) {
               selectedClassName='notifications-panel__tab-item--selected'
               className='notifications-panel__tab-item'
               as='button'
+              style={{ display: 'none' }}
             >
               ACTIVITY
             </Tab>
           </TabList>
           <div className='notifications-panel__panels'>
-            <TabPanel className='notifications-panel__bids-panel'></TabPanel>
-            <TabPanel className='notifications-panel__sales-panel'></TabPanel>
+            <TabPanel className='notifications-panel__bids-panel' style={{ display: 'none' }}></TabPanel>
+            <TabPanel className='notifications-panel__sales-panel' style={{ display: 'none' }}></TabPanel>
             <TabPanel as='table' className='notifications-panel__claim-panel'>
               <ClaimPanel prizeNfts={prizeNfts}></ClaimPanel>
             </TabPanel>
             <TabPanel as='table' className='notifications-panel__refunds-panel'>
               <RefundsPanel refunds={refunds}></RefundsPanel>
             </TabPanel>
-            <TabPanel className='notifications-panel__activity-panel'></TabPanel>
+            <TabPanel className='notifications-panel__activity-panel' style={{ display: 'none' }}></TabPanel>
           </div>
         </Tabs>
       </div>

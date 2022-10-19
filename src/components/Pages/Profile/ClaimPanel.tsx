@@ -1,7 +1,7 @@
 import { BaseMedia } from '@/components/Media/BaseMedia';
 import { GamePrize } from '@/prisma/types';
 import usePagination from '@/hooks/usePagination';
-import { formatDateYYMMddHHmm, formatTimestampYYMMddHHmm } from '@/utilities/strings';
+import { formatDateYYMMddHHmm } from '@/utilities/strings';
 import React from 'react';
 import ClaimPrizeButton from './ClaimPrizeButton';
 import Pagination from './Pagination';
@@ -27,9 +27,10 @@ interface Props {
 }
 
 function ClaimPanel({ prizeNfts }: Props) {
+  const PAGE_SIZE = 10;
   const { selectedPage, onNext, onPrev, pageSize } = usePagination({
     totalCount: prizeNfts.length,
-    pageSize: 10,
+    pageSize: PAGE_SIZE,
   });
 
   const firstIndex = (selectedPage - 1) * pageSize;
@@ -60,7 +61,10 @@ function ClaimPanel({ prizeNfts }: Props) {
           );
         })}
       </div>
-      <Pagination onPrev={onPrev} selectedPage={selectedPage} onNext={onNext}></Pagination>
+
+      {prizeNfts && prizeNfts.length >= PAGE_SIZE && (
+        <Pagination onPrev={onPrev} selectedPage={selectedPage} onNext={onNext}></Pagination>
+      )}
     </>
   );
 }

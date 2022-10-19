@@ -11,9 +11,10 @@ interface Props {
 }
 
 function RefundsPanel({ refunds }: Props) {
+  const PAGE_SIZE = 10;
   const { selectedPage, onNext, onPrev, pageSize } = usePagination({
     totalCount: refunds.length,
-    pageSize: 10,
+    pageSize: PAGE_SIZE,
   });
   return (
     <>
@@ -44,7 +45,9 @@ function RefundsPanel({ refunds }: Props) {
         })}
       </div>
 
-      <Pagination onPrev={onPrev} selectedPage={selectedPage} onNext={onNext}></Pagination>
+      {refunds && refunds.length >= PAGE_SIZE && (
+        <Pagination onPrev={onPrev} selectedPage={selectedPage} onNext={onNext}></Pagination>
+      )}
     </>
   );
 }
