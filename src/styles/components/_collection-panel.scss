@@ -94,12 +94,13 @@
 
 .collection-panel__gallery-control-left {
   @include gallery-control-buttons;
-  left: -20%;
+  left: -50px;
 }
 
 .collection-panel__gallery-control-right {
   @include gallery-control-buttons;
-  right: -160%;
+  // right: -160%;
+  right: 0;
 }
 
 .collection-panel__gallery-display {
@@ -124,6 +125,7 @@ $main-height: 799px;
     @include display-item;
     z-index: 3;
     height: $main-height;
+    aspect-ratio: 1/1;
   }
 
   &--second {

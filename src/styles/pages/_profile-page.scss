@@ -50,6 +50,7 @@
 .profile-page__upper {
   @include m.standard-width;
   display: flex;
+  flex-wrap: wrap;
   // gap: 50px;
 }
 
@@ -81,6 +82,8 @@
 
 .profile-page__logotype-container {
   width: 25vw;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .profile-page__sage-logo-svg {
@@ -245,8 +248,7 @@
 .profile-page__right {
   flex: 1;
   display: flex;
-  // flex-direction: column;
-  // gap: 60px;
+  // width: 100%;
 }
 
 .profile-page__balances {
@@ -285,19 +287,26 @@
   @include balance-label;
 }
 
-.profile-page__tabs-panels {
-  display: flex;
-  max-width: 80vw;
-  min-height: 50vh;
-}
+// .profile-page__tabs-panels {
+//   display: flex;
+//   max-width: 80vw;
+//   min-height: 50vh;
+//   background-color: red;
+// }
 
 .profile-page__tabs-panel {
   display: flex;
   min-height: 60vh;
   flex-direction: column;
   gap: 45px;
-
-  max-width: 863px;
+  // max-width: 863px;
+  width: 0;
+  &--selected {
+    @include m.mobile-width;
+    @include b.min-width('medium') {
+      width: 803px;
+    }
+  }
 }
 
 .profile-page__tabs-panel-contract-address {

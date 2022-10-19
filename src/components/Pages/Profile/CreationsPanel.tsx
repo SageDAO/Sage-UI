@@ -148,6 +148,38 @@ export default function CreationsPanel() {
     <Fragment>
       <div className='creations-panel'>
         <form className='creations-panel__form'>
+          {/* <div className='creations-panel__aspect-ratio-selection'>
+            <p className='creations-panel__aspect-ratio-selection-label'>CHOOSE A FORMAT</p>
+            <fieldset id='aspect-ratio' className='creations-panel__aspect-ratio-selection-flex'>
+              <div className='creations-panel__aspect-ratio-selection-item'>
+                <input
+                  type='radio'
+                  name='aspect-ratio'
+                  className='creations-panel__aspect-ratio-selection-item-ratio'
+                  data-ratio='1x1'
+                ></input>
+                <div className='creations-panel__aspect-ratio-selection-item-icon--1x1'></div>
+              </div>
+              <div className='creations-panel__aspect-ratio-selection-item'>
+                <input
+                  name='aspect-ratio'
+                  type='radio'
+                  data-ratio='16x9'
+                  className='creations-panel__aspect-ratio-selection-item-ratio'
+                ></input>
+                <div className='creations-panel__aspect-ratio-selection-item-icon--16x9'></div>
+              </div>
+              <div className='creations-panel__aspect-ratio-selection-item'>
+                <input
+                  type='radio'
+                  name='aspect-ratio'
+                  data-ratio='16x9'
+                  className='creations-panel__aspect-ratio-selection-item-ratio'
+                ></input>
+                <div className='creations-panel__aspect-ratio-selection-item-icon--9x16'></div>
+              </div>
+            </fieldset>
+          </div> */}
           {artistNftContractAddress ? (
             <span className='profile-page__tabs-panel-contract-address'>
               Your SAGE NFT Contract: {artistNftContractAddress}
@@ -177,20 +209,20 @@ export default function CreationsPanel() {
             </h1>
           </div>
           <div className='creations-panel__file-title-group'>
-            <h1 className='creations-panel__file-title-label'>artwork title *</h1>
             <input
               value={state.title}
               onChange={handleTitleInputChange}
               className='creations-panel__file-title-field'
+              placeholder='ADD AN ARTWOR TITLE'
             />
           </div>{' '}
           <div className='creations-panel__file-desc-group'>
-            <h1 className='creations-panel__file-desc-label'>artwork description</h1>
             <textarea
               value={state.description}
               onChange={handleDescriptionInputChange}
               className='creations-panel__file-desc-field'
               maxLength={500}
+              placeholder='ADD A DESCRIPTION OF YOUR WORK'
             />
           </div>
           {/* <div className='creations-panel__file-title-group'>

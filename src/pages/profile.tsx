@@ -13,9 +13,7 @@ import { useRouter } from 'next/router';
 import { useDisconnect } from 'wagmi';
 import { PfpImage } from '@/components/Media/BaseMedia';
 import useUserNotifications from '@/hooks/useUserNotifications';
-import Link from 'next/link';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import useProfileRoutes from '@/hooks/useProfileRoutes';
 
 type Headers =
   | 'IN AND OUTGOING BIDS'
@@ -53,7 +51,6 @@ function profile() {
   const { asPath } = useRouter();
   const { notificationCount, hasNotifications } = useUserNotifications();
   const [header, setHeader] = useState<Headers>('EDIT YOUR PROFILE');
-  const { shallowRoute } = useProfileRoutes();
 
   // useEffect(() => {
   //   if (asPath.indexOf('notifications')) {
@@ -82,6 +79,10 @@ function profile() {
       if (subtabIndex == 4) {
         setHeader('ALL YOUR ACTIVITIES ON SAGE');
       }
+
+      if (subtabIndex == 5) {
+        setHeader('UPLOAD AN ARTWORK');
+      }
     }
   }, [selectedTabIndex, subtabIndex]);
 
@@ -102,7 +103,6 @@ function profile() {
       className='profile-page'
       selectedIndex={selectedTabIndex}
       onSelect={(index) => {
-        shallowRoute(String(index));
         setSelectedTabIndex(index);
       }}
     >
@@ -113,7 +113,7 @@ function profile() {
             className='profile-page__sage-logo-svg'
           />
         </div>
-        <Balances />
+        {/* <Balances /> */}
       </section>
       <h1 className='profile-page__header'>{header}</h1>
       <section className='profile-page__main'>
@@ -174,20 +174,36 @@ function profile() {
           </TabList>
         </div>
         <div className='profile-page__right'>
-          <TabPanel href="/profile?tab='profile" as='div' className='profile-page__tabs-panel'>
+          <TabPanel
+            selectedClassName='profile-page__tabs-panel--selected'
+            as='div'
+            className='profile-page__tabs-panel'
+          >
             <ProfilePanel isArtist={isArtist} />
           </TabPanel>
-          <TabPanel as='div' className='profile-page__tabs-panel'>
+          <TabPanel
+            as='div'
+            selectedClassName='profile-page__tabs-panel--selected'
+            className='profile-page__tabs-panel'
+          >
             <CollectionPanel
               collectionTabIndex={subtabIndex}
               setCollectionTabIndex={setSubtabIndex}
             />
           </TabPanel>
-          <TabPanel as='div' className='profile-page__tabs-panel'>
+          <TabPanel
+            as='div'
+            selectedClassName='profile-page__tabs-panel--selected'
+            className='profile-page__tabs-panel'
+          >
             <NotificationsPanel subtabIndex={subtabIndex} setSubtabIndex={setSubtabIndex} />
           </TabPanel>
           {isArtist && (
-            <TabPanel as='div' className='profile-page__tabs-panel'>
+            <TabPanel
+              as='div'
+              selectedClassName='profile-page__tabs-panel--selected'
+              className='profile-page__tabs-panel'
+            >
               <CreationsPanel />
             </TabPanel>
           )}
