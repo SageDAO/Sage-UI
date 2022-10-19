@@ -80,8 +80,12 @@ const nftsApi = baseApi.injectEndpoints({
             mintRequest,
             endpoint
           );
+          const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
+          const tokenId = await nftContract.nextTokenId();
+          console.log(`mintSingleNft() :: Token ID = ${tokenId}...`);
           nftId = await dbInsertNft(
             mintRequest,
+            tokenId.toNumber(),
             artistAddress,
             s3Path,
             arweavePath,
@@ -89,8 +93,7 @@ const nftsApi = baseApi.injectEndpoints({
             fetchWithBQ
           );
           console.log(`mintSingleNft() :: Minting on NFT Contract ${nftContractAddress}...`);
-          const nftContract = await getNFTContract(nftContractAddress, mintRequest.signer);
-          const mintTx = await nftContract.artistMint(artistAddress, metadataPath);
+          const mintTx = await nftContract.artistMint(metadataPath);
           await mintTx.wait();
           if (mintRequest.isFixedPrice) {
             await createSignedOffer(
@@ -258,6 +261,7 @@ async function uploadToAwsAndArweave(mintRequest: MintRequest, endpoint: string)
 
 async function dbInsertNft(
   mintRequest: MintRequest,
+  tokenId: number,
   artistAddress: string,
   s3Path: string,
   arweavePath: string,
@@ -270,6 +274,7 @@ async function dbInsertNft(
     method: 'POST',
     body: {
       artistAddress,
+      tokenId,
       name: mintRequest.name,
       description: mintRequest.description,
       //tags: mintRequest.tags,
@@ -392,9 +397,9 @@ async function createNftContract(
 ): Promise<string> {
   var tx: ContractTransaction;
   if (artistAddress == (await signer.getAddress())) {
-    tx = await factory.deployByArtist('Sage', 'SAGE');
+    tx = await factory.deployByArtist('SAGE', 'SAGE');
   } else {
-    tx = await factory.deployByAdmin(artistAddress, 'Sage', 'SAGE');
+    tx = await factory.deployByAdmin(artistAddress, 'SAGE', 'SAGE', 8333); // artist share is 83,33%
   }
   await tx.wait(1);
   const contractAddress = await factory.getContractAddress(artistAddress);

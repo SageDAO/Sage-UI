@@ -70,7 +70,7 @@ const auctionsApi = baseApi.injectEndpoints({
         const weiValue = ethers.utils.parseEther(amount.toString());
         try {
           const auctionContract = await getAuctionContract(signer);
-          const tokenAddress = await auctionContract.erc20();
+          const tokenAddress = await auctionContract.token();
           await approveERC20Transfer(tokenAddress, auctionContract.address, weiValue, signer);
         } catch (e) {
           console.error(e);

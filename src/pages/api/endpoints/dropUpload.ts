@@ -206,6 +206,7 @@ async function insertNft(data: any, response: NextApiResponse) {
     var insertData = {
       data: {
         name: data.name,
+        tokenId: data.tokenId || null,
         description: data.description || '',
         // tags: data.tags || '',
         numberOfEditions: toNumber(data.numberOfEditions),
