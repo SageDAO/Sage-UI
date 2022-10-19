@@ -2,12 +2,18 @@
 @use '@/styles/abstracts/mixins' as m;
 
 .dashboard-page {
-  margin: 2rem 5rem 2rem 5rem;
-  margin-left: 5rem;
-  margin-right: 5rem;
+  @include m.page;
+  // margin: 2rem 5rem 2rem 5rem;
+  // margin-left: 5rem;
+  // margin-right: 5rem;
   font-weight: 500;
   font-size: 14px;
   flex: 1;
+
+  &__tabs {
+    @include m.standard-width;
+    margin-top: 30px;
+  }
 
   &__tab {
     display: inline-block;

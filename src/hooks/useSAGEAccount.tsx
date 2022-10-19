@@ -2,7 +2,7 @@ import { parameters } from '@/constants/config';
 import { useGetPointsBalanceQuery } from '@/store/pointsReducer';
 import { useGetUserQuery } from '@/store/usersReducer';
 import { useSession } from 'next-auth/react';
-import { useAccount, useBalance, useConnect } from 'wagmi';
+import { useAccount, useBalance, useConnect, useSigner } from 'wagmi';
 
 function formatBalance(balance: number) {
   if (balance > 1_000_000) {
@@ -25,6 +25,7 @@ export default function useSAGEAccount() {
   } = useAccount({});
   const { data: userData } = useGetUserQuery();
   const { connect, connectors } = useConnect();
+  const { data: signer } = useSigner();
   const { status: sessionStatus, data: sessionData } = useSession();
   const isSignedIn: boolean = sessionStatus === 'authenticated';
   const { data: pointsBalance } = useGetPointsBalanceQuery(undefined, {
@@ -51,5 +52,6 @@ export default function useSAGEAccount() {
     connect,
     connectors,
     sessionData,
+    signer,
   };
 }
