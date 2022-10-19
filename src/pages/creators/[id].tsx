@@ -36,11 +36,12 @@ export default function artist({ artist }: Props) {
   const { data: sessionData } = useSession();
   const { data: nfts } = useGetListingNftsByArtistQuery(artist.walletAddress);
   const isOwner = () => sessionData?.address == artist.walletAddress;
+  const hasBaner = !!artist.bannerImageS3Path;
 
   return (
     <div className='artist-page' data-cy='artist-page'>
       <Logotype></Logotype>
-      <Hero imgSrc={artist.bannerImageS3Path}></Hero>
+      {hasBaner && <Hero imgSrc={artist.bannerImageS3Path}></Hero>}
       <div className='artist-page__artist-section'>
         <div className='artist-page__artist-section-flex-x'>
           <div className='artist-page__artist-section-left'>

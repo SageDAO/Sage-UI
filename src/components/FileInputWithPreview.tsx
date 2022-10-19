@@ -129,7 +129,6 @@ export default function FileInputWithPreview({
         ? await getVideoAspectRatio(data)
         : await getImageAspectRatio(data);
       const aspectRatio = `${width}/${height}`;
-      console.log(`Setting aspect ratio to ${aspectRatio}`)
       div.style.aspectRatio = aspectRatio;
       if (onAspectRatioChange) {
         onAspectRatioChange(width, height);
@@ -145,12 +144,7 @@ export default function FileInputWithPreview({
         className='creations-panel__file-upload-field'
         accept={(acceptedTypes || ACCEPTED_TYPES).join(',')}
       />
-      <Image
-        className='creations-panel__file-upload-plus-icon'
-        src='/icons/plus.svg'
-        width={40}
-        height={40}
-      />
+      <PlusSVG className='creations-panel__file-upload-plus-icon' />
       {isVideo ? (
         <video
           id='artistCreationVideoPreview'

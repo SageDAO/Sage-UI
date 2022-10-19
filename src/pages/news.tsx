@@ -13,13 +13,13 @@ function news() {
   );
 }
 
-export function getStaticProps() {
-  return {
-    redirect: {
-      destination: '/404',
-      permanent: false,
-    },
-  };
-}
+// export async function getStaticProps() {
+//   return {
+//     redirect: {
+//       destination: '/404',
+//       permanent: false,
+//     },
+//   };
+// }
 
 export default news;

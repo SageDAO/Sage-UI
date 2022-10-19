@@ -16,7 +16,7 @@ interface BaseMediaProps {
 
 function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
   const isVideo = (): boolean => {
-    return src.toLowerCase().endsWith('mp4');
+    return src?.toLowerCase().endsWith('mp4');
   };
 
   return (
