@@ -3,6 +3,7 @@ import { Role } from '@prisma/client';
 import { useGetUserQuery } from '@/store/usersReducer';
 import { DashBoardPage } from '@/components/Dashboard/DashboardPage';
 import LoaderDots from '@/components/LoaderDots';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
 
 export default function dashboard() {
   const isAdmin = (user: any) => {
@@ -13,7 +14,11 @@ export default function dashboard() {
     return <LoaderDots />;
   }
   if (!isAdmin(user)) {
-    return <div style={{ margin: '100px', textAlign: 'center' }}>Please connect with an admin wallet</div>;
+    return (
+      <div style={{ margin: '100px', textAlign: 'center' }}>
+        Please connect with an admin wallet
+      </div>
+    );
   }
   return <DashBoardPage />;
 }

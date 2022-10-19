@@ -243,6 +243,8 @@ function flatten({ auction, drop, artist }: FlattenArgs): GamePrize {
     uri: auction.Nft.metadataPath,
     nftId: auction.Nft.id,
     dropId: drop.id,
+    width: auction.Nft.width,
+    height: auction.Nft.height,
     nftName: auction.Nft.name,
     artistUsername: artist.username!,
     artistProfilePicture: artist.profilePicture!,

@@ -85,13 +85,14 @@
 .drops-page__drop-header-title {
   font-style: normal;
   font-weight: 700;
+  text-transform: uppercase;
   font-size: clamp(14px, 3vw, 52px);
   line-height: 1em;
   color: c.$light;
   z-index: 2;
   position: absolute;
   bottom: 0;
-  margin: 20px 20px 30px;
+  margin: 20px 20px 5%;
 }
 
 .drops-page__drop-artist-name {
@@ -127,8 +128,13 @@
   @include m.interact;
   transition-duration: 200ms;
   @include m.button-base;
+  width: 145px;
+  height: 23px;
+  font-size: 10px;
   @include b.min-width('medium') {
-    // width: min(365px, 80vw);
+    font-size: 16px;
+    width: 283px;
+    height: 40px;
   }
 
   @include m.theme {
@@ -143,7 +149,13 @@
 
 .drops-page__drop-artist-pfp {
   @include m.pfp-container;
-  width: 30px;
+
+  width: 25px;
+  height: 25px;
+  @include b.min-width('medium') {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .drops-page__drop-artist {

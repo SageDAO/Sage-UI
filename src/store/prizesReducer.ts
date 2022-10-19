@@ -51,7 +51,7 @@ const prizesApi = baseApi.injectEndpoints({
             winner: args.walletAddress,
             ticketNumber: args.ticketNumber,
             uri: args.uri,
-            proof: toByteArray(args.proof)
+            proof: toByteArray(args.proof),
           });
           promiseToast(tx, `NFT claimed and moved to your collection!`);
           await tx.wait();

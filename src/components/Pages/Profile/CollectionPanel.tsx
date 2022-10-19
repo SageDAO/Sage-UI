@@ -63,7 +63,6 @@ export default function CollectionPanel({ collectionTabIndex, setCollectionTabIn
             {myNfts &&
               myNfts?.map((nft: GamePrize | CollectedListingNft) => {
                 if (!nft?.s3PathOptimized) return null;
-                // if ()
                 return (
                   <>
                     <div key={nft.nftId} className='collection-panel__tile'>

@@ -9,8 +9,8 @@ export interface ArtistSales {
   nftCountTotal: number;
   amountTotalUSD: number;
   highestSaleUSD: number;
-	profilePicture: string;
-	salesChartData?: any[];
+  profilePicture: string;
+  salesChartData?: any[];
 }
 
 // interface SalesChart {
@@ -73,6 +73,8 @@ export type GamePrize = {
   s3Path: Nft['s3Path'];
   s3PathOptimized: Nft['s3PathOptimized'];
   claimedAt?: PrizeProof['claimedAt'];
+  width: Nft['width'];
+  height: Nft['height'];
 };
 
 export type Lottery_include_Nft = Prisma.LotteryGetPayload<{
