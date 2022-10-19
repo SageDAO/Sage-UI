@@ -45,7 +45,11 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
   }
 
   async function handleAcceptClick(offer: Offer) {
-    const result = await sellFromBuyOffer({ offer, signer: signer as Signer });
+    const result = await sellFromBuyOffer({
+      tokenId: nft.tokenId,
+      offer,
+      signer: signer as Signer,
+    });
     if ((result as any).data) {
       closeModal();
     }
@@ -185,4 +189,3 @@ export default function MakeOfferModal({ isOpen, closeModal, artist, nft, buyOff
     </Modal>
   );
 }
-

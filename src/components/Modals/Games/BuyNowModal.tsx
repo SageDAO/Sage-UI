@@ -28,7 +28,7 @@ export default function BuyNowModal({ isOpen, closeModal, artist, nft, offer }: 
     } else if (isLoading) {
       toast.info('Please wait for transaction to complete.');
     } else {
-      await buyFromSellOffer({ offer, signer });
+      await buyFromSellOffer({ tokenId: nft.tokenId, offer, signer });
       closeModal();
     }
   };

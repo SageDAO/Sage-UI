@@ -119,8 +119,8 @@ const nftsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Nfts'],
     }),
-    buyFromSellOffer: builder.mutation<boolean, { offer: Offer; signer: Signer }>({
-      queryFn: async ({ offer, signer }, {}, _, fetchWithBQ) => {
+    buyFromSellOffer: builder.mutation<boolean, { tokenId: number; offer: Offer; signer: Signer }>({
+      queryFn: async ({ tokenId, offer, signer }, {}, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
         const weiPrice = ethers.utils.parseEther(offer.price.toString());
         try {
@@ -133,13 +133,13 @@ const nftsApi = baseApi.injectEndpoints({
         }
         try {
           console.log(
-            `buyFromSellOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${offer.nftId}, ${offer.expiresAt}, ${offer.signedOffer})`
+            `buyFromSellOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${tokenId}, ${offer.expiresAt}, ${offer.signedOffer})`
           );
           const tx = await marketplaceContract.buyFromSellOffer(
             offer.signer,
             offer.nftContractAddress,
             weiPrice,
-            offer.nftId,
+            tokenId,
             offer.expiresAt,
             CHAIN_ID,
             offer.signedOffer
@@ -163,19 +163,19 @@ const nftsApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ['Nfts'],
     }),
-    sellFromBuyOffer: builder.mutation<boolean, { offer: Offer; signer: Signer }>({
-      queryFn: async ({ offer, signer }, {}, _, fetchWithBQ) => {
+    sellFromBuyOffer: builder.mutation<boolean, { tokenId: number; offer: Offer; signer: Signer }>({
+      queryFn: async ({ tokenId, offer, signer }, {}, _, fetchWithBQ) => {
         const marketplaceContract = await getMarketplaceContract(signer);
         const weiPrice = ethers.utils.parseEther(offer.price.toString());
         try {
           console.log(
-            `sellFromBuyOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${offer.nftId}, ${offer.expiresAt}, ${CHAIN_ID}, ${offer.signedOffer})`
+            `sellFromBuyOffer(${offer.signer}, ${offer.nftContractAddress}, ${weiPrice}, ${tokenId}, ${offer.expiresAt}, ${CHAIN_ID}, ${offer.signedOffer})`
           );
           const tx = await marketplaceContract.sellFromBuyOffer(
             offer.signer,
             offer.nftContractAddress,
             weiPrice,
-            offer.nftId,
+            tokenId,
             offer.expiresAt,
             CHAIN_ID,
             offer.signedOffer

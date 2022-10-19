@@ -258,7 +258,6 @@ export default function CreationsPanel() {
             {isMinting || isDeployingContract ? <LoaderSpinner /> : `mint artwork`}
           </button>
         </form>
-        w: {state.width!} h: {state.height!}
       </div>
     </Fragment>
   );
