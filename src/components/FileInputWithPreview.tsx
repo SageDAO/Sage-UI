@@ -17,7 +17,7 @@ interface Props {
   initialPreview?: string; // URL for initial image/video to be displayed
   onFileChange: (newFile: File) => void; // callback for when user selects a new input file
   onAspectRatioChange?: (width: number, height: number) => void; // callback when aspect ratio changes
-  onGeneratePreview?: (s3Path: string, s3PathOptimized: string) => void; // callback in case a preview file is generated
+  onGeneratePreview?: (s3Path: string, s3PathOptimized: string) => void; // callback in case a new preview file is generated
   acceptedTypes?: string[]; // accepted file upload mime types
 }
 
@@ -32,6 +32,8 @@ export default function FileInputWithPreview({
   const [previewSrc, setPreviewSrc] = useState<string>(
     initialPreview ? initialPreview : EMPTY_PREVIEW
   );
+  const LOADING_IMG = '/interactive/loading.gif';
+  const ERROR_IMG = '/interactive/error.webp';
   const isVideo: boolean = file?.type == 'video/mp4';
   const isTiff: boolean = file?.type == 'image/tiff';
 
@@ -49,8 +51,6 @@ export default function FileInputWithPreview({
   }, [file]);
 
   function handleTiffFileUpload() {
-    const LOADING_IMG = '/interactive/loading.gif';
-    const ERROR_IMG = '/interactive/error.webp';
     setPreviewSrc(LOADING_IMG);
     var newPreview = ERROR_IMG;
     serverOptimizeTiffFile()
