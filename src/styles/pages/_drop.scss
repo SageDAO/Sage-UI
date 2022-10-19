@@ -75,6 +75,22 @@ strong {
   }
 }
 
+.drop-page__share-button {
+  @include m.theme() {
+    @include m.button-base;
+    @include m.interact;
+    @include m.text-p5;
+    aspect-ratio: 132/15;
+    margin-top: 20px;
+    margin-left: auto;
+    width: 131px;
+    height: 25px;
+    // right: 0;
+    // bottom: 20%;
+    // z-index: 100;
+  }
+}
+
 .drop-page__header-logotype {
   @include m.standard-width;
   display: flex;
@@ -111,7 +127,7 @@ strong {
 .drop-page__header-main-column {
   display: flex;
   flex-direction: column;
-  max-width: 700px;
+  // max-width: 700px;
   width: 100%;
 }
 

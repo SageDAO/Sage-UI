@@ -16,6 +16,8 @@ import DrawingTile from '@/components/Pages/DropIndividual/DrawingTile';
 import { useSession } from 'next-auth/react';
 import useDrop from '@/hooks/useDrop';
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 //type drop page data
 
@@ -68,6 +70,13 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
     sessionData?.address as string
   );
 
+  const router = useRouter();
+
+  function handleShareDrop() {
+    navigator.clipboard.writeText(window.location.toString());
+    toast.success('copied to clipboard!');
+  }
+
   let gridClassName: GridClassName = 'drop-page__grid';
   let tileClassName: TileClassName = 'drop-page__grid-item';
   if (gamesCount === 1) {
@@ -113,6 +122,10 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
                   })}
                 </div>
               </div>
+
+              <button onClick={handleShareDrop} className='drop-page__share-button'>
+                SHARE DROP
+              </button>
             </div>
           </section>
         </header>
