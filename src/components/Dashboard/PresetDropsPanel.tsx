@@ -37,8 +37,10 @@ export default function PresetDropsPanel() {
       alert('Select one or more drops!');
       return;
     }
-    await createPresetDrops({ presetDrops: selectedDrops, durationHours: duration });
-    toast.success(`Created ${selectedDrops.length} new drop(s)!`);
+    const data = await createPresetDrops({ presetDrops: selectedDrops, durationHours: duration });
+    if ((data as any).data) {
+      toast.success(`Created ${selectedDrops.length} new drop(s)!`);
+    }
   };
 
   if (isLoading) {

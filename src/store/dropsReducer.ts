@@ -23,11 +23,16 @@ export interface PresetDrop {
 const dropsApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    createPresetDrops: builder.mutation<null, { presetDrops: PresetDrop[]; durationHours: number }>(
+    createPresetDrops: builder.mutation<boolean, { presetDrops: PresetDrop[]; durationHours: number }>(
       {
         queryFn: async ({ presetDrops, durationHours }, {}, _, fetchWithBQ) => {
-          await createPresetDrops(presetDrops, durationHours, fetchWithBQ);
-          return { data: null };
+          try {
+            await createPresetDrops(presetDrops, durationHours, fetchWithBQ);
+            return { data: true };
+          } catch (e) {
+            console.log(e);
+          }
+          return { data: false };
         },
         invalidatesTags: ['PendingDrops'],
       }
@@ -183,14 +188,14 @@ async function checkUsersExistAndAreArtists(presetDrops: PresetDrop[], fetchWith
     }
     return null;
   });
+  var ok = true;
   for (const artist of uniqueArtists) {
-    if (artist.role == null) {
-      // TODO CREATE USER
-    }
-    if (artist.role == Role.USER) {
-      // TODO PROMOTE TO ARTIST
+    if (artist.role != Role.ARTIST) {
+      toast.error(`Failure: promote ${artist.username} to ARTIST before creating the drop.`)
+      ok = false;
     }
   }
+  if (!ok) throw new Error();
 }
 
 async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
