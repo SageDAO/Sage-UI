@@ -79,7 +79,8 @@ strong {
   @include m.theme() {
     @include m.button-base;
     @include m.interact;
-    @include m.text-p5;
+    // @include m.text-p5;
+    font-size: 10px;
     aspect-ratio: 132/15;
     margin-top: 20px;
     margin-left: auto;
@@ -199,8 +200,8 @@ strong {
   @include m.standard-width;
   gap: min(60px, 3vw);
   grid-template-columns: repeat(2, 1fr);
-  grid-template-columns: repeat(5, 1fr);
   @include b.min-width('medium') {
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
