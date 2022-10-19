@@ -59,7 +59,7 @@ async function deployContractMetadata(request: NextApiRequest, response: NextApi
     description: artist.bio,
     image: artist.bannerImageS3Path,
     external_link: `${process.env.NEXTAUTH_URL}creators/${artist.username}`,
-    seller_fee_basis_points: 1000,
+    seller_fee_basis_points: 1200,
     fee_recipient: contractAddress,
   };
   var metadataType = 'application/json';
