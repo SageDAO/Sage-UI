@@ -185,6 +185,8 @@ async function insertAuction(data: any, response: NextApiResponse) {
             numberOfEditions: 1,
             metadataPath: data.metadataPath || null,
             arweavePath: data.arweavePath,
+            width: data.width ? Number(data.width) : null,
+            height: data.height ? Number(data.height) : null,
             s3Path: data.s3Path,
             s3PathOptimized: data.s3PathOptimized || data.s3Path,
           },
