@@ -12,9 +12,10 @@ interface BaseMediaProps {
   isZoomable?: boolean;
   type?: string;
   className?: string;
+  muted?: boolean;
 }
 
-function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMediaProps) {
+function BaseMedia({ src, onClickHandler, isZoomable, type, className, muted }: BaseMediaProps) {
   const isVideo = (): boolean => {
     return src?.toLowerCase().endsWith('mp4');
   };
@@ -23,16 +24,12 @@ function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMed
     <div>
       <ConditionalWrapper
         condition={true === isZoomable}
-        wrapper={(children: JSX.Element) => (
-          <Zoom classDialog='custom-zoom'>
-            {children}
-          </Zoom>
-        )}
+        wrapper={(children: JSX.Element) => <Zoom classDialog='custom-zoom'>{children}</Zoom>}
       >
         {isVideo() ? (
           <video
             autoPlay={true}
-            muted={true}
+            muted={muted ?? true}
             loop={true}
             playsInline={true}
             style={{
