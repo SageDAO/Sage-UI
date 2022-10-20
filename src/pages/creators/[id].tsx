@@ -143,6 +143,13 @@ function CreatorSocials({ artist, className }: CreatorSocialsProps) {
 export async function getStaticProps({
   params,
 }: GetStaticPropsContext): Promise<GetStaticPropsResult<Props>> {
+  return {
+    redirect: {
+      destination: '/404',
+      permanent: false,
+    },
+  };
+
   if (!params) {
     return {
       redirect: {
@@ -154,14 +161,14 @@ export async function getStaticProps({
 
   const artist = await getIndividualArtistsPageData(prisma, String(params.id));
 
-  if (!artist) {
-    return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
-    };
-  }
+  // if (!artist) {
+  // return {
+  //   redirect: {
+  //     destination: '/404',
+  //     permanent: false,
+  //   },
+  // };
+  // }
 
   return { props: { artist } };
 }

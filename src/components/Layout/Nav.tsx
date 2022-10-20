@@ -74,10 +74,19 @@ export default function Nav() {
               function onClick() {
                 routeFunction();
               }
+
+              const isCreators: boolean = name == 'Creators';
+
               return (
-                <div key={name} onClick={onClick} className='nav__menu-link'>
+                <button
+                  key={name}
+                  data-name={name}
+                  disabled={isCreators}
+                  onClick={onClick}
+                  className='nav__menu-link'
+                >
                   {name}
-                </div>
+                </button>
               );
             })}
           </div>

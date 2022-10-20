@@ -45,7 +45,25 @@
     font-size: 12px;
     text-transform: uppercase;
     cursor: pointer;
+    background: transparent;
+    color: m.t(contrast);
     letter-spacing: 0.15em;
+    position: relative;
+    &[data-name='Creators'] {
+      // filter: brightness(0.5);
+      &:before {
+        content: 'COMING SOON!';
+        color: m.t(accent);
+        // filter: brightness(1);
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        @include m.text-p5;
+        white-space: nowrap;
+        transform: translateY(100%) translateX(-50%);
+      }
+    }
+    @include m.disable;
   }
 }
 

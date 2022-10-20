@@ -15,6 +15,7 @@ export default function useSageRoutes() {
   const router = useRouter();
 
   async function pushToCreators(username?: User['username']) {
+    return;
     if (username) {
       await router.push(basePathCreators + '/' + username);
     } else {

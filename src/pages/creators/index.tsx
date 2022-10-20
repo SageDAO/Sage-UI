@@ -13,8 +13,7 @@ export default function artists({ artistGroups }: Props) {
       <div className='artists-page__logotype'>
         <Logotype />
       </div>
-      <div className='artists-page__header-content'>
-      </div>
+      <div className='artists-page__header-content'></div>
       {artistGroups.map((artists, i: number) => {
         let shouldStartAsymmetric: boolean = false;
         if (i % 2 !== 0) {
@@ -33,6 +32,13 @@ export default function artists({ artistGroups }: Props) {
 }
 
 export async function getStaticProps() {
+  return {
+    redirect: {
+      destination: '/404',
+      permanent: false,
+    },
+  };
+
   const artists = await getArtistsPageData(prisma);
   //with two rows
   const midPoint: number = Math.floor(artists.length / 2);

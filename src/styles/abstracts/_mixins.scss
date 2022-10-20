@@ -1,6 +1,16 @@
 @use '@/styles/abstracts/colors' as *;
 @use '@/styles/abstracts/breakpoints' as b;
 
+@mixin disable {
+  &:disabled {
+    filter: brightness(0.4);
+    cursor: default;
+  }
+}
+
+@mixin future-release {
+}
+
 @mixin input-label {
   font-style: normal;
   font-weight: 400;
