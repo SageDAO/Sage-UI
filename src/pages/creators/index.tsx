@@ -32,15 +32,7 @@ export default function artists({ artistGroups }: Props) {
 }
 
 export async function getStaticProps() {
-  return {
-    redirect: {
-      destination: '/404',
-      permanent: false,
-    },
-  };
-
   const artists = await getArtistsPageData(prisma);
-  //with two rows
   const midPoint: number = Math.floor(artists.length / 2);
   const groupOne = artists.slice(0, midPoint);
   const groupTwo = artists.slice(midPoint, artists.length);

@@ -1,6 +1,6 @@
 import { getRewardsContract } from '@/utilities/contracts';
 import { EarnedPoints } from '@prisma/client';
-import type { GetEarnedPointsResponse } from '@/api/points';
+import type { GetEarnedPointsResponse } from '@/api/points.page';
 import { baseApi } from './baseReducer';
 
 var escrowPoints: number = 0;
@@ -32,7 +32,9 @@ export const pointsApi = baseApi.injectEndpoints({
         const userAddress = (data as EarnedPoints).address;
         const pointsUsed = await getTotalPointsUsed(userAddress);
         let pointsBalance = pointsEarned - pointsUsed;
-        console.log(`getPointsBalanceByUser(${walletAddress}) :: ${pointsEarned} - ${pointsUsed} = ${pointsBalance}`);
+        console.log(
+          `getPointsBalanceByUser(${walletAddress}) :: ${pointsEarned} - ${pointsUsed} = ${pointsBalance}`
+        );
         return { data: Number(pointsBalance).toFixed(0) };
       },
       providesTags: ['UserPoints'],

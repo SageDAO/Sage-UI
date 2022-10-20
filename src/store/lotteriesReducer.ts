@@ -1,5 +1,5 @@
 import { LotteryWithNftsAndArtist, Refund_include_Lottery } from '@/prisma/types';
-import type { GetEarnedPointsResponse } from '@/api/points';
+import type { GetEarnedPointsResponse } from '@/api/points.page';
 import {
   approveERC20Transfer,
   extractErrorMessage,
@@ -121,7 +121,7 @@ const lotteriesApi = baseApi.injectEndpoints({
           const tx = await contract.refund(wallet, refund.lotteryId, amountWei);
           await tx.wait();
           await registerRefund(refund.id, tx, signer);
-          toast.success('Success! Your refund has been processed.')
+          toast.success('Success! Your refund has been processed.');
         } catch (e) {
           const errMsg = extractErrorMessage(e);
           toast.error(`Failure! ${errMsg}`);

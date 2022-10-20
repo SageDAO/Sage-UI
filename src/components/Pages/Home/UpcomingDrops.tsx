@@ -7,7 +7,6 @@ import useWindowDimensions from '@/hooks/useWindowSize';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import { transformTitle } from '@/utilities/strings';
 import useDrop, { UseDropArgs } from '@/hooks/useDrop';
-import artist from 'src/pages/creators/[id]';
 import useCountdown from '@/hooks/useCountdown';
 
 interface Props {
