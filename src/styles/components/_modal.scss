@@ -12,12 +12,11 @@
     position: fixed;
     // opacity: 0.9;
     backdrop-filter: blur(32px);
-		// transform: scale(1.2);
+    // transform: scale(1.2);
     inset: 0;
     // background-color: m.t(base);
-		// background-color: #020000;
-		// background-color: black;
-
+    // background-color: #020000;
+    // background-color: black;
   }
 }
 
@@ -38,11 +37,11 @@
     background-color: m.t(base);
     color: m.t(contrast);
   }
-	opacity: 0.9;
   padding: 40px;
   height: 100%;
   @include b.min-width('medium') {
     height: auto;
+    opacity: 0.9;
     padding: 0;
   }
 }
