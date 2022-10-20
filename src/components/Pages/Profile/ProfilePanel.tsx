@@ -1,4 +1,5 @@
 import { PfpImage } from '@/components/Media/BaseMedia';
+import { getCountries, getFilteredCountries, getStates } from 'country-state-picker';
 import TwitterSVG from '@/public/socials/twitter.svg';
 import MediumSVG from '@/public/socials/medium.svg';
 import InstagramSVG from '@/public/socials/insta.svg';
@@ -32,11 +33,15 @@ const INITIAL_STATE: State = {
   instagramUsername: '',
   mediumUsername: '',
   bannerImageS3Path: '',
+  country: '',
+  state: '',
 };
 
 interface Props {
   isArtist: boolean;
 }
+
+const countries = getCountries();
 
 export default function ProfilePanel({ isArtist }: Props) {
   const { data: sessionData } = useSession();
@@ -93,6 +98,21 @@ export default function ProfilePanel({ isArtist }: Props) {
       return { ...prevState, bio: e.target.value };
     });
   }
+
+  const handleCountrySelect: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+    setState((prevState) => {
+      return { ...prevState, country: e.target.value };
+    });
+  };
+
+  const handleStateSelect: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+    setState((prevState) => {
+      return { ...prevState, state: e.target.value };
+    });
+  };
+
+  const countryCode = getFilteredCountries([state.country || '']);
+  const stateOptions = getStates(countryCode[0]?.code || '');
 
   useEffect(() => {
     if (data) {
@@ -165,22 +185,47 @@ export default function ProfilePanel({ isArtist }: Props) {
           />
         </div>
 
-        <div className='profile-panel__location-group'>
+        <div className='profile-panel__country-group'>
           <select
-            value={state?.email ?? ''}
+            value={String(state.country)}
             // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             //   setState((prevState) => {
             //     return { ...prevState, email: e.target.value.trim() };
             //   });
             // }}
             // maxLength={40}
-            className='profile-panel__location-field'
+            onChange={handleCountrySelect}
+            className='profile-panel__country-select'
           >
             <option value='' disabled selected>
-              Select your option
+              Select your country
             </option>
+            {countries.map((c) => {
+              return <option value={c.name}>{c.name}</option>;
+            })}
           </select>
         </div>
+        <div className='profile-panel__state-group'>
+          <select
+            value={String(state.state)}
+            onChange={handleStateSelect}
+            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            //   setState((prevState) => {
+            //     return { ...prevState, email: e.target.value.trim() };
+            //   });
+            // }}
+            // maxLength={40}
+            className='profile-panel__state-select'
+          >
+            <option value='' disabled selected>
+              Select your state
+            </option>
+            {stateOptions?.map((s) => {
+              return <option value={s}>{s}</option>;
+            })}
+          </select>
+        </div>
+
         <div className='profile-panel__bio-group'>
           <p className='profile-panel__bio-label'>
             about{' '}

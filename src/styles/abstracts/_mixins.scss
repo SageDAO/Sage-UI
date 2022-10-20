@@ -35,6 +35,14 @@
   }
 }
 
+@mixin input-select {
+  @include input-field {
+    appearance: none;
+    background-color: t(base);
+    @content;
+  }
+}
+
 @mixin input-group {
   display: flex;
   flex-direction: column;

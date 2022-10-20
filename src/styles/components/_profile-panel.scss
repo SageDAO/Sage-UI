@@ -66,13 +66,22 @@
   @include m.input-field;
 }
 
-.profile-panel__location-group {
+.profile-panel__country-group {
   @include m.input-group;
 }
 
-.profile-panel__location-field {
-  @include m.input-field;
-  text-transform: uppercase;
+.profile-panel__country-select {
+  @include m.input-select {
+  }
+}
+
+.profile-panel__state-group {
+  @include m.input-group;
+}
+
+.profile-panel__state-select {
+  @include m.input-select {
+  }
 }
 
 .profile-panel__username-group {

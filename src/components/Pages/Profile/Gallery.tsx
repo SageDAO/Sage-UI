@@ -48,7 +48,6 @@ function Gallery({ nfts }: Props) {
           className='collection-panel__gallery-control-right'
         ></ArrowRightSVG>
         {nfts.map((nft, i: number) => {
-          console.log(nft);
           let className: string = 'collection-panel__gallery-display-item';
 
           const isCurrent: boolean = selectedIndex == i;
