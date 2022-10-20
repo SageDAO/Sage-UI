@@ -129,7 +129,7 @@ async function getNftContractAddress(artistAddress: string, response: NextApiRes
     const result = await prisma.nftContract.upsert({
       where: { artistAddress },
       update: {},
-      create: { artistAddress, royaltyPercentage: 10 },
+      create: { artistAddress, royaltyPercentage: 12 },
     });
     response.json(result);
   } catch (e) {
