@@ -60,7 +60,7 @@ export default function Layout({ children, router }: Props) {
       />
       <ToastContainer
         position='bottom-center'
-        autoClose={5000}
+        autoClose={2000}
         icon={SageIconSVG}
         hideProgressBar={false}
         newestOnTop={false}
