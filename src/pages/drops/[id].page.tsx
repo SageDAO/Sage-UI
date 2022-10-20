@@ -132,9 +132,9 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
                 </div>
               </div>
 
-              <button onClick={handleShareDrop} className='drop-page__share-button'>
+              {/* <button onClick={handleShareDrop} className='drop-page__share-button'>
                 SHARE DROP
-              </button>
+              </button> */}
             </div>
           </section>
         </header>
