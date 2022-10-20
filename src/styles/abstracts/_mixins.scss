@@ -9,6 +9,18 @@
 }
 
 @mixin future-release {
+  &[data-name='Creators'] {
+    cursor: default;
+    &:before {
+      @content;
+      content: 'COMING SOON!';
+      color: t(accent);
+      // filter: brightness(1);
+      position: absolute;
+      @include text-p5;
+      white-space: nowrap;
+    }
+  }
 }
 
 @mixin input-label {

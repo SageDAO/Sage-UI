@@ -71,6 +71,7 @@ export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
               onClick={handleClick}
               key={l.name}
               data-is-current={isCurrent}
+              data-name={l.name}
               className='mobile-menu__nav-item'
             >
               {l.name}
