@@ -68,11 +68,13 @@ function App({ Component, pageProps, router }: AppProps) {
               <Head>
                 <title>SAGE</title>
                 <link rel='icon' href='/icons/sage.svg' />
+                <meta charSet='utf-8' />
                 <meta
                   name='viewport'
                   content='width=device-width,initial-scale=1,viewport-fit=cover'
                 />
                 <meta name='theme-color' content={themeContent} />
+                <meta name='description' content='' />
               </Head>
               {isMaintenanceOn ? (
                 <LandingPage />
