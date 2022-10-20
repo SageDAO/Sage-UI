@@ -1,5 +1,5 @@
 import prisma from '@/prisma/client';
-import React from 'react';
+import React, { useState } from 'react';
 import { Drop_include_GamesAndArtist, Nft, User } from '@/prisma/types';
 import { getHomePageData, getSageMediumData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
@@ -9,6 +9,10 @@ import LatestArtists from '@/components/Pages/Home/LatestArtists';
 import NewArtworks from '@/components/Pages/Home/NewArtworks';
 import Logotype from '@/components/Logotype';
 import LaunchTrailer from '@/components/LaunchTrailer';
+import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
+import ArrowDownSVG from '@/public/interactive/arrow-down.svg';
+import useSageRoutes from '@/hooks/useSageRoutes';
+import useWindowDimensions from '@/hooks/useWindowSize';
 
 interface Props extends Awaited<ReturnType<typeof getHomePageData>> {
   // featuredDrop: Drop_include_GamesAndArtist;
@@ -27,20 +31,46 @@ function home({
   latestArtists,
   newArtworks,
 }: Props) {
+  const { isMobile } = useWindowDimensions();
+  const [coverOn, setCoverOn] = useState(true);
   const welcomeMessageArray = welcomeMessage.split(',');
+  function removeCover() {
+    setCoverOn(false);
+  }
+  const { pushToCreators, pushToDrops } = useSageRoutes();
+
   return (
-    <div className='home-page' data-cy='home-page'>
-      <div className='home-page__main'>
+    <div className='home-page' data-cy='home-page' data-on={coverOn}>
+      <div className='home-page__cover' data-on={coverOn}>
+        <BaseMedia className='home-page__cover-src' src={'/videos/launch-trailer.mp4'}></BaseMedia>
+        <div onClick={removeCover} data-on={coverOn} className='home-page__cover-arrow'>
+          <ArrowDownSVG className='home-page__cover-arrow-svg' data-on={coverOn}></ArrowDownSVG>
+        </div>
+      </div>
+      <div data-on={isMobile ? coverOn : false} className='home-page__main'>
         <Logotype></Logotype>
-        <LaunchTrailer></LaunchTrailer>
-        {/* {featuredDrop && (
-          <FeaturedDrop
-            drop={featuredDrop}
-            artist={featuredDrop.NftContract.Artist}
-            Lotteries={featuredDrop.Lotteries}
-            Auctions={featuredDrop.Auctions}
-          ></FeaturedDrop>
-        )} */}
+        <LaunchTrailer
+          onClick={() => {
+            pushToDrops(featuredDrop?.id);
+          }}
+        ></LaunchTrailer>
+
+        {featuredDrop && (
+          <div className='home-page__featured-drop-tag-section'>
+            <div className='home-page__featured-drop-tag-info'>
+              <div
+                className='home-page__featured-drop-pfp'
+                onClick={() => pushToCreators(featuredDrop.NftContract.Artist.username)}
+              >
+                <PfpImage src={featuredDrop.NftContract.Artist.profilePicture}></PfpImage>
+              </div>
+              <span className='home-page__featured-drop-tag-label'>
+                {featuredDrop.name} by {featuredDrop.NftContract.Artist.username}
+              </span>
+            </div>
+          </div>
+        )}
+
         <h1 className='home-page__statement'>
           {welcomeMessageArray[0] + ','} <pre /> {welcomeMessageArray[1]}
         </h1>
@@ -55,7 +85,6 @@ function home({
           </div>
         </div>
         <UpcomingDrops upcomingDrops={upcomingDrops}></UpcomingDrops>
-        {/* <LatestArtists latestArtists={latestArtists}></LatestArtists> */}
         <NewArtworks newArtworks={newArtworks}></NewArtworks>
         <EventSlider mediumData={mediumData} />
       </div>
