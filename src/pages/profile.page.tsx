@@ -113,7 +113,7 @@ function profile() {
             className='profile-page__sage-logo-svg'
           />
         </div>
-        {/* <Balances /> */}
+        <Balances />
       </section>
       <h1 className='profile-page__header'>{header}</h1>
       <section className='profile-page__main'>
