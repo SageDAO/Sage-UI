@@ -250,12 +250,6 @@ $theme-map: null;
   animation-name: highlight;
 }
 
-@keyframes highlight {
-  60% {
-    // background-color: c.$bg-base;
-  }
-}
-
 $desktop-width: 1345px;
 
 @mixin desktop-width {
@@ -328,17 +322,13 @@ $desktop-width: 1345px;
   transition-duration: 200ms;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.3;
-  }
-}
-
 @mixin animate-pulse {
   animation: pulse 1900ms infinite;
+  animation-timing-function: ease-in;
+}
+
+@mixin animate-drop {
+  animation: drop 200ms linear;
   animation-timing-function: ease-in;
 }
 
@@ -376,4 +366,29 @@ $desktop-width: 1345px;
   text-align: center;
   letter-spacing: 0.1em;
   @include interact;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes highlight {
+  60% {
+    // background-color: c.$bg-base;
+  }
+}
+
+@keyframes drop {
+  0% {
+    transform: translateY(10%);
+  }
+
+  100% {
+    transform: translateY(0%);
+  }
 }

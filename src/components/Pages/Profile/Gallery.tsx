@@ -47,25 +47,42 @@ function Gallery({ nfts }: Props) {
           onClick={handleControlRightClick}
           className='collection-panel__gallery-control-right'
         ></ArrowRightSVG>
-        {nfts[firstIndex] && (
-          <div className='collection-panel__gallery-display-item--first'>
-            <BaseMedia src={nfts[firstIndex].s3PathOptimized}></BaseMedia>
-          </div>
-        )}
-        {nfts[secondIndex] && (
-          <div className='collection-panel__gallery-display-item--second'>
-            <BaseMedia src={nfts[secondIndex].s3PathOptimized}></BaseMedia>
-          </div>
-        )}
-        {nfts[thirdIndex] && (
-          <div className='collection-panel__gallery-display-item--third'>
-            <BaseMedia src={nfts[thirdIndex].s3PathOptimized}></BaseMedia>
-          </div>
-        )}
+        {nfts.map((nft, i: number) => {
+          console.log(nft);
+          let className: string = 'collection-panel__gallery-display-item';
+
+          const isCurrent: boolean = selectedIndex == i;
+          const isNext: boolean = selectedIndex == i - 1;
+          const isNextTwo: boolean = selectedIndex == i - 2;
+
+          if (isCurrent) {
+            className = 'collection-panel__gallery-display-item--first';
+          }
+          if (isNext) {
+            className = 'collection-panel__gallery-display-item--second';
+          }
+          if (isNextTwo) {
+            className = 'collection-panel__gallery-display-item--third';
+          }
+          return (
+            <div
+              style={{
+                aspectRatio: String(nft.width / nft.height),
+                width: nft.width / 1.5,
+                height: nft.height / 1.5,
+              }}
+              className={className}
+            >
+              <BaseMedia src={nft.s3PathOptimized}></BaseMedia>
+            </div>
+          );
+        })}
       </div>
       <div className='collection-panel__tile-nft-info'>
-        <p className='collection-panel__tile-nft-name'>{nfts[firstIndex].nftName}</p>
-        <p className='collection-panel__tile-artist-name'>BY {nfts[firstIndex].artistUsername}</p>
+        <p className='collection-panel__tile-nft-name'>{nfts[selectedIndex].nftName}</p>
+        <p className='collection-panel__tile-artist-name'>
+          BY {nfts[selectedIndex].artistUsername}
+        </p>
       </div>
       <div className='collection-panel__gallery-grid'>
         {nfts.map((nft, i: number) => {
