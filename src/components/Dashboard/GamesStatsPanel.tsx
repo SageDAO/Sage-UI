@@ -3,6 +3,7 @@ import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
 import { useGetSalesEventsQuery } from '@/store/dashboardReducer';
 import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
+import { formatDateYYMMddHHmm } from '@/utilities/strings';
 import { SaleEvent, SaleEventType } from '@prisma/client';
 import Countdown from '../Countdown';
 import LoaderDots from '../LoaderDots';
@@ -40,8 +41,9 @@ export function GamesStatsPanel() {
                   return (
                     <tr key={i} style={{ border: '1px solid gray', height: '95px' }}>
                       <td style={{ verticalAlign: 'middle' }}>
-                        drawing <span className='dashboard-game-stats__id'>{lottery.Nfts[0].name}</span>
-                        {' '} | {lottery.Nfts[0].numberOfEditions} editions
+                        drawing{' '}
+                        <span className='dashboard-game-stats__id'>{lottery.Nfts[0].name}</span> |{' '}
+                        {lottery.Nfts[0].numberOfEditions} editions
                         <br />
                         {new Date(lottery.endTime).getTime() > new Date().getTime() ? (
                           <Countdown
@@ -49,15 +51,18 @@ export function GamesStatsPanel() {
                             endTime={new Date(lottery.endTime).getTime()}
                           />
                         ) : (
-                          `end date: ${new Date(lottery.endTime).toLocaleString()}`
+                          <>
+                            end date: {formatDateYYMMddHHmm(lottery.endTime)}
+                            <br />
+                          </>
                         )}
-                        <br />
-                        pricing: {lottery.costPerTicketTokens} ASH + {lottery.costPerTicketPoints || 0} PIXEL
+                        pricing: {lottery.costPerTicketTokens} ASH +{' '}
+                        {lottery.costPerTicketPoints || 0} PIXEL
                       </td>
                       <td style={{ verticalAlign: 'middle' }}>
-                        entries sold:{' '}
-                        <span style={{ fontWeight: 'bold' }}>{tickets.length}</span>
-                        {tickets.length > 0 && downloadIcon(() => downloadTickets(sales, lottery.id))}
+                        entries sold: <span style={{ fontWeight: 'bold' }}>{tickets.length}</span>
+                        {tickets.length > 0 &&
+                          downloadIcon(() => downloadTickets(sales, lottery.id))}
                       </td>
                     </tr>
                   );
@@ -121,10 +126,7 @@ const getAuctionGameStats = (id: number) => {
 
 function download(filename: string, filecontents: string) {
   var element = document.createElement('a');
-  element.setAttribute(
-    'href',
-    'data:text/plain;charset=utf-8,' + encodeURIComponent(filecontents)
-  );
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(filecontents));
   element.setAttribute('download', filename);
   element.style.display = 'none';
   document.body.appendChild(element);
