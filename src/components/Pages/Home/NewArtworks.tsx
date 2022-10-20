@@ -20,7 +20,7 @@ export default function NewArtworks({ newArtworks }: Props) {
         <div className='home-page__new-artworks-flex-container'>
           {newArtworks.map((nft) => {
             const artist = nft.NftContract?.Artist;
-            return <NewArtworksTile artist={artist} nft={nft} />;
+            return <NewArtworksTile key={nft.id} artist={artist} nft={nft} />;
           })}
         </div>
       </section>
