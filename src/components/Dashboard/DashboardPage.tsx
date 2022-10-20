@@ -16,13 +16,26 @@ export function DashBoardPage() {
   const isAdmin = (user: any) => {
     return user && Role.ADMIN == user.role;
   };
-  const { data: user, isFetching: isFetchingUser } = useGetUserQuery();
+  const {
+    isSignedIn,
+    isWalletConnected,
+    isWalletConnecting,
+    userData,
+    ashBalanceDisplay,
+    pointsBalanceDisplay,
+    connect,
+    connectors,
+  } = useSAGEAccount();
+
+  const { data: user, isFetching: isFetchingUser } = useGetUserQuery(undefined, { skip: !userData });
   // if (isFetchingUser) {
   //   return <LoaderDots />;
   // }
+  console.log(isFetchingUser)
+  console.log(user)
   return (
     <div className='dashboard-page'>
-      <PublicDashboard></PublicDashboard>
+      {!isSignedIn && <PublicDashboard></PublicDashboard>}
       {isAdmin(user) && (
         <Tabs as='div' className='dashboard-page__tabs'>
           <TabList>
