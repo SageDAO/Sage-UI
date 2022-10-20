@@ -14,6 +14,7 @@ import { useDisconnect } from 'wagmi';
 import { PfpImage } from '@/components/Media/BaseMedia';
 import useUserNotifications from '@/hooks/useUserNotifications';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import ProfileDisplay from '@/components/ProfileDisplay';
 
 type Headers =
   | 'IN AND OUTGOING BIDS'
@@ -117,17 +118,7 @@ function profile() {
       <h1 className='profile-page__header'>{header}</h1>
       <section className='profile-page__main'>
         <div className='profile-page__left'>
-          <div className='profile-page__pfp-section'>
-            <div className='profile-page__pfp-container'>
-              <PfpImage src={userData?.profilePicture}></PfpImage>
-            </div>
-            <div className='profile-page__pfp-section-right'>
-              <p className='profile-page__pfp-section-username'>
-                {userData?.username || 'anonymous'}
-              </p>
-              <p className='profile-page__pfp-section-role'>{userData?.role}</p>
-            </div>
-          </div>
+          <ProfileDisplay></ProfileDisplay>
           <TabList className='profile-page__tabs'>
             <Tab
               as={'button'}

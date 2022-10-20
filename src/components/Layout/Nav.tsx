@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import Connect from '../Connect';
 import { PfpImage } from '../Media/BaseMedia';
 import PersonalizedMessage from '../PersonalizedMessage';
+import ProfileDisplay from '../ProfileDisplay';
 import { SearchInput } from '../SearchInput';
 interface NavLink {
   name: string;
@@ -56,13 +57,15 @@ export default function Nav() {
             <div className='nav__personal'>
               {isSignedIn ? (
                 <>
-                  <div onClick={pushToProfile} className='nav__personal-pfp-container'>
+                  {/* <div onClick={pushToProfile} className='nav__personal-pfp-container'>
                     <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
                   </div>
 
                   <h1 className='nav__personal-message'>
                     <PersonalizedMessage />
-                  </h1>
+                  </h1> */}
+
+                  <ProfileDisplay />
                 </>
               ) : (
                 <Connect></Connect>
