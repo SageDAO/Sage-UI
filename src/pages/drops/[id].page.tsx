@@ -58,7 +58,16 @@ type TileClassName =
   | 'drop-page__grid-item--double';
 
 export default function drop({ drop, auctions, artist, drawings, gamesCount }: Props) {
-  const { systemTypes, bannerImgSrc, dropName, dropDescription, artistName, createdAt } = useDrop({
+  const {
+    systemTypes,
+    bannerImgSrc,
+    dropName,
+    dropDescription,
+    artistName,
+    createdAt,
+    country,
+    state,
+  } = useDrop({
     drop,
     Auctions: auctions,
     Lotteries: drawings,
@@ -137,7 +146,11 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
               </div>
               <div className='drop-page__artist-info'>
                 <p className='drop-page__artist-name'>{artist.username}</p>
-                {/* <p className='drop-page__artist-label'>VOID, USA</p> */}
+                {state && country && (
+                  <p className='drop-page__artist-label'>
+                    {state}, {country}
+                  </p>
+                )}
               </div>
             </div>
             <h3 className='drop-page__drop-info-name'>{drop.name}</h3>
