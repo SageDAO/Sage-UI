@@ -129,6 +129,9 @@
 
 .profile-page__pfp-section {
   @include m.flex-row;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
   gap: 10px;
   align-items: center;
 }
@@ -136,6 +139,7 @@
 .profile-page__pfp-section-username {
   @include m.text-h3;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .profile-page__pfp-section-role {

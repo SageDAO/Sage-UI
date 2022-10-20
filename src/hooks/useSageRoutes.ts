@@ -10,9 +10,11 @@ import {
 } from '@/constants/paths';
 import { useRouter } from 'next/router';
 import { User, Drop } from '@prisma/client';
+import useProfileRoutes from './useProfileRoutes';
 
 export default function useSageRoutes() {
   const router = useRouter();
+  const { shallowRoute } = useProfileRoutes();
 
   async function pushToCreators(username?: User['username']) {
     return;
@@ -41,6 +43,14 @@ export default function useSageRoutes() {
 
   async function pushToProfile() {
     await router.push(basePathProfile);
+  }
+
+  async function pushToCollection() {
+    shallowRoute('2');
+  }
+
+  async function pushToMintCreation() {
+    shallowRoute('3');
   }
 
   async function pushToHowToBuyAsh() {
@@ -78,5 +88,7 @@ export default function useSageRoutes() {
     isProfilePage,
     isSingleDropsPage,
     isCreatorsPage,
+    pushToMintCreation,
+    pushToCollection,
   };
 }

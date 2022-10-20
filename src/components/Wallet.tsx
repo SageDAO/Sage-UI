@@ -1,5 +1,5 @@
 import { PfpImage } from './Media/BaseMedia';
-import { useConnect } from 'wagmi';
+import { useConnect, useDisconnect } from 'wagmi';
 import { Props as ModalProps } from '@/components/Modals';
 import Image from 'next/image';
 import PersonalizedMessage from './PersonalizedMessage';
@@ -8,6 +8,8 @@ import WalletConnectSVG from '@/public/icons/walletconnect.svg';
 import MetamaskSVG from '@/public/icons/metamask.svg';
 import useSAGEAccount from '@/hooks/useSAGEAccount';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import ProfileDisplay from './ProfileDisplay';
+import { useSignOutMutation } from '@/store/usersReducer';
 
 interface Props {
   closeModal?: ModalProps['closeModal'];
@@ -25,15 +27,24 @@ export default function Wallet({ closeModal, isOpen }: Props) {
     connect,
     connectors,
   } = useSAGEAccount();
-  const { pushToProfile } = useSageRoutes();
+  const { pushToProfile, pushToMintCreation, pushToCollection, pushToHome } = useSageRoutes();
   const showWalletSelection: boolean = Boolean(!isWalletConnected);
   const showAuthSection: boolean = Boolean(isWalletConnected && isSignedIn);
+  const [signOut] = useSignOutMutation();
   useSignIn(isOpen);
+  const { disconnect } = useDisconnect();
+
+  async function handleSignOut() {
+    signOut();
+    disconnect();
+    pushToHome();
+    closeModal();
+  }
 
   return (
     <div className='wallet'>
       <div className='wallet__user-section-wrapper'>
-        <section className='wallet__header'>
+        {/* <section className='wallet__header'>
           <h1 className='wallet__header-prompt'>
             <PersonalizedMessage></PersonalizedMessage>
           </h1>
@@ -44,7 +55,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
               to our terms of service and privacy policy.
             </h1>
           )}
-        </section>
+        </section> */}
         {showWalletSelection && (
           <section className='wallet__wallets '>
             {connectors.map((c) => {
@@ -62,9 +73,15 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                   onClick={onClick}
                 >
                   {c.name == 'MetaMask' ? (
-                    <MetamaskSVG className='wallet__wallet-icon' />
+                    <>
+                      <MetamaskSVG className='wallet__wallet-icon' />
+                      {c.name}
+                    </>
                   ) : (
-                    <WalletConnectSVG className='wallet__wallet-icon' />
+                    <>
+                      <WalletConnectSVG className='wallet__wallet-icon' />
+                      {c.name}
+                    </>
                   )}
                 </button>
               );
@@ -73,7 +90,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
         )}
         {showAuthSection && (
           <>
-            <section className='wallet__user-section'>
+            {/* <section className='wallet__user-section'>
               <div className='wallet__user-pfp-container' onClick={pushToProfile}>
                 <PfpImage
                   className='wallet__user-pfp-src'
@@ -105,8 +122,38 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                   PROFILE
                 </button>
               )}
-            </section>
+            </section> */}
+            <div className='wallet__user-section'>
+              <button
+                onClick={() => {
+                  pushToProfile();
+                  closeModal();
+                }}
+                className='wallet__user-section-button'
+              >
+                YOUR PROFILE
+              </button>
+              {/* 
+              <button onClick={pushToMintCreation} className='wallet__user-section-button'>
+                MINT CREATION
+              </button>
+              <button onClick={pushToCollection} className='wallet__user-section-button'>
+                COLLECTION
+              </button>
+
+              <button className='wallet__user-section-button'>NOTIFICATIONS</button> */}
+
+              <button onClick={handleSignOut} className='wallet__user-section-logout-button'>
+                LOG OUT
+              </button>
+            </div>
           </>
+        )}
+
+        {showAuthSection && (
+          <div className='wallet__profile-display-container'>
+            <ProfileDisplay></ProfileDisplay>
+          </div>
         )}
       </div>
     </div>

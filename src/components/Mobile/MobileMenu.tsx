@@ -88,9 +88,9 @@ export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
           <Socials></Socials>
         </div>
       </section> */}
-      <h1 className='mobile-menu__copyright'>
+      {/* <h1 className='mobile-menu__copyright'>
         <Copyright></Copyright>
-      </h1>
+      </h1> */}
     </div>
   );
 }
