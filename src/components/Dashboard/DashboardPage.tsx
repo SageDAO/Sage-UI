@@ -31,8 +31,6 @@ export function DashBoardPage() {
   // if (isFetchingUser) {
   //   return <LoaderDots />;
   // }
-  console.log(isFetchingUser)
-  console.log(user)
   return (
     <div className='dashboard-page'>
       {!isSignedIn && <PublicDashboard></PublicDashboard>}

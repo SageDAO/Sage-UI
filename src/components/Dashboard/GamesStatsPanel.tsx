@@ -3,7 +3,7 @@ import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
 import { useGetSalesEventsQuery } from '@/store/dashboardReducer';
 import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
 import shortenAddress from '@/utilities/shortenAddress';
-import { formatDateYYMMddHHmm } from '@/utilities/strings';
+import { formatDateYYMMddHHmm, formatTimestampYYMMddHHmm } from '@/utilities/strings';
 import { SaleEvent, SaleEventType } from '@prisma/client';
 import Countdown from '../Countdown';
 import LoaderDots from '../LoaderDots';
@@ -61,8 +61,9 @@ export function GamesStatsPanel() {
                       </td>
                       <td style={{ verticalAlign: 'middle' }}>
                         entries sold: <span style={{ fontWeight: 'bold' }}>{tickets.length}</span>
-                        {tickets.length > 0 &&
-                          downloadIcon(() => downloadTickets(sales, lottery.id))}
+                        {tickets.length > 0 && (
+                          <DownloadIcon callback={() => downloadTickets(sales, lottery.id)} />
+                        )}
                       </td>
                     </tr>
                   );
@@ -74,26 +75,13 @@ export function GamesStatsPanel() {
             <table width='500'>
               <tbody>
                 {drop.Auctions.map((auction, i) => {
-                  // const stats = getAuctionGameStats(auction.id);
-                  if ('' == null) {
-                    var endTime = Math.floor(new Date(auction.endTime).getTime() / 1000);
-                  } else {
-                    var endTime = Number(new Date().getTime() / 1000);
-                  }
                   return (
                     <tr key={i} style={{ border: '1px solid gray', height: '95px' }}>
                       <td style={{ verticalAlign: 'middle' }}>
                         auction <span className='dashboard-game-stats__id'>{auction.Nft.name}</span>
-                        <br />
-                        {endTime > new Date().getTime() ? (
-                          <Countdown className='status__countdown' endTime={endTime * 1000} />
-                        ) : (
-                          `end date: ${new Date(endTime * 1000).toLocaleString()}`
-                        )}
-                        {/*stats.bids?.length > 0 && downloadIcon(() => downloadBids(auction.id))*/}
                       </td>
                       <td style={{ verticalAlign: 'middle' }}>
-                        {/*auctionContractState(auction.id)*/}
+                        <AuctionContractState id={auction.id} />
                       </td>
                     </tr>
                   );
@@ -117,13 +105,6 @@ const filterLotteryTickets = (sales: SaleEvent[], id: number): SaleEvent[] => {
   return tickets;
 };
 
-const getAuctionGameStats = (id: number) => {
-  // for (let auction of graphData.auctions) {
-  //   if (parseInt(auction.id) == id) return auction;
-  // }
-  return {};
-};
-
 function download(filename: string, filecontents: string) {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(filecontents));
@@ -143,21 +124,35 @@ function downloadTickets(sales: SaleEvent[], lotteryId: number) {
   download(`lottery_${lotteryId}_tickets_${getDateYYYYMMDDhhmmss()}.txt`, filecontents);
 }
 
-function auctionContractState(id: number) {
+function AuctionContractState({ id }) {
   const { data } = useGetAuctionStateQuery(id);
   if (data) {
     return (
       <>
-        highest bid: {data.highestBidNumber} ASH
-        <br />
-        by {shortenAddress(data.highestBidder)}
+        {data.highestBidNumber == 0 ? (
+          'no bids yet'
+        ) : (
+          <>
+            {data.endTime > new Date().getTime() ? (
+              <Countdown className='status__countdown' endTime={data.endTime} />
+            ) : (
+              <>
+                end date: {formatTimestampYYMMddHHmm(data.endTime / 1000)}
+                <br />
+              </>
+            )}
+            highest bid: {data.highestBidNumber} ASH
+            <br />
+            by {shortenAddress(data.highestBidder)}
+          </>
+        )}
       </>
     );
   }
-  return '';
+  return <></>;
 }
 
-function downloadIcon(callback: any) {
+function DownloadIcon({ callback }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <div
