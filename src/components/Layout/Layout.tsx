@@ -23,7 +23,7 @@ type Props = {
 
 export default function Layout({ children, router }: Props) {
   const { isSignedIn, isWalletConnected, walletAddress, sessionData, userData } = useSAGEAccount();
-  const { pushToHome, isCreatorsPage } = useSageRoutes();
+  const { pushToHome, isCreatorsPage, isSingleDropsPage } = useSageRoutes();
   const {
     isNetworkModalOpen,
     closeNetworkModal,
@@ -79,7 +79,7 @@ export default function Layout({ children, router }: Props) {
           toggleMobileMenu={toggleMobileMenu}
         />
         {children}
-        {!isCreatorsPage && <Motto />}
+        {!isCreatorsPage && !isSingleDropsPage && <Motto />}
 
         <Footer></Footer>
       </div>
