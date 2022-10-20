@@ -95,9 +95,9 @@ function UpcomingDropsTile(props: UpcomingDropsTileProps) {
       )}
       <BaseMedia src={bannerImgSrc} />
       <div className='home-page__upcoming-drops-tile-tag'>
-        <div className='home-page__upcoming-drops-tile-pfp'>
+        {/* <div className='home-page__upcoming-drops-tile-pfp'>
           <PfpImage src={props.artist.profilePicture}></PfpImage>
-        </div>
+        </div> */}
         <span className='home-page__upcoming-drops-tile-item-name'>
           {dropName}
           <pre />

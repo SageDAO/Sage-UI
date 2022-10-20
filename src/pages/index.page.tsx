@@ -53,7 +53,7 @@ function home({
           </div>
         </div>
         <UpcomingDrops upcomingDrops={upcomingDrops}></UpcomingDrops>
-        <LatestArtists latestArtists={latestArtists}></LatestArtists>
+        {/* <LatestArtists latestArtists={latestArtists}></LatestArtists> */}
         <NewArtworks newArtworks={newArtworks}></NewArtworks>
         <EventSlider mediumData={mediumData} />
       </div>

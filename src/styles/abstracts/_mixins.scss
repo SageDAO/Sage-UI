@@ -19,6 +19,7 @@
   &:disabled {
     filter: brightness(0.4);
     cursor: default;
+    @content;
   }
 }
 
@@ -399,7 +400,7 @@ $desktop-width: 1345px;
   height: 35px;
   text-align: center;
   letter-spacing: 0.1em;
-  @include interact;
+  // @include interact;
 }
 
 @keyframes pulse {

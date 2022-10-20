@@ -124,23 +124,6 @@
   @include m.standard-width;
 }
 
-.home-page__upcoming-drops-grid--mobile {
-  margin-top: 10px;
-  display: flex;
-  gap: 20px;
-  width: 100vw;
-  overflow-x: scroll;
-}
-
-.home-page__upcoming-drops-row--mobile {
-  margin-left: 10vw;
-  margin-right: 10vw;
-  display: flex;
-  gap: 10px;
-  flex: none;
-  min-width: 100vw;
-}
-
 $tile-img-z: 0;
 $tile-info-z: calc(#{$tile-img-z} + 1);
 
@@ -281,8 +264,57 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   border-radius: 100%;
 }
 
+@mixin mobile-slide-section {
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;
+  width: 100vw;
+  overflow-x: scroll;
+}
+
+@mixin mobile-slide-row {
+  margin-left: 10vw;
+  margin-right: 10vw;
+  display: flex;
+  gap: 10px;
+  flex: none;
+  min-width: 100vw;
+}
+
+.home-page__upcoming-drops-grid--mobile {
+  @include mobile-slide-section;
+}
+
+.home-page__upcoming-drops-row--mobile {
+  @include mobile-slide-row;
+}
+
 .home-page__new-artworks-section {
   @include section-strip;
+  display: none;
+  @include b.min-width('medium') {
+    display: flex;
+  }
+}
+
+.home-page__new-artworks-section--mobile {
+  @include mobile-slide-section;
+  @include b.min-width('medium') {
+    display: none;
+  }
+}
+
+.home-page__new-artworks-header-section {
+  @include m.flex-col;
+  @include m.standard-width;
+  margin-top: 42px;
+}
+
+.home-page__new-artworks-flex-container--mobile {
+  @include mobile-slide-row;
+  @include b.min-width('medium') {
+    display: none;
+  }
 }
 
 .home-page__new-artworks-header {
@@ -301,10 +333,13 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 }
 
 .home-page__new-artworks-item {
-  width: 19%;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 40vw;
+  @include b.min-width('medium') {
+    // width: 19%;
+  }
 }
 
 .home-page__new-artworks-media {
@@ -317,29 +352,42 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 .home-page__new-artworks-item-content {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 4px;
+  @include b.min-width('medium') {
+    gap: 20px;
+  }
 }
 
 .home-page__new-artworks-item-pfp {
   @include m.pfp-container;
   @include m.interact;
-  width: 12%;
+  width: 15px;
+  height: 15px;
+  @include b.min-width('medium') {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .home-page__new-artworks-item-right {
   @include m.flex-col;
-  @include m.flex-center;
+  // @include m.flex-center;
   height: 100%;
+  @include m.flex-center;
   text-transform: uppercase;
 }
 .home-page__new-artworks-item-name {
-  @include m.text-p5;
+  // @include m.text-p5;
+  width: 100%;
   font-weight: 600;
+  font-size: 10px;
+  line-height: 12px;
 }
 .home-page__new-artworks-item-artist-name {
   font-size: 7px;
   line-height: 8px;
   color: #c4c4c4;
+  white-space: nowrap;
 }
 
 .home-page__events-section {
@@ -425,6 +473,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   @include m.theme() {
     @include m.button-base;
     color: m.t(contrast);
+    // @include m.disable {
+    //   color: white;
+    // }
   }
 }
 
