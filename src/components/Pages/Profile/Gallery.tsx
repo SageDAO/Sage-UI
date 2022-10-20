@@ -2,6 +2,7 @@ import { BaseMedia } from '@/components/Media/BaseMedia';
 import React, { useState } from 'react';
 import ArrowLeftSVG from '@/public/interactive/arrow-left.svg';
 import ArrowRightSVG from '@/public/interactive/arrow-right.svg';
+import useWindowDimensions from '@/hooks/useWindowSize';
 
 interface Props {
   nfts: any[];
@@ -13,6 +14,7 @@ function Gallery({ nfts }: Props) {
   const firstIndex = selectedIndex;
   const secondIndex = firstIndex + 1;
   const thirdIndex = secondIndex + 1;
+  const { windowDimensions } = useWindowDimensions();
 
   function handleControlLeftClick() {
     if (selectedIndex == 0) return;
@@ -67,8 +69,10 @@ function Gallery({ nfts }: Props) {
             <div
               style={{
                 aspectRatio: String(nft.width / nft.height),
-                width: nft.width / 1.5,
-                height: nft.height / 1.5,
+                width: windowDimensions.width / 2,
+                height: windowDimensions.width / 2,
+                maxWidth: '600px',
+                maxHeight: '600px',
               }}
               className={className}
             >

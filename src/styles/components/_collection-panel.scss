@@ -94,7 +94,7 @@
 
 .collection-panel__gallery-control-left {
   @include gallery-control-buttons;
-  left: -50px;
+  // left: -50px;
 }
 
 .collection-panel__gallery-control-right {
@@ -109,10 +109,13 @@
   align-items: center;
   width: 100%;
   flex: 1;
-  height: 799px;
   position: relative;
   margin-bottom: 25px;
   perspective: 100px;
+  height: 400px;
+  @include b.min-width('medium') {
+    height: 799px;
+  }
 }
 
 .slick-current {
@@ -151,6 +154,7 @@ $main-height: 799px;
     left: 50%;
     z-index: 2;
     transform: scale(0.92);
+    filter: brightness(0.3);
     // width: 200px;
     // height: calc($main-height * 0.923);
   }
@@ -160,6 +164,7 @@ $main-height: 799px;
     width: 100px;
     transform: scale(0.85);
     z-index: 1;
+    filter: brightness(0.3);
     left: 90%;
     // height: calc($main-height * 0.923 * 0.923);
   }
