@@ -13,7 +13,7 @@ export default function Balances() {
       </div>
       <div className='profile-page__balances-points' style={{ textAlign: 'center'}}>
         <h1 className='profile-page__balances-points-value'>
-          <a data-tip={tooltip} data-iscapture='true'>
+          <a data-for='main' data-tip={tooltip} data-iscapture='true'>
             {pointsBalanceDisplay}
           </a>
         </h1>
