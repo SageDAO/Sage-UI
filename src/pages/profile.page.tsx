@@ -21,7 +21,7 @@ type Headers =
   | 'IN AND OUTGOING BIDS'
   | 'YOUR SALES'
   | 'CLAIM YOUR WINS'
-  | 'YOUR REFUNDS FROM RAFFLES'
+  | 'YOUR REFUNDS FROM DRAWINGS'
   | 'ALL YOUR ACTIVITIES ON SAGE'
   | 'YOUR SALES'
   | 'YOUR OFFERS'
@@ -75,7 +75,7 @@ function profile() {
       }
 
       if (subtabIndex == 3) {
-        setHeader('YOUR REFUNDS FROM RAFFLES');
+        setHeader('YOUR REFUNDS FROM DRAWINGS');
       }
 
       if (subtabIndex == 4) {
