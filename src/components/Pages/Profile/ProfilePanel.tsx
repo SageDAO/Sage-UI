@@ -197,11 +197,15 @@ export default function ProfilePanel({ isArtist }: Props) {
             onChange={handleCountrySelect}
             className='profile-panel__country-select'
           >
-            <option value='' disabled selected>
+            <option value='' disabled>
               Select your country
             </option>
             {countries.map((c) => {
-              return <option value={c.name}>{c.name}</option>;
+              return (
+                <option key={c.name} value={c.name}>
+                  {c.name}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -217,11 +221,15 @@ export default function ProfilePanel({ isArtist }: Props) {
             // maxLength={40}
             className='profile-panel__state-select'
           >
-            <option value='' disabled selected>
+            <option value='' disabled>
               Select your state
             </option>
             {stateOptions?.map((s) => {
-              return <option value={s}>{s}</option>;
+              return (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              );
             })}
           </select>
         </div>

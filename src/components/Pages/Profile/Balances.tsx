@@ -5,6 +5,7 @@ export default function Balances() {
   const { pointsBalanceDisplay, ashBalanceDisplay } = useSAGEAccount();
   const tooltip =
     'For each 100 ASH you hold,<br/>you will get 25 PIXEL per day<br/>(limited to 250 PIXEL/day)';
+  if (!pointsBalanceDisplay || !ashBalanceDisplay) return null;
   return (
     <div className='profile-page__balances'>
       <ReactTooltip id='main' place={'top'} type={'light'} effect={'solid'} multiline={true} />

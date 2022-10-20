@@ -389,18 +389,15 @@ $desktop-width: 1345px;
   align-items: center;
   justify-content: center;
   font-style: normal;
-  // font-weight: 400;
   font-size: 12px;
   line-height: 40px;
   text-align: center;
   letter-spacing: 0.2em;
-  // font-weight: 400;
-  // font-size: clamp(10px, 1.5vw, 16px);
   width: min(250px, 80vw);
   height: 35px;
   text-align: center;
   letter-spacing: 0.1em;
-  // @include interact;
+  @include interact;
 }
 
 @keyframes pulse {
