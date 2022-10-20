@@ -1,7 +1,17 @@
 import React from 'react';
 import Hero from './Hero';
-function LaunchTrailer() {
-  return <Hero imgSrc={'/videos/launch-trailer.mp4'} />;
+
+interface Props {
+  onClick?: () => void;
+}
+
+function LaunchTrailer({ onClick }: Props) {
+  return (
+    <Hero
+      bannerOnClick={onClick}
+      imgSrc={'https://s3.us-east-2.amazonaws.com/sage.art/trailers/SAGE+-+Genesis+-+by+LEHEL.mp4'}
+    />
+  );
 }
 
 export default LaunchTrailer;
