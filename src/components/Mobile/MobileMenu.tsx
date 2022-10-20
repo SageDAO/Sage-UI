@@ -13,6 +13,7 @@ import {
   basePathHome,
   basePathSubmissions,
 } from '@/constants/paths';
+import Motto from '../Layout/Motto';
 
 interface Props extends ModalProps {
   toggleMenu: any;
@@ -50,6 +51,7 @@ export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
 
   return (
     <div className='mobile-menu' data-is-open={isOpen}>
+      <Motto></Motto>
       <MenuToggle isOpen={isOpen} toggleMobileMenu={toggleMenu} />
       <div className='mobile-menu__ash-price-container-wrapper'>
         <div className='mobile-menu__ash-price-container'>
@@ -80,15 +82,15 @@ export default function MobileMenu({ isOpen, closeModal, toggleMenu }: Props) {
         })}
       </section>
       <Wallet closeModal={closeModal} isOpen={isOpen}></Wallet>
-      <section className='mobile-menu__socials'>
+      {/* <section className='mobile-menu__socials'>
         <h1 className='mobile-menu__socials-header'>follow us on</h1>
         <div className='mobile-menu__socials-icons'>
           <Socials></Socials>
         </div>
-      </section>
-      <h1 className='mobile-menu__copyright'>
+      </section> */}
+      {/* <h1 className='mobile-menu__copyright'>
         <Copyright></Copyright>
-      </h1>
+      </h1> */}
     </div>
   );
 }

@@ -57,9 +57,14 @@ $menu-toggle-z: $menu-z + 1;
 
     position: relative;
     color: m.t(contrast2);
+    &[data-name='Creators'] {
+      pointer-events: none;
+    }
     @include m.future-release {
       top: 50%;
       left: 70%;
+      pointer-events: none;
+      cursor: default;
       transform: translateY(-50%);
     }
 

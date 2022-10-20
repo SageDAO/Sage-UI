@@ -1,6 +1,20 @@
 @use '@/styles/abstracts/colors' as *;
 @use '@/styles/abstracts/breakpoints' as b;
 
+@mixin mobile-buttons {
+  @include button-base;
+  @include theme() {
+    border: 1px solid t(contrast);
+    background-color: t(base);
+    color: t(contrast);
+    border-radius: 15px;
+    width: 269px;
+    height: 51px;
+    aspect-ratio: auto;
+    @content;
+  }
+}
+
 @mixin disable {
   &:disabled {
     filter: brightness(0.4);

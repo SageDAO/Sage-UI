@@ -15,6 +15,7 @@ import { PfpImage } from '@/components/Media/BaseMedia';
 import useUserNotifications from '@/hooks/useUserNotifications';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import ProfileDisplay from '@/components/ProfileDisplay';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 type Headers =
   | 'IN AND OUTGOING BIDS'
@@ -40,7 +41,7 @@ function parseQuery(queryString) {
 
 function profile() {
   const router = useRouter();
-  // const { pushToHome } = useSageRoutes();
+  const { pushToHome } = useSageRoutes();
   const { data: sessionData } = useSession();
   const { data: userData, isFetching: isFetchingUser } = useGetUserQuery(undefined, {
     skip: !sessionData,
@@ -89,7 +90,7 @@ function profile() {
   async function handleSignOut() {
     signOut();
     disconnect();
-    router.push('/');
+    pushToHome();
   }
 
   if (!userData && isFetchingUser) {

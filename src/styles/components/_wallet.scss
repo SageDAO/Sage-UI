@@ -91,34 +91,41 @@
 }
 
 .wallet__wallets {
-  display: flex;
-  align-items: stretch;
+  @include m.flex-col;
+  // align-items: stretch;
   gap: 20px;
 }
 
 .wallet__wallet-item {
-  @include m.interact {
-    transform: scale(1.04);
-  }
-  background-color: transparent;
-  cursor: pointer;
-  transition-duration: 30ms;
-  gap: 30px;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  &:disabled {
-    pointer-events: none;
-    filter: brightness(0.6);
+  @include m.theme() {
+    @include m.interact {
+      transform: scale(1.04);
+    }
+    cursor: pointer;
+    // @include m.button-base;
+    text-transform: uppercase;
+    border-radius: 15px;
+    aspect-ratio: 269/51;
+    width: 269px;
+    height: 51px;
+    background-color: m.t(contrast);
+    transition-duration: 30ms;
+    gap: 20px;
+    // flex: 1;
+    align-items: center;
+    @include m.flex-row;
+    // justify-content: space-between;
+    &:disabled {
+      pointer-events: none;
+      filter: brightness(0.6);
+    }
   }
 }
 
 .wallet__MetaMask {
-  display: none;
+  // display: none;
   @include b.min-width('medium') {
-    display: flex;
+    // display: flex;
   }
 }
 
@@ -127,12 +134,15 @@
 
 .wallet__wallet-icon {
   @include m.theme() {
-    flex: 1;
-    width: min(40vw, 100px);
-    height: min(40vw, 100px);
+    // flex: 1;
+    margin-left: 20px;
+    width: 30px;
+    height: 30px;
+    // width: min(40vw, 100px);
+    // height: min(40vw, 100px);
     // height: 120px;
     // position: relative;
-    color: m.t(contrast);
+    color: m.t(base);
   }
 }
 
@@ -192,6 +202,13 @@
   }
 }
 
+.wallet__profile-display-container {
+  // background-color: red;
+  @include m.mobile-width;
+  margin-top: auto;
+  margin-bottom: 80px;
+}
+
 .wallet__user-section {
   align-items: center;
   display: flex;
@@ -199,7 +216,9 @@
   width: min-content;
   margin-left: auto;
   margin-right: auto;
-
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
   @include b.min-width('medium') {
     flex: 1;
     width: 100%;
@@ -211,6 +230,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  justify-content: center;
   margin-left: auto;
   margin-right: auto;
   @include b.min-width('medium') {
@@ -323,4 +344,15 @@
   }
   @include m.interact;
   text-transform: uppercase;
+}
+
+.wallet__user-section-button {
+  @include m.mobile-buttons;
+}
+.wallet__user-section-logout-button {
+  @include m.mobile-buttons {
+    margin-top: 18px;
+    background-color: m.t(contrast);
+    color: m.t(base);
+  }
 }
