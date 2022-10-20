@@ -120,7 +120,7 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
                 <p className='drop-page__header-drop-details-item'>
                   <strong>Creation date:</strong> {createdAt}
                 </p>
-                <div className='drop-page__header-drop-details-item'>
+                {/* <div className='drop-page__header-drop-details-item'>
                   <strong>Systems in this drop:</strong>
                   {systemTypes.map((type) => {
                     return (
@@ -129,7 +129,7 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
                       </div>
                     );
                   })}
-                </div>
+                </div> */}
               </div>
 
               {/* <button onClick={handleShareDrop} className='drop-page__share-button'>
