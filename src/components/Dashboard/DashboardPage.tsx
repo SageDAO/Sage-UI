@@ -29,9 +29,14 @@ export function DashBoardPage() {
             <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
               New Drops
             </Tab>
-            <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
-              Preset Drops
-            </Tab>
+            {process.env.NEXT_PUBLIC_APP_MODE !== 'production' && (
+              <Tab
+                className='dashboard-page__tab'
+                selectedClassName='dashboard-page__tab--selected'
+              >
+                Preset Drops
+              </Tab>
+            )}
             <Tab className='dashboard-page__tab' selectedClassName='dashboard-page__tab--selected'>
               Games Stats
             </Tab>
@@ -45,9 +50,11 @@ export function DashBoardPage() {
           <TabPanel className='dashboard-panel'>
             <NewDropsPanel />
           </TabPanel>
-          <TabPanel className='dashboard-panel'>
-            <PresetDropsPanel />
-          </TabPanel>
+          {process.env.NEXT_PUBLIC_APP_MODE !== 'production' && (
+            <TabPanel className='dashboard-panel'>
+              <PresetDropsPanel />
+            </TabPanel>
+          )}
           <TabPanel className='dashboard-panel'>
             <GamesStatsPanel />
           </TabPanel>
