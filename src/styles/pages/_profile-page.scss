@@ -50,8 +50,13 @@
 .profile-page__upper {
   @include m.standard-width;
   display: flex;
-  flex-wrap: wrap;
-  // gap: 50px;
+  align-items: flex-start;
+  // flex-wrap: wrap;
+  gap: 50px;
+  flex-direction: column;
+  @include b.min-width('medium') {
+    flex-direction: row;
+  }
 }
 
 .profile-page__header {
@@ -252,14 +257,14 @@
 }
 
 .profile-page__balances {
-  margin-top: 25px;
+  // margin-top: 25px;
   max-width: 80vw;
   display: flex;
   flex-direction: column;
   gap: clamp(20px, 5vw, 160px);
   @include b.min-width('small') {
     flex-direction: row;
-    width: 66.66vw;
+    width: 50vw;
   }
 }
 
