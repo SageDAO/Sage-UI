@@ -8,6 +8,7 @@ import FeaturedDrop from '@/components/Pages/Home/FeaturedDrop';
 import LatestArtists from '@/components/Pages/Home/LatestArtists';
 import NewArtworks from '@/components/Pages/Home/NewArtworks';
 import Logotype from '@/components/Logotype';
+import LaunchTrailer from '@/components/LaunchTrailer';
 
 interface Props extends Awaited<ReturnType<typeof getHomePageData>> {
   // featuredDrop: Drop_include_GamesAndArtist;
@@ -31,14 +32,15 @@ function home({
     <div className='home-page' data-cy='home-page'>
       <div className='home-page__main'>
         <Logotype></Logotype>
-        {featuredDrop && (
+        <LaunchTrailer></LaunchTrailer>
+        {/* {featuredDrop && (
           <FeaturedDrop
             drop={featuredDrop}
             artist={featuredDrop.NftContract.Artist}
             Lotteries={featuredDrop.Lotteries}
             Auctions={featuredDrop.Auctions}
           ></FeaturedDrop>
-        )}
+        )} */}
         <h1 className='home-page__statement'>
           {welcomeMessageArray[0] + ','} <pre /> {welcomeMessageArray[1]}
         </h1>

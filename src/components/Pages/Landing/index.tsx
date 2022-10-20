@@ -1,8 +1,13 @@
-import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
+import LaunchTrailer from '@/components/LaunchTrailer';
+import Motto from '@/components/Layout/Motto';
+import Logotype from '@/components/Logotype';
 export default function LandingPage() {
   return (
     <div className='landing-page'>
-      <div className='landing-page__content'>
+      <Motto></Motto>
+      <Logotype></Logotype>
+      <LaunchTrailer></LaunchTrailer>
+      {/* <div className='landing-page__content'>
         <div className='landing-page__sage-logo'>
           <SageFullLogoSVG className='landing-page__sage-svg' />
         </div>
@@ -15,7 +20,7 @@ export default function LandingPage() {
             </a>
           </h1>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
