@@ -86,13 +86,17 @@
   font-style: normal;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: clamp(14px, 3vw, 52px);
-  line-height: 1em;
   color: c.$light;
   z-index: 2;
   position: absolute;
   bottom: 0;
   margin: 20px 20px 5%;
+
+  font-size: 32px;
+  @include b.min-width('medium') {
+    line-height: 1em;
+    font-size: clamp(14px, 3vw, 52px);
+  }
 }
 
 .drops-page__drop-artist-name {
@@ -106,13 +110,19 @@
   @include m.text-p1;
   text-transform: uppercase;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100px;
+  @include b.min-width('medium') {
+    max-width: 200px;
+  }
 }
 
 .drops-page__drop-header-title-artist {
   // font-size: clamp(8px, 1vw, 28px);
   // line-height: clamp(19px, 1em, 81px);
   font-size: clamp(8px, 1.5vw, 18px);
-  line-height: 130%;
 }
 
 .drops-page__drop-content {
@@ -160,7 +170,10 @@
 
 .drops-page__drop-artist {
   display: flex;
-  gap: 20px;
+  gap: 10px;
+  @include b.min-width('medium') {
+    gap: 20px;
+  }
 }
 
 .drops-page__drop-artist-info {

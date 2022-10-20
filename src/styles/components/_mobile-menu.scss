@@ -55,7 +55,13 @@ $menu-toggle-z: $menu-z + 1;
     line-height: 30px;
     letter-spacing: 0.1em;
 
+    position: relative;
     color: m.t(contrast2);
+    @include m.future-release {
+      top: 50%;
+      left: 70%;
+      transform: translateY(-50%);
+    }
 
     &:after {
       transition-duration: 200ms;

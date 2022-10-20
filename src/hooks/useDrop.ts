@@ -21,6 +21,9 @@ function useDrop({ drop, artist, Lotteries, Auctions }: Args) {
   const artistName: string = transformTitle(artist.username);
   const bannerImgSrc: string = drop.bannerImageS3Path;
   const dropDescription: string = drop.description;
+  // const artistLocation: string = artist.state + ',' + artist.country;
+  const country: string = artist.country;
+  const state: string = artist.state;
   const createdAt = formatDateYYMMddHHmm(drop.createdAt);
   const systemTypes = computeDropSystems({ lottery: Lotteries, auction: Auctions });
   const statusDisplay = status.toLocaleUpperCase();
@@ -43,6 +46,9 @@ function useDrop({ drop, artist, Lotteries, Auctions }: Args) {
     systemTypes,
     createdAt,
     statusDisplay,
+    // artistLocation,
+    country,
+    state,
     goToArtistOnClick,
     goToDropOnClick,
   };
