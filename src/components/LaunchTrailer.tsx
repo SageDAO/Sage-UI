@@ -2,7 +2,7 @@ import React from 'react';
 import Hero from './Hero';
 
 interface Props {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 function LaunchTrailer({ onClick }: Props) {
