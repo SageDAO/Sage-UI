@@ -66,6 +66,15 @@
   @include m.input-field;
 }
 
+.profile-panel__location-group {
+  @include m.input-group;
+}
+
+.profile-panel__location-field {
+  @include m.input-field;
+  text-transform: uppercase;
+}
+
 .profile-panel__username-group {
   @include m.input-group;
 }

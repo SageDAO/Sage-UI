@@ -164,6 +164,23 @@ export default function ProfilePanel({ isArtist }: Props) {
             className='profile-panel__email-field'
           />
         </div>
+
+        <div className='profile-panel__location-group'>
+          <select
+            value={state?.email ?? ''}
+            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            //   setState((prevState) => {
+            //     return { ...prevState, email: e.target.value.trim() };
+            //   });
+            // }}
+            // maxLength={40}
+            className='profile-panel__location-field'
+          >
+            <option value='' disabled selected>
+              Select your option
+            </option>
+          </select>
+        </div>
         <div className='profile-panel__bio-group'>
           <p className='profile-panel__bio-label'>
             about{' '}
