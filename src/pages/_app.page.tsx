@@ -19,8 +19,6 @@ import { useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
 import { infuraProvider } from 'wagmi/providers/infura';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 // set up connectors
 
