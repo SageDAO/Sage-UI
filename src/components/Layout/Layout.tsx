@@ -79,10 +79,11 @@ export default function Layout({ children, router }: Props) {
           toggleMobileMenu={toggleMobileMenu}
         />
         {children}
-        {!isCreatorsPage && !isSingleDropsPage && <Motto />}
 
         <Footer></Footer>
       </div>
+
+      {!isCreatorsPage && !isSingleDropsPage && <Motto />}
     </React.Fragment>
   );
 }
