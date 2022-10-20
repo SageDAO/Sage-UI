@@ -9,38 +9,37 @@
 .howtobuyash-header {
   @include m.text-h1;
   @include m.standard-width;
-  @include b.min-width('medium') {
-    @include m.desktop-inner-width;
+}
+
+.howtobuyash__import-button {
+  @include m.button-base;
+  @include m.theme() {
+    background-color: m.t(accent);
+    color: m.t(base);
   }
+  margin-right: auto;
+  margin-bottom: 40px;
 }
 
 .howtobuyash-text {
-  @include m.standard-width;
-  @include b.min-width('medium') {
-    @include m.desktop-inner-width;
-  }
-  @include m.text-p1;
   @include m.theme() {
+    @include m.standard-width;
+    @include m.text-p1;
+    @include m.flex-col;
     color: m.t(contrast2);
   }
 }
 
 .howtobuyash__group {
-  @include m.mobile-width;
   gap: 14px;
   display: flex;
   flex-direction: column;
-  @include b.min-width('medium') {
-    @include m.desktop-inner-width;
-  }
   margin-bottom: clamp(8px, 1.5vh, 40px);
+  @include m.standard-width;
 }
 
 .howtobuyash__earning-pixels-info {
   @include m.standard-width;
-  @include b.min-width('medium') {
-    @include m.desktop-inner-width;
-  }
   @include m.text-p1;
   @include m.theme() {
     color: m.t(contrast2);
