@@ -24,7 +24,7 @@ function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMed
       <ConditionalWrapper
         condition={true === isZoomable}
         wrapper={(children: JSX.Element) => (
-          <Zoom wrapStyle={{ width: '100%', height: '100%', aspectRatio: '487/527' }}>
+          <Zoom classDialog='custom-zoom'>
             {children}
           </Zoom>
         )}
@@ -48,10 +48,14 @@ function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMed
             <source src={src} type={type} />
           </video>
         ) : isZoomable ? (
-          <Image
+          <img
             src={src}
-            layout='fill'
-            objectFit='cover'
+            style={{
+              overflow: 'hidden',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
             draggable={false}
             className={className}
           />
@@ -61,8 +65,8 @@ function BaseMedia({ src, onClickHandler, isZoomable, type, className }: BaseMed
             layout='fill'
             objectFit='cover'
             draggable={false}
-            onClick={onClickHandler}
             className={className}
+            onClick={onClickHandler}
             style={onClickHandler ? { cursor: 'pointer' } : {}}
           />
         )}
