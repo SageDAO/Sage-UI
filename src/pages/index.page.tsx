@@ -42,7 +42,10 @@ function home({
   return (
     <div className='home-page' data-cy='home-page' data-on={coverOn}>
       <div className='home-page__cover' data-on={coverOn}>
-        <BaseMedia className='home-page__cover-src' src={'/videos/launch-trailer.mp4'}></BaseMedia>
+        <BaseMedia
+          className='home-page__cover-src'
+          src={'https://s3.us-east-2.amazonaws.com/sage.art/trailers/drop1_mobile.mp4'}
+        ></BaseMedia>
         <div onClick={removeCover} data-on={coverOn} className='home-page__cover-arrow'>
           <ArrowDownSVG className='home-page__cover-arrow-svg' data-on={coverOn}></ArrowDownSVG>
         </div>

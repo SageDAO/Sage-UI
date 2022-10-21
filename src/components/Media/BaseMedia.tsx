@@ -29,7 +29,7 @@ function BaseMedia({ src, onClickHandler, isZoomable, type, className, muted }: 
         {isVideo() ? (
           <video
             autoPlay={true}
-            muted={muted ?? true}
+            muted={true}
             loop={true}
             playsInline={true}
             style={{
