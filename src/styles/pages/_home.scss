@@ -508,17 +508,21 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   width: 100%;
 }
 
-.home-page__events-visit-news-button {
+.home-page__events-visit-button {
   @include m.theme() {
     margin-top: 20px;
     aspect-ratio: 225/35;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: m.t(accent);
-    color: m.t(base);
+    background-color: c.$grey;
+    color: m.t(contrast2);
     @include m.text-p5;
-    @include m.interact;
+    &:disabled {
+      // color: white;
+      filter: brightness(1) !important;
+    }
+    // @include m.interact;
   }
 }
 
