@@ -128,6 +128,8 @@ async function createPresetDrops(
             dropId,
             minPrice: '1',
             bannerImageS3Path: presetDrop.bannerS3Path,
+            width: 1024,
+            height: 1024,
             startDate,
             endDate,
             name: nftS3Path.split('/').pop().split('.')[0].replace('%20', ' '),
