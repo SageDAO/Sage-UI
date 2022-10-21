@@ -95,24 +95,32 @@ const auctionsApi = baseApi.injectEndpoints({
     }),
     claimAuction: builder.mutation<Date, { id: number; signer: Signer }>({
       queryFn: async ({ id, signer }, {}, _, fetchWithBQ) => {
-        console.log(`claimAuctionNft(${id})`);
-        try {
-          const contract = await getAuctionContract(signer);
-          var tx = await contract.settleAuction(id);
-          promiseToast(tx, 'NFT claimed and moved to your collection!');
-          await tx.wait();
+        console.log(`claimAuction(${id})`);
+        const contract = await getAuctionContract(signer);
+        async function updateBackend() {
+          console.log('claimAuction() :: updateBackend()');
           const claimedAt = await updateDbPrizeClaimedDate(fetchWithBQ, id);
           const auction = await contract.getAuction(id);
           await registerAuctionSale(id, auction.highestBid, auction.highestBidder, tx, signer);
           return { data: claimedAt };
+        }
+        try {
+          var tx = await contract.settleAuction(id);
+          promiseToast(tx, 'NFT claimed and moved to your collection!');
+          await tx.wait(1);
+          return await updateBackend();
         } catch (e) {
           console.error(e);
           const errMsg = extractErrorMessage(e);
-          toast.error(`Failure! ${errMsg}`);
-          return { error: { status: 500, data: null } };
+          if (errMsg == 'Auction already settled') {
+            return await updateBackend();
+          } else {
+            toast.error(`Failure! ${errMsg}`);
+            return { error: { status: 500, data: null } };
+          }
         }
       },
-      invalidatesTags: ['Auction', 'AuctionState'],
+      invalidatesTags: ['Auction', 'AuctionState', 'Prizes'],
     }),
   }),
 });

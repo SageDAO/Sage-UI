@@ -29,6 +29,7 @@ export async function registerAuctionSale(
   tx: ContractTransaction,
   signer: Signer
 ) {
+  const blockTimestamp = tx ? (await signer.provider.getBlock(tx.blockNumber)).timestamp : Math.floor(new Date().getTime() / 1000);
   await fetch(`/api/sales?action=RegisterSale`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -37,8 +38,8 @@ export async function registerAuctionSale(
       eventId: auctionId,
       amountTokens: parseFloat(ethers.utils.formatUnits(amount)),
       buyer,
-      txHash: tx.hash,
-      blockTimestamp: (await signer.provider.getBlock(tx.blockNumber)).timestamp,
+      txHash: tx ? tx.hash : null,
+      blockTimestamp,
     }),
   });
 }
