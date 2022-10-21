@@ -40,7 +40,17 @@
   flex-direction: column;
   @include m.mobile-width;
   @include b.min-width('medium') {
-    width: 50%;
+    flex: 1;
+  }
+}
+
+.privacy-page__main-left {
+  display: flex;
+  gap: clamp(24px, 10vw, 79px);
+  flex-direction: column;
+  @include m.mobile-width;
+  @include b.min-width('medium') {
+    // width: 50%;
   }
 }
 
@@ -83,10 +93,25 @@
 }
 
 .submissions-page__guidelines-text {
-  @include m.text-p1;
   @include m.theme() {
+    @include m.text-p1;
+    @include m.flex-col;
+    gap: 10px;
     color: m.t(contrast2);
   }
+}
+
+.submissions-page__guidelines-list {
+  @include m.flex-col;
+  gap: 10px;
+  list-style-type: circle;
+  padding: 20px;
+
+  li {
+  }
+}
+
+.submissions-page__guidelines-list-item {
 }
 
 .submissions-page__aspect-ratios-section {
