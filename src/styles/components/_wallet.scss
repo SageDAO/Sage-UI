@@ -102,19 +102,17 @@
       transform: scale(1.04);
     }
     cursor: pointer;
-    // @include m.button-base;
     text-transform: uppercase;
     border-radius: 15px;
     aspect-ratio: 269/51;
     width: 269px;
     height: 51px;
     background-color: m.t(contrast);
+    color: m.t(base);
     transition-duration: 30ms;
     gap: 20px;
-    // flex: 1;
     align-items: center;
     @include m.flex-row;
-    // justify-content: space-between;
     &:disabled {
       pointer-events: none;
       filter: brightness(0.6);
