@@ -33,6 +33,7 @@ const dashboardApi = baseApi.injectEndpoints({
     }),
     promoteUserToArtist: builder.mutation<boolean, { walletAddress: string; signer: Signer }>({
       queryFn: async ({ walletAddress, signer }, {}, _, fetchWithBQ) => {
+        console.log(`promoteUserToArtist(${walletAddress})`);
         const contract = await getStorageContract(signer);
         const tx = await contract.grantRole(
           ethers.utils.solidityKeccak256(['string'], ['role.artist']),

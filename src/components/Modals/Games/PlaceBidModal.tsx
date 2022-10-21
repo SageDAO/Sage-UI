@@ -65,6 +65,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
     nftPath,
     artistName,
     isStarted,
+    isRunning,
     isEnded,
     isOpenForBids,
     editionSize,
@@ -165,7 +166,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
               {!isOpenForBids && (
                 <Countdown endTime={startTime} className='games-modal__countdown'></Countdown>
               )}
-              {isOpenForBids && (
+              {isOpenForBids && isRunning && (
                 <Countdown endTime={endTime} className='games-modal__countdown'></Countdown>
               )}
             </div>
