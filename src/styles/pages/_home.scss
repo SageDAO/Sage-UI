@@ -35,6 +35,7 @@
 
     &[data-on='false'] {
       height: 0px;
+      // transform: translateY(-100%);
     }
   }
 }
@@ -49,7 +50,7 @@
     width: 51px;
     height: 51px;
     @include m.circle;
-    bottom: 5%;
+    bottom: 12%;
     position: absolute;
     @include m.interact;
     @include m.flex-center;
