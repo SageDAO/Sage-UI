@@ -227,9 +227,9 @@ async function updateOwner(id: number, response: NextApiResponse) {
       throw new Error('Offer does not exist or is not active');
     }
     const nftContract = await getNFTContract(offer.nftContractAddress);
-    const ownerAddress = await nftContract.ownerOf(offer.nftId);
+    const ownerAddress = await nftContract.ownerOf(offer.Nft.tokenId);
     console.log(
-      `updateOwner() :: Owner of token ${offer.nftId} on contract ${offer.nftContractAddress} is ${ownerAddress}`
+      `updateOwner() :: Owner of token ${offer.Nft.tokenId} on contract ${offer.nftContractAddress} is ${ownerAddress}`
     );
     if (ownerAddress == ethers.constants.AddressZero) {
       throw new Error('Token has no owner or was not found in contract');
