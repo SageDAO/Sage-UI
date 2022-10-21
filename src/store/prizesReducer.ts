@@ -45,14 +45,15 @@ const prizesApi = baseApi.injectEndpoints({
     claimLotteryPrize: builder.mutation<Date, ClaimPrizeRequest>({
       queryFn: async (args, {}, _, fetchWithBQ) => {
         try {
-          const contract = await getLotteryContract(args.signer);
-          var tx = await contract.claimPrize({
+          const claimParams = {
             lotteryId: args.lotteryId,
             winner: args.walletAddress,
             ticketNumber: args.ticketNumber,
             uri: args.uri,
             proof: toByteArray(args.proof),
-          });
+          };
+          const contract = await getLotteryContract(args.signer);
+          var tx = await contract.claimPrize(claimParams);
           promiseToast(tx, `NFT claimed and moved to your collection!`);
           await tx.wait();
           var claimedAt = await updateDbPrizeClaimedDate(
