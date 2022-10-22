@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CloseSVG from '@/public/interactive/close.svg';
 import Dropzone from 'react-dropzone';
 import AvatarEditor from 'react-avatar-editor';
 import type { SafeUserUpdate } from '@/prisma/types';
@@ -59,6 +60,9 @@ export default function ProfilePictureModal({ isOpen, closeModal }: ModalProps) 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
       <div className='profile-picture-modal'>
+        <button className='games-modal__close-button'>
+          <CloseSVG onClick={closeModal} className='games-modal__close-button-svg' />
+        </button>
         <div>
           <Dropzone onDrop={handleDrop} noClick multiple={false} noKeyboard>
             {({ getRootProps }) => (
@@ -98,9 +102,14 @@ export default function ProfilePictureModal({ isOpen, closeModal }: ModalProps) 
             className='profile-picture-modal__btn'
             onClick={handleUploadBtnClick}
           >
-            upload photo
+            upload file
           </button>
-          <button type='button' data-type='save' className='profile-picture-modal__btn' onClick={save}>
+          <button
+            type='button'
+            data-type='save'
+            className='profile-picture-modal__btn'
+            onClick={save}
+          >
             save
           </button>
         </div>
