@@ -11,7 +11,8 @@ const desktopViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_des
 
 function LaunchTrailer({ onClick }: Props) {
   const { isMobile } = useWindowDimensions();
-  return <Hero bannerOnClick={onClick} imgSrc={isMobile ? mobileViewSrc : desktopViewSrc} />;
+  const mediaSrc = isMobile ? mobileViewSrc : desktopViewSrc;
+  return <Hero bannerOnClick={onClick} imgSrc={mediaSrc} />;
 }
 
 export default LaunchTrailer;
