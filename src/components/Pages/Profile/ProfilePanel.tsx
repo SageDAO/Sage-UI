@@ -188,18 +188,10 @@ export default function ProfilePanel({ isArtist }: Props) {
         <div className='profile-panel__country-group'>
           <select
             value={String(state.country)}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   setState((prevState) => {
-            //     return { ...prevState, email: e.target.value.trim() };
-            //   });
-            // }}
-            // maxLength={40}
             onChange={handleCountrySelect}
             className='profile-panel__country-select'
           >
-            <option value='' disabled>
-              Select your country
-            </option>
+            <option value=''>Select your country</option>
             {countries.map((c) => {
               return (
                 <option key={c.name} value={c.name}>
@@ -213,17 +205,9 @@ export default function ProfilePanel({ isArtist }: Props) {
           <select
             value={String(state.state)}
             onChange={handleStateSelect}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   setState((prevState) => {
-            //     return { ...prevState, email: e.target.value.trim() };
-            //   });
-            // }}
-            // maxLength={40}
             className='profile-panel__state-select'
           >
-            <option value='' disabled>
-              Select your state
-            </option>
+            <option value=''>Select your state</option>
             {stateOptions?.map((s) => {
               return (
                 <option key={s} value={s}>
