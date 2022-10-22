@@ -4,6 +4,8 @@ import { parameters } from '@/constants/config';
 import { toast } from 'react-toastify';
 import useModal from './useModal';
 
+const designatedChain = parameters.NETWORK_NAME;
+
 export default function useWatchNetwork() {
   const [isLoading, setIsLoading] = useState(false);
   const { chain: activeChain } = useNetwork();
@@ -12,6 +14,7 @@ export default function useWatchNetwork() {
     openModal: openNetworkModal,
     closeModal: closeNetworkModal,
   } = useModal();
+  console.log(parameters);
 
   const { chains, error, pendingChainId, switchNetwork } = useSwitchNetwork();
 
@@ -23,7 +26,7 @@ export default function useWatchNetwork() {
   function handleIncorrectNetwork() {
     if (!activeChain) return;
     if (activeChain.id !== +parameters.CHAIN_ID) {
-      toast.warn('incorrect network!', {
+      toast.warn(`Please change your network to ${designatedChain} `, {
         toastId: 'networkChange',
         autoClose: false,
         closeOnClick: false,
