@@ -6,8 +6,8 @@ interface Props {
   onClick?: () => void;
 }
 
-const mobileViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel.mp4';
-const desktopViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel.mp4';
+const mobileViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_mobile.mp4';
+const desktopViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4';
 
 function LaunchTrailer({ onClick }: Props) {
   const { isMobile } = useWindowDimensions();

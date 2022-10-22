@@ -44,7 +44,7 @@ function home({
       <div className='home-page__cover' data-on={coverOn}>
         <BaseMedia
           className='home-page__cover-src'
-          src={'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel.mp4'}
+          src={'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_mobile.mp4'}
         ></BaseMedia>
         <div onClick={removeCover} data-on={coverOn} className='home-page__cover-arrow'>
           <ArrowDownSVG className='home-page__cover-arrow-svg' data-on={coverOn}></ArrowDownSVG>
