@@ -14,7 +14,6 @@ export default function useWatchNetwork() {
     openModal: openNetworkModal,
     closeModal: closeNetworkModal,
   } = useModal();
-  console.log(parameters);
 
   const { chains, error, pendingChainId, switchNetwork } = useSwitchNetwork();
 
