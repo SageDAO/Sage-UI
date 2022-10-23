@@ -162,7 +162,10 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
         <div className='games-modal__body'>
           <section className='games-modal__main'>
             <div className='games-modal__main-img-container'>
-              <BaseMedia src={nftPath} isZoomable={true} />
+              <BaseMedia
+                src={'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4'}
+                // isZoomable={true}
+              />
               {!isOpenForBids && (
                 <Countdown endTime={startTime} className='games-modal__countdown'></Countdown>
               )}

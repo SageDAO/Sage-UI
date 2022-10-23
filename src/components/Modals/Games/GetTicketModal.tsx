@@ -178,7 +178,10 @@ function GetTicketModal({
                   setSelectedNftIndex={setSelectedNftIndex}
                 ></LotterySlider>
               ) : (
-                <BaseMedia src={lottery.Nfts[selectedNftIndex].s3PathOptimized} isZoomable={true} />
+                <BaseMedia
+                  src={'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4'}
+                  // isZoomable={true}
+                />
               )}
               {isActive && (
                 <Countdown endTime={lottery.endTime} className='games-modal__countdown'></Countdown>
