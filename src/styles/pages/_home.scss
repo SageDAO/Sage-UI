@@ -25,17 +25,13 @@
     z-index: 100;
     @include m.flex-center;
     @include m.transition-cover;
-    // @include m.flex-center;
-
     @include b.min-width('medium') {
       display: none;
       position: absolute;
       z-index: 200;
     }
-
     &[data-on='false'] {
       height: 0px;
-      // transform: translateY(-100%);
     }
   }
 }
@@ -55,7 +51,8 @@
     @include m.interact;
     @include m.flex-center;
     // @include m.transition-cover;
-    transition-duration: 3000ms;
+    transition-duration: 6000ms;
+    transition-timing-function: ease-in;
     &[data-on='true'] {
       opacity: 1;
       width: 51px;
@@ -73,7 +70,7 @@
   @include m.transition-base;
 
   &[data-on='false'] {
-    transform: rotate(180deg);
+    transform: rotate(-180deg);
     // height: 0;
   }
 }
