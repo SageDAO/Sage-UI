@@ -12,16 +12,14 @@ const desktopViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_des
 
 const videoJsOptions = {
   autoplay: true,
+  controls: true,
+  controlslist: 'nodownload',
   loop: true,
-  controls: false,
-  responsive: false,
+  playsinline: true,
+  preload: 'metadata',
   muted: true,
   poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
-    {
-      src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/out/hls/drop1_mobile.m3u8',
-      type: 'application/x-mpegURL',
-    },
     {
       src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
       type: 'video/mp4'
