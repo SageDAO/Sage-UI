@@ -27,7 +27,7 @@ type Headers =
   | 'YOUR OFFERS'
   | 'EDIT YOUR PROFILE'
   | 'UPLOAD AN ARTWORK'
-  | 'YOUR COLLECTED NFTS ON SAGE';
+  | 'COLLECTION';
 
 function parseQuery(queryString) {
   var query = {};
@@ -62,7 +62,7 @@ function profile() {
 
   useEffect(() => {
     if (selectedTabIndex == 0) setHeader('EDIT YOUR PROFILE');
-    if (selectedTabIndex == 1) setHeader('YOUR COLLECTED NFTS ON SAGE');
+    if (selectedTabIndex == 1) setHeader('COLLECTION');
     if (selectedTabIndex == 2) {
       if (subtabIndex == 0) {
         setHeader('YOUR OFFERS');
