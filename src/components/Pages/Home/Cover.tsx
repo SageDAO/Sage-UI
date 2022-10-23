@@ -41,7 +41,7 @@ function Cover(props: Props) {
       onTouchMove={(e) => {
         if (isDraggingg) {
           const endPos = getPositionY(e);
-          const triggerPos = window.innerHeight * 0.9;
+          const triggerPos = window.innerHeight * 0.5;
           if (endPos > triggerPos) {
             props.removeCover();
           }
