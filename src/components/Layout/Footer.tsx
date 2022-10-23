@@ -37,10 +37,10 @@ export default function Footer() {
                   <span onClick={pushToSubmissions}>Artists Apply</span>
                 </h1>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='mailto:contact@sage.art'>Business Inquiry</a>
+                  <a href='mailto:business@sage.art'>Business Inquiry</a>
                 </h1>
                 <h1 className='footer__middle-item-content-link'>
-                  <a href='mailto:contact@sage.art'>Support</a>
+                  <a href='mailto:support@sage.art'>Support</a>
                 </h1>
               </div>
             </ul>
