@@ -9,7 +9,7 @@ interface Props {
 
 const videoJsOptions = {
   autoplay: true,
-  controls: true,
+  controls: false,
   controlslist: 'nodownload',
   loop: true,
   playsinline: true,
@@ -19,7 +19,7 @@ const videoJsOptions = {
   sources: [
     {
       src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
-      type: 'video/mp4'
+      type: 'video/mp4',
     },
   ],
 };
