@@ -13,10 +13,14 @@ const videoJsOptions = {
   controls: false,
   responsive: false,
   muted: true,
+  poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
     {
+      src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/out/hls/drop1_mobile.m3u8',
+      type: 'application/x-mpegURL',
+    },
+    {
       src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
-      // type: 'application/x-mpegURL',
       type: 'video/mp4',
     },
   ],
