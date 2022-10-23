@@ -38,7 +38,6 @@ function home({
     setCoverOn(false);
     if ('vibrate' in navigator) {
       const vibrates = navigator.vibrate(1000);
-      console.log(vibrates);
     }
   }
   const { pushToCreators, pushToDrops } = useSageRoutes();

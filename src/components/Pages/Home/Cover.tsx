@@ -1,6 +1,6 @@
 import VideoJS from '@/components/Media/VideoJS';
 import ArrowDownSVG from '@/public/interactive/arrow-down.svg';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   removeCover: () => void;
@@ -28,7 +28,6 @@ function getPositionY(e: React.TouchEvent<HTMLDivElement>) {
 
 function Cover(props: Props) {
   const [isDraggingg, setIsDragging] = useState(false);
-  const [] = useState(0);
 
   return (
     <div
