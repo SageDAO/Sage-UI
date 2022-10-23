@@ -17,6 +17,7 @@ const configuration: Configuration = {
     REWARDS_ADDRESS: '0xC1F9787079a83E444836450b8f3b31A9D5D3cBad',
     AUCTION_ADDRESS: '0xC99A4a7a2222fcdc488D15Bda9f9A95D4f59bF0C',
     ASHTOKEN_ADDRESS: '0x4afD23683118561B39084Cc26BaE966e03033174', // MOCK Contract
+    APP_URL: 'sage-dev.vercel.app',
   },
 
   staging: {
@@ -31,6 +32,7 @@ const configuration: Configuration = {
     NFTFACTORY_ADDRESS: '0x8a26e829c3387bB933d295E70FC5Eb29A9f25841',
     MARKETPLACE_ADDRESS: '0xEfbc3Af631Db2a6F94C2c6336A02b08480e12A61',
     STORAGE_ADDRESS: '0xACb2d936daD56A254a037E28e80BB42Cd86cC042',
+    APP_URL: 'sage-staging.vercel.app',
   },
 };
 

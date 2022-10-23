@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
 import { infuraProvider } from 'wagmi/providers/infura';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
 // set up connectors
 
@@ -25,7 +26,8 @@ const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
 ]);
 
 const connectors = [
-  new InjectedConnector({
+  new MetaMaskConnector({
+    options: { shimDisconnect: true, shimChainChangedDisconnect: true },
     chains,
   }),
   new WalletConnectConnector({

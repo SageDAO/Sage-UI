@@ -14,6 +14,7 @@ export interface Parameters {
   NFTFACTORY_ADDRESS: string;
   MARKETPLACE_ADDRESS: string;
   STORAGE_ADDRESS: string;
+  APP_URL: string;
 }
 
 export interface Configuration {

@@ -1,8 +1,5 @@
-import { PfpImage } from './Media/BaseMedia';
-import { useConnect, useDisconnect } from 'wagmi';
+import { useDisconnect } from 'wagmi';
 import { Props as ModalProps } from '@/components/Modals';
-import Image from 'next/image';
-import PersonalizedMessage from './PersonalizedMessage';
 import useSignIn from '@/hooks/useSignIn';
 import WalletConnectSVG from '@/public/icons/walletconnect.svg';
 import MetamaskSVG from '@/public/icons/metamask.svg';
@@ -10,6 +7,7 @@ import useSAGEAccount from '@/hooks/useSAGEAccount';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import ProfileDisplay from './ProfileDisplay';
 import { useSignOutMutation } from '@/store/usersReducer';
+import MetamaskButton from './Web3/MetamaskButton';
 
 interface Props {
   closeModal?: ModalProps['closeModal'];
@@ -28,7 +26,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
     connectors,
   } = useSAGEAccount();
   const { pushToProfile, pushToMintCreation, pushToCollection, pushToHome } = useSageRoutes();
-  const showWalletSelection: boolean = Boolean(!isWalletConnected);
+  const showWalletSelection: boolean = Boolean(!isSignedIn);
   const showAuthSection: boolean = Boolean(isWalletConnected && isSignedIn);
   const [signOut] = useSignOutMutation();
   useSignIn(isOpen);
@@ -44,19 +42,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   return (
     <div className='wallet'>
       <div className='wallet__user-section-wrapper'>
-        {/* <section className='wallet__header'>
-          <h1 className='wallet__header-prompt'>
-            <PersonalizedMessage></PersonalizedMessage>
-          </h1>
-          {showWalletSelection && (
-            <h1 className='wallet__header-info'>
-              By connecting your wallet, you agree
-              <pre />
-              to our terms of service and privacy policy.
-            </h1>
-          )}
-        </section> */}
-        {showWalletSelection && (
+        {showAuthSection && (
           <section className='wallet__wallets '>
             {connectors.map((c) => {
               function onClick() {
@@ -64,6 +50,14 @@ export default function Wallet({ closeModal, isOpen }: Props) {
               }
               const className = `wallet__wallet-item wallet__${c.name}`;
               if (!c.ready) return null;
+              if (c.name == 'MetaMask')
+                return (
+                  <MetamaskButton
+                    connector={c}
+                    disabledCondition={isWalletConnecting}
+                    dataLoading={isWalletConnecting && 'true'}
+                  />
+                );
               return (
                 <button
                   className={className}
@@ -72,17 +66,8 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                   data-loading={isWalletConnecting && 'true'}
                   onClick={onClick}
                 >
-                  {c.name == 'MetaMask' ? (
-                    <>
-                      <MetamaskSVG className='wallet__wallet-icon' />
-                      {c.name}
-                    </>
-                  ) : (
-                    <>
-                      <WalletConnectSVG className='wallet__wallet-icon' />
-                      {c.name}
-                    </>
-                  )}
+                  <WalletConnectSVG className='wallet__wallet-icon' />
+                  {c.name}
                 </button>
               );
             })}
