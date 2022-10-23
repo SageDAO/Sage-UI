@@ -13,6 +13,7 @@ import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 import ArrowDownSVG from '@/public/interactive/arrow-down.svg';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import useWindowDimensions from '@/hooks/useWindowSize';
+import VideoJS from '@/components/Media/VideoJS';
 
 interface Props extends Awaited<ReturnType<typeof getHomePageData>> {
   // featuredDrop: Drop_include_GamesAndArtist;
@@ -39,13 +40,25 @@ function home({
   }
   const { pushToCreators, pushToDrops } = useSageRoutes();
 
+  const videoJsOptions = {
+    autoplay: true,
+    loop: true,
+    controls: false,
+    responsive: false,
+    muted: true,
+    sources: [
+      {
+        src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
+        // type: 'application/x-mpegURL',
+        type: 'video/mp4',
+      },
+    ],
+  };
+
   return (
     <div className='home-page' data-cy='home-page' data-on={coverOn}>
       <div className='home-page__cover' data-on={coverOn}>
-        <BaseMedia
-          className='home-page__cover-src'
-          src={'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_mobile.mp4'}
-        ></BaseMedia>
+        <VideoJS options={videoJsOptions} onReady={() => {}} />
         <div onClick={removeCover} data-on={coverOn} className='home-page__cover-arrow'>
           <ArrowDownSVG className='home-page__cover-arrow-svg' data-on={coverOn}></ArrowDownSVG>
         </div>
