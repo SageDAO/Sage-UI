@@ -10,10 +10,9 @@ import NewArtworks from '@/components/Pages/Home/NewArtworks';
 import Logotype from '@/components/Logotype';
 import LaunchTrailer from '@/components/LaunchTrailer';
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
-import ArrowDownSVG from '@/public/interactive/arrow-down.svg';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import useWindowDimensions from '@/hooks/useWindowSize';
-import VideoJS from '@/components/Media/VideoJS';
+import Cover from '@/components/Pages/Home/Cover';
 
 interface Props extends Awaited<ReturnType<typeof getHomePageData>> {
   // featuredDrop: Drop_include_GamesAndArtist;
@@ -37,32 +36,16 @@ function home({
   const welcomeMessageArray = welcomeMessage.split(',');
   function removeCover() {
     setCoverOn(false);
+    if ('vibrate' in navigator) {
+      const vibrates = navigator.vibrate(1000);
+      console.log(vibrates);
+    }
   }
   const { pushToCreators, pushToDrops } = useSageRoutes();
 
-  const videoJsOptions = {
-    autoplay: true,
-    loop: true,
-    controls: false,
-    responsive: false,
-    muted: true,
-    sources: [
-      {
-        src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
-        // type: 'application/x-mpegURL',
-        type: 'video/mp4',
-      },
-    ],
-  };
-
   return (
     <div className='home-page' data-cy='home-page' data-on={coverOn}>
-      <div className='home-page__cover' data-on={coverOn}>
-        <VideoJS options={videoJsOptions} onReady={() => {}} />
-        <div onClick={removeCover} data-on={coverOn} className='home-page__cover-arrow'>
-          <ArrowDownSVG className='home-page__cover-arrow-svg' data-on={coverOn}></ArrowDownSVG>
-        </div>
-      </div>
+      <Cover coverOn={coverOn} removeCover={removeCover} />
       <div data-on={isMobile ? coverOn : false} className='home-page__main'>
         <Logotype></Logotype>
         <LaunchTrailer
