@@ -13,9 +13,18 @@ interface BaseMediaProps {
   type?: string;
   className?: string;
   muted?: boolean;
+  autoPlay?: boolean;
 }
 
-function BaseMedia({ src, onClickHandler, isZoomable, type, className, muted }: BaseMediaProps) {
+function BaseMedia({
+  src,
+  autoPlay,
+  onClickHandler,
+  isZoomable,
+  type,
+  className,
+  muted,
+}: BaseMediaProps) {
   const isVideo = (): boolean => {
     return src?.toLowerCase().endsWith('mp4');
   };
@@ -28,7 +37,7 @@ function BaseMedia({ src, onClickHandler, isZoomable, type, className, muted }: 
       >
         {isVideo() ? (
           <video
-            autoPlay={true}
+            autoPlay={autoPlay ?? true}
             muted={true}
             loop={true}
             playsInline={true}
