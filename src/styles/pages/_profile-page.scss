@@ -144,12 +144,12 @@
 
 .profile-page__pfp-section-role {
   @include m.theme {
-    @include m.text-tag;
     background-color: m.t(contrast);
     color: m.t(base);
     @include m.pill;
     @include m.flex-row;
     @include m.flex-center;
+    @include m.text-tag;
     width: min-content;
     text-align: center;
     padding: 2px 8px;
