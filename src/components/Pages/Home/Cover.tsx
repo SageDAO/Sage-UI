@@ -1,3 +1,4 @@
+import Motto from '@/components/Layout/Motto';
 import Logotype from '@/components/Logotype';
 import VideoJS from '@/components/Media/VideoJS';
 import ArrowDownSVG from '@/public/interactive/arrow-down.svg';
@@ -55,6 +56,7 @@ function Cover(props: Props) {
       <div data-on={props.coverOn} className='home-page__cover-logotype-container'>
         <Logotype></Logotype>
       </div>
+      <Motto></Motto>
       <VideoJS options={videoJsOptions} onReady={() => {}} />
       <div className='home-page__cover-arrow-container'>
         <div onClick={props.removeCover} data-on={props.coverOn} className='home-page__cover-arrow'>

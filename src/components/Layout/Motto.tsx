@@ -5,6 +5,5 @@ interface Props {
 }
 
 export default function Motto({ dataColor }: Props) {
-  return null;
   return <div className='motto'>SAGE™️ - ACCELERATING WEB 3</div>;
 }
