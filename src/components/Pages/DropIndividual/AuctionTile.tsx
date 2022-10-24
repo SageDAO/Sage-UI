@@ -39,7 +39,7 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
   const { displayValue: countdownUntilOpen } = useCountdown({ targetDate: startTime });
   const { displayValue: countdownUntilClose } = useCountdown({ targetDate: endTime });
 
-  if (!auctionState) return null;
+  // if (!auctionState) return null;
 
   return (
     <div onClick={openModal} className={className}>
