@@ -33,7 +33,7 @@ const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
       };
     },
   }),
-  infuraProvider({ apiKey: process.env.INFURA_ID }),
+  // infuraProvider({ apiKey: process.env.INFURA_ID }),
   alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
 ]);
 
