@@ -231,6 +231,8 @@
   margin-top: 50px;
   @include menu-tab;
   color: #696969;
+  border: 1px solid #696969;
+  width: max-content;
 }
 
 .profile-page__tabs-tab-notifications-counter {
