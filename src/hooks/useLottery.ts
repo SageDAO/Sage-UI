@@ -22,7 +22,13 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
   const selectedNftEditionsCount: number = selectedNft.numberOfEditions;
   const selectedNftName: string = transformTitle(selectedNft.name);
   const selectedNftEditionsText: string = selectedNftEditionsCount > 1 ? 'editions' : 'edition';
+
+  let duration = Number(lottery.endTime) - Number(lottery.startTime);
+  duration = duration / 1000;
+  duration = duration / 60 / 60;
   const { data: lotteryWinners } = useGetWinnersQuery(lottery.id, { skip: !isEnded });
+  const durationDisplay = `${duration} hour${duration > 1 ? 's' : ''}`;
+  const gameInfo = `Users can enter a live drawing for ${durationDisplay}. At entry, users will be asked to pay the sales price. Once the entry period is closed, the drawing takes place and SAGE selects the game winner through our RNG integration with Chainlink. Users that don't win will receive their refund automatically when gas is at 10 GWEI or below.`;
 
   return {
     isLive,
@@ -37,5 +43,8 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
     lotteryWinners,
     hasMaxTicketsPerUser,
     selectedNftEditionsCount,
+    duration,
+    durationDisplay,
+    gameInfo,
   };
 }

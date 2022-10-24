@@ -25,6 +25,7 @@ import ClaimRefundButton from '@/components/Pages/Profile/ClaimRefundButton';
 import CheckSVG from '@/public/icons/check.svg';
 import { useRouter } from 'next/router';
 import useSAGEAccount from '@/hooks/useSAGEAccount';
+import useLottery from '@/hooks/useLottery';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -83,6 +84,8 @@ function GetTicketModal({
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   const editionsCount: number = lottery.Nfts[selectedNftIndex].numberOfEditions;
   const editionsText: string = editionsCount > 1 ? 'editions' : 'edition';
+
+  const { gameInfo } = useLottery({ lottery, nfts: lottery.Nfts, selectedIndex: 0 });
 
   function handleTicketSubClick() {
     if (desiredTicketAmount == 1) {
@@ -191,9 +194,9 @@ function GetTicketModal({
                   {editionsCount} {editionsText}
                 </span>
               </span>
-              <h1 className='games-modal__game-name'>
+              <p className='games-modal__game-name'>
                 {transformTitle(lottery.Nfts[selectedNftIndex].name)}
-              </h1>
+              </p>
               <p className='games-modal__game-description'>
                 {lottery.Nfts[selectedNftIndex].description ||
                   'This artwork has no description provided.'}
@@ -202,16 +205,12 @@ function GetTicketModal({
                 <div className='games-modal__system-icon-container'>
                   <System type={systemType}></System>
                 </div>
-                <h1 className='games-modal__system-info'>
-                  This is a fair drop mechanic. By purchasing one or more tickets for this drop, you
-                  have the opportunity to be selected to buy this NFT. Losing tickets will be
-                  refunded.
-                </h1>
+                <p className='games-modal__system-info'>{gameInfo}</p>
               </div>
 
               {!isStarted && !isEnded && (
                 <div className='games-modal__upcoming-section'>
-                  <h1 className='games-modal__countdown-label'>Starts in</h1>
+                  <p className='games-modal__countdown-label'>Starts in</p>
                   <Countdown
                     endTime={lottery.startTime}
                     className='games-modal__countdown'
@@ -222,12 +221,12 @@ function GetTicketModal({
               {isStarted && !isEnded && (
                 <div className='games-modal__live-section'>
                   <div className='games-modal__ticket-cost-group'>
-                    <h1 className='games-modal__ticket-cost-label'>entry cost</h1>
-                    <h1 className='games-modal__ticket-cost-value'>
+                    <p className='games-modal__ticket-cost-label'>entry cost</p>
+                    <p className='games-modal__ticket-cost-value'>
                       {lottery.costPerTicketTokens * desiredTicketAmount} ASH
                       {lottery.costPerTicketPoints > 0 &&
                         ` + ${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`}
-                    </h1>
+                    </p>
                   </div>
                   <div className='games-modal__tickets-controls'>
                     <MinusSVG onClick={handleTicketSubClick} className='games-modal__tickets-sub' />
@@ -252,9 +251,9 @@ function GetTicketModal({
               )}
               {winners && winners.length > 0 && (
                 <>
-                  <h1 className='games-modal__winners-label'>
+                  <p className='games-modal__winners-label'>
                     winner{winners.length > 1 ? 's' : ''}
-                  </h1>
+                  </p>
                   <div className='games-modal__winners-list'>
                     {winners.map((winner: any) => (
                       <div key={winner}>
@@ -277,7 +276,7 @@ function GetTicketModal({
               )}
               {refund && (
                 <>
-                  <h1 className='games-modal__winners-label'>refund</h1>
+                  <p className='games-modal__winners-label'>refund</p>
                   <div className='games-modal__winners-list'>
                     {refund.refundableTokens} ASH &nbsp; &nbsp;
                     <ClaimRefundButton refund={refund} />

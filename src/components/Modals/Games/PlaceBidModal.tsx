@@ -78,6 +78,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
     buttonText,
     description,
     prize,
+    gameInfo,
   } = useAuction({ auction, artist, walletAddress: walletAddress as string });
 
   function toggleBidHistory() {
@@ -172,26 +173,26 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
             </div>
             <div className='games-modal__main-content'>
               <div>
-                <h1 className='games-modal__drop-name'>
+                <p className='games-modal__drop-name'>
                   {transformTitle(dropName)} by {artistName}
-                </h1>
-                <h1 className='games-modal__game-name'>{nftName}</h1>
+                </p>
+                <p className='games-modal__game-name'>{nftName}</p>
               </div>
               <p className='games-modal__game-description'>{description}</p>
               <div className='games-modal__system'>
                 <div className='games-modal__system-icon-container'>
                   <System type='auction'></System>
                 </div>
-                <h1 className='games-modal__system-info'>This is an auction</h1>
+                <p className='games-modal__system-info'>{gameInfo}</p>
               </div>
               {isEnded && walletAddress && walletAddress == highestBidder && (
                 <div style={{ marginBottom: '25px' }}>
                   <div className='games-modal__bid-info-group'>
                     <div className='games-modal__highest-bid'>
-                      <h1 className='games-modal__highest-bid-label'>WINNER</h1>
-                      <h1 className='games-modal__highest-bid-value'>
+                      <p className='games-modal__highest-bid-label'>WINNER</p>
+                      <p className='games-modal__highest-bid-value'>
                         {shortenAddress(highestBidder)}
-                      </h1>
+                      </p>
                       &nbsp; &nbsp;
                       <ClaimPrizeButton gamePrize={prize} />
                     </div>
@@ -202,8 +203,8 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                 <div>
                   <div className='games-modal__bid-info-group'>
                     <div className='games-modal__highest-bid'>
-                      <h1 className='games-modal__highest-bid-label'>Highest Bid</h1>
-                      <h1 className='games-modal__highest-bid-value'>{highestBid} ASH</h1>
+                      <p className='games-modal__highest-bid-label'>Highest Bid</p>
+                      <p className='games-modal__highest-bid-value'>{highestBid} ASH</p>
                     </div>
                     <button
                       onClick={toggleBidHistory}
@@ -220,7 +221,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
               )}
               {!isStarted && !isEnded && (
                 <div className='games-modal__upcoming-section'>
-                  <h1 className='games-modal__countdown-label'>Starts in</h1>
+                  <p className='games-modal__countdown-label'>Starts in</p>
                   <Countdown
                     endTime={auction.startTime}
                     className='games-modal__countdown'
