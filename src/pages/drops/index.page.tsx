@@ -10,8 +10,6 @@ interface Props {
   drops: Awaited<ReturnType<typeof getDropsPageData>>;
 }
 
-
-
 function drops({ drops }: Props) {
   return (
     <div className='drops-page'>
@@ -20,12 +18,9 @@ function drops({ drops }: Props) {
         <div className='drops-page__subheader'>
           <div className='drops-page__subheader-top'>
             <div className='drops-page__subheader-content'>
-              <h1 className='drops-page__subheader-label'>
-                SAGE-Curated <br /> live and upcoming drops.
-              </h1>
+              <h1 className='drops-page__subheader-label'>UPCOMING AND LIVE DROPS</h1>
               <h2 className='drops-page__subheader-info'>
-                Drops are carefully curated to meet <br /> the standards and new structures in{' '}
-                <br /> NFT assets.
+                HIGHLIGHTING THE LEADING ARTISTS TO FOR THE COMMUNITY TO COLLECT ON SAGE.
               </h2>
             </div>
           </div>
