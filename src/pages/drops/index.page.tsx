@@ -20,7 +20,7 @@ function drops({ drops }: Props) {
             <div className='drops-page__subheader-content'>
               <h1 className='drops-page__subheader-label'>UPCOMING AND LIVE DROPS</h1>
               <h2 className='drops-page__subheader-info'>
-                HIGHLIGHTING THE LEADING ARTISTS TO FOR THE COMMUNITY TO COLLECT ON SAGE.
+                HIGHLIGHTING THE LEADING ARTISTS FOR THE COMMUNITY TO COLLECT ON SAGE.
               </h2>
             </div>
           </div>
