@@ -47,12 +47,7 @@
     position: relative;
     margin-right: auto;
     margin-left: auto;
-    @include m.mobile-width;
-    // margin-top: clamp(24px, 10vw, 111px);
-    // margin-bottom: clamp(10px, 5vw, 50px);
-    @include b.min-width('medium') {
-      @include m.desktop-inner-width;
-    }
+    @include m.standard-width;
   }
 
   &__right-dot {
