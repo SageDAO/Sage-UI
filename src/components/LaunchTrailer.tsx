@@ -1,14 +1,16 @@
-import useWindowDimensions from '@/hooks/useWindowSize';
 import React from 'react';
-import Hero from './Hero';
 import VideoJS from './Media/VideoJS';
 
 interface Props {
   onClick?: () => void;
 }
 
-const mobileViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_mobile.mp4';
-const desktopViewSrc = 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4';
+const isFirefox = () => {
+  if (typeof window !== "undefined") {
+    return window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+  }
+  return false;
+}
 
 const videoJsOptions = {
   autoplay: true,
@@ -17,8 +19,8 @@ const videoJsOptions = {
   loop: true,
   playsinline: true,
   preload: 'metadata',
-  muted: true,
-  poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
+  muted: !isFirefox(),
+  // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
     {
       src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
@@ -27,15 +29,10 @@ const videoJsOptions = {
   ],
 };
 
-function LaunchTrailer({ onClick }: Props) {
-  const { isMobile } = useWindowDimensions();
-  const mediaSrc = isMobile ? mobileViewSrc : desktopViewSrc;
-  //return <Hero bannerOnClick={onClick} imgSrc={mediaSrc} />;
+export default function LaunchTrailer({ onClick }: Props) {
   return (
-    <div className='hero'>
+    <div className='hero' onClick={onClick}>
       <VideoJS options={videoJsOptions} onReady={() => {}} />
     </div>
   );
 }
-
-export default LaunchTrailer;
