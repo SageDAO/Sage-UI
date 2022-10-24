@@ -232,7 +232,7 @@
   width: min-content;
 }
 
-.games-modal__countdown {
+@mixin countdown {
   @include m.theme() {
     background-color: m.t(base);
     color: m.t(accent);
@@ -240,7 +240,27 @@
     flex: none;
     width: max-content;
     padding: 10px 20px;
+    @content;
+
+    // &--float {
+    // position: absolute;
+    // background-color: red;
+    // top: 0;
+    // right: 0;
+    // }
   }
+}
+
+.games-modal__countdown {
+  @include countdown;
+}
+
+.games-modal__countdown--float {
+  @include countdown;
+  background: transparent;
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
 }
 
 .games-modal__countdown-label {

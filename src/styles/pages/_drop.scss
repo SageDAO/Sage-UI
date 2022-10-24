@@ -38,6 +38,9 @@ strong {
 .drop-page__drop-info-description {
   @include m.text-p3;
   text-transform: none;
+  @include b.min-width('medium') {
+    max-width: 60%;
+  }
 }
 
 .drop-page__artist-pfp {

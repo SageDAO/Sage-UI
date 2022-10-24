@@ -112,7 +112,7 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
               <h1 className='drop-page__header-drop-name'>
                 <i className='drop-page__header-drop-name-italic'>{dropName},</i> by {artistName}
               </h1>
-              <p className='drop-page__header-drop-description'>{dropDescription}</p>
+              {/* <p className='drop-page__header-drop-description'>{dropDescription}</p> */}
               <div className='drop-page__header-drop-details'>
                 <p className='drop-page__header-drop-details-item'>
                   <strong>Minted by:</strong> {artistName}
