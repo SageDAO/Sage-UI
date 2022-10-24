@@ -46,7 +46,7 @@
     text-transform: uppercase;
     cursor: pointer;
     background: transparent;
-    color: m.t(contrast);
+    color: inherit;
     letter-spacing: 0.15em;
     position: relative;
     // @include m.disable;

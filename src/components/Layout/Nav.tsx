@@ -57,14 +57,6 @@ export default function Nav() {
             <div className='nav__personal'>
               {isSignedIn ? (
                 <>
-                  {/* <div onClick={pushToProfile} className='nav__personal-pfp-container'>
-                    <PfpImage className='nav__personal-pfp-src' src={userData?.profilePicture} />
-                  </div>
-
-                  <h1 className='nav__personal-message'>
-                    <PersonalizedMessage />
-                  </h1> */}
-
                   <ProfileDisplay />
                 </>
               ) : (

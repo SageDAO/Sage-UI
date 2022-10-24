@@ -80,6 +80,12 @@ strong {
   }
 }
 
+.drop-page__header-drop-description {
+  @include b.min-width('medium') {
+    max-width: 50%;
+  }
+}
+
 .drop-page__share-button {
   @include m.theme() {
     @include m.button-base;

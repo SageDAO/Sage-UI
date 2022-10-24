@@ -130,7 +130,7 @@
 .profile-page__pfp-section {
   @include m.flex-row;
   @include m.theme() {
-    color: m.t(contrast);
+    color: inherit;
     gap: 10px;
     align-items: center;
   }
