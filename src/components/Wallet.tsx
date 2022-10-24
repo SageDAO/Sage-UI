@@ -71,7 +71,12 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                       <WalletConnectSVG className='wallet__wallet-icon' />
                     </>
                   )}
-                  {c.name}
+                  <p className='wallet__wallet-item-name'>
+                    {c.name}
+                    <span className='wallet__agreement-text'>
+                      BY CONNECTING YOUR WALLET, YOU AGREE TO OUR AND PRIVACY POLICY.
+                    </span>
+                  </p>
                 </button>
               );
             })}

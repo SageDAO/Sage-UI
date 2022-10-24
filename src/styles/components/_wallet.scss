@@ -127,6 +127,22 @@
   }
 }
 
+.wallet__wallet-item-name {
+  @include m.flex-col;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.wallet__agreement-text {
+  font-style: normal;
+  @include m.flex-row;
+  align-items: flex-start;
+  text-align: left;
+  font-weight: 400;
+  font-size: 6px;
+  line-height: 130%;
+}
+
 .wallet__WalletConnect {
 }
 
@@ -134,14 +150,18 @@
   @include m.theme() {
     // flex: 1;
     margin-left: 20px;
-    width: 30px;
-    height: 30px;
+    width: 42px;
+    height: 42px;
     // width: min(40vw, 100px);
     // height: min(40vw, 100px);
     // height: 120px;
     // position: relative;
     color: m.t(base);
   }
+}
+
+.strong {
+  font-weight: 600;
 }
 
 .wallet__wallet-name {
