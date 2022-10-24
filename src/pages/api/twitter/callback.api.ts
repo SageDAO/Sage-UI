@@ -17,7 +17,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { address: walletAddress } = session!;
 
   try {
-    if (state !== 'curated') return res.status(500).send("State isn't matching");
+    if (state !== process.env.TWITTER_STATE_SECRET)
+      return res.status(500).send("State isn't matching");
     await authClient.generateAuthURL({
       state: process.env.TWITTER_STATE_SECRET as string,
       code_challenge: process.env.TWITTER_CODE_SECRET as string,
