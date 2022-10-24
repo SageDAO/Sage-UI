@@ -11,6 +11,7 @@
 
 .submissions-page {
   @include m.page;
+  margin-bottom: 10vh;
 }
 
 .submissions-page__logotype-container {
@@ -108,10 +109,8 @@
   padding: 20px;
 
   li {
+    @include m.text-p4;
   }
-}
-
-.submissions-page__guidelines-list-item {
 }
 
 .submissions-page__aspect-ratios-section {

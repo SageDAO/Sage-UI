@@ -131,9 +131,9 @@
   @include m.flex-row;
   @include m.theme() {
     color: m.t(contrast);
+    gap: 10px;
+    align-items: center;
   }
-  gap: 10px;
-  align-items: center;
 }
 
 .profile-page__pfp-section-username {
@@ -144,7 +144,7 @@
 
 .profile-page__pfp-section-role {
   @include m.theme {
-    @include m.text-p5;
+    @include m.text-tag;
     background-color: m.t(contrast);
     color: m.t(base);
     @include m.pill;
@@ -152,7 +152,7 @@
     @include m.flex-center;
     width: min-content;
     text-align: center;
-    padding: 0 8px;
+    padding: 2px 8px;
     text-transform: uppercase;
   }
 }

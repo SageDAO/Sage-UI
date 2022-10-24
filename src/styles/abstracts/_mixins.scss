@@ -357,6 +357,10 @@ $desktop-width: 1345px;
   line-height: 130%;
 }
 
+@mixin text-tag {
+  font-size: clamp(6px, 0.8vw, 10px);
+}
+
 @mixin transition-base {
   transition-duration: 200ms;
 }
