@@ -25,7 +25,7 @@ export default function useSignIn(isOpen: boolean) {
       const message = new SiweMessage({
         domain: window.location.host,
         address: address,
-        statement: 'Sign in with Ethereum to the app.',
+        statement: `I accept the SAGE Terms of Service: ${parameters.APP_URL}termsofservice`,
         uri: window.location.origin,
         version: '1',
         chainId,
@@ -35,6 +35,7 @@ export default function useSignIn(isOpen: boolean) {
       const signature = await signMessageAsync({
         message: message.prepareMessage(),
       });
+
       signIn({ message, signature });
     } catch (error) {
       console.error(error);
