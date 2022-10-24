@@ -382,6 +382,7 @@ strong {
   flex-direction: column;
   display: flex;
   justify-content: end;
+  flex: 1;
 }
 
 .drop-page__grid-item-info-countdown-label {
@@ -397,6 +398,7 @@ strong {
     font-size: clamp(8px, 0.6vw, 12px);
     padding: clamp(3px, 0.6em, 6px);
     height: max-content;
+    margin-left: auto;
   }
 }
 
