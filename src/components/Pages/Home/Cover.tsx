@@ -1,3 +1,5 @@
+import ArtistDisplay from '@/components/ArtistDisplay';
+import { User } from '@/prisma/types';
 import Motto from '@/components/Layout/Motto';
 import Logotype from '@/components/Logotype';
 import VideoJS from '@/components/Media/VideoJS';
@@ -7,6 +9,7 @@ import React, { useState } from 'react';
 interface Props {
   removeCover: () => void;
   coverOn: boolean;
+  artist: User;
 }
 
 const videoJsOptions = {
@@ -59,6 +62,7 @@ function Cover(props: Props) {
       <Motto></Motto>
       <VideoJS options={videoJsOptions} onReady={() => {}} />
       <div className='home-page__cover-arrow-container'>
+        <ArtistDisplay artist={props.artist}></ArtistDisplay>
         <div onClick={props.removeCover} data-on={props.coverOn} className='home-page__cover-arrow'>
           <ArrowDownSVG
             className='home-page__cover-arrow-svg'

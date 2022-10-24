@@ -44,7 +44,7 @@ function home({
 
   return (
     <div className='home-page' data-cy='home-page' data-on={coverOn}>
-      <Cover coverOn={coverOn} removeCover={removeCover} />
+      <Cover artist={featuredDrop.NftContract.Artist} coverOn={coverOn} removeCover={removeCover} />
       <div data-on={isMobile ? coverOn : false} className='home-page__main'>
         <Logotype></Logotype>
         <LaunchTrailer
