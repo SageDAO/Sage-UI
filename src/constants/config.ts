@@ -52,7 +52,7 @@ const configuration: Configuration = {
     NETWORK_NAME: 'mainnet',
     SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.10',
     MEDIUM_URL: 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@SAGE_WEB3',
-    MARKETPLACE_ADDRESS: '0x11049f4231B8D32403821B8A157325E2B0FB6cab',
+    MARKETPLACE_ADDRESS: '',
     STORAGE_ADDRESS: '0xEc620c97C0c2f893e6D86B8C0008B654fA738a9e',
     NFTFACTORY_ADDRESS: '0x3B268D390fE9c9Ca937D28c12ADB341Cf4fa64F0',
     LOTTERY_ADDRESS: '0xFCCCed6439ab16313B39048019aA50566d6bd72b',
