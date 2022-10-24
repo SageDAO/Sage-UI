@@ -660,6 +660,7 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   letter-spacing: 0.1em;
   width: 101px;
   height: 21px;
+  margin-top: 40px;
   text-transform: capitalize;
   @include m.interact;
   @include m.theme() {

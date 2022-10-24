@@ -225,6 +225,9 @@
   @include m.mobile-width;
   margin-top: auto;
   margin-bottom: 80px;
+  @include m.theme() {
+    color: m.t(contrast);
+  }
 }
 
 .wallet__user-section {
