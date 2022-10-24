@@ -35,8 +35,6 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-
-
 body {
   @include m.theme() {
     overflow: hidden;
@@ -199,6 +197,5 @@ input::-webkit-inner-spin-button {
 }
 
 sup {
-	vertical-align: text-top;
-	font-size: 3px;
+  @include m.super;
 }

@@ -7,7 +7,7 @@ interface Props {
 export default function Motto({ dataColor }: Props) {
   return (
     <div className='motto'>
-      SAGE<sup>™</sup>️ - ACCELERATING WEB 3
+      SAGE<sup className='motto__super'>™</sup>️ - ACCELERATING WEB 3
     </div>
   );
 }

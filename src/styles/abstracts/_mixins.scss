@@ -384,6 +384,11 @@ $desktop-width: 1345px;
   overflow: hidden;
 }
 
+@mixin super {
+  vertical-align: text-top;
+  font-size: 3px;
+}
+
 @mixin pfp-container {
   @include interact;
   position: relative;

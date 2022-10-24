@@ -40,6 +40,11 @@
   }
 }
 
+.motto__super {
+  @include m.super;
+  color: inherit;
+}
+
 .sage-logotype__src {
   position: absolute;
 }
