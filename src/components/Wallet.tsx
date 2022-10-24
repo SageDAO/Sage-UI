@@ -44,18 +44,6 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   return (
     <div className='wallet'>
       <div className='wallet__user-section-wrapper'>
-        {/* <section className='wallet__header'>
-          <h1 className='wallet__header-prompt'>
-            <PersonalizedMessage></PersonalizedMessage>
-          </h1>
-          {showWalletSelection && (
-            <h1 className='wallet__header-info'>
-              By connecting your wallet, you agree
-              <pre />
-              to our terms of service and privacy policy.
-            </h1>
-          )}
-        </section> */}
         {showWalletSelection && (
           <section className='wallet__wallets '>
             {connectors.map((c) => {
@@ -72,17 +60,18 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                   data-loading={isWalletConnecting && 'true'}
                   onClick={onClick}
                 >
-                  {c.name == 'MetaMask' ? (
+                  {c.name == 'MetaMask' && (
                     <>
                       <MetamaskSVG className='wallet__wallet-icon' />
-                      {c.name}
-                    </>
-                  ) : (
-                    <>
-                      <WalletConnectSVG className='wallet__wallet-icon' />
-                      {c.name}
                     </>
                   )}
+
+                  {c.name == 'WalletConnect' && (
+                    <>
+                      <WalletConnectSVG className='wallet__wallet-icon' />
+                    </>
+                  )}
+                  {c.name}
                 </button>
               );
             })}
