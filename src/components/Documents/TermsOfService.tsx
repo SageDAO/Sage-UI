@@ -3,19 +3,33 @@ export default function TermsOfService() {
     <>
       <Group>
         <p className='submissions-page__header'>TERMS OF USE</p>
+
         <Text>
-          SAGE WEB3 INC. (“SAGE”, “we”, “us”. “our”) provides services as described below (the
+          SAGE WEB3 INC. (“SAGE”, “we”, “us”, “our”) provides services as described below (the
           “Services”) to you (“you” or “User”) through its website subject to the following Terms of
           Use.
         </Text>
       </Group>
-
       <Group>
         <Subheader>Services</Subheader>
         <Text>
-          SAGE WEB3 INC. (“SAGE”, “we”, “us”. “our”) provides services as described below (the
-          “Services”) to you (“you” or “User”) through its website subject to the following Terms of
-          Use.
+          SAGE provides a platform for Users, including Artists and Collectors, to mint, publish,
+          sell, and purchase artwork, in the form of non-fungible tokens (“NFTs”) that use
+          blockchain based smart contracts.
+        </Text>
+
+        <Text>
+          The services currently include the following available to you: connecting to SAGE;
+          creating a user account; utilizing the Artist feature set; uploading, buying or selling
+          NFTs; entering Auctions, Drawings or other NFT related mechanisms; utilizing the News
+          features, posting, following or liking social content; redeeming crypto assets or refunds;
+          checking your platform activity; utilizing User Profile functionality; interacting with
+          DAO mechanisms; entering or interacting with Web2 content; and applying to the platform.
+          Upcoming services will include: entering or interacting with metaverse; entering or
+          interacting with Web3 Games; entering or interacting with DeFi protocols; entering or
+          interacting with DAO governance; entering or interacting with other Web3 Dapps;
+          interacting the SAGE leaderboards for Collectors or Artists; interacting with SAGE in any
+          social media manner.
         </Text>
       </Group>
 
@@ -23,16 +37,15 @@ export default function TermsOfService() {
         <Subheader>User Accounts</Subheader>
         <Text>
           In order to use the Services, you need to create and maintain a User Account. When you
-          create a user account, you will also create a User profile. We will ask you for some
-          information about yourself to complete the User profile. We may require you, in our sole
+          create a User Account, you will also create a User Profile. We will ask you for some
+          information about yourself to complete the User Profile. We may require you, in our sole
           discretion, to provide additional information and/or documents. If you do not provide
           complete and accurate information and/or documents in response to such a request, we may
-          refuse to provide you with the Services. You may also create an Artist profile, by which
-          you will provide information that you would like to be made public. We reserve the right,
-          in our sole discretion, to revoke your access if you violate the terms of these Terms of
-          Use.
+          refuse to provide you with the Services. Approved Artists may also create an Artist
+          Profile, by which you will provide information that you would like to be made public. We
+          reserve the right, in our sole discretion, to revoke your access if you violate the terms
+          of these Terms of Use. Your User Account is subject to the following conditions:
         </Text>
-        <Text>Your User Account is subject to the following conditions:</Text>
         <List>
           <li>
             You may only open one User Account. If we have a reasonable suspicion that you have
@@ -47,13 +60,13 @@ export default function TermsOfService() {
           </li>
           <li>
             You understand and agree that you are solely responsible for maintaining the security of
-            your User Account and control over any user names, passwords, or any other codes that
-            you use to access the Services. Any unauthorized access to your User Account by third
-            parties could result in loss or theft. You understand and agree that you will not hold
-            SAGE responsible for managing and maintaining the security of your User Account. You
-            further understand and agree that we are not responsible (and you will not hold us
-            responsible) for any unauthorized access to or use of your User Account. You are
-            responsible for monitoring your User Account. If you notice any unauthorized or
+            your User Account and control over any user names, passwords, crypto wallets, or any
+            other codes that you use to access the Services. Any unauthorized access to your User
+            Account by third parties could result in loss or theft. You understand and agree that
+            you will not hold SAGE responsible for managing and maintaining the security of your
+            User Account. You further understand and agree that we are not responsible (and you will
+            not hold us responsible) for any unauthorized access to or use of your User Account. You
+            are responsible for monitoring your User Account. If you notice any unauthorized or
             suspicious activity in your User Account, you agree to immediately notify us and to
             provide all relevant details.
           </li>
@@ -65,15 +78,15 @@ export default function TermsOfService() {
             parent or guardian understand and agree to these terms. You agree to have your parent or
             guardian review and accept these terms on your behalf. If you are a parent or guardian
             agreeing to the terms for the benefit of a child over 13, then you agree to and accept
-            full responsibility for that child&#39;s use of the platform, including all financial
+            full responsibility for that child's use of the platform, including all financial
             charges and legal liability that he or she may incur.
           </li>
           <li>
             You understand and agree that we will communicate with you via electronic means. To
             ensure that you receive all of our communications, you agree to keep your email address
-            and telephone number current and notify us if there are any changes. You agree that any
-            notices, agreements, disclosures, or other communications delivered to your email
-            address on record is considered valid.
+            current and notify us if there are any changes. You agree that any notices, agreements,
+            disclosures, or other communications delivered to your email address on record is
+            considered valid.
           </li>
           <li>
             You understand and agree that SAGE has the right to immediately suspend your User
@@ -116,11 +129,11 @@ export default function TermsOfService() {
 
           <li>
             You agree not to (1) interfere with other users’ access to or use of the Services; (2)
-            use or attempt to use another user&#39;s account without authorization from such user
-            and SAGE; (3) interfere with or disrupt the Services or servers or networks associated
-            with the Services in any manner that could negatively affect or inhibit other users from
+            use or attempt to use another user's account without authorization from such user and
+            SAGE; (3) interfere with or disrupt the Services or servers or networks associated with
+            the Services in any manner that could negatively affect or inhibit other users from
             fully enjoying the Services or that could damage, disable, overburden or impair the
-            functioning of the Services in any manner; or (4) disobey any requirements, procedures,
+            functioning of the Services in any manner; or (4) disobey any requirements, procedures,
             policies or regulations of networks associated with the Services.
           </li>
 
@@ -167,10 +180,6 @@ export default function TermsOfService() {
             website for any purpose, including but not limited to marketing activity.
           </li>
           <li>
-            You agree not to utilize the Services to engage in any lottery, bidding fee auctions,
-            contests, sweepstakes, or other games of chance.
-          </li>
-          <li>
             You agree that SAGE is not responsible for determining the withholding, sales, use,
             value added, transfer or other taxes, together with any interest and penalties imposed
             with respect thereto (“Taxes”), that apply to your transactions. You agree that you are
@@ -187,17 +196,13 @@ export default function TermsOfService() {
             harassing, or otherwise objectionable.
           </li>
           <li>
-            You agree not to (1) distribute, publish, broadcast, reproduce, copy, retransmit, or
-            publicly display any Artist Content; (2) modify or create derivative works from the
-            website, Artist Content, or any portion thereof; (3) use any data mining, robots, or
-            similar data gathering or extraction methods on the website or Artist Content; (4)
-            download any portion of the Website other than for purposes of page caching, except as
-            expressly permitted by us; (5) harvest or collect email addresses or other contact
-            information of other users by electronic or other means for the purposes of sending
-            unsolicited emails or other unsolicited communications; (6) advertise or offer to sell
-            or buy any goods or services for any business purpose that is not specifically
-            authorized; or (7) access or use the website for the purpose of creating a product or
-            service that is competitive with any of our Services.
+            You agree not to (1) use any data mining, robots, or similar data gathering or
+            extraction methods on the website or Art Content; (2) download any portion of the
+            Website other than for purposes of page caching, except as expressly permitted by us;
+            (3) harvest or collect email addresses or other contact information of other users by
+            electronic or other means for the purposes of sending unsolicited emails or other
+            unsolicited communications; (4) access or use the website for the purpose of creating a
+            product or service that is competitive with any of our Services.
           </li>
         </List>
       </Group>
@@ -219,35 +224,35 @@ export default function TermsOfService() {
         </Text>
         <Text>
           The Artist owns all legal right, title, and interest in all intellectual property rights
-          of the content underlying the digital artwork minted through use of the Services,
-          including but not limited to copyrights and trademarks in the content, unless the Artist
-          expressly transfers any such right, title or interest to a third party. As the copyright
-          owner, the Artist has the right to reproduce, prepare derivatives of, distribute, and
-          display or perform the content, and the right to prevent others from doing the same.  A
-          buyer receives a cryptographic token representing the Artist’s Art Content as a piece of
-          property, but does not own the Art Content itself or any intellectual property rights
-          therein.  The buyer does not have any legal ownership, right, or title to any copyrights,
-          trademarks, or other intellectual property rights to the Art Content, except for a
-          limited, worldwide, non-assignable and non-transferable (except as described herein),
-          non-sublicensable, royalty-free license to display the Art Content solely for the buyer’s
-          non-commercial purposes, including the right to display such Art Content privately or
-          publicly. Upon any sale or transfer of the Digital Artwork to another buyer, the foregoing
-          license will automatically transfer to such other buyer, and such other buyer will be
-          deemed the “buyer” and will be subject to these Terms, and the seller or transferor will
-          cease to have any further rights to such Art Content.
+          of the content underlying the digital artwork minted through use of the Services (“Art
+          Content”), including but not limited to copyrights and trademarks in the Art Content,
+          unless the Artist expressly transfers any such right, title or interest to a third party.
+          As the copyright owner, the Artist has the right to reproduce, prepare derivatives of,
+          distribute, and display or perform the Art Content, and the right to prevent others from
+          doing the same. A buyer receives a cryptographic token representing the Artist’s Art
+          Content as a piece of property, but does not own the Art Content itself or any
+          intellectual property rights therein. The buyer does not have any legal ownership, right,
+          or title to any copyrights, trademarks, or other intellectual property rights to the Art
+          Content, except for a limited, worldwide, non-assignable and non-transferable (except as
+          described herein), non-sublicensable, royalty-free license to display the Art Content
+          solely for the buyer’s non-commercial purposes, including the right to display such Art
+          Content privately or publicly. Upon any sale or transfer of the Art Content to another
+          buyer, the foregoing license will automatically transfer to such other buyer, and such
+          other buyer will be deemed the “buyer” and will be subject to these Terms of Use, and the
+          seller or transferor will cease to have any further rights to such Art Content.
         </Text>
         <Text>
           The Artist hereby acknowledges, understands, and agrees that selling such digital artwork
           constitutes an express representation, warranty, and covenant that the Artist (a) has not
-          sold, tokenized or created another cryptographic token from that content, (b) will not,
-          and will not cause another to, sell, tokenize, or create another cryptographic token, in
-          each case representing a digital collectible for the same content, and (c) will not make
-          any erroneous or misleading statements regarding any content (including in connection with
-          any sales thereof).
+          sold, tokenized or created another cryptographic token from that Art Content, (b) will
+          not, and will not cause another to, sell, tokenize, or create another cryptographic token,
+          in each case representing a digital collectible for the same Art Content, and (c) will not
+          make any erroneous or misleading statements regarding any content (including in connection
+          with any sales thereof).
         </Text>
         <Text>
-          Artist expressly represents and warrants that its content contains only original content
-          otherwise authorized for use by the Artist, and does not contain unlicensed or
+          Artist expressly represents and warrants that its Art Content contains only original
+          content otherwise authorized for use by the Artist, and does not contain unlicensed or
           unauthorized copyrighted content, including any imagery, design, audio, video, human
           likeness, or other unoriginal content not created by the Artist, not authorized for use by
           the Artist, not in the public domain, or otherwise without a valid claim of fair use. The
@@ -255,19 +260,19 @@ export default function TermsOfService() {
           unoriginal content, to the extent such permission is legally required.
         </Text>
         <Text>
-          By providing any content to SAGE, you grant us and our affiliates and our respective
+          By providing any Art Content to SAGE, you grant us and our affiliates and our respective
           licensees, successors, and assigns the right to use, reproduce, modify, perform, display,
           distribute, retransmit, publish, broadcast, and otherwise disclose to third parties any
           such material for the purpose of providing you with the Services. You further grant SAGE
           the right to use your name and image for marketing or promotional purposes. You further
-          agree that we may use or modify images from your content for marketing or promotional
+          agree that we may use or modify images from your Art Content for marketing or promotional
           purposes.
         </Text>
         <Text>
           The SAGE name and logos are trademarks and service marks of SAGE WEB3 INC. Nothing in
-          these Terms should be construed as granting, by implication, estoppel, or otherwise, any
-          license or right to use any of SAGE’s logos or trademarks without our prior written
-          permission in each instance. All goodwill generated from the use of our logos and
+          these Terms of Use should be construed as granting, by implication, estoppel, or
+          otherwise, any license or right to use any of SAGE’s logos or trademarks without our prior
+          written permission in each instance. All goodwill generated from the use of our logos and
           trademarks will inure to our exclusive benefit. Apart from the SAGE logos and trademarks,
           and any content provided by users, all other trademarks, product names, and logos on the
           website are the property of their respective owners and may not be copied, imitated, or
@@ -285,13 +290,15 @@ export default function TermsOfService() {
           action, including without limitation, referral to law enforcement, for any illegal or
           unauthorized use of the Services; and (e) terminate or suspend your access to all or part
           of the Services for any or no reason, including without limitation, any violation of these
-          Terms. Without limiting the foregoing, we have the right to cooperate fully with any law
-          enforcement authorities or court order requesting or directing us to disclose the identity
-          or other information of anyone posting any materials on or through the Services. YOU WAIVE
-          AND HOLD HARMLESS SAGE AND ITS AFFILIATES, LICENSORS, LICENSEES, AND SERVICE PROVIDERS,
-          FROM ANY CLAIMS RESULTING FROM ANY ACTION TAKEN BY ANY OF THE FOREGOING PARTIES DURING OR
-          TAKEN AS A CONSEQUENCE OF, INVESTIGATIONS BY EITHER SUCH PARTIES OR LAW ENFORCEMENT
-          AUTHORITIES.
+          Terms of Use. Without limiting the foregoing, we have the right to cooperate fully with
+          any law enforcement authorities or court order requesting or directing us to disclose the
+          identity or other information of anyone posting any materials on or through the Services.
+        </Text>
+        <Text>
+          YOU WAIVE AND HOLD HARMLESS SAGE AND ITS AFFILIATES, LICENSORS, LICENSEES, AND SERVICE
+          PROVIDERS, FROM ANY CLAIMS RESULTING FROM ANY ACTION TAKEN BY ANY OF THE FOREGOING PARTIES
+          DURING OR TAKEN AS A CONSEQUENCE OF, INVESTIGATIONS BY EITHER SUCH PARTIES OR LAW
+          ENFORCEMENT AUTHORITIES.
         </Text>
         <Text>
           You understand and agree that SAGE has the right to terminate or suspend your access to
@@ -302,8 +309,8 @@ export default function TermsOfService() {
       <Group>
         <Subheader>Copyright Policy</Subheader>
         <Text>
-          SAGE respects the intellectual property of others, and we ask our users to do the same. 
-          If you believe that your work has been copied in a way that constitutes copyright
+          SAGE respects the intellectual property of others, and we ask our users to do the same. If
+          you believe that your work has been copied in a way that constitutes copyright
           infringement, or that your intellectual property rights have been otherwise violated, you
           should notify SAGE of your infringement claim by contacting SAGE’s Copyright Agent at
           ip@sage.art. SAGE will process and investigate notices of alleged infringement and will
@@ -329,9 +336,9 @@ export default function TermsOfService() {
           If you are the target of an allegation of infringement made to SAGE, but you believe that
           your use is not infringing, you may file a counter-notice with SAGE’s Copyright Agent.
           Your counter-notice to SAGE’s Copyright Agent must include the following information: (1)
-          your physical or electronic signature; (2) identification of the content that has been
+          your physical or electronic signature; (2) identification of the content that has been
           removed or to which access has been disabled and the location at which the content
-          appeared before it was removed or disabled; (3) a statement that you have a good faith
+          appeared before it was removed or disabled; (3) a statement that you have a good faith
           belief that the content was removed or disabled as a result of mistake or a
           misidentification of the content; (4) your name, address, telephone number, and email
           address; and (5) a statement that you consent to the jurisdiction of the federal court
@@ -365,45 +372,6 @@ export default function TermsOfService() {
       </Group>
 
       <Group>
-        <Subheader>Royalties</Subheader>
-        <Text>
-          SAGE takes a commission in the amount of 20% of all proceeds from the initial sale of NFTs
-          through use of the Services. SAGE further receives payment for transaction fees to cover
-          the cost of payment processing.
-        </Text>
-        <Text>
-          SAGE takes a commission in the amount of 2% of all proceeds from all subsequent sales of
-          NFTs. SAGE further receives payment for transaction fees to cover the cost of payment
-          processing if such subsequent sales are made using the Services. You may also receive a
-          percentage of proceeds from such subsequent sales, in an amount negotiated by you.
-          However, SAGE cannot guarantee any royalty from a subsequent sale if made independently of
-          the Services.
-        </Text>
-        <Text>
-          You are responsible to pay any and all sales, use, value-added and other taxes, duties,
-          and assessments now or hereafter claimed or imposed by any governmental authority,
-          associated with your use of the Services, including, without limitation, any taxes that
-          may become payable as the result of your ownership, transfer, purchase, sale, or creation
-          of any artworks.
-        </Text>
-        <Text>
-          Users acknowledge and consent to the risk that the price of any item purchased through use
-          of the Services may have been influenced by activity outside of the control of SAGE. SAGE
-          does not represent, guarantee, or warrant the accuracy or fairness of the price of asset
-          sold or offered for sale through the use of the Services or through outside services. User
-          agrees and acknowledges that SAGE is not a fiduciary nor owes any duties to any user of
-          the Services, including the duty to ensure fair pricing of assets or to police user
-          behavior of the Services.
-        </Text>
-      </Group>
-      <Group>
-        <Subheader>Privacy</Subheader>
-        <Text>
-          Our privacy policy is a part of these Terms. Please review the SAGE Privacy Policy, which
-          also governs the website and informs users of our data collection practices.
-        </Text>
-      </Group>
-      <Group>
         <Subheader>Representations and Warrantees</Subheader>
         <Text>
           You represent and warrant that (1) you own or have the rights to all of the content that
@@ -419,21 +387,26 @@ export default function TermsOfService() {
           entity that you represent.
         </Text>
         <Text>
+          YOU FURTHER REPRESENT AND WARRANT THAT YOU UNDERSTAND AND ARE WILLING TO ACCEPT THE RISKS
+          ASSOCIATED WITH CRYPTOGRAPHIC SYSTEMS SUCH AS THE SMART CONTRACTS, THE BLOCKCHAIN,
+          NON-FUNGIBLE TOKENS, AND THE INTERPLANETARY FILE SYSTEM.
+        </Text>
+        <Text>
           YOUR USE OF THE SERVICES IS AT YOUR SOLE RISK. THE SERVICES ARE PROVIDED ON AN “AS IS” AND
           “AS AVAILABLE” BASIS. YOU AGREE THAT SAGE WILL HAVE NO RESPONSIBILITY OR LIABILITY TO YOU
-          IF (A) YOU ARE UNABLE TO LOCATE OR USE YOUR CREDENTIALS, (B) YOUR RIGHTS TO ANY DIGITAL
-          ARTWORK OR ART CONTENT ARE TERMINATED, OR (C) ANY THIRD PARTY MAKES ANY CLAIM AGAINST YOU
-          IN RELATION TO ANY DIGITAL ARTWORK OR ART CONTENT, INCLUDING ANY CLAIM OF INFRINGEMENT OR
-          VIOLATION OF INTELLECTUAL PROPERTY OR OTHER RIGHTS. SAGE EXPRESSLY DISCLAIMS ALL
-          WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED
-          TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND
-          NON- INFRINGEMENT.
+          IF (A) YOU ARE UNABLE TO LOCATE OR USE YOUR CREDENTIALS OR CRYPTO WALLET(S), (B) YOUR
+          RIGHTS TO ANY DIGITAL ARTWORK OR ART CONTENT ARE TERMINATED, OR (C) ANY THIRD PARTY MAKES
+          ANY CLAIM AGAINST YOU IN RELATION TO ANY DIGITAL ARTWORK OR ART CONTENT, INCLUDING ANY
+          CLAIM OF INFRINGEMENT OR VIOLATION OF INTELLECTUAL PROPERTY OR OTHER RIGHTS. SAGE
+          EXPRESSLY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED OR STATUTORY,
+          INCLUDING, BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+          PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT.
         </Text>
         <Text>
           SAGE MAKES NO WARRANTY THAT (I) THE SERVICES WILL MEET YOUR REQUIREMENTS, (II) THE
           SERVICES WILL BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE, (III) THE RESULTS THAT MAY
           BE OBTAINED FROM THE USE OF THE SERVICES WILL BE ACCURATE, COMPLETE, RELIABLE, CURRENT, OR
-          ERROR- FREE, OR (IV) THE QUALITY OF ANY PRODUCTS, INFORMATION, OR OTHER MATERIAL PURCHASED
+          ERROR-FREE, OR (IV) THE QUALITY OF ANY PRODUCTS, INFORMATION, OR OTHER MATERIAL PURCHASED
           OR OBTAINED BY YOU THROUGH USE OF THE SERVICES WILL MEET YOUR EXPECTATIONS (INCLUDING WITH
           RESPECT TO ANY DIGITAL ARTWORK AND ART CONTENT).
         </Text>
@@ -448,22 +421,18 @@ export default function TermsOfService() {
           DUE TO OUR GROSS NEGLIGENCE.
         </Text>
         <Text>
-          SAGE WILL NOT BE RESPONSIBLE OR LIABLE TO YOU FOR ANY LOSS AND TAKE NO RESPONSIBILITY FOR,
-          AND WILL NOT BE LIABLE TO YOU FOR, ANY USE OF ASSETS, INCLUDING BUT NOT LIMITED TO ANY
-          LOSSES, DAMAGES OR CLAIMS ARISING FROM: (A) USER ERROR SUCH AS FORGOTTEN PASSWORDS,
+          SAGE WILL NOT BE RESPONSIBLE OR LIABLE TO YOU FOR ANY LOSS AND TAKES NO RESPONSIBILITY
+          FOR, AND WILL NOT BE LIABLE TO YOU FOR, ANY USE OF ASSETS, INCLUDING BUT NOT LIMITED TO
+          ANY LOSSES, DAMAGES OR CLAIMS ARISING FROM: (A) USER ERROR SUCH AS FORGOTTEN PASSWORDS,
           INCORRECTLY CONSTRUCTED TRANSACTIONS, OR MISTYPED ADDRESSES; (B) SERVER FAILURE OR DATA
-          LOSS; (C) CORRUPTED WALLET FILES; (D) UNAUTHORIZED ACCESS TO APPLICATIONS; (E) ANY
-          UNAUTHORIZED THIRD PARTY ACTIVITIES, INCLUDING WITHOUT LIMITATION THE USE OF VIRUSES,
-          PHISHING, BRUTEFORCING OR OTHER MEANS OF ATTACK.
+          LOSS; (C) MISUSED, MISPLACED, CORRUPTED, OR OTHERWISE INACCESSIBLE WALLET FILES; (D)
+          UNAUTHORIZED ACCESS TO APPLICATIONS; (E) ANY UNAUTHORIZED THIRD PARTY ACTIVITIES,
+          INCLUDING WITHOUT LIMITATION THE USE OF VIRUSES, PHISHING, BRUTEFORCING OR OTHER MEANS OF
+          ATTACK.
         </Text>
         <Text>
-          YOU FURTHER REPRESENT AND WARRANT THAT YOU UNDERSTAND AND ARE WILLING TO ACCEPT THE RISKS
-          ASSOCIATED WITH CRYPTOGRAPHIC SYSTEMS SUCH AS THE SMART CONTRACTS, THE BLOCKCHAIN,
-          NON-FUNGIBLE TOKENS, AND THE INTERPLANETARY FILE SYSTEM.
-        </Text>
-        <Text>
-          SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES IN CONTRACTS WITH
-          CONSUMERS, SO THE ABOVE EXCLUSION MAY NOT APPLY TO YOU.
+          Some jurisdictions do not allow the exclusion of implied warranties in contracts with
+          consumers, so some or all of the above exclusions may not apply to you.
         </Text>
       </Group>
       <Group>
@@ -472,53 +441,53 @@ export default function TermsOfService() {
           YOU EXPRESSLY UNDERSTAND AND AGREE THAT, TO THE FULLEST EXTENT ALLOWED BY LAW, SAGE WILL
           NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY DAMAGES, OR
           DAMAGES FOR LOSS OF PROFITS INCLUDING BUT NOT LIMITED TO, LOSS IN VALUE OF ANY DIGITAL
-          ARTWORK, DAMAGES FOR LOSS OF GOODWILL, USE, DATA OR OTHER INTANGIBLE LOSSES (EVEN IF SAGE
-          HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES), WHETHER BASED ON CONTRACT, TORT,
-          NEGLIGENCE, STRICT LIABILITY OR OTHERWISE, RESULTING FROM: (I) THE USE OR THE INABILITY TO
-          USE THE SERVICES; (II) THE COST OF PROCUREMENT OF SUBSTITUTE GOODS RESULTING FROM ANY
-          DIGITAL ARTWORK, GOODS, DATA, OR INFORMATION PURCHASED OR OBTAINED OR MESSAGES RECEIVED OR
-          TRANSACTIONS ENTERED INTO THROUGH OR FROM THE SERVICES; (III) UNAUTHORIZED ACCESS TO OR
-          ALTERATION OF YOUR TRANSMISSIONS OR DATA; (IV) STATEMENTS OR CONDUCT OF ANY THIRD PARTY
-          USING THE SERVICES; OR (V) ANY OTHER MATTER RELATING TO THE SERVICES. IN NO EVENT WILL
-          SAGE’S TOTAL LIABILITY TO YOU FOR ALL DAMAGES, LOSSES OR CAUSES OF ACTION EXCEED THE
-          AMOUNT YOU HAVE PAID SAGE IN THE LAST SIX (6) MONTHS, OR, IF GREATER, ONE HUNDRED DOLLARS
-          ($100).
+          ARTWORK OR ART CONTENT, DAMAGES FOR LOSS OF GOODWILL, USE, DATA OR OTHER INTANGIBLE LOSSES
+          (EVEN IF SAGE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES), WHETHER BASED ON
+          CONTRACT, TORT, NEGLIGENCE, STRICT LIABILITY OR OTHERWISE, RESULTING FROM: (I) THE USE OR
+          THE INABILITY TO USE THE SERVICES; (II) THE COST OF PROCUREMENT OF SUBSTITUTE GOODS
+          RESULTING FROM ANY DIGITAL ARTWORK OR ART CONTENT, GOODS, DATA, OR INFORMATION PURCHASED
+          OR OBTAINED OR MESSAGES RECEIVED OR TRANSACTIONS ENTERED INTO THROUGH OR FROM THE
+          SERVICES; (III) UNAUTHORIZED ACCESS TO OR ALTERATION OF YOUR TRANSMISSIONS OR DATA; (IV)
+          STATEMENTS OR CONDUCT OF ANY THIRD PARTY USING THE SERVICES; OR (V) ANY OTHER MATTER
+          RELATING TO THE SERVICES. IN NO EVENT WILL SAGE’S TOTAL LIABILITY TO YOU FOR ALL DAMAGES,
+          LOSSES OR CAUSES OF ACTION EXCEED THE AMOUNT YOU HAVE PAID SAGE IN THE LAST SIX (6)
+          MONTHS, OR, IF GREATER, ONE HUNDRED DOLLARS ($100).
         </Text>
         <Text>
           SOME JURISDICTIONS DO NOT ALLOW THE DISCLAIMER OR EXCLUSION OF CERTAIN WARRANTIES OR THE
           LIMITATION OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES. ACCORDINGLY,
           SOME OF THE ABOVE LIMITATIONS SET FORTH ABOVE MAY NOT APPLY TO YOU OR BE ENFORCEABLE WITH
           RESPECT TO YOU. IF YOU ARE DISSATISFIED WITH ANY PORTION OF THE SSERVICES OR WITH THESE
-          TERMS, YOUR SOLE AND EXCLUSIVE REMEDY IS TO DISCONTINUE USE OF THE SERVICES.
+          TERMS OF USE, YOUR SOLE AND EXCLUSIVE REMEDY IS TO DISCONTINUE USE OF THE SERVICES.
         </Text>
       </Group>
       <Group>
         <Subheader>Acknowledgement of Risk</Subheader>
         <Text>
           The blockchain provides an immutable ledger of all transactions that occur on the
-          blockchain.  This means that all artwork is outside of the control of any one party,
-          including SAGE, and is subject to many risks and uncertainties.  Therefore, please note
-          the following risks in accessing or using the Services:
+          blockchain. This means that all artwork is outside of the control of any one party,
+          including SAGE, and is subject to many risks and uncertainties. Therefore, please note the
+          following risks in accessing or using the Services:
         </Text>
         <List>
           <li>
             The price and liquidity of blockchain assets are extremely volatile and may be subject
-            to large fluctuations;
+            to large fluctuations.
           </li>
           <li>
             Fluctuations in the price of other digital assets could materially and adversely affect
             the price of any NFT purchased or sold on the website, which may also be subject to
-            significant price volatility;
+            significant price volatility.
           </li>
-          <li>Sage cannot guarantee that any purchasers of product will not lose money;</li>
+          <li>Sage cannot guarantee that any purchasers of product will not lose money.</li>
           <li>
             You are solely responsible for determining what, if any, taxes apply to your
             transactions; SAGE is not responsible for determining what, if any, taxes may apply to
-            any transactions;
+            any transactions.
           </li>
           <li>
             Legislative and regulatory changes or actions at the state, federal, or international
-            level may adversely affect the use, transfer, exchange, and value of product;
+            level may adversely affect the use, transfer, exchange, and value of product.
           </li>
           <li>
             There are risks associated with using an Internet based currency, including but not
@@ -526,47 +495,47 @@ export default function TermsOfService() {
             malicious software introduction, and the risk that third parties may obtain unauthorized
             access to information stored within your wallet; you accept and acknowledge that SAGE
             will not be responsible for any communication failures, disruptions, errors, distortions
-            or delays you may experience when using the Services, however caused;
+            or delays you may experience when using the Services, however caused.
           </li>
           <li>
             Transactions occurring on the website may be irreversible, and, accordingly, losses due
-            to fraudulent or accidental transactions may not be recoverable;
+            to fraudulent or accidental transactions may not be recoverable.
           </li>
           <li>
             By using the Services, you represent that you have been, are, and will be solely
             responsible for making your own independent appraisal and investigations into the risks
-            of a given transaction and the underlying digital assets;
+            of a given transaction and the underlying digital assets.
           </li>
           <li>
             You represent that you have sufficient knowledge, market sophistication, professional
             advice, and experience to make your own evaluation of the merits and risks of any
-            transaction or any underlying digital asset;
+            transaction or any underlying digital asset.
           </li>
           <li>
             You accept all consequences of using the Services, including the risk that you may lose
-            access to your digital assets indefinitely;
+            access to your digital assets indefinitely.
           </li>
-          <li>You understand and agree that all transaction decisions are made solely by you;</li>
+          <li>You understand and agree that all transaction decisions are made solely by you.</li>
           <li>
             You understand and agree that in the event that you deposit digital assets into an
             incorrect address, SAGE may not have the ability, and are under no obligation or duty,
             to return such digital assets to you (this section applies regardless of whether we
-            control the destination address);
+            control the destination address).
           </li>
           <li>
             Some transactions shall be deemed to be made when recorded on a public ledger, which is
-            not necessarily the date or time that you initiated the transaction;
+            not necessarily the date or time that you initiated the transaction.
           </li>
           <li>
             The value of any product may be derived from the continued willingness of market
             participants to exchange fiat currency or digital assets for product, which may result
             in the potential for permanent and total loss of value of a particular NFT should the
-            market for that NFT disappear;
+            market for that NFT disappear.
           </li>
           <li>
             The nature of NFTs may lead to an increased risk of fraud or cyber attack, and may mean
             that any technological difficulties experienced by SAGE may prevent your access to the
-            Services; and
+            Services.
           </li>
           <li>
             Notwithstanding anything in this Agreement, SAGE accepts no responsibility whatsoever
@@ -585,23 +554,23 @@ export default function TermsOfService() {
           errors, distortions or delays you may experience, however caused.
         </Text>
         <Text>
-          SAGE neither owns nor controls crypto networks, the smart contracts on which transactions
-          are based, your browser, or any other third party site, product, or service that you might
-          access, visit, or use for the purpose of enabling you to use the various features of the
-          Services. We will not be liable for the acts or omissions of any such third parties, nor
-          will we be liable for any damage that you may suffer as a result of your transactions or
-          any other interaction with any such third parties.
+          SAGE neither owns nor controls crypto networks, your browser, or any other third party
+          site, product, or service that you might access, visit, or use for the purpose of enabling
+          you to use the various features of the Services. We will not be liable for the acts or
+          omissions of any such third parties, nor will we be liable for any damage that you may
+          suffer as a result of your transactions or any other interaction with any such third
+          parties.
         </Text>
         <Text>
           SAGE does not buy, sell, or ever take custody or possession of any artwork. Use of the
-          Services facilitates transactions, but SAGE is not a custodian of any artwork.  You
+          Services facilitates transactions, but SAGE is not a custodian of any artwork. You
           understand and acknowledge that the smart contracts used in the transactions do not give
           SAGE custody, possession, or control of any artwork or cryptocurrency at any time for the
-          purpose of facilitating transactions.  You affirm that you are aware and acknowledge that
+          purpose of facilitating transactions. You affirm that you are aware and acknowledge that
           SAGE is a non-custodial service provider and has designed the Services to be directly
           accessible by the users without any involvement or actions taken by SAGE or any
-          third-party.  SAGE facilitates transactions between users but is not a party to any
-          agreement between any sellers or buyers.  As a marketplace, SAGE cannot make any
+          third-party. SAGE facilitates transactions between users but is not a party to any
+          agreement between any sellers or buyers. As a marketplace, SAGE cannot make any
           representation or guarantee that any user will achieve any particular outcome as the
           result of listing product or engaging in any other transaction.
         </Text>
@@ -641,27 +610,34 @@ export default function TermsOfService() {
         </Text>
       </Group>
       <Group>
+        <Subheader>Privacy</Subheader>
+        <Text>
+          Our privacy policy is a part of these Terms of Use. Please review the SAGE Privacy Policy,
+          which also governs the website and informs users of our data collection practices.
+        </Text>
+      </Group>
+      <Group>
         <Subheader>Disputes with Third Parties</Subheader>
         <Text>
           You agree to resolve any disputes directly with any buyer or seller with whom you engage
           and in accordance with these Terms of Use within five business days of the buyer or seller
           making first contact with you. You further agree to provide public contact information on
-          your profile so that buyers and sellers may contact you.
+          your User Profile so that buyers and sellers may contact you.
         </Text>
         <Text>
           You agree that you are solely responsible for your interactions with any other third party
           in connection with the website, and SAGE will have no liability or responsibility with
-          respect thereto.  Without limiting the foregoing, you agree that SAGE has no
-          responsibility for the nature, quality or method of any NFT sale that may be at issue.
-          SAGE reserves the right, but has no obligation, to become involved in any way with
-          disputes between you and any other third party.
+          respect thereto. Without limiting the foregoing, you agree that SAGE has no responsibility
+          for the nature, quality or method of any NFT sale that may be at issue. SAGE reserves the
+          right, but has no obligation, to become involved in any way with disputes between you and
+          any other third party.
         </Text>
       </Group>
       <Group>
         <Subheader>Disputes with SAGE</Subheader>
         <Text>
-          PLEASE READ THESE TERMS CAREFULLY, AS THEY CONTAIN AN AGREEMENT TO ARBITRATE AND OTHER
-          IMPORTANT INFORMATION REGARDING YOUR LEGAL RIGHTS, REMEDIES, AND OBLIGATIONS.  THE
+          PLEASE READ THE FOLLOWING TERMS CAREFULLY, AS THEY CONTAIN AN AGREEMENT TO ARBITRATE AND
+          OTHER IMPORTANT INFORMATION REGARDING YOUR LEGAL RIGHTS, REMEDIES, AND OBLIGATIONS. THE
           AGREEMENT TO ARBITRATE REQUIRES (WITH LIMITED EXCEPTION) THAT YOU SUBMIT CLAIMS YOU HAVE
           AGAINST SAGE TO BINDING AND FINAL ARBITRATION. FURTHER, (1) YOU WILL ONLY BE PERMITTED TO
           PURSUE CLAIMS AGAINST SAGE ON AN INDIVIDUAL BASIS, NOT AS A PLAINTIFF OR CLASS MEMBER IN
@@ -672,28 +648,28 @@ export default function TermsOfService() {
         </Text>
         <Text>
           SAGE prefers to resolve disputes amicably and efficiently, and most customer concerns can
-          be resolved quickly and to the customer’s satisfaction by contacting SAGE.  If such
-          efforts prove unsuccessful, the parties agree to submit to binding arbitration as follows:
-          Any dispute or claim relating in any way to: your access, use, or attempted access or use
-          of the website; any products sold or distributed through the website; or any aspect of
-          your relationship with SAGE will be resolved by binding arbitration, except that (1) you
-          may assert claims in small claims court if your claims qualify; and (2) you or SAGE may
-          seek equitable relief in court for infringement or other misuse of intellectual property
-          rights (such as trademarks, trade dress, domain names, trade secrets, copyright, or
-          patent). You agree that any such arbitration shall be settled solely and exclusively by
-          binding arbitration held in Maine and conducted in English, rather than in court.
+          be resolved quickly and to the customer’s satisfaction by contacting SAGE. If such efforts
+          prove unsuccessful, the parties agree to submit to binding arbitration as follows: Any
+          dispute or claim relating in any way to: your access, use, or attempted access or use of
+          the website; any products sold or distributed through the website; or any aspect of your
+          relationship with SAGE will be resolved by binding arbitration, except that (1) you may
+          assert claims in small claims court if your claims qualify; and (2) you or SAGE may seek
+          equitable relief in court for infringement or other misuse of intellectual property rights
+          (such as trademarks, trade dress, domain names, trade secrets, copyright, or patent). You
+          agree that any such arbitration shall be settled solely and exclusively by binding
+          arbitration held in Maine and conducted in English, rather than in court.
         </Text>
         <Text>
           The arbitrator shall have exclusive authority to (1) determine the scope and
-          enforceability of this Arbitration Agreement; and (2) resolve any dispute related to the
-          interpretation, applicability, enforceability or formation of this Arbitration Agreement,
-          including but not limited to any claim that all or part of this Arbitration Agreement is
-          void or voidable; (3) decide the rights and liabilities, if any, of you and SAGE; (4)
-          grant motions dispositive of all or part of any claim; (5) award monetary damages and
-          grant any non-monetary remedy or relief available to a party under applicable law,
-          arbitration rules, and these Terms of Use (including the Arbitration Agreement). The
-          arbitrator has the same authority to award relief on an individual basis that a judge in a
-          court of law would have. The arbitrator shall issue a written award and statement of
+          enforceability of these arbitration provisions; and (2) resolve any dispute related to the
+          interpretation, applicability, enforceability or formation of these arbitration
+          provisions, including but not limited to any claim that all or part of these arbitration
+          provisions is void or voidable; (3) decide the rights and liabilities, if any, of you and
+          SAGE; (4) grant motions dispositive of all or part of any claim; (5) award monetary
+          damages and grant any non-monetary remedy or relief available to a party under applicable
+          law, arbitration rules, and these Terms of Use (including these arbitration provisions).
+          The arbitrator has the same authority to award relief on an individual basis that a judge
+          in a court of law would have. The arbitrator shall issue a written award and statement of
           decision describing the essential findings and conclusions on which the award is based,
           including the calculation of any damages awarded. Such an award is final and binding upon
           you and us.
@@ -703,56 +679,56 @@ export default function TermsOfService() {
           arbitrator, will be strictly confidential for the benefit of all parties.
         </Text>
         <Text>
-          If any part of this Arbitration Agreement is found to be invalid or unenforceable, then
-          such part shall be of no force and effect and shall be severed and the remainder of the
-          Arbitration Agreement shall continue to in full force and effect.
+          If any part of these arbitration provisions is found to be invalid or unenforceable, then
+          such part shall be of no force and effect and shall be severed and the remainder of these
+          arbitration provisions shall continue to in full force and effect.
         </Text>
         <Text>
-          You understand that by agreeing to this Arbitration Agreement, you and SAGE are each
+          You understand that by agreeing to these arbitration provisions, you and SAGE are each
           waiving their right to trial by jury and to participate in a class action or class
           arbitration.
         </Text>
         <Text>
-          This Arbitration Agreement shall survive the termination of your relationship with SAGE.
+          These arbitration provisions shall survive the termination of your relationship with SAGE.
         </Text>
       </Group>
       <Group>
         <Subheader>Termination</Subheader>
         <Text>
-          You agree that SAGE, in its sole discretion, may suspend or terminate your account (or any
-          part thereof) or use of the Services and remove and discard any content, for any reason,
-          including, without limitation, for lack of use or if SAGE believes that you have violated
-          or acted inconsistently with the letter or spirit of these Terms. Any suspected
-          fraudulent, abusive or illegal activity that may be grounds for termination of your use of
-          the Services may be referred to appropriate law enforcement authorities. SAGE may also in
-          its sole discretion and at any time discontinue providing the Services, or any part
-          thereof, with or without notice. You agree that any termination of your access to the
-          Services under any provision of these Terms may be effected without prior notice, and
-          acknowledge and agree that SAGE may immediately deactivate or delete your account and all
-          related information and files in your account and/or bar any further access to such files
-          or the Services. Further, you agree that SAGE will not be liable to you or any third party
-          for any termination of your access to the Services.
+          You agree that SAGE, in its sole discretion, may suspend or terminate your User Account
+          (or any part thereof) or use of the Services and remove and discard any content, for any
+          reason, including, without limitation, for lack of use or if SAGE believes that you have
+          violated or acted inconsistently with the letter or spirit of these Terms of Use. Any
+          suspected fraudulent, abusive or illegal activity that may be grounds for termination of
+          your use of the Services may be referred to appropriate law enforcement authorities. SAGE
+          may also in its sole discretion and at any time discontinue providing the Services, or any
+          part thereof, with or without notice. You agree that any termination of your access to the
+          Services under any provision of these Terms of Use may be effected without prior notice,
+          and acknowledge and agree that SAGE may immediately deactivate or delete your account and
+          all related information and files in your account and/or bar any further access to such
+          files or the Services. Further, you agree that SAGE will not be liable to you or any third
+          party for any termination of your access to the Services.
         </Text>
       </Group>
       <Group>
         <Subheader>General</Subheader>
         <Text>
           We reserve the right, at our sole discretion, to change or modify portions of these Terms
-          at any time and without prior notice.  Any such changes will be posted here.  Any such
-          changes will become effective immediately.  Your continued use of the Services after the
-          date any such changes become effective constitutes your acceptance of the new Terms of
+          of Use at any time and without prior notice. Any such changes will be posted here. Any
+          such changes will become effective immediately. Your continued use of the Services after
+          the date any such changes become effective constitutes your acceptance of the new Terms of
           Use.
         </Text>
         <Text>
-          These Terms constitute the entire agreement between you and SAGE and govern your use of
-          the Services, superseding any prior agreements between you and SAGE with respect to the
-          Services.
+          These Terms of Use constitute the entire agreement between you and SAGE and govern your
+          use of the Services, superseding any prior agreements between you and SAGE with respect to
+          the Services.
         </Text>
         <Text>
-          The failure of SAGE to exercise or enforce any right or provision of these Terms will not
-          constitute a waiver of such right or provision. Waiver of the benefit of any provision
-          hereunder must be in writing to be effective, and any such waiver shall not operate or be
-          construed as a waiver of any subsequent breach.
+          The failure of SAGE to exercise or enforce any right or provision of these Terms of Use
+          will not constitute a waiver of such right or provision. Waiver of the benefit of any
+          provision hereunder must be in writing to be effective, and any such waiver shall not
+          operate or be construed as a waiver of any subsequent breach.
         </Text>
         <Text>
           If any provision of these Terms is found by a court of competent jurisdiction to be
@@ -761,24 +737,28 @@ export default function TermsOfService() {
           provisions of these Terms remain in full force and effect.
         </Text>
         <Text>
-          These Terms will be governed by the laws of the State of Maine without regard to its
-          conflict of law provisions. Any dispute between the parties that is not subject to
+          These Terms of Use will be governed by the laws of the State of Maine without regard to
+          its conflict of law provisions. Any dispute between the parties that is not subject to
           arbitration or cannot be heard in small claims court, shall be resolved in the state or
           federal courts of the State of Maine, and the United States, respectively, sitting in the
-          State of Maine. You agree that regardless of any statute or law to the contrary, any claim
-          or cause of action arising out of or related to use of the Services or these Terms must be
-          filed within one (1) year after such claim or cause of action arose or be forever barred.
+          State of Maine.
         </Text>
         <Text>
-          Except as otherwise provided herein, these Terms are intended solely for the benefit of
-          the parties and are not intended to confer third party beneficiary rights upon any other
-          person or entity.
+          You agree that regardless of any statute or law to the contrary, any claim or cause of
+          action arising out of or related to use of the Services or these Terms of Use must be
+          brought within one (1) year after such claim or cause of action arose or be forever
+          barred.
         </Text>
         <Text>
-          These Terms shall inure to the benefit of and be binding on the parties and their
+          Except as otherwise provided herein, these Terms of Use are intended solely for the
+          benefit of the parties and are not intended to confer third party beneficiary rights upon
+          any other person or entity.
+        </Text>
+        <Text>
+          These Terms of Use shall inure to the benefit of and be binding on the parties and their
           respective successors, heirs, personal representatives, and assigns; however, you may not
-          assign these Terms without the prior written consent of SAGE, but SAGE may assign or
-          transfer these Terms, in whole or in part, without restriction.
+          assign these Terms of Use without the prior written consent of SAGE, but SAGE may assign
+          or transfer these Terms of Use, in whole or in part, without restriction.
         </Text>
         <Text>
           Under California Civil Code Section 1789.3, California users are entitled to the following
@@ -788,12 +768,12 @@ export default function TermsOfService() {
           445-1254 or (800) 952-5210.
         </Text>
         <Text>
-          The section titles in these Terms are for convenience only and have no legal or
+          The section titles in these Terms of Use are for convenience only and have no legal or
           contractual effect.
         </Text>
         <Text>
-          These Terms shall be construed without regard to any presumption or other rule requiring
-          construction against the drafting party.
+          These Terms of Use shall be construed without regard to any presumption or other rule
+          requiring construction against the drafting party.
         </Text>
         <Text>
           You agree and understand that all provisions of these Terms of Use shall survive the
