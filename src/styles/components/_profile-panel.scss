@@ -133,10 +133,15 @@
   gap: 24px 20px;
 }
 .profile-panel__socials-field {
-  color: #696969;
-  width: 24px;
-  height: 24px;
-  @include m.interact;
+  @include m.theme() {
+    color: #696969;
+    width: 24px;
+    height: 24px;
+    @include m.interact;
+    &[data-linked='true'] {
+      color: m.t(accent);
+    }
+  }
 }
 
 .profile-panel__upload-artist-banner-container {

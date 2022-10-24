@@ -41,7 +41,7 @@
     "jwk-rsa-compute-primes": "^1.0.1",
     "multer": "^1.4.5-lts.1",
     "next": "^12.1.6",
-    "next-auth": "^4.3.4",
+    "next-auth": "^4.15.0",
     "nextjs-cors": "^2.1.1",
     "prisma": "^4.3.1",
     "react": "^18.2.0",
@@ -62,6 +62,7 @@
     "siwe": "^2.0.3",
     "superjson": "^1.8.0",
     "ts-node": "^10.9.1",
+    "twitter-api-sdk": "^1.2.1",
     "underscore": "^1.13.4",
     "video.js": "^7.20.3",
     "wagmi": "^0.6.6"

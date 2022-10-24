@@ -20,6 +20,8 @@ import {
 } from './ProfileValidation';
 import { toast } from 'react-toastify';
 import FileInputWithPreview from '@/components/FileInputWithPreview';
+import authClient from '@/utilities/twitter';
+import { useRouter } from 'next/router';
 
 interface State extends SafeUserUpdate {}
 
@@ -29,7 +31,6 @@ const INITIAL_STATE: State = {
   profilePicture: '',
   bio: '',
   webpage: '',
-  twitterUsername: '',
   instagramUsername: '',
   mediumUsername: '',
   bannerImageS3Path: '',
@@ -55,15 +56,10 @@ export default function ProfilePanel({ isArtist }: Props) {
     closeModal: closeProfilePicModal,
     openModal: openProfilePicModal,
   } = useModal();
-
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!validateEmail(state.email)) {
       toast.warn('Please provide a valid e-mail address');
-      return;
-    }
-    if (!validateTwitter(state.twitterUsername)) {
-      toast.warn('Please provide a valid twitter handle');
       return;
     }
     if (!validateInstagram(state.instagramUsername)) {
@@ -111,8 +107,17 @@ export default function ProfilePanel({ isArtist }: Props) {
     });
   };
 
+  const router = useRouter();
   const countryCode = getFilteredCountries([state.country || '']);
   const stateOptions = getStates(countryCode[0]?.code || '');
+
+  async function handleTwitterClick() {
+    // if (data.twitterUsername) {
+    //   window.open('https://twitter.com/' + data.twitterUsername);
+    // } else {
+    router.push('/api/twitter/authorize');
+    // }
+  }
 
   useEffect(() => {
     if (data) {
@@ -237,16 +242,11 @@ export default function ProfilePanel({ isArtist }: Props) {
           <p className='profile-panel__socials-label'>Connect Your Social Profile</p>
           <div className='profile-panel__socials-field-container'>
             <TwitterSVG
-              type='text'
-              value={state.twitterUsername ?? ''}
+              data-linked={!!data?.twitterUsername}
               className='profile-panel__socials-field'
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setState((prevState) => {
-                  return { ...prevState, twitterUsername: e.target.value.trim() };
-                });
-              }}
+              onClick={handleTwitterClick}
             />
-            <InstagramSVG
+            {/* <InstagramSVG
               type='text'
               value={state.instagramUsername ?? ''}
               className='profile-panel__socials-field'
@@ -275,7 +275,7 @@ export default function ProfilePanel({ isArtist }: Props) {
                   return { ...prevState, webpage: e.target.value.trim() };
                 });
               }}
-            />
+            /> */}
           </div>
         </div>
         <button
