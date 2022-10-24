@@ -6,10 +6,11 @@ interface Props {
 }
 
 function ArtistDisplay(props: Props) {
+  if (!props.artist) return null;
   return (
     <div className='artist-display'>
       <div className='artist-display__pfp-container'>
-        <PfpImage src={props.artist.profilePicture}></PfpImage>
+        <PfpImage src={props.artist?.profilePicture}></PfpImage>
       </div>
       <p className='artist-display__username'>{props.artist.username}</p>
     </div>

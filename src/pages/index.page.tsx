@@ -44,7 +44,11 @@ function home({
 
   return (
     <div className='home-page' data-cy='home-page' data-on={coverOn}>
-      <Cover artist={featuredDrop.NftContract.Artist} coverOn={coverOn} removeCover={removeCover} />
+      <Cover
+        artist={featuredDrop?.NftContract.Artist}
+        coverOn={coverOn}
+        removeCover={removeCover}
+      />
       <div data-on={isMobile ? coverOn : false} className='home-page__main'>
         <Logotype></Logotype>
         <LaunchTrailer
@@ -58,12 +62,12 @@ function home({
             <div className='home-page__featured-drop-tag-info'>
               <div
                 className='home-page__featured-drop-pfp'
-                onClick={() => pushToCreators(featuredDrop.NftContract.Artist.username)}
+                onClick={() => pushToCreators(featuredDrop.NftContract.Artist?.username)}
               >
-                <PfpImage src={featuredDrop.NftContract.Artist.profilePicture}></PfpImage>
+                <PfpImage src={featuredDrop.NftContract.Artist?.profilePicture}></PfpImage>
               </div>
               <span className='home-page__featured-drop-tag-label'>
-                {featuredDrop.name} by {featuredDrop.NftContract.Artist.username}
+                {featuredDrop.name} by {featuredDrop.NftContract.Artist?.username}
               </span>
             </div>
           </div>

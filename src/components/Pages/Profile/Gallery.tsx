@@ -49,7 +49,7 @@ function Gallery({ nfts }: Props) {
           onClick={handleControlRightClick}
           className='collection-panel__gallery-control-right'
         ></ArrowRightSVG>
-        {nfts.map((nft, i: number) => {
+        {nfts?.map((nft, i: number) => {
           let className: string = 'collection-panel__gallery-display-item';
 
           const isCurrent: boolean = selectedIndex == i;
@@ -88,7 +88,7 @@ function Gallery({ nfts }: Props) {
         </p>
       </div>
       <div className='collection-panel__gallery-grid'>
-        {nfts.map((nft, i: number) => {
+        {nfts?.map((nft, i: number) => {
           return (
             <div
               key={nft.id}
