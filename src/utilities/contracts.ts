@@ -41,7 +41,9 @@ var ContractFactory = (function () {
     const contract = new ethers.Contract(
       address,
       abi,
-      new ethers.providers.JsonRpcProvider(process.env.RPC_PROVIDER_URL as string)
+      new ethers.providers.JsonRpcProvider(
+        (process.env.RPC_PROVIDER_URL as string) || 'https://rpc.ankr.com/eth'
+      )
     );
     instances.set(address, contract);
     return contract;
@@ -176,6 +178,7 @@ export async function approveERC20Transfer(
     signer
   ) as ERC20Contract;
   const wallet = await signer.getAddress();
+  // const;
   const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, dstContractAddress);
   console.log(
     `approveERC20Transfer() :: ERC20 ${erc20Address} allowance of wallet ${wallet} for contract ${dstContractAddress} is ${allowance}`
@@ -190,6 +193,8 @@ export async function approveERC20Transfer(
 /**
  * This function is called server-side so winner can't be spoofed
  */
+
+const rpcURL = process.env.RPC_PROVIDER_URL || 'https://rpc.ankr.com/eth';
 export async function getUnclaimedAuctionWinner(auctionId: number): Promise<string> {
   console.log(`getUnclaimedAuctionWinner(${auctionId})`);
   const privateKey = process.env.DEV_WALLET_PK || '';
