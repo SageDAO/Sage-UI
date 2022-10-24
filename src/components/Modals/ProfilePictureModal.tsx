@@ -71,10 +71,11 @@ export default function ProfilePictureModal({ isOpen, closeModal }: ModalProps) 
                   ref={setEditorRef}
                   scale={state.scale}
                   image={state.image}
-                  width={150}
-                  height={150}
-                  borderRadius={150}
-                  color={[33, 33, 34, 1]}
+                  // width={150}
+                  // height={150}
+                  // borderRadius={150}
+                  color={[0, 0, 0, 0]}
+                  style={{ borderRadius: '100%', width: '150px', height: '150px' }}
                 />
               </div>
             )}
