@@ -46,6 +46,7 @@ export async function getHomePageData(prisma: PrismaClient) {
   const newArtworks = await prisma.nft.findMany({
     take: 5,
     include: { NftContract: { include: { Artist: true } } },
+    distinct: ['s3Path'],
   });
 
   const welcomeMessage = config
