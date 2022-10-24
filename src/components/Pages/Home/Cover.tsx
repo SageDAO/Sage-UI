@@ -1,3 +1,4 @@
+import Logotype from '@/components/Logotype';
 import VideoJS from '@/components/Media/VideoJS';
 import ArrowDownSVG from '@/public/interactive/arrow-down.svg';
 import React, { useState } from 'react';
@@ -35,7 +36,6 @@ function Cover(props: Props) {
     <div
       onTouchStart={(e) => {
         setIsDragging(true);
-        const startPos = getPositionY(e);
       }}
       className='home-page__cover'
       data-on={props.coverOn}
@@ -52,9 +52,17 @@ function Cover(props: Props) {
         setIsDragging(false);
       }}
     >
+      <div data-on={props.coverOn} className='home-page__cover-logotype-container'>
+        <Logotype></Logotype>
+      </div>
       <VideoJS options={videoJsOptions} onReady={() => {}} />
-      <div onClick={props.removeCover} data-on={props.coverOn} className='home-page__cover-arrow'>
-        <ArrowDownSVG className='home-page__cover-arrow-svg' data-on={props.coverOn}></ArrowDownSVG>
+      <div className='home-page__cover-arrow-container'>
+        <div onClick={props.removeCover} data-on={props.coverOn} className='home-page__cover-arrow'>
+          <ArrowDownSVG
+            className='home-page__cover-arrow-svg'
+            data-on={props.coverOn}
+          ></ArrowDownSVG>
+        </div>
       </div>
     </div>
   );

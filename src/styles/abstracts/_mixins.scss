@@ -160,10 +160,14 @@
 @mixin page {
   width: 100vw;
   flex: 1;
-  padding: 97px 0 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  @include page-paddings;
+}
+
+@mixin page-paddings {
+  padding: 97px 0 0px;
   @include b.min-width('medium') {
     padding: 80px 0 60px;
   }
