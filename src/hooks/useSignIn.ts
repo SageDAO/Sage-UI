@@ -25,7 +25,7 @@ export default function useSignIn(isOpen: boolean) {
       const message = new SiweMessage({
         domain: window.location.host,
         address: address,
-        statement: `I accept the SAGE Terms of Service: ${parameters.APP_URL}termsofservice`,
+        statement: `I accept the SAGE Terms of Service and Privacy Policy: ${parameters.APP_URL}termsofservice ${parameters.APP_URL}privacypolicy`,
         uri: window.location.origin,
         version: '1',
         chainId,
