@@ -6,7 +6,7 @@ function Subheader({ children }: { children: React.ReactNode }) {
 }
 
 function Text({ children }: { children: React.ReactNode }) {
-  return <p className='submissions-page__guide-lines-text'>{children}</p>;
+  return <p className='submissions-page__guidelines-text'>{children}</p>;
 }
 
 function List({ children }: { children: React.ReactNode }) {
