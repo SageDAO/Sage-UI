@@ -67,6 +67,7 @@ export default function submissions() {
               <li>Links to your social media pages.</li>
             </ul>
             <p className='submissions-page__guidelines-text'>
+              With those items included, you may email your application to
               <a href='mailto:creators@sage.art'> creators@sage.art</a>
             </p>
           </div>
