@@ -14,7 +14,7 @@ export default function NewArtworks({ newArtworks }: Props) {
     <>
       <div className='home-page__new-artworks-header-section'>
         <p className='home-page__new-artworks-header'>NEW ARTWORK</p>
-        <p className='home-page__new-artworks-subheader'>Fresh mints by SAGE creators</p>
+        {/* <p className='home-page__new-artworks-subheader'>Fresh mints by SAGE creators</p> */}
       </div>
       <section className='home-page__new-artworks-section'>
         <div className='home-page__new-artworks-flex-container'>

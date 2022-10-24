@@ -40,7 +40,7 @@ export default function EventSlider({ mediumData }: Props) {
   return (
     <section className='home-page__events-section'>
       <h3 className='home-page__events-header'>news</h3>
-      <p className='home-page__events-subheader'>Latest news from the crypto space.</p>
+      <p className='home-page__events-subheader'>Latest news from SAGE</p>
       <div className='home-page__events'>
         {state.items.map((item, i) => {
           const regex = /(<([^>]+)>)/gi;
