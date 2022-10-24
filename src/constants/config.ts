@@ -47,6 +47,20 @@ const configuration: Configuration = {
     STORAGE_ADDRESS: '0xACb2d936daD56A254a037E28e80BB42Cd86cC042',
     APP_URL: 'https://sage-staging.vercel.app/',
   },
+  production: {
+    CHAIN_ID: '1',
+    NETWORK_NAME: 'mainnet',
+    SUBGRAPH_URL: 'https://api.studio.thegraph.com/query/28124/sage-rinkeby/v0.0.10',
+    MEDIUM_URL: 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@SAGE_WEB3',
+    MARKETPLACE_ADDRESS: '0x11049f4231B8D32403821B8A157325E2B0FB6cab',
+    STORAGE_ADDRESS: '0xd03ecE827177d7D7ACA0EF6065A605abcAF62d22',
+    NFTFACTORY_ADDRESS: '0x3B268D390fE9c9Ca937D28c12ADB341Cf4fa64F0',
+    LOTTERY_ADDRESS: '0xBB8022c7235d456252eC1B40C65DB5F4B7123F2D',
+    REWARDS_ADDRESS: '0xC1F9787079a83E444836450b8f3b31A9D5D3cBad',
+    AUCTION_ADDRESS: '0xC99A4a7a2222fcdc488D15Bda9f9A95D4f59bF0C',
+    ASHTOKEN_ADDRESS: '0x64D91f12Ece7362F91A6f8E7940Cd55F05060b92', // MOCK Contract
+    APP_URL: 'https://sage.art/',
+  },
 };
 
 export const parameters: Parameters = configuration[env as string];
