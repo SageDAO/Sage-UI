@@ -6,8 +6,11 @@ import { useToken } from 'wagmi';
 const { ASHTOKEN_ADDRESS } = parameters;
 
 export default function howtobuyash() {
-  const { data: ashTokenData } = useToken({ address: ASHTOKEN_ADDRESS });
+  const { data: ashTokenData, isLoading, isError, error } = useToken({ address: ASHTOKEN_ADDRESS });
 
+  if (error) {
+    console.log(error);
+  }
   async function handleImportASH() {
     try {
       // wasAdded is a boolean. Like any RPC method, an error may be thrown.
@@ -16,9 +19,9 @@ export default function howtobuyash() {
         params: {
           type: 'ERC20', // Initially only supports ERC20, but eventually more!
           options: {
-            address: ashTokenData.address, // The address that the token is at.
-            symbol: ashTokenData.symbol, // A ticker symbol or shorthand, up to 5 chars.
-            decimals: ashTokenData.decimals, // The number of decimals in the token
+            address: ASHTOKEN_ADDRESS, // The address that the token is at.
+            symbol: ashTokenData?.symbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: ashTokenData?.decimals, // The number of decimals in the token
             // image: ashTokenData, // A string url of the token logo
           },
         },
@@ -38,7 +41,11 @@ export default function howtobuyash() {
       <Logotype></Logotype>
       <div className='howtobuyash-header'>How to buy ASH </div>
       <div className='howtobuyash-text'>
-        <button onClick={handleImportASH} className='howtobuyash__import-button'>
+        <button
+          // disabled={isLoading}
+          onClick={handleImportASH}
+          className='howtobuyash__import-button'
+        >
           IMPORT ASH TO WALLET
         </button>
         <div className='howtobuyash__group'>

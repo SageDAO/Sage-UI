@@ -10,10 +10,12 @@ import { createClient, WagmiConfig, configureChains, defaultChains } from 'wagmi
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { useState } from 'react';
 import { SearchContext } from '@/store/searchContext';
 import LandingPage from '@/components/Pages/Landing';
 import { infuraProvider } from 'wagmi/providers/infura';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
 
 // import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import 'react-medium-image-zoom/dist/styles.css';
@@ -22,8 +24,17 @@ import 'video.js/dist/video-js.css';
 // set up connectors
 
 const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
-  infuraProvider({ apiKey: process.env.INFURA_ID }),
   publicProvider(),
+  jsonRpcProvider({
+    rpc: (chain) => {
+      return {
+        http: process.env.ALCHEMY_HTTPS,
+        webSocket: process.env.ALCHEMY_WEBSOCKETS,
+      };
+    },
+  }),
+  infuraProvider({ apiKey: process.env.INFURA_ID }),
+  alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
 ]);
 
 const connectors = [
