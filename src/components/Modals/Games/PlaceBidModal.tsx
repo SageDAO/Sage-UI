@@ -163,7 +163,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
         <div className='games-modal__body'>
           <section className='games-modal__main'>
             <div className='games-modal__main-img-container'>
-              <BaseMedia src={nftPath} isZoomable={true} />
+              <BaseMedia src={auction.Nft.s3Path} isZoomable={true} />
 
               {!isOpenForBids && (
                 <Countdown

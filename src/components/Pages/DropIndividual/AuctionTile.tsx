@@ -50,7 +50,7 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
         isOpen={isOpen}
         closeModal={closeModal}
       />
-      <Media focusText={auctionFocusText} src={auction.Nft.s3Path}></Media>
+      <Media focusText={auctionFocusText} src={auction.Nft.s3PathOptimized}></Media>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>

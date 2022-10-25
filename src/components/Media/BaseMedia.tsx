@@ -2,6 +2,7 @@ import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import DEFAULT_PFP from '@/public/branding/sage-icon.svg';
 import Image from 'next/image';
 import Zoom from 'react-medium-image-zoom';
+import VideoJS from './VideoJS';
 
 const ConditionalWrapper = ({ condition, wrapper, children }) =>
   condition ? wrapper(children) : children;
@@ -29,33 +30,52 @@ function BaseMedia({
     return src?.toLowerCase().endsWith('mp4');
   };
 
+  const isFirefox = (): boolean => {
+    if (typeof window !== 'undefined') {
+      return window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    }
+    return false;
+  };
+
+  const videoJsOptions = isVideo()
+    ? {
+        autoplay: true,
+        controls: true,
+        controlslist: 'nodownload',
+        loop: true,
+        playsinline: true,
+        preload: 'metadata',
+        muted: !isFirefox(),
+        // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
+        sources: [
+          {
+            src,
+            type: 'video/mp4',
+          },
+        ],
+      }
+    : {};
+
   return (
     <div>
       <ConditionalWrapper
-        condition={true === isZoomable}
+        condition={true === isZoomable && !isVideo()}
         wrapper={(children: JSX.Element) => <Zoom classDialog='custom-zoom'>{children}</Zoom>}
       >
         {isVideo() ? (
-          <video
-            autoPlay={autoPlay ?? true}
-            muted={true}
-            loop={true}
-            playsInline={true}
+          <div
             style={{
-              inset: '0px',
-              overflow: 'hidden',
-              position: 'absolute',
               width: '100%',
               height: '100%',
               objectFit: 'cover',
             }}
-            className={className}
           >
-            <source src={src} type={type} />
-          </video>
+            <VideoJS options={videoJsOptions} onReady={() => {}} />
+          </div>
         ) : isZoomable ? (
           <img
             src={src}
+            // layout='fill'
             style={{
               overflow: 'hidden',
               width: '100%',
