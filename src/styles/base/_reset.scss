@@ -186,7 +186,7 @@ input {
 }
 
 img {
-  @include m.noselect;
+  // @include m.noselect;
 }
 
 input::-webkit-outer-spin-button,
