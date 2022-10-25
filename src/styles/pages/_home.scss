@@ -42,6 +42,7 @@
   @include m.standard-width;
   margin-left: auto;
   margin-right: auto;
+  background-color: red;
 
   &[data-on='false'] {
     display: none;
@@ -468,7 +469,6 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
   @include m.flex-col;
   // @include m.flex-center;
   height: 100%;
-  @include m.flex-center;
   text-transform: uppercase;
 }
 .home-page__new-artworks-item-name {
