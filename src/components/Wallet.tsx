@@ -74,7 +74,8 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                   <p className='wallet__wallet-item-name'>
                     {c.name}
                     <span className='wallet__agreement-text'>
-                      BY CONNECTING YOUR WALLET, YOU AGREE TO OUR AND PRIVACY POLICY.
+                      BY CONNECTING YOUR WALLET, YOU AGREE TO OUR TERMS OF SERVICE AND PRIVACY
+                      POLICY.
                     </span>
                   </p>
                 </button>
