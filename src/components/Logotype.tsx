@@ -13,19 +13,17 @@ export default function Logotype({ isErrorPage, disableHomeRouting }: Props) {
   const { isSingleDropsPage, pushToHome } = useSageRoutes();
   const dataColor = isSingleDropsPage && 'white';
   return (
-    <div className='sage-logotype__wrapper'>
-      <div
-        className='sage-logotype'
-        onClick={() => {
-          !disableHomeRouting && pushToHome();
-        }}
-      >
-        {isErrorPage ? (
-          <ErrortypeSVG data-color={dataColor} className='sage-logotype__svg' />
-        ) : (
-          <SageFullLogoSVG data-color={dataColor} className='sage-logotype__svg' />
-        )}
-      </div>
+    <div
+      className='sage-logotype'
+      onClick={() => {
+        !disableHomeRouting && pushToHome();
+      }}
+    >
+      {isErrorPage ? (
+        <ErrortypeSVG data-color={dataColor} className='sage-logotype__svg' />
+      ) : (
+        <SageFullLogoSVG data-color={dataColor} className='sage-logotype__svg' />
+      )}
     </div>
   );
 }

@@ -16,6 +16,7 @@ import useUserNotifications from '@/hooks/useUserNotifications';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import ProfileDisplay from '@/components/ProfileDisplay';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import Logotype from '@/components/Logotype';
 
 type Headers =
   | 'IN AND OUTGOING BIDS'
@@ -108,12 +109,13 @@ function profile() {
       }}
     >
       <section className='profile-page__upper'>
-        <div className='profile-page__logotype-container'>
+        <Logotype></Logotype>
+        {/* <div className='profile-page__logotype-container'>
           <SageFullLogoSVG
             onClick={() => router.push('/')}
             className='profile-page__sage-logo-svg'
           />
-        </div>
+        </div> */}
         <Balances />
       </section>
       <h1 className='profile-page__header'>{header}</h1>
