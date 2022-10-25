@@ -17,6 +17,7 @@ interface Props {
 // styles/layout/_game-page.scss
 export default function BidHistoryTable({ auctionId, isActive }: Props) {
   const { data: bids } = useGetBidHistoryQuery(auctionId);
+  console.log('bidHistory: ', bids);
 
   // const BID_HISTORY_QUERY = gql`
   //   query GetBidHistory($auctionId: String) {
@@ -41,22 +42,16 @@ export default function BidHistoryTable({ auctionId, isActive }: Props) {
   // const sortedBids = sortBidHistory(graphData.auction.bids);
   // startPolling(1000);
 
-  if (!isActive || !bids) return null;
-
   return (
     <table className='games-modal__bid-history-table' data-active={isActive}>
       <tbody className='games-modal__bid-history-data'>
-        {bids.slice(0, 10).map(({ bidderAddress, bidderUsername, amount, blockTimestamp }) => {
+        {bids?.slice(0, 10).map(({ bidderAddress, bidderUsername, amount, blockTimestamp }) => {
           // const { amountFormatted, amountFormattedShortened } = formatAmount(amount);
           const dateTime = new Date(blockTimestamp * 1000).toLocaleString();
           // const animateFirst: string = previousData ? 'true' : 'false';
           if (!isActive) return null;
           return (
-            <tr
-              className='games-modal__bid-history-row'
-              key={amount}
-              data-animate-first={'true'}
-            >
+            <tr className='games-modal__bid-history-row' key={amount} data-animate-first={'true'}>
               <th data-col='time' className='games-modal__bid-history-cell'>
                 {dateTime}
               </th>
