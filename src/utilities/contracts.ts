@@ -41,9 +41,8 @@ var ContractFactory = (function () {
     const contract = new ethers.Contract(
       address,
       abi,
-      new ethers.providers.InfuraProvider(
-        { name: NETWORK_NAME, chainId: +CHAIN_ID },
-        process.env.INFURA_ID
+      new ethers.providers.JsonRpcProvider(
+        (process.env.RPC_PROVIDER_URL as string) || 'https://rpc.ankr.com/eth'
       )
     );
     instances.set(address, contract);
@@ -63,31 +62,66 @@ var ContractFactory = (function () {
 })();
 
 export async function getLotteryContract(signer?: Signer): Promise<LotteryContract> {
-  return (await getContract(LOTTERY_ADDRESS, LotteryJson.contractName, LotteryJson.abi, signer)) as LotteryContract;
+  return (await getContract(
+    LOTTERY_ADDRESS,
+    LotteryJson.contractName,
+    LotteryJson.abi,
+    signer
+  )) as LotteryContract;
 }
 
 export async function getAuctionContract(signer?: Signer): Promise<AuctionContract> {
-  return (await getContract(AUCTION_ADDRESS, AuctionJson.contractName, AuctionJson.abi, signer)) as AuctionContract;
+  return (await getContract(
+    AUCTION_ADDRESS,
+    AuctionJson.contractName,
+    AuctionJson.abi,
+    signer
+  )) as AuctionContract;
 }
 
 export async function getRewardsContract(signer?: Signer): Promise<RewardsContract> {
-  return (await getContract(REWARDS_ADDRESS, RewardsJson.contractName, RewardsJson.abi, signer)) as RewardsContract;
+  return (await getContract(
+    REWARDS_ADDRESS,
+    RewardsJson.contractName,
+    RewardsJson.abi,
+    signer
+  )) as RewardsContract;
 }
 
 export async function getNFTContract(address: string, signer?: Signer): Promise<NftContract> {
-  return (await getContract(address, SageNFTJson.contractName, SageNFTJson.abi, signer)) as NftContract;
+  return (await getContract(
+    address,
+    SageNFTJson.contractName,
+    SageNFTJson.abi,
+    signer
+  )) as NftContract;
 }
 
 export async function getERC20Contract(signer?: Signer): Promise<ERC20Contract> {
-  return (await getContract(ASHTOKEN_ADDRESS, 'ERC20StandardJson', ERC20StandardJson.abi, signer)) as ERC20Contract;
+  return (await getContract(
+    ASHTOKEN_ADDRESS,
+    'ERC20StandardJson',
+    ERC20StandardJson.abi,
+    signer
+  )) as ERC20Contract;
 }
 
 export async function getNftFactoryContract(signer?: Signer): Promise<NftFactoryContract> {
-  return (await getContract(NFTFACTORY_ADDRESS, NFTFactoryJson.contractName, NFTFactoryJson.abi, signer)) as NftFactoryContract;
+  return (await getContract(
+    NFTFACTORY_ADDRESS,
+    NFTFactoryJson.contractName,
+    NFTFactoryJson.abi,
+    signer
+  )) as NftFactoryContract;
 }
 
 export async function getStorageContract(signer?: Signer): Promise<StorageContract> {
-  return (await getContract(STORAGE_ADDRESS, StorageJson.contractName, StorageJson.abi, signer)) as StorageContract;
+  return (await getContract(
+    STORAGE_ADDRESS,
+    StorageJson.contractName,
+    StorageJson.abi,
+    signer
+  )) as StorageContract;
 }
 
 export async function getMarketplaceContract(signer?: Signer): Promise<MarketplaceContract> {
@@ -144,6 +178,7 @@ export async function approveERC20Transfer(
     signer
   ) as ERC20Contract;
   const wallet = await signer.getAddress();
+  // const;
   const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, dstContractAddress);
   console.log(
     `approveERC20Transfer() :: ERC20 ${erc20Address} allowance of wallet ${wallet} for contract ${dstContractAddress} is ${allowance}`
@@ -158,6 +193,8 @@ export async function approveERC20Transfer(
 /**
  * This function is called server-side so winner can't be spoofed
  */
+
+const rpcURL = process.env.RPC_PROVIDER_URL || 'https://rpc.ankr.com/eth';
 export async function getUnclaimedAuctionWinner(auctionId: number): Promise<string> {
   console.log(`getUnclaimedAuctionWinner(${auctionId})`);
   const privateKey = process.env.DEV_WALLET_PK || '';

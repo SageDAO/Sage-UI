@@ -164,23 +164,17 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
           <section className='games-modal__main'>
             <div className='games-modal__main-img-container'>
               <BaseMedia src={nftPath} isZoomable={true} />
-              {isStarted && (
-                <>
-                  <Countdown
-                    endTime={startTime}
-                    className='games-modal__countdown--float'
-                  ></Countdown>
 
-                  <Countdown
-                    endTime={endTime}
-                    className='games-modal__countdown--float'
-                  ></Countdown>
-                </>
-              )}
-              {/* {!isOpenForBids && (
+              {!isOpenForBids && (
+                <Countdown
+                  endTime={startTime}
+                  className='games-modal__countdown--float'
+                ></Countdown>
               )}
               {isOpenForBids && isRunning && (
-              )} */}
+                <Countdown endTime={endTime} className='games-modal__countdown--float'></Countdown>
+              )}
+              
             </div>
             <div className='games-modal__main-content'>
               <div>
@@ -239,7 +233,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                   ></Countdown>
                 </div>
               )}
-              {isOpenForBids && (
+              {isStarted && (
                 <>
                   <input
                     onChange={handleBidInputChange}

@@ -3,14 +3,21 @@ import ReactTooltip from 'react-tooltip';
 
 export default function Balances() {
   const { pointsBalanceDisplay, ashBalance, ashBalanceDisplay } = useSAGEAccount();
-  if (!pointsBalanceDisplay || !ashBalanceDisplay) {
-    return null;
-  }
+  // if (!pointsBalanceDisplay || !ashBalanceDisplay) {
+  //   return null;
+  // }
   const pixelRate = getPixelRate(ashBalance);
   const tooltip = `You are currently earning ${pixelRate} pixels per day`;
   return (
     <div className='profile-page__balances'>
-      <ReactTooltip id='main' place={'bottom'} type={'light'} effect={'solid'} multiline={true} offset={{ bottom: 40 }} />
+      <ReactTooltip
+        id='main'
+        place={'bottom'}
+        type={'light'}
+        effect={'solid'}
+        multiline={true}
+        offset={{ bottom: 40 }}
+      />
       <div className='profile-page__balances-token'>
         <h1 className='profile-page__balances-token-value'>{ashBalanceDisplay}</h1>
         <h1 className='profile-page__balances-points-label'>your ash balance</h1>

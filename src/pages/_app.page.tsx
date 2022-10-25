@@ -25,16 +25,15 @@ import 'video.js/dist/video-js.css';
 
 const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
   publicProvider(),
-  jsonRpcProvider({
-    rpc: (chain) => {
-      return {
-        http: process.env.ALCHEMY_HTTPS,
-        webSocket: process.env.ALCHEMY_WEBSOCKETS,
-      };
-    },
-  }),
-  infuraProvider({ apiKey: process.env.INFURA_ID }),
-  alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
+  // jsonRpcProvider({
+  //   rpc: (chain) => {
+  //     return {
+  //       http: process.env.ALCHEMY_HTTPS,
+  //       webSocket: process.env.ALCHEMY_WEBSOCKETS,
+  //     };
+  //   },
+  // }),
+  infuraProvider({}),
 ]);
 
 const connectors = [
