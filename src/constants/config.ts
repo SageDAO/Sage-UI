@@ -59,7 +59,7 @@ const configuration: Configuration = {
     REWARDS_ADDRESS: '0x9faC40CA206b61e48AdC5c440d5dcbCc5F9beE35',
     AUCTION_ADDRESS: '0x78209A2985595ff3128Fc69291b51443f918d636',
     ASHTOKEN_ADDRESS: '0x64D91f12Ece7362F91A6f8E7940Cd55F05060b92', // MOCK Contract
-    APP_URL: 'https://sage.art/',
+    APP_URL: 'https://www.sage.art/',
   },
 };
 
