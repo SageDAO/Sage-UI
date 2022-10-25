@@ -17,7 +17,6 @@ interface Props {
 // styles/layout/_game-page.scss
 export default function BidHistoryTable({ auctionId, isActive }: Props) {
   const { data: bids } = useGetBidHistoryQuery(auctionId);
-  console.log('bidHistory: ', bids);
 
   // const BID_HISTORY_QUERY = gql`
   //   query GetBidHistory($auctionId: String) {
