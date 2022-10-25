@@ -8,6 +8,7 @@ export interface NewArtwork {
   artistUsername: User['username'];
   name: Nft['name'];
   profilePicture: User['profilePicture'];
+  dropId?: Drop['id'];
 }
 
 export interface ArtistSales {

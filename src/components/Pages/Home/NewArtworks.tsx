@@ -1,8 +1,10 @@
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
+import { basePathDrops } from '@/constants/paths';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import { getHomePageData } from '@/prisma/functions';
 import { NewArtwork } from '@/prisma/types';
 import { Nft, User } from '@prisma/client';
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 
 interface Props {
@@ -37,11 +39,22 @@ export default function NewArtworks({ newArtworks }: Props) {
 
 interface NewArtworksTileProps extends NewArtwork {}
 
-function NewArtworksTile({ s3Path, artistUsername, name, profilePicture }: NewArtworksTileProps) {
-  console.log(s3Path);
+function NewArtworksTile({
+  s3Path,
+  artistUsername,
+  name,
+  profilePicture,
+  dropId,
+}: NewArtworksTileProps) {
+  const { pushToDrops } = useSageRoutes();
+  function handleMediaClick() {
+    if (dropId) {
+      pushToDrops(dropId);
+    }
+  }
   return (
-    <div key={s3Path} onClick={() => {}} className='home-page__new-artworks-item'>
-      <div className='home-page__new-artworks-media'>
+    <div className='home-page__new-artworks-item'>
+      <div onClick={handleMediaClick} className='home-page__new-artworks-media'>
         <BaseMedia src={s3Path}></BaseMedia>
       </div>
       <div className='home-page__new-artworks-item-content'>

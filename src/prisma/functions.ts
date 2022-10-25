@@ -52,19 +52,22 @@ export async function getHomePageData(prisma: PrismaClient) {
       Lotteries: {
         select: { Nfts: { distinct: ['s3Path'], select: { s3Path: true, name: true } } },
       },
+      id: true,
     },
+    orderBy: { createdAt: 'desc' },
   });
   let newArtworks: NewArtwork[] = [];
   newDrops.forEach((d) => {
     const artistUsername = d.NftContract.Artist.username;
     const { profilePicture } = d.NftContract.Artist;
+    const dropId = d.id;
     d.Auctions.forEach((a) => {
-      const newArtwork = { ...a.Nft, artistUsername, profilePicture };
+      const newArtwork = { ...a.Nft, artistUsername, profilePicture, dropId };
       newArtworks.push(newArtwork);
     });
     d.Lotteries.forEach((l) => {
       l.Nfts.map((nft) => {
-        newArtworks.push({ ...nft, artistUsername, profilePicture });
+        newArtworks.push({ ...nft, artistUsername, profilePicture, dropId });
       });
     });
   });
