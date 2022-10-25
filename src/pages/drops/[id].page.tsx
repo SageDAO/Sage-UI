@@ -105,7 +105,7 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
       <div className='drop-page'>
         <header className='drop-page__header'>
           <div className='drop-page__header-logotype'>
-            <Logotype />
+            <Logotype dataColor='white' />
           </div>
           <section className='drop-page__header-drop-info'>
             <div className='drop-page__header-main-column'>

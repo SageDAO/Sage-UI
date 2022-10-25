@@ -7,11 +7,11 @@ import useSageRoutes from '@/hooks/useSageRoutes';
 interface Props {
   isErrorPage?: boolean;
   disableHomeRouting?: boolean;
+  dataColor?: string;
 }
 
-export default function Logotype({ isErrorPage, disableHomeRouting }: Props) {
+export default function Logotype({ isErrorPage, disableHomeRouting, dataColor }: Props) {
   const { isSingleDropsPage, pushToHome } = useSageRoutes();
-  const dataColor = isSingleDropsPage && 'white';
   return (
     <div
       className='sage-logotype'
