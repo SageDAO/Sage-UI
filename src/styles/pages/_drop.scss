@@ -215,6 +215,9 @@ strong {
   gap: min(60px, 3vw);
   grid-template-columns: repeat(2, 1fr);
   @include b.min-width('medium') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include b.min-width('large') {
     grid-template-columns: repeat(5, 1fr);
   }
 }
@@ -369,7 +372,7 @@ strong {
 .drop-page__grid-item-info {
   padding: 10px;
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   justify-content: space-between;
   gap: 6px;
 }
@@ -382,7 +385,7 @@ strong {
 .drop-page__grid-item-info-right {
   flex-direction: column;
   display: flex;
-  justify-content: end;
+  justify-content: start;
   flex: 1;
 }
 
@@ -409,6 +412,7 @@ strong {
   font-size: clamp(6px, 0.6vw, 10px);
   line-height: 130%;
   color: inherit;
+  white-space: nowrap;
 }
 
 .drop-page__grid-item-info-game-name {
