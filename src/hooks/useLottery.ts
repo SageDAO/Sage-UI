@@ -41,6 +41,7 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
     selectedNftName,
     selectedNftEditionsText,
     lotteryWinners,
+    costASH: lottery.costPerTicketTokens,
     hasMaxTicketsPerUser,
     selectedNftEditionsCount,
     duration,

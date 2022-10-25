@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Signer } from 'ethers';
-import { useSigner } from 'wagmi';
+import { erc20ABI, useContractRead, useSigner } from 'wagmi';
 import { Lottery_include_Nft } from '@/prisma/types';
 import {
   BuyTicketRequest,
@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import useSAGEAccount from '@/hooks/useSAGEAccount';
 import useLottery from '@/hooks/useLottery';
 import { toast } from 'react-toastify';
+import { parameters } from '@/constants/config';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -86,7 +87,17 @@ function GetTicketModal({
   const editionsCount: number = lottery.Nfts[selectedNftIndex].numberOfEditions;
   const editionsText: string = editionsCount > 1 ? 'editions' : 'edition';
 
-  const { gameInfo } = useLottery({ lottery, nfts: lottery.Nfts, selectedIndex: 0 });
+  const { data: allowance } = useContractRead({
+    addressOrName: parameters.ASHTOKEN_ADDRESS,
+    contractInterface: erc20ABI,
+    functionName: 'allowance',
+    args: [walletAddress, parameters.LOTTERY_ADDRESS],
+    watch: true,
+  });
+
+  const { gameInfo, costASH } = useLottery({ lottery, nfts: lottery.Nfts, selectedIndex: 0 });
+
+  const needsAllowance = +allowance < desiredTicketAmount * costASH;
 
   function handleTicketSubClick() {
     if (desiredTicketAmount == 1) {
@@ -253,7 +264,11 @@ function GetTicketModal({
                     onClick={handleBuyTicketClick}
                     className='games-modal__buy-tickets-button'
                   >
-                    {errorState.isError ? errorState.message : 'Buy Entries'}
+                    {errorState.isError
+                      ? errorState.message
+                      : needsAllowance
+                      ? 'approve'
+                      : 'buy entries'}
                   </button>
                 </div>
               )}

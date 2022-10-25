@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Signer } from 'ethers';
-import { useSigner } from 'wagmi';
+import { erc20ABI, useContractRead, useSigner } from 'wagmi';
 import { toast } from 'react-toastify';
 import { Auction_include_Nft } from '@/prisma/types';
 import type { User } from '@prisma/client';
@@ -18,6 +18,7 @@ import useAuction from '@/hooks/useAuction';
 import { useSession } from 'next-auth/react';
 import shortenAddress from '@/utilities/shortenAddress';
 import ClaimPrizeButton from '@/components/Pages/Profile/ClaimPrizeButton';
+import { parameters } from '@/constants/config';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -58,6 +59,15 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
   const { data: signer } = useSigner();
   const { data: sessionData } = useSession();
   const walletAddress = sessionData?.address;
+  const { data: allowance } = useContractRead({
+    addressOrName: parameters.ASHTOKEN_ADDRESS,
+    contractInterface: erc20ABI,
+    functionName: 'allowance',
+    args: [walletAddress, parameters.AUCTION_ADDRESS],
+    watch: true,
+  });
+  const allowanceNumber = +allowance;
+  const needApproval = allowanceNumber < state.desiredBidValue;
 
   const {
     nftName,
@@ -174,7 +184,6 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
               {isOpenForBids && isRunning && (
                 <Countdown endTime={endTime} className='games-modal__countdown--float'></Countdown>
               )}
-              
             </div>
             <div className='games-modal__main-content'>
               <div>
@@ -247,7 +256,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                     className='games-modal__place-bid-button'
                     onClick={handlePlaceBidClick}
                   >
-                    {buttonText}
+                    {needApproval ? 'approve' : buttonText}
                   </button>
                 </>
               )}
