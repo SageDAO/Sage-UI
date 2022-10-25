@@ -24,6 +24,7 @@ export default function DrawingTile({ artistName, dropName, drawing, tickets, cl
     isLive,
     isEnded,
     mediaSrc,
+    optimizedMediaSrc,
     selectedNftName,
     selectedNftEditionsCount,
     endTime,
@@ -55,7 +56,7 @@ export default function DrawingTile({ artistName, dropName, drawing, tickets, cl
         ticketCount={tickets}
         systemType='drawing'
       ></GetTicketModal>
-      <Media focusText={focusText} src={mediaSrc}></Media>
+      <Media focusText={focusText} src={optimizedMediaSrc}></Media>
       <div className='drop-page__grid-item-info'>
         <div className='drop-page__grid-item-info-left'>
           <h1 className='drop-page__grid-item-info-drop-name'>
