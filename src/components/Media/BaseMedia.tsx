@@ -68,6 +68,7 @@ function BaseMedia({
               width: '100%',
               height: '100%',
               objectFit: 'cover',
+              overflow: 'hidden',
             }}
           >
             <VideoJS options={videoJsOptions} onReady={() => {}} />
