@@ -38,6 +38,6 @@ function getPixelRate(ashBalance: number) {
   if (isNaN(ashBalance) || ashBalance == 0) {
     return 0;
   }
-  const rate = Math.round(ashBalance / 4);
-  return rate > 250 ? 250 : rate;
+  const rate = ashBalance / 4;
+  return rate > 250 ? 250 : rate.toFixed(1);
 }
