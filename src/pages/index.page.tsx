@@ -1,6 +1,6 @@
 import prisma from '@/prisma/client';
 import React, { useState } from 'react';
-import { Drop_include_GamesAndArtist, Nft, User } from '@/prisma/types';
+import { Drop_include_GamesAndArtist, NewArtwork, Nft, User } from '@/prisma/types';
 import { getHomePageData, getSageMediumData } from '@/prisma/functions';
 import EventSlider from '@/components/Pages/Home/EventSlider';
 import UpcomingDrops from '@/components/Pages/Home/UpcomingDrops';
@@ -15,12 +15,7 @@ import useWindowDimensions from '@/hooks/useWindowSize';
 import Cover from '@/components/Pages/Home/Cover';
 
 interface Props extends Awaited<ReturnType<typeof getHomePageData>> {
-  // featuredDrop: Drop_include_GamesAndArtist;
-  // upcomingDrops: Drop_include_GamesAndArtist[];
   mediumData: any;
-  // welcomeMessage: string;
-  // latestArtists: User[];
-  // newArtworks: ;
 }
 
 function home({

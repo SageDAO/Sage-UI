@@ -1,11 +1,12 @@
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import { getHomePageData } from '@/prisma/functions';
+import { NewArtwork } from '@/prisma/types';
 import { Nft, User } from '@prisma/client';
 import { Fragment } from 'react';
 
 interface Props {
-  newArtworks: Awaited<ReturnType<typeof getHomePageData>>['newArtworks'];
+  newArtworks: NewArtwork[];
 }
 export default function NewArtworks({ newArtworks }: Props) {
   const { pushToCreators, pushToDrops } = useSageRoutes();
@@ -18,17 +19,15 @@ export default function NewArtworks({ newArtworks }: Props) {
       </div>
       <section className='home-page__new-artworks-section'>
         <div className='home-page__new-artworks-flex-container'>
-          {newArtworks.map((nft) => {
-            const artist = nft.NftContract?.Artist;
-            return <NewArtworksTile key={nft.id} artist={artist} nft={nft} />;
+          {newArtworks.map((nftArtwork) => {
+            return <NewArtworksTile {...nftArtwork} key={nftArtwork.s3Path} />;
           })}
         </div>
       </section>
       <section className='home-page__new-artworks-section--mobile'>
         <div className='home-page__new-artworks-flex-container--mobile'>
           {newArtworks.map((nft) => {
-            const artist = nft.NftContract?.Artist;
-            return <NewArtworksTile key={nft.id} artist={artist} nft={nft} />;
+            return <NewArtworksTile {...nft} key={nft.s3Path} />;
           })}
         </div>
       </section>
@@ -36,25 +35,23 @@ export default function NewArtworks({ newArtworks }: Props) {
   );
 }
 
-interface NewArtworksTileProps {
-  nft: Nft;
-  artist: User;
-}
+interface NewArtworksTileProps extends NewArtwork {}
 
-function NewArtworksTile({ nft, artist }: NewArtworksTileProps) {
+function NewArtworksTile({ s3Path, artistUsername, name, profilePicture }: NewArtworksTileProps) {
+  console.log(s3Path);
   return (
-    <div key={nft.id} onClick={() => {}} className='home-page__new-artworks-item'>
+    <div key={s3Path} onClick={() => {}} className='home-page__new-artworks-item'>
       <div className='home-page__new-artworks-media'>
-        <BaseMedia src={nft.s3Path}></BaseMedia>
+        <BaseMedia src={s3Path}></BaseMedia>
       </div>
       <div className='home-page__new-artworks-item-content'>
         <div className='home-page__new-artworks-item-pfp'>
-          <PfpImage src={artist?.profilePicture}></PfpImage>
+          <PfpImage src={profilePicture}></PfpImage>
         </div>
         <div className='home-page__new-artworks-item-right'>
-          <p className='home-page__new-artworks-item-name'>{nft.name}</p>
+          <p className='home-page__new-artworks-item-name'>{name}</p>
           <p className='home-page__new-artworks-item-artist-name'>
-            {artist?.username && `By ${artist?.username}`}
+            {artistUsername && `By ${artistUsername}`}
           </p>
         </div>
       </div>

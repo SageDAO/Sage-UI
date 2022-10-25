@@ -1,5 +1,5 @@
 import { parameters } from '../constants/config';
-import { ArtistSales, Drop_include_GamesAndArtist, User } from '@/prisma/types';
+import { ArtistSales, Drop_include_GamesAndArtist, User, NewArtwork } from '@/prisma/types';
 import { PrismaClient, Prisma, Role } from '@prisma/client';
 import { BigNumber } from 'ethers';
 
@@ -43,10 +43,30 @@ export async function getHomePageData(prisma: PrismaClient) {
     orderBy: { createdAt: 'desc' },
     take: 10,
   });
-  const newArtworks = await prisma.nft.findMany({
-    take: 5,
-    include: { NftContract: { include: { Artist: true } } },
-    distinct: ['s3Path'],
+
+  const newDrops = await prisma.drop.findMany({
+    where: { ...FilterDropApprovedOnly },
+    select: {
+      NftContract: { select: { Artist: { select: { username: true, profilePicture: true } } } },
+      Auctions: { select: { Nft: { select: { s3Path: true, name: true } } } },
+      Lotteries: {
+        select: { Nfts: { distinct: ['s3Path'], select: { s3Path: true, name: true } } },
+      },
+    },
+  });
+  let newArtworks: NewArtwork[] = [];
+  newDrops.forEach((d) => {
+    const artistUsername = d.NftContract.Artist.username;
+    const { profilePicture } = d.NftContract.Artist;
+    d.Auctions.forEach((a) => {
+      const newArtwork = { ...a.Nft, artistUsername, profilePicture };
+      newArtworks.push(newArtwork);
+    });
+    d.Lotteries.forEach((l) => {
+      l.Nfts.map((nft) => {
+        newArtworks.push({ ...nft, artistUsername, profilePicture });
+      });
+    });
   });
 
   const welcomeMessage = config
