@@ -26,6 +26,7 @@ import CheckSVG from '@/public/icons/check.svg';
 import { useRouter } from 'next/router';
 import useSAGEAccount from '@/hooks/useSAGEAccount';
 import useLottery from '@/hooks/useLottery';
+import { toast } from 'react-toastify';
 
 interface Props extends ModalProps {
   lottery: Lottery_include_Nft;
@@ -135,6 +136,10 @@ function GetTicketModal({
   }
 
   const handleBuyTicketClick = async () => {
+    if (!signer || !sessionData) {
+      toast.info('Please sign in with a wallet.');
+      return;
+    }
     const getPriceCoins = (): bigint => {
       return BigInt(lottery.costPerTicketTokens * 1000) * BigInt(10 ** 15);
     };
