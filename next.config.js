@@ -9,6 +9,7 @@ const nextConfig = {
       'dev-sage.s3.us-east-2.amazonaws.com',
       'staging-sage.s3.us-east-2.amazonaws.com',
       'sage-art.s3.us-east-2.amazonaws.com',
+      'd2k3k1d7773avn.cloudfront.net'
     ],
   },
   webpack: (config) => {
