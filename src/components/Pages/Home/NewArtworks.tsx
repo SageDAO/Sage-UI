@@ -21,14 +21,14 @@ export default function NewArtworks({ newArtworks }: Props) {
       </div>
       <section className='home-page__new-artworks-section'>
         <div className='home-page__new-artworks-flex-container'>
-          {newArtworks.map((nftArtwork) => {
+          {newArtworks.slice(0, 5).map((nftArtwork) => {
             return <NewArtworksTile {...nftArtwork} key={nftArtwork.s3Path} />;
           })}
         </div>
       </section>
       <section className='home-page__new-artworks-section--mobile'>
         <div className='home-page__new-artworks-flex-container--mobile'>
-          {newArtworks.map((nft) => {
+          {newArtworks.slice(0, 10).map((nft) => {
             return <NewArtworksTile {...nft} key={nft.s3Path} />;
           })}
         </div>
