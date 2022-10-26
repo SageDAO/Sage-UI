@@ -19,7 +19,7 @@ const videoJsOptions = {
   loop: true,
   playsinline: true,
   preload: 'metadata',
-  muted: !isFirefox(),
+  muted: isFirefox(),
   // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
     {
