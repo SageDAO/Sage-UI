@@ -18,6 +18,7 @@ import useDrop from '@/hooks/useDrop';
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import useSageRoutes from '@/hooks/useSageRoutes';
 
 //type drop page data
 
@@ -79,7 +80,7 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
     sessionData?.address as string
   );
 
-  const router = useRouter();
+  const { pushToCreators } = useSageRoutes();
 
   function handleShareDrop() {
     navigator.clipboard.writeText(window.location.toString());
@@ -141,7 +142,12 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
         <section className='drop-page__content'>
           <div className='drop-page__drop-info'>
             <div className='drop-page__artist'>
-              <div className='drop-page__artist-pfp'>
+              <div
+                onClick={() => {
+                  pushToCreators(artistName);
+                }}
+                className='drop-page__artist-pfp'
+              >
                 <PfpImage src={artist.profilePicture}></PfpImage>
               </div>
               <div className='drop-page__artist-info'>
