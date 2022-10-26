@@ -26,6 +26,7 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
           {drop.Lotteries && (
             <div style={{ display: 'flex' }}>
               {drop.Lotteries.map((lottery, i) => {
+                const nft = lottery.Nfts[0];
                 return (
                   <div key={i} style={{ padding: '10px', width: '175px' }}>
                     DRAWING {lottery.id}
@@ -41,19 +42,15 @@ export function NewDropDetailsModal({ isOpen, closeModal, drop }: NewDropDetails
                     <br />
                     <br />
                     <div style={{ display: 'flex' }}>
-                      {lottery.Nfts.map((nft, i) => {
-                        return (
-                          <div key={i} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
-                            <img src={nft.s3PathOptimized} width={150} />
-                            <br />
-                            Name: {nft.name}
-                            <br />
-                            Editions: {nft.numberOfEditions}
-                            <br />
-                            {nft.description && <span>"{nft.description}"</span>}
-                          </div>
-                        );
-                      })}
+                      <div key={i} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                        <img src={nft.s3PathOptimized} width={150} />
+                        <br />
+                        Name: {nft.name}
+                        <br />
+                        Editions: {nft.numberOfEditions}
+                        <br />
+                        {nft.description && <span>"{nft.description}"</span>}
+                      </div>
                     </div>
                   </div>
                 );
