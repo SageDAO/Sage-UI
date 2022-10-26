@@ -23,7 +23,7 @@ const videoJsOptions = {
   // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
     {
-      src: 'http://d2k3k1d7773avn.cloudfront.net/videos/drop002/billboard.mp4',
+      src: 'https://d2k3k1d7773avn.cloudfront.net/videos/drop002/billboard.mp4',
       type: 'video/mp4',
     },
   ],
