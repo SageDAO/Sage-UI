@@ -51,10 +51,13 @@ function unique(array: any[], propertyName: string) {
 //   return editionSize;
 // }
 
-type GridClassName = 'drop-page__grid' | 'drop-page__grid--single' | 'drop-page__grid--double';
+type GridClassName =
+  | 'drop-page__grid--base'
+  | 'drop-page__grid--single'
+  | 'drop-page__grid--double';
 
 type TileClassName =
-  | 'drop-page__grid-item'
+  | 'drop-page__grid-item--base'
   | 'drop-page__grid-item--single'
   | 'drop-page__grid-item--double';
 
@@ -87,8 +90,8 @@ export default function drop({ drop, auctions, artist, drawings, gamesCount }: P
     toast.success('copied to clipboard!');
   }
 
-  let gridClassName: GridClassName = 'drop-page__grid';
-  let tileClassName: TileClassName = 'drop-page__grid-item';
+  let gridClassName: GridClassName = 'drop-page__grid--base';
+  let tileClassName: TileClassName = 'drop-page__grid-item--base';
   if (gamesCount === 1) {
     gridClassName = 'drop-page__grid--single';
     tileClassName = 'drop-page__grid-item--single';
