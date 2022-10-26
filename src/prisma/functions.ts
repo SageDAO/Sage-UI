@@ -165,7 +165,10 @@ export async function getIndividualArtistsPageData(prisma: PrismaClient, usernam
     where: { username },
     include: { NftContract: true },
   });
-  return artist;
+  const drops = await prisma.drop.findMany({
+    where: { artistAddress: artist.walletAddress },
+  });
+  return { artist, drops };
 }
 
 export async function getArtistsSalesData(prisma: PrismaClient) {

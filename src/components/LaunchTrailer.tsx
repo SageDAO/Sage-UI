@@ -6,11 +6,11 @@ interface Props {
 }
 
 const isFirefox = () => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     return window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
   }
   return false;
-}
+};
 
 const videoJsOptions = {
   autoplay: true,
@@ -23,7 +23,7 @@ const videoJsOptions = {
   // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
     {
-      src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
+      src: 'http://d2k3k1d7773avn.cloudfront.net/videos/drop002/banner.mp4',
       type: 'video/mp4',
     },
   ],

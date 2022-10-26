@@ -20,10 +20,10 @@ const videoJsOptions = {
   playsinline: true,
   preload: 'metadata',
   muted: true,
-  poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
+  // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
     {
-      src: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/drop1_desktop.mp4',
+      src: 'http://d2k3k1d7773avn.cloudfront.net/videos/drop002/billboard.mp4',
       type: 'video/mp4',
     },
   ],
