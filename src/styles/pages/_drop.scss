@@ -229,8 +229,8 @@ strong {
   @include b.min-width('medium') {
     grid-template-columns: repeat(3, 1fr);
   }
-  @include b.min-width('large') {
-    grid-template-columns: repeat(5, 1fr);
+  @include b.min-width('xl') {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -392,6 +392,7 @@ strong {
 .drop-page__grid-item-info-left {
   display: flex;
   flex-direction: column;
+  max-width: 60%;
 }
 
 .drop-page__grid-item-info-right {

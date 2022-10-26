@@ -195,11 +195,12 @@
   &:not([disabled]) {
     cursor: pointer;
     @include transition-base;
-    @content;
     @include hover {
       filter: brightness(0.9);
+      @content;
     }
     @include active {
+      @content;
     }
   }
 }
