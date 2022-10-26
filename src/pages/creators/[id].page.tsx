@@ -173,7 +173,7 @@ export async function getStaticProps({
     };
   }
 
-  return { props: { artist, drops } };
+  return { props: { artist, drops }, revalidate: 60 };
 }
 
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
