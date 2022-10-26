@@ -15,7 +15,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
     query: { action },
   } = request;
   const session = await getSession({ req: request });
-  const { address: walletAddress } = session!;
+  const walletAddress = session ? session.address : undefined;
   switch (action) {
     case 'GetAuction':
       await getAuction(Number(request.query.auctionId), response);
