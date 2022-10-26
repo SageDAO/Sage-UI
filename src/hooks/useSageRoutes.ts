@@ -17,7 +17,6 @@ export default function useSageRoutes() {
   const { shallowRoute } = useProfileRoutes();
 
   async function pushToCreators(username?: User['username']) {
-    return;
     if (username) {
       await router.push(basePathCreators + '/' + username);
     } else {
