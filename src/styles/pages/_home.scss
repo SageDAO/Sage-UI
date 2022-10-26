@@ -456,7 +456,8 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 
 .home-page__new-artworks-item-pfp {
   @include m.pfp-container;
-  @include m.interact;
+  // @include m.interact;
+  cursor: pointer;
   width: 15px;
   height: 15px;
   @include b.min-width('medium') {
