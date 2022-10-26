@@ -3,7 +3,7 @@ import prisma from '@/prisma/client';
 import Hero from '@/components/Hero';
 import { getIndividualArtistsPageData, getIndividualArtistsPagePaths } from '@/prisma/functions';
 import { useGetListingNftsByArtistQuery } from '@/store/nftsReducer';
-import { Nft_include_NftContractAndOffers, User_include_NftContract } from '@/prisma/types';
+import { Nft_include_NftContractAndOffers, User_include_NftContract, Drop } from '@/prisma/types';
 import { BaseMedia, PfpImage } from '@/components/Media/BaseMedia';
 import ListingTile from '@/components/Pages/DropIndividual/ListingTile';
 import TwitterSVG from '@/public/socials/twitter.svg';
@@ -15,6 +15,7 @@ import ArtistBalancePanel from '@/components/Pages/Artists/ArtistBalancePanel';
 import { useSession } from 'next-auth/react';
 import SageFullLogoSVG from '@/public/branding/sage-full-logo.svg';
 import Logotype from '@/components/Logotype';
+import DropTile from '@/components/Pages/Creator/DropTile';
 
 type ListingNft = Nft_include_NftContractAndOffers;
 
@@ -30,9 +31,10 @@ function sort(a: ListingNft, b: ListingNft) {
 
 interface Props {
   artist: User_include_NftContract;
+  drops: Drop[];
 }
 
-export default function artist({ artist }: Props) {
+export default function artist({ artist, drops }: Props) {
   const { data: sessionData } = useSession();
   const { data: nfts } = useGetListingNftsByArtistQuery(artist.walletAddress);
   const isOwner = () => sessionData?.address == artist.walletAddress;
@@ -92,6 +94,9 @@ export default function artist({ artist }: Props) {
           [...nfts]
             .sort(sort)
             .map((nft: ListingNft, i: number) => <ListingTile key={i} nft={nft} artist={artist} />)}
+        {drops?.map((d) => {
+          return <DropTile key={d.id} drop={d}></DropTile>;
+        })}
       </div>
     </div>
   );
@@ -152,7 +157,7 @@ export async function getStaticProps({
     };
   }
 
-  const artist = await getIndividualArtistsPageData(prisma, String(params.id));
+  const { artist, drops } = await getIndividualArtistsPageData(prisma, String(params.id));
 
   if (!artist) {
     return {
@@ -163,7 +168,7 @@ export async function getStaticProps({
     };
   }
 
-  return { props: { artist } };
+  return { props: { artist, drops } };
 }
 
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
