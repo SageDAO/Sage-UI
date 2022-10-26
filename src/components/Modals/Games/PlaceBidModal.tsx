@@ -242,7 +242,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                   ></Countdown>
                 </div>
               )}
-              {isStarted && (
+              {isStarted && !isEnded && (
                 <>
                   <input
                     onChange={handleBidInputChange}
