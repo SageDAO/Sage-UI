@@ -63,7 +63,7 @@ export default function AuctionTile({ artist, dropName, auction, className }: Pr
             <div className='drop-page__grid-item-info-countdown'>{countdownUntilOpen}</div>
           )}
           {!isRunning && isOpenForBids && (
-            <div className='drop-page__grid-item-info-countdown'>Bid Now</div>
+            <div className='drop-page__grid-item-info-countdown'>Bid</div>
           )}
           {isRunning && !isEnded && (
             <div className='drop-page__grid-item-info-countdown'>{countdownUntilClose}</div>
