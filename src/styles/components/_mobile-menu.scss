@@ -23,7 +23,7 @@ $menu-toggle-z: $menu-z + 1;
   &[data-is-open='true'] {
     transform: translateY(0%);
   }
-  transition-duration: 200ms;
+  transition-duration: 260ms;
 }
 
 .mobile-menu__logotype {
