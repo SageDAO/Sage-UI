@@ -105,21 +105,21 @@ interface CreatorSocialsProps {
 function CreatorSocials({ artist, className }: CreatorSocialsProps) {
   return (
     <ul className={className}>
-      {!artist.twitterUsername && (
+      {!!artist.twitterUsername && (
         <div className='artist-page__socials-item'>
           <a target='_blank' href={`https://twitter.com/${artist.twitterUsername}`}>
             <TwitterSVG className='artist-page__socials-svg' />
           </a>
         </div>
       )}
-      {!artist.mediumUsername && (
+      {!!artist.mediumUsername && (
         <div className='artist-page__socials-item'>
           <a target='_blank' href={`https://medium.com/@${artist.mediumUsername}`}>
             <MediumSVG className='artist-page__socials-svg' />
           </a>
         </div>
       )}
-      {!artist.instagramUsername && (
+      {!!artist.instagramUsername && (
         <div className='artist-page__socials-item'>
           <a target='_blank' href={`https://instagram.com/${artist.instagramUsername}`}>
             <InstagramSVG className='artist-page__socials-svg' />

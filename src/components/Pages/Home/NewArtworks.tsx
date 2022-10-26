@@ -11,7 +11,6 @@ interface Props {
   newArtworks: NewArtwork[];
 }
 export default function NewArtworks({ newArtworks }: Props) {
-  const { pushToCreators, pushToDrops } = useSageRoutes();
   if (!newArtworks) return null;
   return (
     <>
@@ -21,14 +20,14 @@ export default function NewArtworks({ newArtworks }: Props) {
       </div>
       <section className='home-page__new-artworks-section'>
         <div className='home-page__new-artworks-flex-container'>
-          {newArtworks.map((nftArtwork) => {
-            return <NewArtworksTile {...nftArtwork} key={nftArtwork.s3Path} />;
+          {newArtworks.slice(0, 5).map((nft) => {
+            return <NewArtworksTile {...nft} key={nft.s3Path} />;
           })}
         </div>
       </section>
       <section className='home-page__new-artworks-section--mobile'>
         <div className='home-page__new-artworks-flex-container--mobile'>
-          {newArtworks.map((nft) => {
+          {newArtworks.slice(0, 10).map((nft) => {
             return <NewArtworksTile {...nft} key={nft.s3Path} />;
           })}
         </div>
@@ -46,7 +45,7 @@ function NewArtworksTile({
   profilePicture,
   dropId,
 }: NewArtworksTileProps) {
-  const { pushToDrops } = useSageRoutes();
+  const { pushToDrops, pushToCreators } = useSageRoutes();
   function handleMediaClick() {
     if (dropId) {
       pushToDrops(dropId);
@@ -58,7 +57,12 @@ function NewArtworksTile({
         <BaseMedia src={s3Path}></BaseMedia>
       </div>
       <div className='home-page__new-artworks-item-content'>
-        <div className='home-page__new-artworks-item-pfp'>
+        <div
+          className='home-page__new-artworks-item-pfp'
+          onClick={() => {
+            pushToCreators(artistUsername);
+          }}
+        >
           <PfpImage src={profilePicture}></PfpImage>
         </div>
         <div className='home-page__new-artworks-item-right'>
