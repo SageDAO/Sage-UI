@@ -220,6 +220,7 @@ strong {
   @include b.min-width('large') {
     grid-template-columns: repeat(5, 1fr);
   }
+  @content;
 }
 
 .drop-page__grid {
@@ -227,13 +228,21 @@ strong {
 }
 
 .drop-page__grid--single {
-  @include grid;
-  grid-template-columns: repeat(1, 1fr);
+  @include grid {
+    grid-template-columns: repeat(1, 1fr);
+    @include b.min-width('medium') {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
 }
 
 .drop-page__grid--double {
-  @include grid;
-  grid-template-columns: repeat(2, 1fr);
+  @include grid {
+    grid-template-columns: repeat(1, 1fr);
+    @include b.min-width('medium') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
 }
 
 @mixin grid-item {
