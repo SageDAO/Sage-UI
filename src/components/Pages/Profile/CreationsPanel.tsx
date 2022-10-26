@@ -98,6 +98,10 @@ export default function CreationsPanel() {
   }
 
   async function handleDeployContractButtonClick() {
+    if (!signer) {
+      toast.info('Please sign in with a wallet.');
+      return;
+    }
     await deployContract({
       artistAddress: sessionData?.address as string,
       signer: signer as Signer,
