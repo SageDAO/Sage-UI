@@ -97,6 +97,14 @@ function GetTicketModal({
 
   const { gameInfo, costASH } = useLottery({ lottery, nfts: lottery.Nfts, selectedIndex: 0 });
 
+  const requiresASH = !!lottery.costPerTicketTokens;
+  const requiresPoints = !!lottery.costPerTicketPoints;
+  const ASHPriceDisplay = `${lottery.costPerTicketTokens * desiredTicketAmount} ASH`;
+  const pixelPriceDisplay = `${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`;
+
+  // lottery.costPerTicketTokens * desiredTicketAmount  ASH
+  // {lottery.costPerTicketPoints > 0 &&
+  //   ` + ${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`}
   const needsAllowance = +allowance < desiredTicketAmount * costASH;
 
   function handleTicketSubClick() {
@@ -242,9 +250,8 @@ function GetTicketModal({
                   <div className='games-modal__ticket-cost-group'>
                     <p className='games-modal__ticket-cost-label'>entry cost</p>
                     <p className='games-modal__ticket-cost-value'>
-                      {lottery.costPerTicketTokens * desiredTicketAmount} ASH
-                      {lottery.costPerTicketPoints > 0 &&
-                        ` + ${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`}
+                      {requiresASH && ASHPriceDisplay} {requiresPoints && requiresASH ? '+' : null}{' '}
+                      {requiresPoints && pixelPriceDisplay}
                     </p>
                   </div>
                   <div className='games-modal__tickets-controls'>
