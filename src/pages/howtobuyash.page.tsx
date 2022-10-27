@@ -70,15 +70,9 @@ export default function howtobuyash() {
           <span className='howtobuyash-bullet'>Step 3</span>
           <p>Enter the desired amount of ASH you are purchasing. </p>
         </div>
+
         <div className='howtobuyash__group'>
           <span className='howtobuyash-bullet'>Step 4</span>
-          <p>
-            If you have not already approved the ASH token, hit Approve and confirm the action with
-            your wallet provider.
-          </p>
-        </div>
-        <div className='howtobuyash__group'>
-          <span className='howtobuyash-bullet'>Step 5</span>
           <p>Hit Swap to confirm the exchange with Uniswap.</p>
         </div>
       </div>
