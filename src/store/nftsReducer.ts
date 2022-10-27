@@ -8,7 +8,7 @@ import {
 } from '@/utilities/contracts';
 import { createBucketFolderName, uploadFileToS3 } from '@/utilities/awsS3-client';
 import { copyFromS3toArweave, createNftMetadataOnArweave } from '@/utilities/arweave-client';
-import { CollectedListingNft, Nft_include_NftContractAndOffers } from '@/prisma/types';
+import { CollectedListingNft, Nft_include_NftContractAndOffers, Nft } from '@/prisma/types';
 import { toast } from 'react-toastify';
 import { Offer } from '@prisma/client';
 import { baseApi } from './baseReducer';
@@ -16,6 +16,7 @@ import { promiseToast } from '@/utilities/toast';
 import { registerMarketplaceSale } from '@/utilities/sales';
 import { parameters } from '@/constants/config';
 import { NFTFactory } from '@/types/contracts';
+import { name } from 'aws-sdk/clients/importexport';
 
 export interface MintRequest {
   name: string;
@@ -41,10 +42,8 @@ export interface OfferRequest {
   expiresAt?: Date;
 }
 
-export interface SearchableNftData {
-  name: string;
-  // tags: string;
-  s3PathOptimized: string;
+export interface SearchableNftData
+  extends Pick<Nft, 'name' | 's3PathOptimized' | 'width' | 'height'> {
   artist: string; // username
   dId?: number; // dropId
   dName?: string; // dropName
