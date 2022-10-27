@@ -1,4 +1,5 @@
 import useModal from '@/hooks/useModal';
+import Modal, { Props as ModalProps } from '@/components/Modals';
 import { useSession } from 'next-auth/react';
 import useSAGEAccount from '@/hooks/useSAGEAccount';
 import Wallet from './Wallet';
@@ -28,7 +29,10 @@ export default function Connect() {
   return (
     <button className={buttonClass} onClick={openAccountModal}>
       {buttonText}
-      <Wallet isOpen={isAccountModalOpen} closeModal={closeAccountModal} />
+
+      <Modal closeModal={closeAccountModal} isOpen={isAccountModalOpen}>
+        <Wallet isOpen={isAccountModalOpen} closeModal={closeAccountModal} />
+      </Modal>
     </button>
   );
 }

@@ -46,7 +46,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   }
 
   return (
-    <div data-hide={isWalletConnected && !isSignedIn} className='wallet__wrapper'>
+    <div data-hide={isWalletConnected && !isSignedIn && !isOpen} className='wallet__wrapper'>
       <section className='wallet__header'>
         <SageFullLogo className='games-modal__sage-logo' />
         <button className='games-modal__close-button'>
