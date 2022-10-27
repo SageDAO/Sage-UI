@@ -81,7 +81,7 @@ export async function getHomePageData(prisma: PrismaClient) {
 
 export async function getDropsPageData(prisma: PrismaClient) {
   const drops = await prisma.drop.findMany({
-    orderBy: { approvedAt: 'asc' },
+    orderBy: { approvedAt: 'desc' },
     include: {
       NftContract: { include: { Artist: true } },
       Lotteries: { include: { Nfts: true } },
