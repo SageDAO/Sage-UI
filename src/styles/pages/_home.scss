@@ -535,7 +535,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
 .home-page__events-visit-button {
   @include m.theme() {
     @include m.button-base;
-    color: m.t(contrast);
+    color: white;
+    pointer-events: none;
+    background: #c4c4c4;
 
     margin-top: 100px;
   }

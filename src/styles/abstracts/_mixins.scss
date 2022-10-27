@@ -185,7 +185,7 @@
 
 @mixin interact {
   &[disabled] {
-    filter: brightness(0.4);
+    filter: brightness(0.5);
 
     cursor: not-allowed;
     &[data-loading='true'] {
