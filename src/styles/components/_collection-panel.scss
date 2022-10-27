@@ -136,13 +136,11 @@ $main-height: 799px;
 }
 
 .collection-panel__gallery-display-item {
-  background-color: red;
   @include display-item;
   // @include m.transition-base;
 
   &--first {
     @include display-item;
-    background-color: red;
     z-index: 3;
     // width: 300px;
     // height: $main-height;
