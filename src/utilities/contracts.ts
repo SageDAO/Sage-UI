@@ -178,8 +178,9 @@ export async function approveERC20Transfer(
     signer
   ) as ERC20Contract;
   const wallet = await signer.getAddress();
-  // const;
+  if (!wallet) throw new Error('signer wallet address unavailable');
   const allowance = await (erc20Contract as ERC20Contract).allowance(wallet, dstContractAddress);
+  if (!allowance) throw new Error('ERC20 allowance data unavailable');
   console.log(
     `approveERC20Transfer() :: ERC20 ${erc20Address} allowance of wallet ${wallet} for contract ${dstContractAddress} is ${allowance}`
   );

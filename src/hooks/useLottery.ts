@@ -23,6 +23,7 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
   const selectedNftName: string = transformTitle(selectedNft.name);
   const selectedNftEditionsText: string = selectedNftEditionsCount > 1 ? 'editions' : 'edition';
 
+  const selectedNftS3Path: string = selectedNft.s3Path;
   let duration = Number(lottery.endTime) - Number(lottery.startTime);
   duration = duration / 1000;
   duration = duration / 60 / 60;
@@ -32,12 +33,15 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
     "Users can buy tickets for this drop using only Pixel points, which are a SAGE reward for those holding the ASH token in their wallets. Once the entry period is closed, the drawing takes place and the winners, who will be able to mint this collectible, are selected using SAGE's integration with Chainlink.";
   const ashOnlyGameInfo = `Users can enter a live drawing for ${durationDisplay}. At entry, users will be asked to pay the sales price. Once the entry period is closed, the drawing takes place and SAGE selects the game winner through our RNG integration with Chainlink. Users that don't win will receive their refund automatically when gas is at 10 GWEI or below.`;
   const gameInfo = lottery.costPerTicketPoints ? pixelGameInfo : ashOnlyGameInfo;
+  const requiresASH: boolean = !!lottery.costPerTicketTokens;
+  const requiresPoints: boolean = !!lottery.costPerTicketPoints;
 
   return {
     isLive,
     isStarted,
     isEnded,
     startTime,
+    selectedNftS3Path,
     endTime,
     mediaSrc,
     optimizedMediaSrc,
@@ -50,5 +54,7 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
     duration,
     durationDisplay,
     gameInfo,
+    requiresASH,
+    requiresPoints,
   };
 }

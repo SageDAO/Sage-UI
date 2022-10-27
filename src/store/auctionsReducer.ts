@@ -10,6 +10,7 @@ import { BigNumber, ethers, Signer, utils } from 'ethers';
 import { baseApi } from './baseReducer';
 import { promiseToast } from '@/utilities/toast';
 import { registerAuctionSale } from '@/utilities/sales';
+import { parameters } from '@/constants/config';
 
 export interface AuctionState {
   highestBidder: string; // wallet address
@@ -67,14 +68,21 @@ const auctionsApi = baseApi.injectEndpoints({
     placeBid: builder.mutation<null, BidArgs>({
       queryFn: async ({ auctionId, amount, signer }, {}, _, fetchWithBQ) => {
         console.log(`placeBid(${auctionId}, ${amount})`);
+        if (!amount) new Error('Unspecified bid amount');
         const weiValue = ethers.utils.parseEther(amount.toString());
         try {
+          if (!signer) throw new Error('Please check wallet connection');
           const auctionContract = await getAuctionContract(signer);
+          if (!auctionContract) throw new Error('Unable to reach Auction Contract');
           const tokenAddress = await auctionContract.token();
+          if (!Boolean(tokenAddress == parameters.ASHTOKEN_ADDRESS))
+            throw new Error('incorrect ASH Token address configuration');
           await approveERC20Transfer(tokenAddress, auctionContract.address, weiValue, signer);
         } catch (e) {
           console.error(e);
-          toast.error(`Error approving transfer`);
+          toast.error(`Error: ${extractErrorMessage(e)}`, {
+            toastId: `approveERC20Transfer${auctionId}`,
+          });
           return { data: null };
         }
         try {
@@ -86,7 +94,7 @@ const auctionsApi = baseApi.injectEndpoints({
           await fetchWithBQ(`auctions?action=SaveBid&id=${auctionId}&amt=${amount}&ts=${blockTs}`);
         } catch (e) {
           const errMsg = extractErrorMessage(e);
-          toast.error(`Failure! ${errMsg}`);
+          toast.error(`Failure! ${errMsg}`, { toastId: `bid${auctionId}` });
           console.error(e);
         }
         return { data: null };

@@ -42,7 +42,6 @@ export default function useAuction({ auction, artist, walletAddress }: Args) {
   const highestBid = auctionState?.highestBidNumber;
   const highestBidder = auctionState?.highestBidder;
   const nextMinBid = auctionState?.nextMinBid;
-  const buttonText = 'place bid';
   const description = auction.Nft.description || 'This artwork has no description provided.';
   const duration = auctionState?.duration / 60 / 60;
   const durationDisplay = `${duration} hours`;
@@ -75,7 +74,6 @@ export default function useAuction({ auction, artist, walletAddress }: Args) {
     highestBid,
     highestBidder,
     nextMinBid,
-    buttonText,
     description,
     prize,
   };

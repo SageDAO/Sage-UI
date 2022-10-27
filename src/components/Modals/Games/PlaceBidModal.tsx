@@ -19,6 +19,7 @@ import { useSession } from 'next-auth/react';
 import shortenAddress from '@/utilities/shortenAddress';
 import ClaimPrizeButton from '@/components/Pages/Profile/ClaimPrizeButton';
 import { parameters } from '@/constants/config';
+import useSAGEAccount from '@/hooks/useSAGEAccount';
 
 interface Props extends ModalProps {
   auction: Auction_include_Nft;
@@ -32,6 +33,11 @@ interface State {
   desiredBidValue: DesiredBidValue;
   minBid: DesiredBidValue;
   shouldShowBidHistory: boolean;
+}
+
+interface ErrorState {
+  isError: boolean;
+  errorMessage: string;
 }
 
 const initialState: State = {
@@ -52,13 +58,15 @@ export function computeAuctionStatus(auction: Auction_include_Nft, auctionState:
   return { isOpenForBids, isStarted, isEnded };
 }
 
+const INITIAL_ERROR_STATE = { isError: false, errorMessage: '' };
+
 //@scss : '@/styles/components/_games-modal.scss'
 function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props) {
   const [state, setState] = useState<State>(initialState);
+  const [errorState, setErrorState] = useState<ErrorState>(INITIAL_ERROR_STATE);
   const [placeBid, { isLoading: isPlaceBidLoading }] = usePlaceBidMutation();
   const { data: signer } = useSigner();
-  const { data: sessionData } = useSession();
-  const walletAddress = sessionData?.address;
+  const { walletAddress } = useSAGEAccount();
   const { data: allowance } = useContractRead({
     addressOrName: parameters.ASHTOKEN_ADDRESS,
     contractInterface: erc20ABI,
@@ -78,14 +86,10 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
     isRunning,
     isEnded,
     isOpenForBids,
-    editionSize,
-    startTime,
     endTime,
-    bidLabel,
     highestBidder,
     highestBid,
     nextMinBid,
-    buttonText,
     description,
     prize,
     gameInfo,
@@ -98,21 +102,7 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
   }
 
   function handlePlaceBidClick() {
-    if (!signer) {
-      toast.info('Please sign in with a wallet.');
-      return;
-    }
-    if (state.desiredBidValue < state.minBid) {
-      toast.info(`Current minimum bid is ${state.minBid}`);
-      return;
-    }
     placeBid({ auctionId: auction.id, amount: state.desiredBidValue, signer: signer as Signer });
-  }
-
-  function handleMinButtonClick() {
-    setState((prevState) => {
-      return { ...prevState, desiredBidValue: state.minBid };
-    });
   }
 
   function handleBidInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -147,6 +137,18 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
     });
   }
 
+  const buttonText = needApproval ? 'approve' : 'place bid';
+  const buttonDisplay = errorState.isError ? errorState.errorMessage : buttonText;
+
+  useEffect(() => {
+    if (!signer) {
+      setErrorState({ isError: true, errorMessage: 'wallet not connected' });
+      return;
+    }
+
+    setErrorState(INITIAL_ERROR_STATE);
+  }, [signer]);
+
   useEffect(() => {
     handleStartingBid();
   }, []);
@@ -154,12 +156,6 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
   useEffect(() => {
     handleNewAuctionState();
   }, [auctionState]);
-
-  // const statusLabel = auction.winnerAddress
-  //   ? 'winning bid'
-  //   : computeAuctionStatus(auction, auctionState)
-  //   ? 'current highest bid'
-  //   : 'highest bid';
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -175,12 +171,6 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
             <div className='games-modal__main-img-container'>
               <BaseMedia src={auction.Nft.s3Path} isZoomable={true} />
 
-              {/* {!isOpenForBids && (
-                <Countdown
-                  endTime={startTime}
-                  className='games-modal__countdown--float'
-                ></Countdown>
-              )} */}
               {isOpenForBids && isRunning && (
                 <Countdown endTime={endTime} className='games-modal__countdown--float'></Countdown>
               )}
@@ -252,11 +242,11 @@ function PlaceBidModal({ isOpen, closeModal, auction, artist, dropName }: Props)
                     value={state.desiredBidValue}
                   />
                   <button
-                    disabled={isPlaceBidLoading}
+                    disabled={isPlaceBidLoading || errorState.isError}
                     className='games-modal__place-bid-button'
                     onClick={handlePlaceBidClick}
                   >
-                    {needApproval ? 'approve' : buttonText}
+                    {buttonDisplay}
                   </button>
                 </>
               )}
