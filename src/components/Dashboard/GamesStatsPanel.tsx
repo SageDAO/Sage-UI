@@ -2,9 +2,12 @@ import { Drop_include_GamesAndArtist } from '@/prisma/types';
 import { useGetAuctionStateQuery } from '@/store/auctionsReducer';
 import { useGetSalesEventsQuery } from '@/store/dashboardReducer';
 import { useGetApprovedDropsQuery } from '@/store/dropsReducer';
+import { Lottery } from '@/types/contracts';
+import { getLotteryContract } from '@/utilities/contracts';
 import shortenAddress from '@/utilities/shortenAddress';
 import { formatDateYYMMddHHmm, formatTimestampYYMMddHHmm } from '@/utilities/strings';
 import { SaleEvent, SaleEventType } from '@prisma/client';
+import { useEffect, useState } from 'react';
 import Countdown from '../Countdown';
 import LoaderDots from '../LoaderDots';
 
@@ -41,9 +44,7 @@ export function GamesStatsPanel() {
                   return (
                     <tr key={i} style={{ border: '1px solid gray', height: '95px' }}>
                       <td style={{ verticalAlign: 'middle' }}>
-                        drawing{' '}
-                        <span className='dashboard-game-stats__id'>{lottery.Nfts[0].name}</span> |{' '}
-                        {lottery.Nfts[0].numberOfEditions} editions
+                        <span className='dashboard-game-stats__id'>{lottery.Nfts[0].name}</span>
                         <br />
                         {new Date(lottery.endTime).getTime() > new Date().getTime() ? (
                           <Countdown
@@ -56,11 +57,12 @@ export function GamesStatsPanel() {
                             <br />
                           </>
                         )}
-                        pricing: {lottery.costPerTicketTokens} ASH +{' '}
+                        {lottery.Nfts[0].numberOfEditions} editions |{' '}
+                        {lottery.costPerTicketTokens} ASH +{' '}
                         {lottery.costPerTicketPoints || 0} PIXEL
                       </td>
                       <td style={{ verticalAlign: 'middle' }}>
-                        entries sold: <span style={{ fontWeight: 'bold' }}>{tickets.length}</span>
+                        entries: <span style={{ fontWeight: 'bold' }}><TicketCount id={lottery.id} /></span>
                         {tickets.length > 0 && (
                           <DownloadIcon callback={() => downloadTickets(sales, lottery.id)} />
                         )}
@@ -78,7 +80,7 @@ export function GamesStatsPanel() {
                   return (
                     <tr key={i} style={{ border: '1px solid gray', height: '95px' }}>
                       <td style={{ verticalAlign: 'middle' }}>
-                        auction <span className='dashboard-game-stats__id'>{auction.Nft.name}</span>
+                        <span className='dashboard-game-stats__id'>{auction.Nft.name}</span>
                       </td>
                       <td style={{ verticalAlign: 'middle' }}>
                         <AuctionContractState id={auction.id} />
@@ -141,7 +143,7 @@ function AuctionContractState({ id }) {
                 <br />
               </>
             )}
-            highest bid: {data.highestBidNumber} ASH
+            bid: {data.highestBidNumber.toLocaleString()} ASH
             <br />
             by {shortenAddress(data.highestBidder)}
           </>
@@ -171,6 +173,19 @@ function DownloadIcon({ callback }) {
       </div>
     </div>
   );
+}
+
+function TicketCount({ id }) {
+  const [count, setCount] = useState<number>();  
+  const loadAsyncData = async () => {
+    const contract = await getLotteryContract();
+    const info = await contract.getLotteryInfo(id);
+    setCount(info.numberOfTicketsSold);
+  };
+  useEffect(() => {
+    loadAsyncData();
+  }, []);
+  return <>{count ? count : ''}</>;
 }
 
 function getDateYYYYMMDDhhmmss(): string {
