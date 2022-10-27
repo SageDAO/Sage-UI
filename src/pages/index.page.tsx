@@ -54,6 +54,7 @@ function home({
 
         {featuredDrop && (
           <div className='home-page__featured-drop-tag-section'>
+            <meta property="og:image" content={featuredDrop.bannerImageS3Path} />
             <div className='home-page__featured-drop-tag-info'>
               <div
                 className='home-page__featured-drop-pfp'
