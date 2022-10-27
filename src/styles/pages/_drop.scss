@@ -313,15 +313,16 @@ strong {
     position: absolute;
     content: 'content';
     border: 1px solid m.t(contrast2);
-    padding: 5% 7%;
+    padding: 15px 30px;
+    // aspect-ratio: 1/1;
+    @include m.flex-center;
     font-weight: 300;
     background-color: m.t(contrast2);
     color: m.t(base);
-    // @include m.text-p4;
     @include m.transition-base;
     letter-spacing: 0.2em;
     z-index: 999;
-    font-size: clamp(6px, 0.8vw, 20px);
+    font-size: clamp(8px, 0.8vw, 20px);
     text-transform: uppercase;
     white-space: nowrap;
   }

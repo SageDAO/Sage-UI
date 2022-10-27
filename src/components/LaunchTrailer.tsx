@@ -5,9 +5,12 @@ interface Props {
   onClick?: () => void;
 }
 
-const isFirefox = () => {
+const isFirefoxOrBrave = () => {
   if (typeof window !== 'undefined') {
-    return window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    const ua = window.navigator.userAgent.toLowerCase();
+    const isFirefox = ua.indexOf('firefox') > -1;
+    const isBrave = ua.indexOf('brave') > -1;
+    return isFirefox || isBrave;
   }
   return false;
 };
@@ -19,7 +22,7 @@ const videoJsOptions = {
   loop: true,
   playsinline: true,
   preload: 'metadata',
-  muted: isFirefox || true,
+  muted: isFirefoxOrBrave(),
   // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
   sources: [
     {

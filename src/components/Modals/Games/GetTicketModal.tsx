@@ -251,7 +251,9 @@ function GetTicketModal({
               {isStarted && !isEnded && (
                 <div className='games-modal__live-section'>
                   <div className='games-modal__ticket-cost-group'>
-                    <p className='games-modal__ticket-cost-label'>entry cost</p>
+                    <p className='games-modal__ticket-cost-label'>
+                      {Boolean(requiresPoints || requiresASH) ? 'entry cost' : 'free entry'}
+                    </p>
                     <p className='games-modal__ticket-cost-value'>
                       {requiresASH && ASHPriceDisplay} {requiresPoints && requiresASH ? '+' : null}{' '}
                       {requiresPoints && pixelPriceDisplay}

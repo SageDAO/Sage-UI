@@ -45,17 +45,7 @@
 }
 
 .games-modal__header {
-  display: flex;
-  width: max-content;
-  align-items: center;
-  width: 95%;
-  // margin-top: 5px;
-  gap: 0 25px;
-  width: 90%;
-  @include b.min-width('medium') {
-    // padding-top: 20px;
-    width: 95%;
-  }
+  @include m.modal-header;
 }
 
 .games-modal__sage-logo {
