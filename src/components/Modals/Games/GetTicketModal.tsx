@@ -60,7 +60,7 @@ function GetTicketModal({
   systemType,
 }: Props) {
   const router = useRouter();
-  const { sessionData } = useSAGEAccount();
+  const { sessionData, isSignedIn } = useSAGEAccount();
   const walletAddress = sessionData?.address;
   const { data: signer } = useSigner();
   const [desiredTicketAmount, setDesiredTicketAmount] = useState<number>(1);
@@ -69,11 +69,21 @@ function GetTicketModal({
   const { data: earnedPoints } = useGetEarnedPointsQuery(undefined, { skip: !sessionData });
   const [buyTickets, { isLoading: isBuyTicketsLoading }] = useBuyTicketsMutation();
 
-  const now = new Date().getTime();
-  const isStarted = lottery.startTime.getTime() < now;
-  const isEnded = lottery.endTime.getTime() < now;
-  const isActive = isStarted && !isEnded;
-
+  const {
+    gameInfo,
+    costASH,
+    requiresASH,
+    requiresPoints,
+    isEnded,
+    isStarted,
+    isLive,
+    selectedNftS3Path,
+    selectedNftName,
+  } = useLottery({
+    lottery,
+    nfts: lottery.Nfts,
+    selectedIndex: 0,
+  });
   const { data: winners } = useGetWinnersQuery(lottery.id, {
     skip: !isEnded,
     pollingInterval: 60000,
@@ -82,11 +92,9 @@ function GetTicketModal({
     skip: !isEnded,
     pollingInterval: 60000,
   });
-
   const hasMaxTicketsPerUser: boolean = lottery.maxTicketsPerUser > 0;
   const editionsCount: number = lottery.Nfts[selectedNftIndex].numberOfEditions;
   const editionsText: string = editionsCount > 1 ? 'editions' : 'edition';
-
   const { data: allowance } = useContractRead({
     addressOrName: parameters.ASHTOKEN_ADDRESS,
     contractInterface: erc20ABI,
@@ -94,19 +102,9 @@ function GetTicketModal({
     args: [walletAddress, parameters.LOTTERY_ADDRESS],
     watch: true,
   });
-
-  const { gameInfo, costASH } = useLottery({ lottery, nfts: lottery.Nfts, selectedIndex: 0 });
-
-  const requiresASH = !!lottery.costPerTicketTokens;
-  const requiresPoints = !!lottery.costPerTicketPoints;
   const ASHPriceDisplay = `${lottery.costPerTicketTokens * desiredTicketAmount} ASH`;
   const pixelPriceDisplay = `${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`;
-
-  // lottery.costPerTicketTokens * desiredTicketAmount  ASH
-  // {lottery.costPerTicketPoints > 0 &&
-  //   ` + ${lottery.costPerTicketPoints * desiredTicketAmount} PIXEL`}
   const needsAllowance = +allowance < desiredTicketAmount * costASH;
-
   function handleTicketSubClick() {
     if (desiredTicketAmount == 1) {
       return;
@@ -115,6 +113,10 @@ function GetTicketModal({
   }
 
   function validateDesiredTicketAmount() {
+    if (!signer) {
+      setErrorState({ message: 'please connect wallet', isError: true });
+      return;
+    }
     if (desiredTicketAmount == 0) {
       setErrorState({ message: 'cannot buy zero entries', isError: true });
       return;
@@ -131,6 +133,16 @@ function GetTicketModal({
     if (lottery.maxTickets > 0 && desiredTicketAmount > lottery.maxTickets) {
       setErrorState({ message: 'max entries reached', isError: true });
       return;
+    }
+    if (lottery.costPerTicketPoints) {
+      if (!earnedPoints) {
+        setErrorState({ message: 'Points data unavailable', isError: true });
+        return;
+      }
+      if (lottery.costPerTicketPoints * desiredTicketAmount > +earnedPoints?.totalPointsEarned) {
+        setErrorState({ message: 'Insufficient funds', isError: true });
+        return;
+      }
     }
 
     setErrorState(INITIAL_ERROR_STATE);
@@ -155,10 +167,6 @@ function GetTicketModal({
   }
 
   const handleBuyTicketClick = async () => {
-    if (!signer || !sessionData) {
-      toast.info('Please sign in with a wallet.');
-      return;
-    }
     const getPriceCoins = (): bigint => {
       return BigInt(lottery.costPerTicketTokens * 1000) * BigInt(10 ** 15);
     };
@@ -182,9 +190,14 @@ function GetTicketModal({
     }
   };
 
+  const buttonText = errorState.isError
+    ? errorState.message
+    : needsAllowance
+    ? 'approve'
+    : 'buy entries';
   useEffect(() => {
     validateDesiredTicketAmount();
-  }, [desiredTicketAmount, ticketCount]);
+  }, [desiredTicketAmount, ticketCount, earnedPoints]);
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -198,16 +211,8 @@ function GetTicketModal({
         <section className='games-modal__body'>
           <div className='games-modal__main'>
             <div className='games-modal__main-img-container'>
-              {systemType === 'lottery' ? (
-                <LotterySlider
-                  nfts={lottery.Nfts}
-                  selectedNftIndex={selectedNftIndex}
-                  setSelectedNftIndex={setSelectedNftIndex}
-                ></LotterySlider>
-              ) : (
-                <BaseMedia src={lottery.Nfts[selectedNftIndex].s3Path} isZoomable={true} />
-              )}
-              {isActive && (
+              <BaseMedia src={selectedNftS3Path} isZoomable={true} />
+              {isLive && (
                 <Countdown
                   endTime={lottery.endTime}
                   className='games-modal__countdown--float'
@@ -221,9 +226,7 @@ function GetTicketModal({
                   {editionsCount} {editionsText}
                 </span>
               </span>
-              <p className='games-modal__game-name'>
-                {transformTitle(lottery.Nfts[selectedNftIndex].name)}
-              </p>
+              <p className='games-modal__game-name'>{selectedNftName}</p>
               <p className='games-modal__game-description'>
                 {lottery.Nfts[selectedNftIndex].description ||
                   'This artwork has no description provided.'}
@@ -271,11 +274,7 @@ function GetTicketModal({
                     onClick={handleBuyTicketClick}
                     className='games-modal__buy-tickets-button'
                   >
-                    {errorState.isError
-                      ? errorState.message
-                      : needsAllowance
-                      ? 'approve'
-                      : 'buy entries'}
+                    {buttonText}
                   </button>
                 </div>
               )}

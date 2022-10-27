@@ -21,7 +21,7 @@ export default function ClaimPrizeButton({ gamePrize }: Props) {
   const { data: signer } = useSigner();
   async function handleInteractButtonClick() {
     if (!signer) {
-      toast.info('Please sign in with a wallet.');
+      toast.info('Please sign in with a wallet.', { toastId: 'claimLotteryPrize' });
       return;
     }
     if (lotteryId) {

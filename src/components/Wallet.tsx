@@ -83,6 +83,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
             })}
           </section>
         )}
+        {Boolean(isWalletConnected && !isSignedIn) && <p>Welcome</p>}
         {showAuthSection && (
           <>
             {/* <section className='wallet__user-section'>
