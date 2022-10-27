@@ -1,6 +1,8 @@
 import { PfpImage } from './Media/BaseMedia';
-import { useConnect, useDisconnect } from 'wagmi';
-import { Props as ModalProps } from '@/components/Modals';
+import CloseSVG from '@/public/interactive/close.svg';
+import SageFullLogo from '@/public/branding/sage-full-logo.svg';
+import Modal, { Props as ModalProps } from '@/components/Modals';
+import { useDisconnect } from 'wagmi';
 import Image from 'next/image';
 import PersonalizedMessage from './PersonalizedMessage';
 import useSignIn from '@/hooks/useSignIn';
@@ -10,6 +12,7 @@ import useSAGEAccount from '@/hooks/useSAGEAccount';
 import useSageRoutes from '@/hooks/useSageRoutes';
 import ProfileDisplay from './ProfileDisplay';
 import { useSignOutMutation } from '@/store/usersReducer';
+import useWindowDimensions from '@/hooks/useWindowSize';
 
 interface Props {
   closeModal?: ModalProps['closeModal'];
@@ -31,8 +34,9 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   const showWalletSelection: boolean = Boolean(!isWalletConnected);
   const showAuthSection: boolean = Boolean(isWalletConnected && isSignedIn);
   const [signOut] = useSignOutMutation();
-  useSignIn(isOpen);
+  const { isSigningMessage } = useSignIn(isOpen);
   const { disconnect } = useDisconnect();
+  const { isMobile } = useWindowDimensions();
 
   async function handleSignOut() {
     signOut();
@@ -42,51 +46,58 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   }
 
   return (
-    <div className='wallet'>
-      <div className='wallet__user-section-wrapper'>
-        {showWalletSelection && (
-          <section className='wallet__wallets '>
-            {connectors.map((c) => {
-              function onClick() {
-                connect({ connector: c });
-              }
-              const className = `wallet__wallet-item wallet__${c.name}`;
-              if (!c.ready) return null;
-              return (
-                <button
-                  className={className}
-                  key={c.name}
-                  disabled={isWalletConnecting}
-                  data-loading={isWalletConnecting && 'true'}
-                  onClick={onClick}
-                >
-                  {c.name == 'MetaMask' && (
-                    <>
-                      <MetamaskSVG className='wallet__wallet-icon' />
-                    </>
-                  )}
+    <div data-hide={isWalletConnected && !isSignedIn} className='wallet__wrapper'>
+      <section className='wallet__header'>
+        <SageFullLogo className='games-modal__sage-logo' />
+        <button className='games-modal__close-button'>
+          <CloseSVG onClick={closeModal} className='games-modal__close-button-svg' />
+        </button>
+      </section>
+      <div className='wallet'>
+        <div className='wallet__user-section-wrapper'>
+          {showWalletSelection && (
+            <section className='wallet__wallets '>
+              {connectors.map((c) => {
+                function onClick() {
+                  connect({ connector: c });
+                }
+                const className = `wallet__wallet-item wallet__${c.name}`;
+                if (!c.ready) return null;
+                return (
+                  <button
+                    className={className}
+                    key={c.name}
+                    disabled={isWalletConnecting}
+                    data-loading={isWalletConnecting && 'true'}
+                    onClick={onClick}
+                  >
+                    {c.name == 'MetaMask' && (
+                      <>
+                        <MetamaskSVG className='wallet__wallet-icon' />
+                      </>
+                    )}
 
-                  {c.name == 'WalletConnect' && (
-                    <>
-                      <WalletConnectSVG className='wallet__wallet-icon' />
-                    </>
-                  )}
-                  <p className='wallet__wallet-item-name'>
-                    {c.name}
-                    <span className='wallet__agreement-text'>
-                      BY CONNECTING YOUR WALLET, YOU AGREE TO OUR TERMS OF SERVICE AND PRIVACY
-                      POLICY.
-                    </span>
-                  </p>
-                </button>
-              );
-            })}
-          </section>
-        )}
-        {Boolean(isWalletConnected && !isSignedIn) && <p>Welcome</p>}
-        {showAuthSection && (
-          <>
-            {/* <section className='wallet__user-section'>
+                    {c.name == 'WalletConnect' && (
+                      <>
+                        <WalletConnectSVG className='wallet__wallet-icon' />
+                      </>
+                    )}
+                    <p className='wallet__wallet-item-name'>
+                      {c.name}
+                      <span className='wallet__agreement-text'>
+                        BY CONNECTING YOUR WALLET, YOU AGREE TO OUR TERMS OF SERVICE AND PRIVACY
+                        POLICY.
+                      </span>
+                    </p>
+                  </button>
+                );
+              })}
+            </section>
+          )}
+          {/* {Boolean(isWalletConnected && !isSignedIn) && <p>Welcome</p>} */}
+          {showAuthSection && (
+            <>
+              {/* <section className='wallet__user-section'>
               <div className='wallet__user-pfp-container' onClick={pushToProfile}>
                 <PfpImage
                   className='wallet__user-pfp-src'
@@ -119,17 +130,17 @@ export default function Wallet({ closeModal, isOpen }: Props) {
                 </button>
               )}
             </section> */}
-            <div className='wallet__user-section'>
-              <button
-                onClick={() => {
-                  pushToProfile();
-                  closeModal();
-                }}
-                className='wallet__user-section-button'
-              >
-                YOUR PROFILE
-              </button>
-              {/* 
+              <div className='wallet__user-section'>
+                <button
+                  onClick={() => {
+                    pushToProfile();
+                    closeModal();
+                  }}
+                  className='wallet__user-section-button'
+                >
+                  YOUR PROFILE
+                </button>
+                {/* 
               <button onClick={pushToMintCreation} className='wallet__user-section-button'>
                 MINT CREATION
               </button>
@@ -139,18 +150,19 @@ export default function Wallet({ closeModal, isOpen }: Props) {
 
               <button className='wallet__user-section-button'>NOTIFICATIONS</button> */}
 
-              <button onClick={handleSignOut} className='wallet__user-section-logout-button'>
-                LOG OUT
-              </button>
-            </div>
-          </>
-        )}
+                <button onClick={handleSignOut} className='wallet__user-section-logout-button'>
+                  LOG OUT
+                </button>
+              </div>
+            </>
+          )}
 
-        {showAuthSection && (
-          <div className='wallet__profile-display-container'>
-            <ProfileDisplay></ProfileDisplay>
-          </div>
-        )}
+          {showAuthSection && (
+            <div className='wallet__profile-display-container'>
+              <ProfileDisplay></ProfileDisplay>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

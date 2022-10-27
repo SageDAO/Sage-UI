@@ -1,7 +1,7 @@
 import useModal from '@/hooks/useModal';
 import { useSession } from 'next-auth/react';
-import AccountModal from '@/components/Modals/AccountModal';
 import useSAGEAccount from '@/hooks/useSAGEAccount';
+import Wallet from './Wallet';
 
 export default function Connect() {
   const {
@@ -11,7 +11,7 @@ export default function Connect() {
   } = useModal();
 
   const { status: sessionStatus } = useSession();
-  const {isWalletConnected} = useSAGEAccount();
+  const { isWalletConnected } = useSAGEAccount();
   let buttonText: string = 'connect';
   let buttonClass: string = 'connect';
 
@@ -28,7 +28,7 @@ export default function Connect() {
   return (
     <button className={buttonClass} onClick={openAccountModal}>
       {buttonText}
-      <AccountModal isOpen={isAccountModalOpen} closeModal={closeAccountModal} />
+      <Wallet isOpen={isAccountModalOpen} closeModal={closeAccountModal} />
     </button>
   );
 }

@@ -12,7 +12,7 @@ export default function useSignIn(isOpen: boolean) {
   const { chain: activeChain } = useNetwork();
   const { data: connectData } = useConnect();
   const { address, isConnected } = useAccount();
-  const { signMessageAsync } = useSignMessage();
+  const { signMessageAsync, isLoading: isSigningMessage } = useSignMessage();
   const [signIn] = useSignInMutation();
   const { status: sessionStatus } = useSession();
 
@@ -44,9 +44,11 @@ export default function useSignIn(isOpen: boolean) {
 
   useEffect(() => {
     const shouldPromptSignIn: boolean =
-      isOpen && isConnected && sessionStatus === 'unauthenticated';
+      !isSigningMessage && isOpen && isConnected && sessionStatus === 'unauthenticated';
     if (shouldPromptSignIn) {
       handleSignInClick();
     }
   }, [isOpen, isConnected]);
+
+  return { isSigningMessage };
 }

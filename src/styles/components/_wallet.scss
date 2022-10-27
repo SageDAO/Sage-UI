@@ -17,19 +17,34 @@
   }
 }
 
-.wallet__header {
-  @include m.theme() {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: space-between;
-    text-transform: uppercase;
-    color: m.t(contrast);
+.wallet__wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  align-items: center;
+  width: 100%;
+  @include m.data-hide;
+  flex: 1;
+  @include m.flex-center;
+}
 
-    @include b.min-width('medium') {
-      gap: 15px;
-    }
+.wallet__header {
+  @include m.modal-header;
+  display: none;
+  @include b.min-width('medium') {
+    display: flex;
   }
+  // @include m.theme() {
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 10px;
+  //   justify-content: space-between;
+  //   text-transform: uppercase;
+  //   color: m.t(contrast);
+  //   @include b.min-width('medium') {
+  //     gap: 15px;
+  //   }
+  // }
 }
 
 .wallet__header-prompt {
