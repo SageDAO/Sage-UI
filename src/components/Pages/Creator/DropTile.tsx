@@ -19,7 +19,7 @@ function DropTile({ drop }: Props) {
       </div>
       <div className='artist-page__grid-tile-info'>
         <div className='artist-page__grid-tile-info-left'>
-          <h3 className='artist-page__grid-tile-title'>{drop.name}</h3>
+          <p className='artist-page__grid-tile-title'>{drop.name}</p>
         </div>
         <div className='artist-page__grid-tile-info-right'>
           {/* {isForSale ? (

@@ -162,7 +162,7 @@ export async function getIndividualArtistsPagePaths(prisma: PrismaClient) {
 
 export async function getIndividualArtistsPageData(prisma: PrismaClient, username: string) {
   const artist = await prisma.user.findFirst({
-    where: { username },
+    where: { ...FilterUserIsArtist, username },
     include: { NftContract: true },
   });
   const drops = await prisma.drop.findMany({

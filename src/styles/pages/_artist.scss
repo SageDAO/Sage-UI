@@ -245,13 +245,12 @@
   @include m.theme() {
     display: flex;
     flex-direction: column;
-    // border: 1px solid transparent;
     @include m.transition-base;
     @include m.interact {
       background-color: m.t(accent);
-      // border: 1px solid m.t(accent);
       color: m.t(base);
     }
+    overflow: hidden;
   }
 }
 
