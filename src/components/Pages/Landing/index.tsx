@@ -6,7 +6,7 @@ export default function LandingPage() {
     <div className='landing-page'>
       <Motto></Motto>
       <Logotype></Logotype>
-      <LaunchTrailer></LaunchTrailer>
+      {/* <LaunchTrailer></LaunchTrailer> */}
       {/* <div className='landing-page__content'>
         <div className='landing-page__sage-logo'>
           <SageFullLogoSVG className='landing-page__sage-svg' />

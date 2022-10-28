@@ -28,6 +28,7 @@
     "@types/react-redux": "^7.1.18",
     "@types/react-table": "^7.7.9",
     "@types/sharp": "^0.30.5",
+    "@vercel/analytics": "^0.1.3",
     "arweave": "^1.11.6",
     "aws-sdk": "^2.1221.0",
     "babel-plugin-superjson-next": "^0.4.2",

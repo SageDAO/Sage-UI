@@ -54,23 +54,18 @@ function profile() {
   const { asPath } = useRouter();
   const { notificationCount, hasNotifications } = useUserNotifications();
   const [header, setHeader] = useState<Headers>('EDIT YOUR PROFILE');
-
-  // useEffect(() => {
-  //   if (asPath.indexOf('notifications')) {
-  //     setSelectedTabIndex(2);
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (selectedTabIndex == 0) setHeader('EDIT YOUR PROFILE');
-    if (selectedTabIndex == 1) setHeader('COLLECTION');
+    if (selectedTabIndex == 1) {
+      setHeader('COLLECTION');
+    }
     if (selectedTabIndex == 2) {
-      if (subtabIndex == 0) {
-        setHeader('YOUR OFFERS');
-      }
-      if (subtabIndex == 1) {
-        setHeader('YOUR SALES');
-      }
+      // if (subtabIndex == 0) {
+      //   setHeader('YOUR OFFERS');
+      // }
+      // if (subtabIndex == 1) {
+      //   setHeader('YOUR SALES');
+      // }
       if (subtabIndex == 2) {
         setHeader('CLAIM YOUR WINS');
       }
@@ -79,9 +74,9 @@ function profile() {
         setHeader('YOUR REFUNDS FROM DRAWINGS');
       }
 
-      if (subtabIndex == 4) {
-        setHeader('ALL YOUR ACTIVITIES ON SAGE');
-      }
+      // if (subtabIndex == 4) {
+      //   setHeader('ALL YOUR ACTIVITIES ON SAGE');
+      // }
     }
     if (selectedTabIndex == 3) {
       setHeader('UPLOAD AN ARTWORK');
@@ -134,6 +129,9 @@ function profile() {
               as={'button'}
               className='profile-page__tabs-tab'
               selectedClassName='profile-page__tabs-tab--selected'
+              onClick={() => {
+                setSubtabIndex(0);
+              }}
             >
               collection
             </Tab>
@@ -142,6 +140,9 @@ function profile() {
               as={'button'}
               className='profile-page__tabs-tab'
               selectedClassName='profile-page__tabs-tab--selected'
+              onClick={() => {
+                setSubtabIndex(2);
+              }}
             >
               notifications
               {hasNotifications && (

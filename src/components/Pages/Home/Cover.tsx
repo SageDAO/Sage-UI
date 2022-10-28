@@ -9,25 +9,9 @@ import React, { useState } from 'react';
 interface Props {
   removeCover: () => void;
   coverOn: boolean;
+  src: string;
   artist: User;
 }
-
-const videoJsOptions = {
-  autoplay: true,
-  controls: false,
-  controlslist: 'nodownload',
-  loop: true,
-  playsinline: true,
-  preload: 'metadata',
-  muted: true,
-  // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
-  sources: [
-    {
-      src: 'https://d2k3k1d7773avn.cloudfront.net/videos/drop002/billboard.mp4',
-      type: 'video/mp4',
-    },
-  ],
-};
 
 function getPositionY(e: React.TouchEvent<HTMLDivElement>) {
   return e.touches[0].clientY;
@@ -35,6 +19,23 @@ function getPositionY(e: React.TouchEvent<HTMLDivElement>) {
 
 function Cover(props: Props) {
   const [isDraggingg, setIsDragging] = useState(false);
+
+  const videoJsOptions = {
+    autoplay: true,
+    controls: false,
+    controlslist: 'nodownload',
+    loop: true,
+    playsinline: true,
+    preload: 'metadata',
+    muted: true,
+    // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
+    sources: [
+      {
+        src: props.src,
+        type: 'video/mp4',
+      },
+    ],
+  };
 
   return (
     <div

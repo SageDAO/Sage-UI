@@ -46,13 +46,7 @@ export default function Wallet({ closeModal, isOpen }: Props) {
   }
 
   return (
-    <div data-hide={isWalletConnected && !isSignedIn && !isOpen} className='wallet__wrapper'>
-      <section className='wallet__header'>
-        <SageFullLogo className='games-modal__sage-logo' />
-        <button className='games-modal__close-button'>
-          <CloseSVG onClick={closeModal} className='games-modal__close-button-svg' />
-        </button>
-      </section>
+    <div data-hide={isWalletConnected && !isSignedIn} className='wallet__wrapper'>
       <div className='wallet'>
         <div className='wallet__user-section-wrapper'>
           {showWalletSelection && (

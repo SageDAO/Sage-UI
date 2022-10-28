@@ -41,12 +41,14 @@ function home({
     <div className='home-page' data-cy='home-page' data-on={coverOn}>
       <Cover
         artist={featuredDrop?.NftContract.Artist}
+        src={featuredDrop?.featuredMediaS3Path}
         coverOn={coverOn}
         removeCover={removeCover}
       />
       <div data-on={isMobile ? coverOn : false} className='home-page__main'>
         <Logotype></Logotype>
         <LaunchTrailer
+          src={featuredDrop?.featuredMediaS3Path}
           onClick={() => {
             pushToDrops(featuredDrop?.id);
           }}
@@ -54,6 +56,7 @@ function home({
 
         {featuredDrop && (
           <div className='home-page__featured-drop-tag-section'>
+            <meta property='og:image' content={featuredDrop.bannerImageS3Path} />
             <div className='home-page__featured-drop-tag-info'>
               <div
                 className='home-page__featured-drop-pfp'
