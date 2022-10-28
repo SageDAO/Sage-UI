@@ -152,6 +152,9 @@ async function insertDrop(data: any, response: NextApiResponse) {
         description: data.description || '',
         createdAt: new Date(),
         bannerImageS3Path: data.bannerImageS3Path,
+        tileImageS3Path: data.tileImageS3Path || null,
+        featuredMediaS3Path: data.featuredMediaS3Path || null,
+        mobileCoverS3Path: data.mobileCoverS3Path || null,
         NftContract: { connect: { artistAddress: data.artistWallet } },
       },
     });
