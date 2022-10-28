@@ -7,12 +7,13 @@ interface Props {
   src: string;
 }
 
-const isFirefoxOrBrave = () => {
+const videoMustStartMuted = () => {
   if (typeof window !== 'undefined') {
     const ua = window.navigator.userAgent.toLowerCase();
     const isFirefox = ua.indexOf('firefox') > -1;
     const isBrave = ua.indexOf('brave') > -1;
-    return isFirefox || isBrave;
+    const isSafari = ua.indexOf('safari') > -1;
+    return isFirefox || isBrave || isSafari;
   }
   return false;
 };
@@ -25,7 +26,7 @@ export default function LaunchTrailer({ onClick, src }: Props) {
     loop: true,
     playsinline: true,
     preload: 'metadata',
-    muted: isFirefoxOrBrave(),
+    muted: videoMustStartMuted(),
     // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
     sources: [
       {
