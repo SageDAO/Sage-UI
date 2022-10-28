@@ -1,8 +1,10 @@
 import React from 'react';
+import { Drop } from '@prisma/client';
 import VideoJS from './Media/VideoJS';
 
 interface Props {
   onClick?: () => void;
+  src: string;
 }
 
 const isFirefoxOrBrave = () => {
@@ -15,24 +17,23 @@ const isFirefoxOrBrave = () => {
   return false;
 };
 
-const videoJsOptions = {
-  autoplay: true,
-  controls: false,
-  controlslist: 'nodownload',
-  loop: true,
-  playsinline: true,
-  preload: 'metadata',
-  muted: isFirefoxOrBrave(),
-  // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
-  sources: [
-    {
-      src: 'https://d2k3k1d7773avn.cloudfront.net/videos/drop002/banner.mp4',
-      type: 'video/mp4',
-    },
-  ],
-};
-
-export default function LaunchTrailer({ onClick }: Props) {
+export default function LaunchTrailer({ onClick, src }: Props) {
+  const videoJsOptions = {
+    autoplay: true,
+    controls: false,
+    controlslist: 'nodownload',
+    loop: true,
+    playsinline: true,
+    preload: 'metadata',
+    muted: isFirefoxOrBrave(),
+    // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
+    sources: [
+      {
+        src,
+        type: 'video/mp4',
+      },
+    ],
+  };
   return (
     <div className='hero' onClick={onClick}>
       <VideoJS options={videoJsOptions} onReady={() => {}} />
