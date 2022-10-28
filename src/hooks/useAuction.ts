@@ -45,8 +45,8 @@ export default function useAuction({ auction, artist, walletAddress }: Args) {
   const description = auction.Nft.description || 'This artwork has no description provided.';
   const duration = auctionState?.duration / 60 / 60;
   const durationDisplay = `${duration.toFixed(2)} hours`;
-  const reservedAuctionInfo = `Reserve Auctions have a minimum bid price. Once the minimum bid price is met, the auction will last for ${durationDisplay}. Bidders may extend the auction by 10 minutes when entering a bidding war at the end of the auction. The highest bidder when the clock stops, wins the auction.`;
-  const auctionInfo = `Auctions will last for ${durationDisplay}. Bidders may extend the auction by 10 minutes when entering a bidding war at the end of the auction. The highest bidder when the clock stops, wins the auction.`;
+  const reservedAuctionInfo = `Reserve Auctions have a minimum bid price. Once the minimum bid price is met, the auction will last for ${durationDisplay}. Bidders may extend the auction by 10 minutes when entering a bidding war at the end of the auction. When the clock stops, the highest bidder wins the auction.`;
+  const auctionInfo = `Auctions will last for ${durationDisplay}. Bidders may extend the auction by 10 minutes when entering a bidding war at the end of the auction. When the clock stops, the highest bidder wins the auction.`;
   const gameInfo = auction.minimumPrice ? reservedAuctionInfo : auctionInfo;
 
   useEffect(() => {
