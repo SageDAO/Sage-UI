@@ -1,5 +1,5 @@
 import '@/styles/index.scss';
-import { Analytics} '@vercel/analytics/react'
+import { Analytics } from '@vercel/analytics/react';
 import Head from 'next/head';
 import Script from 'next/script';
 import useTheme from '@/hooks/useTheme';
