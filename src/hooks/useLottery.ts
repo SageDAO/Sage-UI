@@ -32,11 +32,11 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
   const requiresASH: boolean = !!lottery.costPerTicketTokens;
   const requiresPoints: boolean = !!lottery.costPerTicketPoints;
   const freeGameInfo =
-    'This drawing is token gated. Only users that hold the Alpha governance token in their wallet can claim 1 free ticket. Once the entry period is closed, the drawing takes place and the winners, who will be able to mint this collectible, are selected using SAGE’s integration with Chainlink.';
-  const pixelGameInfo =
+    'This drawing is token gated. Only users with The Internship token in their wallet can claim one free entry. Once the entry period is closed, winners will be chosen by our integration with Chainlink and given the ability to mint the NFT.';
+  const pixelOnlyGameInfo =
     "Users can buy tickets for this drop using only Pixel points, which are a SAGE reward for those holding the ASH token in their wallets. Once the entry period is closed, the drawing takes place and the winners, who will be able to mint this collectible, are selected using SAGE's integration with Chainlink.";
-  const ashOnlyGameInfo = `Users can enter a live drawing for ${durationDisplay}. At entry, users will be asked to pay the sales price. Once the entry period is closed, the drawing takes place and SAGE selects the game winner through our RNG integration with Chainlink. Users that don't win will receive their refund automatically when gas is at 10 GWEI or below.`;
-  let gameInfo = lottery.costPerTicketPoints ? pixelGameInfo : ashOnlyGameInfo;
+  const defaultGameInfo = `Users can enter a live drawing for ${durationDisplay}. At entry, users will be asked to pay the sales price. Once the entry period is closed, the drawing takes place and SAGE selects the game winner through our RNG integration with Chainlink. Users that don't win will receive their refund automatically when gas is at 10 GWEI or below.`;
+  let gameInfo = Boolean(requiresPoints && !requiresASH) ? pixelOnlyGameInfo : defaultGameInfo;
   if (!Boolean(requiresASH && !requiresPoints)) {
     gameInfo = freeGameInfo;
   }
