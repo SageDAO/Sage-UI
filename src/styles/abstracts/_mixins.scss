@@ -413,7 +413,7 @@ $desktop-width: 1345px;
   // @include interact;
   position: relative;
   aspect-ratio: 1/1;
-  border-radius: 100%;
+  border-radius: max(300px, 200%);
   overflow: hidden;
   display: flex;
   align-items: center;
