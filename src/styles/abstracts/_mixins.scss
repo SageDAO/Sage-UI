@@ -411,6 +411,7 @@ $desktop-width: 1345px;
 
 @mixin pfp-container {
   // @include interact;
+  cursor: pointer;
   position: relative;
   aspect-ratio: 1/1;
   border-radius: max(300px, 200%);
