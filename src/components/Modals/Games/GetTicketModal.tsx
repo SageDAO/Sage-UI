@@ -280,7 +280,7 @@ function GetTicketModal({
                   </button>
                 </div>
               )}
-              {winners && winners.length > 0 && (
+              {/* {winners && winners.length > 0 && (
                 <>
                   <p className='games-modal__winners-label'>
                     winner{winners.length > 1 ? 's' : ''}
@@ -304,7 +304,7 @@ function GetTicketModal({
                     ))}
                   </div>
                 </>
-              )}
+              )} */}
               {refund && (
                 <>
                   <p className='games-modal__winners-label'>refund</p>
