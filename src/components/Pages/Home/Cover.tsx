@@ -5,6 +5,7 @@ import Logotype from '@/components/Logotype';
 import VideoJS from '@/components/Media/VideoJS';
 import ArrowDownSVG from '@/public/interactive/arrow-down.svg';
 import React, { useState } from 'react';
+import videojs, { VideoJsPlayerOptions } from 'video.js';
 
 interface Props {
   removeCover: () => void;
@@ -20,10 +21,10 @@ function getPositionY(e: React.TouchEvent<HTMLDivElement>) {
 function Cover(props: Props) {
   const [isDraggingg, setIsDragging] = useState(false);
 
-  const videoJsOptions = {
-    autoplay: true,
+  const videoJsOptions: VideoJsPlayerOptions = {
+    autoplay: 'muted',
     controls: false,
-    controlslist: 'nodownload',
+    // controlslist: 'nodownload',
     loop: true,
     playsinline: true,
     preload: 'metadata',

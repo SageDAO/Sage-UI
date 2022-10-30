@@ -85,15 +85,16 @@ function getIsOpenForBids(auctionState: AuctionState, startTime: Date): boolean 
     return false;
   }
   const now = new Date().getTime();
+
   //designated start time has passed
   //waiting for minimum bid
   if (startTime.getTime() < now) {
-    return true;
-  }
+    //minimum bid in place
+    if (auctionState.endTime !== 0) {
+      return auctionState.endTime < now;
+    }
 
-  //minimum bid in place
-  if (auctionState.endTime !== 0) {
-    return auctionState.endTime > now;
+    return true;
   }
 
   return false;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Drop } from '@prisma/client';
 import VideoJS from './Media/VideoJS';
+import { VideoJsPlayerOptions } from 'video.js';
 
 interface Props {
   onClick?: () => void;
@@ -19,10 +20,10 @@ const videoMustStartMuted = () => {
 };
 
 export default function LaunchTrailer({ onClick, src }: Props) {
-  const videoJsOptions = {
-    autoplay: true,
+  const videoJsOptions: VideoJsPlayerOptions = {
+    autoplay: 'muted',
     controls: false,
-    controlslist: 'nodownload',
+    // controlslist: 'nodownload',
     loop: true,
     playsinline: true,
     preload: 'metadata',
