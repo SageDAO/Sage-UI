@@ -2,6 +2,7 @@ import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import DEFAULT_PFP from '@/public/branding/sage-icon.svg';
 import Image from 'next/image';
 import Zoom from 'react-medium-image-zoom';
+import { VideoJsPlayerOptions } from 'video.js';
 import VideoJS from './VideoJS';
 
 const ConditionalWrapper = ({ condition, wrapper, children }) =>
@@ -37,11 +38,11 @@ function BaseMedia({
     return false;
   };
 
-  const videoJsOptions = isVideo()
+  const videoJsOptions: VideoJsPlayerOptions = isVideo()
     ? {
         autoplay: true,
         controls: true,
-        controlslist: 'nodownload',
+        // controlslist: 'nodownload',
         loop: true,
         playsinline: true,
         preload: 'metadata',

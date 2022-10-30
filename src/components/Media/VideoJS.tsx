@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
-import videojs from 'video.js';
+import videojs, { VideoJsPlayerOptions } from 'video.js';
 
 interface Props {
-  options: any;
+  options: VideoJsPlayerOptions;
   onReady: (player: any) => void;
   className?: string;
 }
