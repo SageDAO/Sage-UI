@@ -46,17 +46,17 @@ const initialState: State = {
   shouldShowBidHistory: false,
 };
 
-export function computeAuctionStatus(auction: Auction_include_Nft, auctionState: AuctionState) {
-  const now = new Date().getTime();
-  const isOpenForBids =
-    auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
-  const isStarted = auction.startTime.getTime() < now;
+// export function computeAuctionStatus(auction: Auction_include_Nft, auctionState: AuctionState) {
+//   const now = new Date().getTime();
+//   const isOpenForBids =
+//     auctionState && auctionState.endTime > now && auction.startTime.getTime() < now;
+//   const isStarted = auction.startTime.getTime() < now;
 
-  const isEnded = auctionState
-    ? Boolean(auctionState.endTime !== undefined) && Boolean(auctionState.endTime < now)
-    : false;
-  return { isOpenForBids, isStarted, isEnded };
-}
+//   const isEnded = auctionState
+//     ? Boolean(auctionState.endTime !== undefined) && Boolean(auctionState.endTime < now)
+//     : false;
+//   return { isOpenForBids, isStarted, isEnded };
+// }
 
 const INITIAL_ERROR_STATE = { isError: false, errorMessage: '' };
 

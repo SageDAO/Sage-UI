@@ -80,28 +80,35 @@ export default function useAuction({ auction, artist, walletAddress }: Args) {
 }
 
 function getIsOpenForBids(auctionState: AuctionState, startTime: Date): boolean {
+  //auction state not available
   if (!auctionState) {
     return false;
   }
   const now = new Date().getTime();
-  if (startTime.getTime() > now) {
-    return false;
+  //designated start time has passed
+  //waiting for minimum bid
+  if (startTime.getTime() < now) {
+    return true;
   }
-  if (auctionState.endTime == 0) {
-    const endTime = startTime.getTime() + auctionState.duration * 1000;
-    return endTime > now;
+
+  //minimum bid in place
+  if (auctionState.endTime !== 0) {
+    return auctionState.endTime > now;
   }
-  return auctionState.endTime > now;
+
+  return false;
 }
 
 function getIsEnded(auctionState: AuctionState, startTime: Date): boolean {
+  //auctionState not available
   if (!auctionState) {
     return false;
   }
   const now = new Date().getTime();
-  if (auctionState.endTime == 0) {
-    const endTime = startTime.getTime() + auctionState.duration * 1000;
-    return endTime < now;
+  //minimum bid not met
+  if (auctionState.endTime == 0 && !auctionState.settled) {
+    return false;
   }
+  //check if endtime has passed
   return auctionState.endTime < now;
 }
