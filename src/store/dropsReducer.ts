@@ -214,6 +214,8 @@ async function deployDrop(dropId: number, signer: Signer, fetchWithBQ: any) {
   if (artistNftContractAddress == ethers.constants.AddressZero) {
     throw new Error('Unable to deploy a new artist NFT contract');
   }
+  // trigger server-side task that optimizes NFT images
+  await fetchWithBQ(`drops?action=OptimizeDropImages&id=${dropId}`);
   await deployAuctions(drop, artistNftContractAddress, signer, fetchWithBQ);
   await deployLotteries(drop, artistNftContractAddress, signer, fetchWithBQ);
   await updateDbApprovedDateAndIsLiveFlags(drop, fetchWithBQ);

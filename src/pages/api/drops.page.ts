@@ -1,9 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import prisma from '@/prisma/client';
-import { Prisma } from '@prisma/client';
-import { readPresetDropsFromS3 } from '@/utilities/awsS3-server';
+import { Nft, Prisma } from '@prisma/client';
+import { readPresetDropsFromS3, uploadBufferToS3 } from '@/utilities/awsS3-server';
 import { PresetDrop } from '@/store/dropsReducer';
+import sharp from 'sharp';
+import { OPTIMIZED_IMAGE_WIDTH } from '@/constants/config';
 
 async function handler(request: NextApiRequest, response: NextApiResponse) {
   const {
@@ -40,6 +42,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       break;
     case 'FindSplitterAddress':
       await findSplitterAddress(Number(id), response);
+      break;
+    case 'OptimizeDropImages':
+      await optimizeDropImages(Number(id), response);
       break;
     case 'UpdateSplitterAddress':
       await updateSplitterAddress(Number(id), address as string, response);
@@ -113,7 +118,6 @@ async function getFullDrop(id: number, response: NextApiResponse) {
         NftContract: { include: { Artist: true } },
         Auctions: { include: { Nft: true } },
         Lotteries: { include: { Nfts: true } },
-        Whitelist: { include: { WhitelistEntries: true } },
       },
     });
     response.json(result);
@@ -174,6 +178,42 @@ async function updateNftContractAddress(
   } catch (e) {
     console.log({ e });
     response.status(500);
+  }
+}
+
+async function optimizeDropImages(id: number, response: NextApiResponse) {
+  const drop = await prisma.drop.findUnique({
+    where: { id },
+    include: {
+      Auctions: { include: { Nft: true } },
+      Lotteries: { include: { Nfts: true } },
+    },
+  });
+  // compile a set of all images that need optimization
+  const imgSet = new Set<string>();
+  
+  const addToSetIfMeetCriteria = (n: Nft) => {
+    if (n.s3Path != n.s3PathOptimized) return;
+    if (imgSet.has(n.s3Path)) return;
+  }
+  for (const { Nft: n } of drop.Auctions) {
+    if (n.s3Path == n.s3PathOptimized && !imgSet.has(n.s3Path)) {
+      imgSet.add(n.s3Path);
+    }
+  }
+  for (const l of drop.Lotteries) {
+    for (const n of l.Nfts) {
+      if (n.s3Path == n.s3PathOptimized && !imgSet.has(n.s3Path)) {
+        imgSet.add(n.s3Path);
+      }
+    }
+  }
+  for (const img of Array.from(imgSet)) {
+    const imgOpt = await optimizeImage(img);
+    await prisma.nft.updateMany({
+      where: { s3Path: img },
+      data: { s3PathOptimized: imgOpt }
+    });
   }
 }
 
@@ -328,6 +368,24 @@ async function deleteDrops(response: NextApiResponse) {
   await prisma.nft.deleteMany();
   await prisma.lottery.deleteMany();
   await prisma.drop.deleteMany();
+}
+
+async function optimizeImage(path: string): Promise<string> {
+  console.log(`optimizeImage(${path})`);
+  const fetchResponse = await fetch(path);
+  const inputBuffer = new Uint8Array(await fetchResponse.arrayBuffer());
+  const outputBuffer: Buffer = await sharp(inputBuffer).jpeg().resize(OPTIMIZED_IMAGE_WIDTH).toBuffer();
+  const folder = 'optimized';
+  const inputFilenameParts = path.split('/').pop().split('.');
+  const outputFilename = inputFilenameParts[0] + '_opt' + inputFilenameParts[1];
+  const s3PathOptimized = await uploadBufferToS3(
+    folder,
+    outputFilename,
+    'image/jpeg',
+    outputBuffer
+  );
+  console.log(`optimizeImage(${path}) :: ${s3PathOptimized}`);
+  return s3PathOptimized;
 }
 
 export default handler;

@@ -1,6 +1,7 @@
 import { Configuration, Parameters } from './types';
 
 export const DEFAULT_PROFILE_PICTURE = '/branding/sage-icon.svg';
+export const OPTIMIZED_IMAGE_WIDTH = 487;
 
 var env = process.env.NEXT_PUBLIC_APP_MODE;
 
