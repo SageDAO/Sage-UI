@@ -1,12 +1,18 @@
 import { useGetWinnersQuery } from '@/store/lotteriesReducer';
 import { transformTitle } from '@/utilities/strings';
 import { Lottery, Nft } from '@prisma/client';
+import { useMemo } from 'react';
 
 interface UseLotteryArgs {
   lottery: Lottery;
   nfts: Nft[];
   selectedIndex?: number;
 }
+
+const freeGameInfo =
+  'This drawing is free to enter. Once the entry period is closed, winners will be chosen by our integration with Chainlink and given the ability to mint the NFT.';
+const pixelOnlyGameInfo =
+  "Users can buy tickets for this drop using only Pixel points, which are a SAGE reward for those holding the ASH token in their wallets. Once the entry period is closed, the drawing takes place and the winners, who will be able to mint this collectible, are selected using SAGE's integration with Chainlink.";
 
 export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryArgs) {
   const now = new Date();
@@ -31,15 +37,16 @@ export default function useLottery({ lottery, nfts, selectedIndex }: UseLotteryA
   const durationDisplay = `${duration.toFixed(2)} hour${duration > 1 ? 's' : ''}`;
   const requiresASH: boolean = !!lottery.costPerTicketTokens;
   const requiresPoints: boolean = !!lottery.costPerTicketPoints;
-  const freeGameInfo =
-    'This drawing is token gated. Only users with The Internship token in their wallet can claim one free entry. Once the entry period is closed, winners will be chosen by our integration with Chainlink and given the ability to mint the NFT.';
-  const pixelOnlyGameInfo =
-    "Users can buy tickets for this drop using only Pixel points, which are a SAGE reward for those holding the ASH token in their wallets. Once the entry period is closed, the drawing takes place and the winners, who will be able to mint this collectible, are selected using SAGE's integration with Chainlink.";
-  const defaultGameInfo = `Users can enter a live drawing for ${durationDisplay}. At entry, users will be asked to pay the sales price. Once the entry period is closed, the drawing takes place and SAGE selects the game winner through our RNG integration with Chainlink. Users that don't win will receive their refund automatically when gas is at 10 GWEI or below.`;
-  let gameInfo = Boolean(requiresPoints && !requiresASH) ? pixelOnlyGameInfo : defaultGameInfo;
-  if (!Boolean(requiresASH && !requiresPoints)) {
-    gameInfo = freeGameInfo;
-  }
+
+  const gameInfo = useMemo(() => {
+    if (Boolean(requiresPoints && !requiresASH)) {
+      return pixelOnlyGameInfo;
+    }
+    if (Boolean(!requiresASH && !requiresPoints)) {
+      return freeGameInfo;
+    }
+    return `Users can enter a live drawing for ${durationDisplay}. At entry, users will be asked to pay the sales price. Once the entry period is closed, the drawing takes place and SAGE selects the game winner through our RNG integration with Chainlink. Users that don't win will receive their refund automatically when gas is at 10 GWEI or below.`;
+  }, []);
 
   return {
     isLive,
