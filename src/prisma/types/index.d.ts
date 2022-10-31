@@ -61,7 +61,6 @@ export type DropFull = Prisma.DropGetPayload<{
     Lotteries: { include: { Nfts: true } };
     PrimarySplitter: { include: { SplitterEntries: true } };
     SecondarySplitter: { include: { SplitterEntries: true } };
-    Whitelist: { include: { WhitelistEntries: true } };
   };
 }>;
 

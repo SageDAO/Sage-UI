@@ -54,5 +54,6 @@ export async function getStaticProps(
     props: {
       drops,
     },
+    revalidate: 300, // re-generate every 5 minutes
   };
 }

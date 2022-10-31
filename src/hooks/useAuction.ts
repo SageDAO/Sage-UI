@@ -95,7 +95,7 @@ function getIsOpenForBids(auctionState: AuctionState, startTime: Date): boolean 
   if (startTime.getTime() < now) {
     //minimum bid in place
     if (auctionState.endTime !== 0) {
-      return auctionState.endTime < now;
+      return auctionState.endTime > now;
     }
 
     return true;
