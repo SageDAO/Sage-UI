@@ -371,7 +371,8 @@ async function optimizeImage(path: string): Promise<string> {
   const fetchResponse = await fetch(path);
   const inputBuffer = new Uint8Array(await fetchResponse.arrayBuffer());
   const outputBuffer: Buffer = await sharp(inputBuffer).jpeg().resize(OPTIMIZED_IMAGE_WIDTH).toBuffer();
-  const folder = 'optimized';
+  const pathParts = path.split('/');
+  const folder = pathParts[pathParts.length - 2];
   const inputFilenameParts = path.split('/').pop().split('.');
   const outputFilename = inputFilenameParts[0] + '_opt' + inputFilenameParts[1];
   const s3PathOptimized = await uploadBufferToS3(
