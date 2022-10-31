@@ -192,8 +192,8 @@ async function optimizeDropImages(id: number, response: NextApiResponse) {
   // compile a set of all images that need optimization
   const imgSet = new Set<string>();
   const addToSetIfMeetCriteria = (n: Nft) => {
-    if (n.s3Path != n.s3PathOptimized) return;
-    if (n.width <= OPTIMIZED_IMAGE_WIDTH) return;
+    if (n.s3Path != n.s3PathOptimized) return; // must not be already optimized
+    if (n.width <= OPTIMIZED_IMAGE_WIDTH) return; // must be larger than optimized width
     imgSet.add(n.s3Path);
   };
   for (const { Nft: n } of drop.Auctions) {
