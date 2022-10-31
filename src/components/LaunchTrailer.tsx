@@ -22,7 +22,7 @@ const videoMustStartMuted = () => {
 export default function LaunchTrailer({ onClick, src }: Props) {
   const videoJsOptions: VideoJsPlayerOptions = {
     autoplay: 'muted',
-    controls: false,
+    controls: true,
     // controlslist: 'nodownload',
     loop: true,
     playsinline: true,

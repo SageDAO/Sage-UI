@@ -23,7 +23,7 @@ function Cover(props: Props) {
 
   const videoJsOptions: VideoJsPlayerOptions = {
     autoplay: 'muted',
-    controls: false,
+    controls: true,
     // controlslist: 'nodownload',
     loop: true,
     playsinline: true,
