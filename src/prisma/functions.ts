@@ -48,9 +48,9 @@ export async function getHomePageData(prisma: PrismaClient) {
     where: { ...FilterDropApprovedOnly },
     select: {
       NftContract: { select: { Artist: { select: { username: true, profilePicture: true } } } },
-      Auctions: { select: { Nft: { select: { s3Path: true, name: true } } } },
+      Auctions: { select: { Nft: { select: { s3PathOptimized: true, name: true } } } },
       Lotteries: {
-        select: { Nfts: { distinct: ['s3Path'], select: { s3Path: true, name: true } } },
+        select: { Nfts: { distinct: ['s3Path'], select: { s3PathOptimized: true, name: true } } },
       },
       id: true,
     },

@@ -21,14 +21,14 @@ export default function NewArtworks({ newArtworks }: Props) {
       <section className='home-page__new-artworks-section'>
         <div className='home-page__new-artworks-flex-container'>
           {newArtworks.slice(0, 5).map((nft) => {
-            return <NewArtworksTile {...nft} key={nft.s3Path} />;
+            return <NewArtworksTile {...nft} key={nft.s3PathOptimized} />;
           })}
         </div>
       </section>
       <section className='home-page__new-artworks-section--mobile'>
         <div className='home-page__new-artworks-flex-container--mobile'>
           {newArtworks.slice(0, 10).map((nft) => {
-            return <NewArtworksTile {...nft} key={nft.s3Path} />;
+            return <NewArtworksTile {...nft} key={nft.s3PathOptimized} />;
           })}
         </div>
       </section>
@@ -39,7 +39,7 @@ export default function NewArtworks({ newArtworks }: Props) {
 interface NewArtworksTileProps extends NewArtwork {}
 
 function NewArtworksTile({
-  s3Path,
+  s3PathOptimized,
   artistUsername,
   name,
   profilePicture,
@@ -54,7 +54,7 @@ function NewArtworksTile({
   return (
     <div className='home-page__new-artworks-item'>
       <div onClick={handleMediaClick} className='home-page__new-artworks-media'>
-        <BaseMedia src={s3Path}></BaseMedia>
+        <BaseMedia src={s3PathOptimized}></BaseMedia>
       </div>
       <div className='home-page__new-artworks-item-content'>
         <div
