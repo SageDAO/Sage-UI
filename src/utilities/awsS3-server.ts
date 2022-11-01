@@ -37,11 +37,15 @@ export async function uploadBufferToS3(
   console.log(`uploadBufferToS3(folder: ${folder}, file: ${filename})`);
   let { uploadUrl, getUrl } = createS3SignedUrl(folder, filename);
   console.log(`uploadBufferToS3() :: sending PUT request...`);
-  await fetch(uploadUrl, {
+  const response = await fetch(uploadUrl, {
     method: 'PUT',
     headers: { 'Content-Type': fileType },
     body: buffer,
   });
+  if (response.status != 200) {
+    console.log(response);
+    throw new Error('Error uploading file to S3');
+  }
   console.log(`uploadBufferToS3() :: file uploaded to ${getUrl}`);
   return getUrl;
 }
