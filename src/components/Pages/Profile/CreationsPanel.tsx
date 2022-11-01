@@ -11,6 +11,7 @@ import {
   useGetArtistNftContractAddressQuery,
 } from '@/store/artistsReducer';
 import { useSession } from 'next-auth/react';
+import { User } from '@prisma/client';
 
 interface State {
   file: File | null;
@@ -38,7 +39,7 @@ const INITIAL_STATE: State = {
   isFixedPrice: true,
 };
 
-export default function CreationsPanel() {
+export default function CreationsPanel({ user }: { user: User }) {
   const [state, setState] = useState<State>(INITIAL_STATE);
   const [mintSingleNft, { isLoading: isMinting }] = useMintSingleNftMutation();
   const [deployContract, { isLoading: isDeployingContract }] = useDeployArtistNftContractMutation();
@@ -98,6 +99,18 @@ export default function CreationsPanel() {
   }
 
   async function handleDeployContractButtonClick() {
+    if (!signer) {
+      toast.info('Please sign in with a wallet.');
+      return;
+    }
+    if (!user.bio) {
+      toast.info('Please input and save your bio before deploying the contract.');
+      return;
+    }
+    if (!user.bannerImageS3Path) {
+      toast.info('Please input and save your banner image before deploying the contract.');
+      return;
+    }
     await deployContract({
       artistAddress: sessionData?.address as string,
       signer: signer as Signer,
