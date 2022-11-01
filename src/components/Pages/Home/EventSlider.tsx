@@ -69,7 +69,7 @@ export default function EventSlider({ mediumData }: Props) {
       </div>
       <div className='home-page__events-section-bottom'>
         <button onClick={pushToNews} className='home-page__events-visit-button'>
-          COMING SOON
+          VISIT ALL NEWS
         </button>
       </div>
     </section>
