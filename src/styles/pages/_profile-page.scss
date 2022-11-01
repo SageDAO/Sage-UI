@@ -316,7 +316,7 @@
   &--selected {
     @include m.mobile-width;
     @include b.min-width('medium') {
-      width: 803px;
+      // width: 803px;
     }
   }
 }
