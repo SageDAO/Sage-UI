@@ -1,22 +1,5 @@
 import Logotype from '@/components/Logotype';
-import BigLogotype from '@/public/branding/big-logo-vertical.svg';
-
-function Subheader({ children }: { children: React.ReactNode }) {
-  return <h2 className='submissions-page__guidelines-header'>{children}</h2>;
-}
-
-function Text({ children }: { children: React.ReactNode }) {
-  return <p className='submissions-page__guidelines-text'>{children}</p>;
-}
-
-function List({ children }: { children: React.ReactNode }) {
-  return <ul className='submissions-page__guidelines-list'>{children}</ul>;
-}
-
-function Bullet({ children }: { children: React.ReactNode }) {
-  return <li className='submissions-page__guidelines-list-item'>{children}</li>;
-}
-
+import { Text, Subheader, Group, List } from '@/components/Static';
 export default function privacypolicy() {
   return (
     <div className='submissions-page'>
@@ -38,7 +21,7 @@ export default function privacypolicy() {
 function AutomatedCopy() {
   return (
     <>
-      <p className='submissions-page__header'>PRIVACY POLICY</p>
+      <h1 className='submissions-page__header'>PRIVACY POLICY</h1>
       <p className='submissions-page__guidelines-text'>
         SAGE WEB3 INC. (&ldquo;SAGE&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;. &ldquo;our&rdquo;)
         provides the following Privacy Policy to users of SAGE&rsquo;s Services.
@@ -368,8 +351,4 @@ function AutomatedCopy() {
       </Group>
     </>
   );
-}
-
-function Group({ children }: { children?: React.ReactNode }) {
-  return <div className='submissions-page__guidelines-group'>{children}</div>;
 }

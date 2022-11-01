@@ -42,6 +42,26 @@
   gap: 23px;
 }
 
+.creations-panel__contract-address {
+  @include m.theme() {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 50px;
+    text-align: center;
+    letter-spacing: 0.15em;
+    height: 50px;
+    border: 1px solid m.t(contrast2);
+    color: m.t(contrast2);
+    border-radius: 15px;
+    @include m.interact;
+    &[data-active] {
+      background-color: m.t(contrast);
+      color: m.t(base);
+    }
+  }
+}
+
 .creations-panel__aspect-ratio-selection {
   @include m.input-group;
 }

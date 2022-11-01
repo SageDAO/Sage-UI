@@ -185,7 +185,14 @@ export default function CreationsPanel() {
             </fieldset>
           </div> */}
           {artistNftContractAddress ? (
-            <span className='profile-page__tabs-panel-contract-address'>
+            <span
+              onClick={() => {
+                window.navigator.clipboard.writeText(artistNftContractAddress);
+                toast.success('Copied to clipboard!', { toastId: 'clipboard#contract' });
+              }}
+              data-active={!!artistNftContractAddress}
+              className='creations-panel__contract-address'
+            >
               Your SAGE NFT Contract: {artistNftContractAddress}
             </span>
           ) : (
