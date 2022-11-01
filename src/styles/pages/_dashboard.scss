@@ -147,6 +147,25 @@
   }
 }
 
+.dashboard__submit-button {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 136.6%;
+  text-align: center;
+  letter-spacing: 0.35em;
+  height: 50px;
+
+  @include m.interact() {
+  }
+
+  @include m.theme() {
+    background-color: m.t(base2);
+    border: 1px solid m.t(contrast2);
+    color: m.t(contrast2);
+  }
+}
+
 .dashboard-game-stats {
   &__container {
     margin-left: auto;
