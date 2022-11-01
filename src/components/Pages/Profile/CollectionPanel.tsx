@@ -82,7 +82,7 @@ export default function CollectionPanel({ collectionTabIndex, setCollectionTabIn
               })}
           </TabPanel>
           <TabPanel as='div' className='collection-panel__gallery'>
-            <Gallery nfts={myNfts}></Gallery>
+            <Gallery nfts={[...myNfts]}></Gallery>
           </TabPanel>
         </div>
       </Tabs>

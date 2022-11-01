@@ -190,12 +190,12 @@ async function optimizeDropImages(id: number, response: NextApiResponse) {
     },
   });
   // compile a set of all images that need optimization
-  const imgSet = new Set<string>();  
+  const imgSet = new Set<string>();
   const addToSetIfMeetCriteria = (n: Nft) => {
-    if (n.s3Path != n.s3PathOptimized) return;
-    if (n.width <= OPTIMIZED_IMAGE_WIDTH) return;
+    if (n.s3Path != n.s3PathOptimized) return; // must not be already optimized
+    if (n.width <= OPTIMIZED_IMAGE_WIDTH) return; // must be larger than optimized width
     imgSet.add(n.s3Path);
-  }
+  };
   for (const { Nft: n } of drop.Auctions) {
     addToSetIfMeetCriteria(n);
   }
@@ -205,11 +205,16 @@ async function optimizeDropImages(id: number, response: NextApiResponse) {
     }
   }
   for (const img of Array.from(imgSet)) {
-    const imgOpt = await optimizeImage(img);
-    await prisma.nft.updateMany({
-      where: { s3Path: img },
-      data: { s3PathOptimized: imgOpt }
-    });
+    try {
+      const imgOpt = await optimizeImage(img);
+      await prisma.nft.updateMany({
+        where: { s3Path: img },
+        data: { s3PathOptimized: imgOpt },
+      });
+    } catch (e) {
+      console.log(e);
+      // ignore errors optimizing single file, on to the next
+    }
   }
 }
 
@@ -368,20 +373,26 @@ async function deleteDrops(response: NextApiResponse) {
 
 async function optimizeImage(path: string): Promise<string> {
   console.log(`optimizeImage(${path})`);
+  // retrieve source file from S3
   const fetchResponse = await fetch(path);
   const inputBuffer = new Uint8Array(await fetchResponse.arrayBuffer());
-  const outputBuffer: Buffer = await sharp(inputBuffer).jpeg().resize(OPTIMIZED_IMAGE_WIDTH).toBuffer();
-  const pathParts = path.split('/');
-  const folder = pathParts[pathParts.length - 2];
-  const inputFilenameParts = path.split('/').pop().split('.');
-  const outputFilename = inputFilenameParts[0] + '_opt' + inputFilenameParts[1];
+  // use 'sharp' to reduce image size
+  const outputBuffer: Buffer = await sharp(inputBuffer)
+    .jpeg()
+    .resize(OPTIMIZED_IMAGE_WIDTH)
+    .toBuffer();
+  // parse original path and store optimized file in the same bucket/folder with '_opt' suffix
+  // sample url: https://dev-sage.s3.us-east-2.amazonaws.com/1666901994984/nft_1.png
+  const inputPathParts = path.split('/');
+  const inputFilenameParts = inputPathParts.pop().split('.');
+  const dstFolder = inputPathParts.pop();
+  const outputFilename = inputFilenameParts[0] + '_opt.' + inputFilenameParts[1];
   const s3PathOptimized = await uploadBufferToS3(
-    folder,
+    dstFolder,
     outputFilename,
     'image/jpeg',
     outputBuffer
   );
-  console.log(`optimizeImage(${path}) :: ${s3PathOptimized}`);
   return s3PathOptimized;
 }
 

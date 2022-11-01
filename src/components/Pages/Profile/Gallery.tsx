@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import ArrowLeftSVG from '@/public/interactive/arrow-left.svg';
 import ArrowRightSVG from '@/public/interactive/arrow-right.svg';
 import useWindowDimensions from '@/hooks/useWindowSize';
+import { Swiper, SwiperSlide, SwiperProps } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import { EffectCoverflow, Pagination } from 'swiper';
 
 interface Props {
   nfts: any[];
@@ -35,71 +40,64 @@ function Gallery({ nfts }: Props) {
     setSelectedIndex(i);
   }
 
+  // const swiperProps: SwiperProps = {ef};
+
   if (!nfts.length) return null;
   if (!nfts) return null;
-
   return (
     <>
-      <div className='collection-panel__gallery-display'>
-        <ArrowLeftSVG
-          onClick={handleControlLeftClick}
-          className='collection-panel__gallery-control-left'
-        ></ArrowLeftSVG>
-        <ArrowRightSVG
-          onClick={handleControlRightClick}
-          className='collection-panel__gallery-control-right'
-        ></ArrowRightSVG>
-        {nfts?.map((nft, i: number) => {
-          let className: string = 'collection-panel__gallery-display-item';
+      <Swiper
+        effect={'coverflow'}
+        grabCursor={true}
+        centeredSlides={true}
+        slidesPerView={'auto'}
+        coverflowEffect={{
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true,
+        }}
+        zoom={true}
+        onActiveIndexChange={({ realIndex }) => setSelectedIndex(realIndex)}
+        pagination={{
+          clickable: true,
+          bulletActiveClass: 'swiper-pagination-bullet-active',
+          bulletClass: 'swiper-pagination-bullet',
+          bulletElement: 'span',
+          renderBullet(index, className) {
+            return (
+              '<span class="' +
+              className +
+              '">' +
+              `<img src='${nfts[index].s3PathOptimized}' class='bullet-src' />` +
+              '</span>'
+            );
+          },
+        }}
+        modules={[EffectCoverflow, Pagination]}
+        className='mySwiper'
+      >
+        {nfts.map((nft, i) => {
+          let size = '1x1';
+          if (i == 1) {
+            size = '16x9';
+          }
+          if (i == 2) {
+            size = '9x16';
+          }
 
-          const isCurrent: boolean = selectedIndex == i;
-          const isNext: boolean = selectedIndex == i - 1;
-          const isNextTwo: boolean = selectedIndex == i - 2;
-
-          if (isCurrent) {
-            className = 'collection-panel__gallery-display-item--first';
-          }
-          if (isNext) {
-            className = 'collection-panel__gallery-display-item--second';
-          }
-          if (isNextTwo) {
-            className = 'collection-panel__gallery-display-item--third';
-          }
           return (
-            <div
-              style={{
-                aspectRatio: String(nft.width / nft.height),
-                width: windowDimensions.width / 2,
-                height: windowDimensions.width / 2,
-                maxWidth: '600px',
-                maxHeight: '600px',
-              }}
-              className={className}
-            >
-              <BaseMedia src={nft.s3PathOptimized}></BaseMedia>
-            </div>
+            <SwiperSlide key={i} data-size={size} className='slide'>
+              <BaseMedia src={nft.s3PathOptimized} />
+              <div className='collection-panel__tile-nft-info'>
+                <p className='collection-panel__tile-nft-name'>{nft.nftName}</p>
+                <p className='collection-panel__tile-artist-name'>BY {nft.artistUsername}</p>
+              </div>
+            </SwiperSlide>
           );
         })}
-      </div>
-      <div className='collection-panel__tile-nft-info'>
-        <p className='collection-panel__tile-nft-name'>{nfts[selectedIndex].nftName}</p>
-        <p className='collection-panel__tile-artist-name'>
-          BY {nfts[selectedIndex].artistUsername}
-        </p>
-      </div>
-      <div className='collection-panel__gallery-grid'>
-        {nfts?.map((nft, i: number) => {
-          return (
-            <div
-              key={nft.id}
-              onClick={() => handleGalleryGridItemClick(i)}
-              className='collection-panel__gallery-grid-item'
-            >
-              <BaseMedia src={nft.s3PathOptimized}></BaseMedia>
-            </div>
-          );
-        })}
-      </div>
+      </Swiper>
     </>
   );
 }
