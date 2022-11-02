@@ -35,14 +35,15 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    background-color: color.change(m.t(base), $alpha: 0.75);
     color: m.t(contrast);
-  }
-  padding: 40px;
-  height: 100%;
-  @include b.min-width('medium') {
-    height: auto;
-    padding: 0;
+    padding: 40px;
+    height: 100%;
+    background-color: m.t(base);
+    @include b.min-width('medium') {
+      height: auto;
+      background-color: color.change(m.t(base), $alpha: 0.75);
+      padding: 0;
+    }
   }
 }
 
