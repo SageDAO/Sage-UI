@@ -133,7 +133,7 @@ const auctionsApi = baseApi.injectEndpoints({
   }),
 });
 
-export async function getAuctionContractState(auctionId: number) {
+export async function getAuctionContractState(auctionId: number): Promise<AuctionState> {
   console.log(`getAuctionContractState(${auctionId})`);
   const auctionContract = await getAuctionContract();
   try {
@@ -149,7 +149,7 @@ export async function getAuctionContractState(auctionId: number) {
           .div(BigNumber.from(10000))
       )
     );
-    return {
+    return <AuctionState>{
       highestBidNumber: +highestBidNumber,
       highestBidder: auctionStruct.highestBidder,
       settled: auctionStruct.settled,

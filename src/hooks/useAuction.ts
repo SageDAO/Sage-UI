@@ -51,7 +51,7 @@ export default function useAuction({ auction, artist, walletAddress }: Args) {
     const auctionInfo = `Auctions will last for ${durationDisplay}. Bidders may extend the auction by 10 minutes when entering a bidding war at the end of the auction. When the clock stops, the highest bidder wins the auction.`;
 
     return auction.minimumPrice ? reservedAuctionInfo : auctionInfo;
-  }, []);
+  }, [durationDisplay]);
 
   useEffect(() => {
     if (walletAddress && auctionState && walletAddress == auctionState.highestBidder) {
