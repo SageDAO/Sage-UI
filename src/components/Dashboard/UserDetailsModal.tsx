@@ -11,6 +11,7 @@ import { useBalance, useSigner } from 'wagmi';
 import { Signer } from 'ethers';
 import { parameters } from '@/constants/config';
 import CloseSVG from '@/public/interactive/close.svg';
+import { toast } from 'react-toastify';
 
 interface UserDetailsModalProps extends ModalProps {
   userData: User_include_EarnedPoints;
@@ -32,11 +33,23 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
   const pointsBalanceDisplay = isNaN(Number(pointsBalance)) ? '' : Number(pointsBalance).toFixed(2);
 
   async function handlePromoteToArtistClick(walletAddress: string) {
+    if (!userData?.username) {
+      toast.error('User must have a username to be promoted to ARTIST');
+      return;
+    }
+    if (!signer) {
+      toast.error('Signer not found! Make sure wallet is connected or refresh your browser.');
+      return;
+    }
     await promoteUserToArtist({ walletAddress, signer: signer as Signer });
   }
 
   async function handlePromoteToAdminClick(walletAddress: string) {
     if (confirm(`Confirm promoting ${walletAddress} to ADMIN?`)) {
+      if (!signer) {
+        toast.error('Signer not found! Make sure wallet is connected or refresh your browser.');
+        return;
+      }
       await promoteUserToAdmin({ walletAddress, signer: signer as Signer });
     }
   }
@@ -89,21 +102,21 @@ export function UserDetailsModal({ isOpen, closeModal, userData }: UserDetailsMo
                   </span>
                 }
               </div>
-              {userData?.role == 'USER' && userData?.username && (
+              {userData?.role == 'USER' && (
                 <>
                   <button
                     disabled={isPromotingToAdmin || isPromotingToArtist}
                     onClick={() => handlePromoteToArtistClick(userData?.walletAddress!)}
-                    className='btn-place-bid'
-                    style={{ marginTop: '20px', lineHeight: '40px' }}
+                    className='dashboard__submit-button'
+                    style={{ marginTop: '20px', width: '100%'  }}
                   >
                     {isPromotingToAdmin || isPromotingToArtist ? <LoaderSpinner /> : 'Promote to ARTIST'}
                   </button>
                   <button
                     disabled={isPromotingToAdmin || isPromotingToArtist}
                     onClick={() => handlePromoteToAdminClick(userData?.walletAddress!)}
-                    className='btn-place-bid'
-                    style={{ marginTop: '20px', lineHeight: '40px' }}
+                    className='dashboard__submit-button'
+                    style={{ marginTop: '20px', width: '100%' }}
                   >
                     {isPromotingToAdmin || isPromotingToArtist ? <LoaderSpinner /> : 'Promote to ADMIN'}
                   </button>

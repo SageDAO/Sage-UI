@@ -1,4 +1,6 @@
+import NewsArticle from '@/components/NewsArticle';
 import useSageRoutes from '@/hooks/useSageRoutes';
+import { parseHTMLStrings } from '@/utilities/strings';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -43,33 +45,12 @@ export default function EventSlider({ mediumData }: Props) {
       <p className='home-page__events-subheader'>Latest news from SAGE</p>
       <div className='home-page__events'>
         {state.items.map((item, i) => {
-          const regex = /(<([^>]+)>)/gi;
-          let description = item.description.replace(regex, '');
-          description = description.slice(0, 300);
-          return (
-            <a key={i} target='__blank' className='home-page__events-item' href={item.link}>
-              <div className='home-page__events-item-media'>
-                <Image
-                  src={item.thumbnail}
-                  layout='fill'
-                  objectFit='cover'
-                  className='home-page__events-slide-bg'
-                  loader={({ src, width, quality }) => {
-                    return `${src}?w=${width}&q=${quality || 75}`;
-                  }}
-                />
-              </div>
-              <div className='home-page__event-slide-content'>
-                <p className='home-page__event-slide-content-title'>{item.title}</p>
-                <p className='home-page__event-slide-content-description'>{description}</p>
-              </div>
-            </a>
-          );
+          return <NewsArticle key={i} {...item} />;
         })}
       </div>
       <div className='home-page__events-section-bottom'>
         <button onClick={pushToNews} className='home-page__events-visit-button'>
-          COMING SOON
+          VISIT ALL NEWS
         </button>
       </div>
     </section>

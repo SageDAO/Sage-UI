@@ -4,7 +4,7 @@ import type { DropWhereInput } from '@prisma/client';
 export type { User, Drop, Nft };
 
 export interface NewArtwork {
-  s3Path: Nft['s3Path'];
+  s3PathOptimized: Nft['s3PathOptimized'];
   artistUsername: User['username'];
   name: Nft['name'];
   profilePicture: User['profilePicture'];

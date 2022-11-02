@@ -231,6 +231,13 @@
   }
 }
 
+@mixin hover-underline {
+  @include hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
 @mixin active {
   &:not([disabled]):active {
     @content;

@@ -76,7 +76,7 @@ export function ConfigPanel() {
       <div className='creations-panel__file-desc-group' style={{ marginTop: '25px' }}>
         <button
           disabled={isUpdatingConfig}
-          className='creations-panel__submit-button'
+          className='dashboard__submit-button'
           type='button'
           onClick={handleSaveButtonClick}
         >
