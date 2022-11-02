@@ -30,9 +30,13 @@ function BaseMedia({
     return src?.toLowerCase().endsWith('mp4');
   };
 
-  const isFirefox = (): boolean => {
+  const videoMustStartMuted = () => {
     if (typeof window !== 'undefined') {
-      return window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+      const ua = window.navigator.userAgent.toLowerCase();
+      const isFirefox = ua.indexOf('firefox') > -1;
+      const isBrave = ua.indexOf('brave') > -1;
+      const isSafari = ua.indexOf('safari') > -1;
+      return isFirefox || isBrave || isSafari;
     }
     return false;
   };
@@ -45,7 +49,7 @@ function BaseMedia({
         loop: true,
         playsinline: true,
         preload: 'metadata',
-        muted: !isFirefox(),
+        muted: videoMustStartMuted(),
         // poster: 'https://d180qjjsfkqvjc.cloudfront.net/trailers/lehel_poster.png',
         sources: [
           {
