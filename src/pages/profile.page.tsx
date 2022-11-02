@@ -198,7 +198,7 @@ function profile() {
               selectedClassName='profile-page__tabs-panel--selected'
               className='profile-page__tabs-panel'
             >
-              <CreationsPanel />
+              <CreationsPanel user={userData} />
             </TabPanel>
           )}
         </div>

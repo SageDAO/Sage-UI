@@ -33,7 +33,7 @@ export function DashBoardPage() {
   // }
   return (
     <div className='dashboard-page'>
-      {!isSignedIn && <PublicDashboard></PublicDashboard>}
+      {!isSignedIn && !isWalletConnecting && <PublicDashboard></PublicDashboard>}
       {isAdmin(user) && (
         <Tabs as='div' className='dashboard-page__tabs'>
           <TabList>

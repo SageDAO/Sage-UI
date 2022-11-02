@@ -4,6 +4,7 @@ import prisma from '@/prisma/client';
 import { Prisma, Role } from '@prisma/client';
 import type { SafeUserUpdate } from '@/prisma/types';
 import { UserDisplayInfo } from '@/store/usersReducer';
+import { getERC20Contract } from '@/utilities/contracts';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -111,10 +112,16 @@ async function getAllUsersAndEarnedPoints(res: NextApiResponse) {
 
 async function createUser(walletAddress: string, res: NextApiResponse) {
   try {
+    try {
+      const ashContract = await getERC20Contract();
+      var ashBalanceAtCreation = (await ashContract.balanceOf(walletAddress)).toString();
+      console.log(`createUser(${walletAddress}) :: ASH Balance = ${ashBalanceAtCreation}`);
+    } catch (e) {
+      console.log(e);
+      var ashBalanceAtCreation = '0';
+    }
     const newUser = await prisma.user.create({
-      data: {
-        walletAddress,
-      },
+      data: { walletAddress, ashBalanceAtCreation },
     });
     res.status(201).json(newUser);
   } catch (error) {

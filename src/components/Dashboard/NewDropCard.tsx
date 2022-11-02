@@ -62,7 +62,7 @@ export default function NewDropCard({ drop }: Props) {
       <button
         onClick={handleApproveBtnClick}
         disabled={isDeploying || isDeleting}
-        className='nft-tile__claimbutton'
+        className='dashboard__submit-button'
         style={{ width: '100%', display: 'inline-block', height: '50px' }}
       >
         {isDeploying ? <LoaderSpinner /> : 'approve & deploy drop'}
@@ -70,7 +70,7 @@ export default function NewDropCard({ drop }: Props) {
       <button
         onClick={handleDeleteBtnClick}
         disabled={isDeploying || isDeleting}
-        className='btn-get-tickets'
+        className='dashboard__submit-button'
         style={{ width: '100%', display: 'inline-block', height: '50px' }}
       >
         {isDeleting ? <LoaderSpinner /> : 'delete drop'}
