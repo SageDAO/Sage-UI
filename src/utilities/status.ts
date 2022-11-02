@@ -12,26 +12,32 @@ export function computeDropStatus({
   Lotteries: Lottery_include_Nft[];
   Auctions: Auction_include_Nft[];
 }) {
-  let games: Game[];
+  const now = Date.now();
+  let games: Game[] = [...Lotteries, ...Auctions];
   let startTime: number;
   let endTime: number;
   let status: Status = 'Unknown';
-  games = [...Lotteries, ...Auctions];
   games.sort((a: any, b: any) => +a.startTime - +b.startTime);
   startTime = +games[0].startTime;
   games.sort((a: any, b: any) => +b.endTime + a.endTime);
   endTime = +games[0].endTime!;
   //TODO: status countdown
-  if (new Date(startTime).getHours() - Date.now() < 92) {
+  if (new Date(startTime).getHours() - now < 92) {
     status = 'Upcoming';
   }
-  if (startTime < Date.now()) {
+  if (startTime < now) {
     status = 'Live';
-    if (endTime < Date.now()) {
+    let openAuction = false;
+    for (const a of Auctions) {
+      if (!a.winnerAddress) {
+        openAuction = true;
+        break;
+      }
+    }
+    if (!openAuction && endTime < now) {
       status = 'Done';
     }
   }
-
   return { startTime, endTime, status };
 }
 
