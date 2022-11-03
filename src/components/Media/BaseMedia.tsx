@@ -1,13 +1,13 @@
 import { DEFAULT_PROFILE_PICTURE } from '@/constants/config';
 import DEFAULT_PFP from '@/public/branding/sage-icon.svg';
-import Image from 'next/image';
+import Image, { ImageProps } from 'next/image';
 import Zoom from 'react-medium-image-zoom';
 import VideoJS from './VideoJS';
 
 const ConditionalWrapper = ({ condition, wrapper, children }) =>
   condition ? wrapper(children) : children;
 
-interface BaseMediaProps {
+interface BaseMediaProps extends Partial<ImageProps> {
   src: string;
   onClickHandler?: React.MouseEventHandler<HTMLImageElement>;
   isZoomable?: boolean;
@@ -25,6 +25,7 @@ function BaseMedia({
   type,
   className,
   muted,
+  priority,
 }: BaseMediaProps) {
   const isVideo = (): boolean => {
     return src?.toLowerCase().endsWith('mp4');
@@ -89,6 +90,7 @@ function BaseMedia({
         ) : (
           <Image
             src={src}
+            priority={priority}
             layout='fill'
             objectFit='cover'
             draggable={false}
