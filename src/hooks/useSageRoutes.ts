@@ -65,6 +65,7 @@ export default function useSageRoutes() {
   }
 
   async function pushToNews() {
+    return;
     await router.push(basePathNews);
   }
 

@@ -538,6 +538,9 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     color: white;
     background: #c4c4c4;
     margin-top: 100px;
+    @include b.min-width('medium') {
+      margin-top: 0px;
+    }
   }
 }
 
