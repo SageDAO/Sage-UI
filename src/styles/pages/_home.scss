@@ -537,7 +537,11 @@ $tile-info-z: calc(#{$tile-img-z} + 1);
     @include m.button-base;
     color: white;
     background: #c4c4c4;
+    pointer-events: none;
     margin-top: 100px;
+    @include b.min-width('medium') {
+      margin-top: 0px;
+    }
   }
 }
 

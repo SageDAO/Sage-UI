@@ -8,7 +8,7 @@ interface Props {
 export default function Hero({ imgSrc, bannerOnClick }: Props) {
   return (
     <div className='hero'>
-      <BaseMedia muted={false} onClickHandler={bannerOnClick} src={imgSrc}></BaseMedia>
+      <BaseMedia priority muted={false} onClickHandler={bannerOnClick} src={imgSrc}></BaseMedia>
     </div>
   );
 }
