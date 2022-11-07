@@ -33,6 +33,7 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
                     <UpcomingDropsTile
                       Lotteries={d.Lotteries}
                       Auctions={d.Auctions}
+                      key={d.id}
                       drop={d}
                       artist={d.NftContract.Artist}
                     />
@@ -55,9 +56,6 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
         const nextIndexNull = Boolean(!upcomingDrops[i + 1]);
         if (isIndexEven && nextIndexNull) {
           shouldTileSpanTwoColumns = true;
-        }
-        function onClick() {
-          pushToDrops(d.id);
         }
         return (
           <UpcomingDropsTile
