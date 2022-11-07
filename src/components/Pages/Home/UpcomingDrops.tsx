@@ -17,9 +17,10 @@ export default function UpcomingDrops({ upcomingDrops }: Props) {
   const { pushToDrops } = useSageRoutes();
   const { isMobile } = useWindowDimensions();
   if (isMobile) {
-    const midPoint: number = Math.floor(upcomingDrops.length / 2);
-    const rowData1 = upcomingDrops.slice(0, midPoint);
-    const rowData2 = upcomingDrops.slice(midPoint, upcomingDrops.length);
+    const mobileData = upcomingDrops.slice(0, 4);
+    const midPoint: number = Math.floor(mobileData.length / 2);
+    const rowData1 = mobileData.slice(0, midPoint);
+    const rowData2 = mobileData.slice(midPoint, upcomingDrops.length);
     const rows = new Array(rowData1, rowData2);
     return (
       <React.Fragment>
