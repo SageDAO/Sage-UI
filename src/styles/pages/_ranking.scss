@@ -110,21 +110,37 @@
 
 .ranking-page__tab {
   @include m.theme() {
+    @include m.flex-center;
+    gap: 13px;
+
     text-transform: uppercase;
-    display: flex;
-    gap: 20px;
     background-color: m.t('base');
     border: 1px solid m.t('contrast');
     color: m.t('contrast');
     height: max-content;
-    padding: 10px;
+
+    font-size: 8px;
+    line-height: 130%;
+    width: 102px;
+    height: 26px;
     @include m.transition-base;
     @include m.interact {
       background-color: m.t('contrast');
       color: m.t('base');
       border: 1px solid m.t('base');
     }
+
+    &--selected {
+      background-color: m.t('contrast');
+      color: m.t('base');
+      border: 1px solid m.t('base');
+    }
   }
+}
+
+.ranking-page__tab-icon {
+  width: 15px;
+  height: 15px;
 }
 
 .ranking-page__list {
@@ -136,7 +152,7 @@
 .ranking-page__list-item {
   @include m.theme() {
     // height: 100px;
-		color: m.t(contrast);
+    color: m.t(contrast);
     display: flex;
     gap: 20px;
     align-items: center;
@@ -144,7 +160,7 @@
     @include m.transition-base;
     @include m.interact {
       background-color: m.t(accent);
-		color: m.t(base);
+      color: m.t(base);
     }
   }
 }
@@ -161,7 +177,7 @@
 }
 
 .ranking-page__list-item-info-container {
-	height: 60px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -178,13 +194,13 @@
 }
 
 .ranking-page__list-item-artworks-slide {
-	gap: 8px;
-	display: flex;
+  gap: 8px;
+  display: flex;
 }
 
 .ranking-page__list-item-artworks-slide-item {
-	height: 50px;
-	width: 50px;
-	position: relative;
-	overflow: hidden;
+  height: 50px;
+  width: 50px;
+  position: relative;
+  overflow: hidden;
 }

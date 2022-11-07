@@ -22,7 +22,7 @@ export default function ranking({ salesData }: Props) {
     (a, b) => b.amountTotalUSD - a.amountTotalUSD
   );
   return (
-    <Tabs  className='ranking-page'>
+    <Tabs className='ranking-page'>
       <Logotype />
       <div className='ranking-page__header-container'>
         <div className='ranking-page__header-left'>
@@ -33,12 +33,12 @@ export default function ranking({ salesData }: Props) {
         </div>
         <div className='ranking-page__tabs'>
           <TabList className='ranking-page__tablist'>
-            <Tab className='ranking-page__tab'>
-              <BurgerDotsSVG />
+            <Tab selectedClassName='ranking-page__tab--selected' className='ranking-page__tab'>
+              <BurgerDotsSVG className='ranking-page__tab-icon' />
               <span>Artist View</span>
             </Tab>
-            <Tab className='ranking-page__tab'>
-              <BurgerSVG />
+            <Tab selectedClassName='ranking-page__tab--selected' className='ranking-page__tab'>
+              <BurgerSVG className='ranking-page__tab-icon' />
               <span>List View</span>
             </Tab>
           </TabList>
@@ -49,7 +49,7 @@ export default function ranking({ salesData }: Props) {
           {displayData.slice(0, 100).map((data) => {
             return (
               <div key={data.walletAddress} className='ranking-page__grid-item'>
-                <PfpImage src={data.profilePicture || null} ></PfpImage>
+                <PfpImage src={data.profilePicture || null}></PfpImage>
               </div>
             );
           })}
