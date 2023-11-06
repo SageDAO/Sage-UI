@@ -30,6 +30,7 @@ function home({
   const [coverOn, setCoverOn] = useState(true);
   const welcomeMessageArray = welcomeMessage.split(',');
   function removeCover() {
+    console.log('remove cover');
     setCoverOn(false);
     if ('vibrate' in navigator) {
       const vibrates = navigator.vibrate(1000);

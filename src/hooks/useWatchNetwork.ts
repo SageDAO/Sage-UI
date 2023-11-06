@@ -4,7 +4,8 @@ import { parameters } from '@/constants/config';
 import { toast } from 'react-toastify';
 import useModal from './useModal';
 
-const designatedChain = parameters.NETWORK_NAME;
+const designatedChain = "goerli";
+
 
 export default function useWatchNetwork() {
   const [isLoading, setIsLoading] = useState(false);

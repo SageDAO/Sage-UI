@@ -75,6 +75,7 @@
     // @include m.transition-cover;
     transition-duration: 6000ms;
     transition-timing-function: ease-in;
+    z-index: 100;
 
     &[data-on='true'] {
       opacity: 1;

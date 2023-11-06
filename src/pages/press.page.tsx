@@ -10,6 +10,7 @@ export default function press() {
   }
   return (
     <div className='press-page'>
+
       <Logotype></Logotype>
       <div className='press-page__content'>
         <h1 className='press-page__header'>
